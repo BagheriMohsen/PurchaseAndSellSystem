@@ -99,7 +99,15 @@
             @method('put')
             <div class="input-group mb-3">
               <input type="text" value="{{$state->name}}" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
-              <div class="input-group-append">
+                <div class="input-group-append  col-sm-12 form-control">
+                    <select style="width:100%;" class="form-control  bg-white cities-name " name="city">
+                        <option value="{{$state->city->id}}">{{$state->city->name}}</option>
+                        @foreach($cities as $city)
+                            <option value="{{$city->id}}">{{$city->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="input-group-append">
                 <button class="input-group-text ">
                     <i class="far fa-arrow-alt-circle-up crud-icon text-success"></i>
                 </button>

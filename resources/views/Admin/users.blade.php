@@ -20,28 +20,34 @@
 
                 <table  id="example2" class="table table-bordered table-striped bg-white pt-2 pb-2">
                   <thead>
-                  <tr>
+                  <tr class="text-center">
                     <th>نام</th>
                     <th>نام خانوادگی</th>
                     <th>نقش</th>
                     <th>شهر-استان</th>
-                    <th>وضعیت</th>
-                    <th>عملیات</th>
+                    <th >وضعیت</th>
+                    <th >عملیات</th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach($users as $user)
-                    <tr>
+                    <tr class="text-center">
                       <td>{{$user->name}}</td>
                       <td>{{$user->family}}</td>
                       <td>{{$user->role->name}}</td>
-                      <td>{{$user->city_id.'-'.$user->state_id}}</td>
-                      <td>{{$user->status}}</td>
-                      <td >
-                        <a  class="text-warning " href="#">
+                      <td>{{$user->state->name}}</td>
+                      @if($user->status != null)
+                      <td class="text-success">  {{'فعال'}} </td>
+                      @else
+                      <td class="text-danger ">   {{'غیر فعال'}} </td>
+                      @endif
+                      <td class="text-center">
+                        <a  class="text-success " href="#">
+                          <i class="fas fa-plus crud-icon"></i>
+                        </a>
+                        <a  class="text-warning " href="{{route('users.edit',$user->id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
-                        {{-- <a class="btn btn-warning" href="{{route('roles.edit',$city->id)}}">ویرایش</a> --}}
                         <a class="text-danger " href="#">
                             <i class="far fa-trash-alt crud-icon"></i>
                         </a>

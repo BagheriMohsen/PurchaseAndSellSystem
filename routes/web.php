@@ -1,11 +1,13 @@
 <?php
-use App\User;
-use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
+
+Route::get('/test',function(){
+  return view('test');
+});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
@@ -27,6 +29,12 @@ Route::middleware('auth')->resource('roles','RoleController');
 |--------------------------------------------------------------------------
 |*/
 Route::middleware('auth')->resource('products','ProductController');
+/*
+|--------------------------------------------------------------------------
+| ProductType Routes
+|--------------------------------------------------------------------------
+|*/
+Route::middleware('auth')->resource('types','ProductTypeController');
 /*
 |--------------------------------------------------------------------------
 | Orders Routes

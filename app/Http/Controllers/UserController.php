@@ -26,6 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
+
         $roles  = 'App\Role'::latest()->get();
         $cities = 'App\City'::latest()->get();
         return view('Admin/users-create',compact('cities','roles'));
@@ -39,7 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create([
+         User::create([
           'name'          =>  $request->name,
           'family'        =>  $request->family,
           'role_id'       =>  $request->role,
@@ -48,19 +49,20 @@ class UserController extends Controller
           'password'      =>  Hash::make($request->password),
           'mobile'        =>  $request->mobile,
           'status'        =>  $request->status,
-          'state_id'      =>  $request->state_id,
-          'city_id'       =>  $request->city_id,
+          'state_id'      =>  $request->state,
           'address'       =>  $request->address,
           'uploadCS'      =>  $request->uploadCS,
           'level'         =>  $request->level,
+          'sendAuto'      =>  $request->sendAuto,
           'reciveAuto'    =>  $request->reciveAuto,
           'callCenter'    =>  $request->callCenter,
           'agent_id'      =>  $request->agent_id,
           'porsantSeller' =>  $request->porsantSeller,
           'percent'       =>  $request->percent,
-          'locallyPrice'  =>  $request->locallyPrice,
-          'internalPrice' =>  $request->internalPrice,
-          'villagePrice'  =>  $request->villagePrice
+          'calType'       =>  $request->calType,
+          'locallyPrice'  =>  $request->locally,
+          'internalPrice' =>  $request->internal,
+          'villagePrice'  =>  $request->village
         ]);
         return redirect()->route('users.index');
     }
@@ -73,7 +75,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -84,7 +86,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+      $roles  = 'App\Role'::latest()->get();
+      $cities = 'App\City'::latest()->get();
+      $user = User::findOrFail($id);
+      return view('Admin/users-edit',compact('user','roles','cities'));
     }
 
     /**
@@ -96,7 +101,32 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $user = User::findOrFail($id);
+      $user->update([
+       'name'          =>  $request->name,
+       'family'        =>  $request->family,
+       'role_id'       =>  $request->role,
+       'sex'           =>  $request->sex,
+       'username'      =>  $request->username,
+       'password'      =>  Hash::make($request->password),
+       'mobile'        =>  $request->mobile,
+       'status'        =>  $request->status,
+       'state_id'      =>  $request->state,
+       'address'       =>  $request->address,
+       'uploadCS'      =>  $request->uploadCS,
+       'level'         =>  $request->level,
+       'sendAuto'      =>  $request->sendAuto,
+       'reciveAuto'    =>  $request->reciveAuto,
+       'callCenter'    =>  $request->callCenter,
+       'agent_id'      =>  $request->agent_id,
+       'porsantSeller' =>  $request->porsantSeller,
+       'percent'       =>  $request->percent,
+       'calType'       =>  $request->calType,
+       'locallyPrice'  =>  $request->locally,
+       'internalPrice' =>  $request->internal,
+       'villagePrice'  =>  $request->village
+     ]);
+     return redirect()->route('users.index');
     }
 
     /**

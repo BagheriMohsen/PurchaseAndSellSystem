@@ -4,16 +4,16 @@
 
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-align-justify "></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-align-justify crud-icon"></i></a>
       </li>
       <li class="nav-item">
         <a class="nav-link"  href="{{route('products.create')}}">
-          <i class="fas fa-plus-circle text-success "></i>
+          <i class="far fa-plus-square text-success crud-icon"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link"  href="{{route('users.create')}}">
-        <i class="fas fa-user-plus text-success "></i>
+        <i class="fas fa-user-plus text-success crud-icon"></i>
         </a>
       </li>
 
@@ -25,7 +25,7 @@
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-comments "></i>
+          <i class="fas fa-comments crud-icon"></i>
           <span class="badge badge-primary navbar-badge" style="font-size:12px;">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -83,7 +83,7 @@
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell "></i>
+          <i class="far fa-bell crud-icon"></i>
           <span class="badge badge-info navbar-badge" style="font-size:12px;">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -109,7 +109,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link"  href="{{route('logout')}}">
-            <i class="text-danger fas fa-sign-out-alt "></i>
+            <i class="text-danger fas fa-sign-out-alt crud-icon"></i>
         </a>
       </li>
     </ul>

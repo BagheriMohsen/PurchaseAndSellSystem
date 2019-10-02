@@ -15,19 +15,19 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('type_id')->unsigned();
             $table->string('code');
             $table->text('name');
             $table->text('image');
             $table->text('description');
             $table->integer('price');
             $table->integer('buyPrice');
-            $table->integer('installmentPrice')->nullable();
-            $table->integer('cashValue')->nullable();
-            $table->boolean('status')->default(0);
-            $table->boolean('messageStatus')->default(0);
-            $table->string('weight');
-            $table->string('size');
+            $table->text('description')->nullable();
+            // $table->integer('installmentPrice')->nullable();
+            // $table->integer('cashValue')->nullable();
+            $table->boolean('status')->nullable();
+            $table->boolean('messageStatus')->nullable();
+            // $table->string('weight');
+            // $table->string('size');
             $table->timestamps();
         });
     }

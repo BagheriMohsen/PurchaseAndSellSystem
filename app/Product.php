@@ -12,12 +12,15 @@ class Product extends Model
       'image',
       'price',
       'buyPrice',
-      'installmentPrice',
-      'cashValue',
-      'type',
       'description',
-      'weight',
-      'size',
-      'count'
+      'status',
+      'messageStatus'
+
     ];
+    // releation with ProductType Model
+    public function types(){
+      return $this->hasMany('App\ProductType');
+    }
+
+
 }

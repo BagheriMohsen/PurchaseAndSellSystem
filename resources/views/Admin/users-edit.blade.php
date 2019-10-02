@@ -23,8 +23,9 @@
 
 @section('content')
 
-<form action="{{route('users.store')}}" method="post">
+<form action="{{route('users.update',$user->id)}}" method="post">
   @csrf
+  @method('put')
 <div class="row bg-white pt-3 pb-3">
   <h4 class="col-12 pt-2 pb-3">
     اطلاعات عمومی
@@ -38,7 +39,7 @@
           <label for="phone-number">نام
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" name="name" value="" required>
+          <input class="form-control bg-sec" type="text" name="name" value="{{$user->name}}" required>
         </div>
         {{-- نام --}}
         {{-- نام خانوادگی  --}}
@@ -47,7 +48,7 @@
             نام خانوادگی
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" name="family" value="" required>
+          <input class="form-control bg-sec" type="text" name="family" value="{{$user->family}}" required>
         </div>
         {{-- نام خانوادگی  --}}
         {{-- role --}}
@@ -57,7 +58,7 @@
           </label>
           <select class="form-control bg-sec"  name="role">
             @foreach($roles as $role)
-              <option value="{{$role->id}}">{{$role->name}}</option>
+              <option @if($role->id === $user->role_id ) selected @endif value="{{$role->id}}">{{$role->name}}</option>
             @endforeach
           </select>
         </div>
@@ -67,7 +68,7 @@
           <label for="phone-number">شماره همراه
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" name="mobile" value="" required>
+          <input class="form-control bg-sec" type="text" name="mobile" value="{{$user->mobile}}" required>
         </div>
         {{-- end name and family --}}
       </div>
@@ -87,8 +88,8 @@
           <span class="text-danger">*</span>
         </label>
         <select class="form-control bg-sec"  name="sex">
-          <option value="1">مرد</option>
-          <option value="0">زن</option>
+          <option @if($user->sex != 0)  selected @endif value="1">مرد</option>
+          <option @if($user->sex != 1)  selected @endif value="0">زن</option>
         </select>
       </div>
       {{-- جنسیت --}}
@@ -98,6 +99,7 @@
           <span class="text-danger">*</span>
         </label>
         <select class="form-control bg-sec"  name="agent_id">
+
           <option value="">بدون مدیر</option>
           <option value="">نماینده</option>
         </select>
@@ -108,7 +110,7 @@
         <label for="phone-number">تعرفه پایه داخل
           <span class="text-danger">*</span>
         </label>
-        <input class="form-control bg-sec" type="text" placeholder="" name="internal" value="" required>
+        <input class="form-control bg-sec" type="text" placeholder="" name="internal" value="{{$user->internalPrice}}" required>
       </div>
       {{-- تعرفه پایه داخلی --}}
       {{-- تعرفه پایه حومهی --}}
@@ -116,7 +118,7 @@
         <label for="phone-number">تعرفه پایه حومه
           <span class="text-danger">*</span>
         </label>
-        <input class="form-control bg-sec" type="text" placeholder="" name="locally" value="" required>
+        <input class="form-control bg-sec" type="text" placeholder="" name="locally" value="{{$user->locallyPrice}}" required>
       </div>
       {{-- تعرفه پایه حومه--}}
       {{-- تعرفه پایه روستای --}}
@@ -124,7 +126,7 @@
         <label for="phone-number">تعرفه پایه روستا
           <span class="text-danger">*</span>
         </label>
-        <input class="form-control bg-sec" type="text" placeholder=""name="village" value="" required>
+        <input class="form-control bg-sec" type="text" placeholder="" name="village" value="{{$user->villagePrice}}" required>
       </div>
       {{-- تعرفه پایه روستا --}}
     </div>
@@ -146,7 +148,7 @@
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="sendAuto">
+           data-offlabel="دستی" name="sendAuto" @if($user->sendAuto != null) checked @endif>
       </div>
       {{-- end auto send --}}
       {{--  auto send--}}
@@ -159,7 +161,7 @@
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="reciveAuto">
+           data-offlabel="دستی" name="reciveAuto" @if($user->reciveAuto != null) checked @endif>
       </div>
       {{-- end auto send --}}
       {{--  auto send--}}
@@ -171,7 +173,7 @@
            data-onstyle="success"
            data-offstyle="info"
            data-onlabel="مبلغ فاکتور"
-           data-offlabel="تعرفه تعیین شده" name="calType">
+           data-offlabel="تعرفه تعیین شده" name="calType" @if($user->calType != null) checked @endif>
       </div>
       {{-- end auto send --}}
     </div>
@@ -192,10 +194,11 @@
   {{-- شهر --}}
   <div class="col-sm-5  mt-5">
     <select class="cities col-12 bg-white" name="state">
+
       @foreach($cities as $city)
         <optgroup class="bg-info" label="{{$city->name}}">
             @foreach($city->states as $state)
-              <option value="{{$state->id}}">{{$state->name}}</option>
+              <option @if($state->id === $user->state_id) selected @endif value="{{$state->id}}">{{$state->name}}</option>
             @endforeach
         </optgroup>
       @endforeach
@@ -206,7 +209,9 @@
   {{-- آدرس کامل --}}
   <div class="col-sm-5 px-5">
     <label for="address">آدرس کامل:</label>
-    <textarea name="address" placeholder="آدرس را بصورت دقیق و کامل وارد کنید..." rows="8" cols="80"></textarea>
+    <textarea name="address" placeholder="آدرس را بصورت دقیق و کامل وارد کنید..." rows="8" cols="80">
+      {!! $user->address !!}
+    </textarea>
   </div>
   {{-- آدرس کامل --}}
 
@@ -222,7 +227,7 @@
     <label for="phone-number">نام کاربری
       <span class="text-danger">*</span>
     </label>
-    <input class="form-control bg-sec" type="text" placeholder=""name="username" value="" required>
+    <input class="form-control bg-sec" type="text" placeholder="" name="username" value="{{$user->username}}" required>
   </div>
   {{-- نام کاربری--}}
   {{-- گذرواژه --}}
@@ -244,12 +249,12 @@
        data-onstyle="success"
        data-offstyle="danger"
        data-onlabel="فعال"
-       data-offlabel="غیر فعال" name="status">
+       data-offlabel="غیر فعال" name="status" @if($user->status != null) checked @endif>
   </div>
   {{-- وضعیت --}}
 
   <div class="col-12 text-center mt-5">
-    <button class="btn btn-success col-2" type="submit" name="button">ثبت کاربر</button>
+    <button class="btn btn-success col-2" type="submit" name="button">ویرایش کاربر</button>
   </div>
 </div>
 

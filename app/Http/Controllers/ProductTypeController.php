@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\State;
-use App\City;
-class StateController extends Controller
+use App\ProductType;
+class ProductTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +13,7 @@ class StateController extends Controller
      */
     public function index()
     {
-        $cities = City::latest()->get();
-        $states = State::latest()->paginate(10);
-        return view('Admin.states',compact('states','cities'));
+        //
     }
 
     /**
@@ -37,11 +34,11 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        State::create([
-          'name'    =>  $request->name,
-          'city_id' =>  $request->city
+        ProductType::create([
+          'product_id'  =>  $request->product,
+          'name'        =>  $request->name
         ]);
-        return redirect()->route('states.index');
+        return redirect()->route('products.index');
     }
 
     /**
@@ -75,12 +72,12 @@ class StateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $state = State::findOrFail($id);
-        $state->update([
-          'name'  =>  $request->name,
-          'city_id'=> $request->city
-        ]);
-        return redirect()->route('states.index');
+      $type = ProductType::findOrFail($id);
+      $type->update([
+        'product_id'  =>  $request->product,
+        'name'        =>  $request->name
+      ]);
+      return redirect()->route('products.index');
     }
 
     /**
@@ -91,7 +88,7 @@ class StateController extends Controller
      */
     public function destroy($id)
     {
-        State::destroy($id);
-        return redirect()->route('states.index');
+        ProductType::destroy($id);
+        return redirect()->route('products.index');
     }
 }
