@@ -18,16 +18,11 @@ class CreateProductsTable extends Migration
             $table->string('code');
             $table->text('name');
             $table->text('image');
-            $table->text('description');
             $table->integer('price');
             $table->integer('buyPrice');
             $table->text('description')->nullable();
-            // $table->integer('installmentPrice')->nullable();
-            // $table->integer('cashValue')->nullable();
             $table->boolean('status')->nullable();
             $table->boolean('messageStatus')->nullable();
-            // $table->string('weight');
-            // $table->string('size');
             $table->timestamps();
         });
     }

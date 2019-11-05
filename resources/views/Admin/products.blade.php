@@ -91,10 +91,10 @@
       <div class="modal-body text-center ">
         <table  id="example2" class="table table-bordered table-striped bg-white pt-2 pb-2">
           <thead>
-          <tr class="text-center">
-            <th>نوع محصول</th>
-            <th>عملیات</th>
-          </tr>
+            <tr class="text-center">
+              <th>نوع محصول</th>
+              <th>عملیات</th>
+            </tr>
           </thead>
           <tbody>
           @foreach($product->types as $type)

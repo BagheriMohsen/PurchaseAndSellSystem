@@ -42,9 +42,11 @@
                       <td class="text-danger ">   {{'غیر فعال'}} </td>
                       @endif
                       <td class="text-center">
-                        <a  class="text-success " href="#">
-                          <i class="fas fa-plus crud-icon"></i>
-                        </a>
+                        @if($user->role->role === 'agent' || $user->role->role === 'agentChief')
+                          <a  class="text-success " href="#">
+                            <i class="fas fa-plus crud-icon"></i>
+                          </a>
+                        @endif
                         <a  class="text-warning " href="{{route('users.edit',$user->id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>

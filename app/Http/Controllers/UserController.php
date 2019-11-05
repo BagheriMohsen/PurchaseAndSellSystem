@@ -26,10 +26,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        $agentChiefs  = User::where('role_id',6)->get();
 
         $roles  = 'App\Role'::latest()->get();
         $cities = 'App\City'::latest()->get();
-        return view('Admin/users-create',compact('cities','roles'));
+        return view('Admin/users-create',compact('cities','roles','agentChiefs'));
     }
 
     /**
@@ -59,7 +60,7 @@ class UserController extends Controller
           'agent_id'      =>  $request->agent_id,
           'porsantSeller' =>  $request->porsantSeller,
           'percent'       =>  $request->percent,
-          'calType'       =>  $request->calType,
+        //   'calType'       =>  $request->calType,
           'locallyPrice'  =>  $request->locally,
           'internalPrice' =>  $request->internal,
           'villagePrice'  =>  $request->village
@@ -137,6 +138,32 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        User::destroy($id);
+        return redirect()->route('users.index');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Details
+    |--------------------------------------------------------------------------
+    |*/
+
+    public function agents()
+    {
+        $products = 'App\Product'::all();
+        $users = User::whereIn('role_id',[5,6])->get();
+        return view('Admin.agents',compact('users','products'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sellers Details
+    |--------------------------------------------------------------------------
+    |*/
+    public function sellers(){
+      $users = User::whereIn('role_id',2)->get();
+      return view('Admin.sellers',compact('users'));
+    }
+
 }

@@ -23,4 +23,10 @@ class Product extends Model
     }
 
 
+    // releate with SpecialTariff
+    public function tariffs(){
+      return $this->hasMany('App\SpecialTariff');
+    }
+
+
 }

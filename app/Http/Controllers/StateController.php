@@ -37,11 +37,25 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        State::create([
-          'name'    =>  $request->name,
-          'city_id' =>  $request->city
-        ]);
-        return redirect()->route('states.index');
+        $status = Status::where([
+          ['name','=',$request->name],
+          ['city_id','=',$request->city]
+        ])->exists();
+
+        if($status != true){
+          State::create([
+            'name'    =>  $request->name,
+            'city_id' =>  $request->city
+          ]);
+          $message  = 'استان';
+          $message .= $request->name;
+          $message .= 'با موفقیت ثبت شد';
+          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }else{
+          $message = 'این استان برای این شهر قبلا وارد شده است';
+          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }
+
     }
 
     /**
@@ -80,7 +94,10 @@ class StateController extends Controller
           'name'  =>  $request->name,
           'city_id'=> $request->city
         ]);
-        return redirect()->route('states.index');
+        $message  = 'استان';
+        $message .= $request->name;
+        $message .= 'با موفقیت به روز رسانی شد';
+        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**

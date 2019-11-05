@@ -5,6 +5,8 @@
 |--------------------------------------------------------------------------
 |*/
 
+
+
 Route::get('/test',function(){
   return view('test');
 });
@@ -16,6 +18,12 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 | Users Routes
 |--------------------------------------------------------------------------
 |*/
+
+Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
+    Route::get('agents','UserController@agents')->name('agents');
+    Route::get('sellers','UserController@sellers')->name('sellers');
+});
+
 Route::middleware('auth')->resource('users','UserController');
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +61,12 @@ Route::middleware('auth')->resource('cities','CityController');
 |--------------------------------------------------------------------------
 |*/
 Route::middleware('auth')->resource('states','StateController');
+/*
+|--------------------------------------------------------------------------
+| SpecialTariff Routes
+|--------------------------------------------------------------------------
+|*/
+Route::middleware('auth')->resource('special-tariffs','SpecialTariffController');
 /*
 |--------------------------------------------------------------------------
 | Custom Routes

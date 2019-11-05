@@ -35,10 +35,22 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        City::create([
-          'name' => $request->name
-        ]);
-        return redirect()->route('cities.index');
+        $status = City::where('name',$request->name)->exists();
+
+        if($status != True){
+          City::create([
+            'name' => $request->name
+          ]);
+          $message  = 'شهر';
+          $message .= $request->name;
+          $message .= 'با موفقیت ثبت شد';
+          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }else{
+          $message = 'این شهر قبلا ثبت شده است';
+          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }
+
+
     }
 
     /**
@@ -76,7 +88,10 @@ class CityController extends Controller
         $city->update([
           'name'  =>  $request->name
         ]);
-        return redirect()->route('cities.index');
+        $message  = 'شهر';
+        $message .= $request->name;
+        $message .= 'به روز رسانی شد';
+        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**

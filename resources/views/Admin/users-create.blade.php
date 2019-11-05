@@ -98,8 +98,12 @@
           <span class="text-danger">*</span>
         </label>
         <select class="form-control bg-sec"  name="agent_id">
-          <option value="">بدون مدیر</option>
-          <option value="">نماینده</option>
+          <option value="{{null}}">بدون مدیر</option>
+          @foreach($agentChiefs as $agentChief)
+            <option value="{{$agentChief->id}}">
+              {{$agentChief->name.' '.$agentChief->family}}
+            </option>
+          @endforeach
         </select>
       </div>
       {{-- نقش نماینده --}}

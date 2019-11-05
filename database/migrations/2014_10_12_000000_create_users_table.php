@@ -13,12 +13,40 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        
+        /*
+        |--------------------------------------------------------------------------
+        | cities table
+        |--------------------------------------------------------------------------
+        |*/
+        Schema::create('cities', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | states table
+        |--------------------------------------------------------------------------
+        |*/
+        Schema::create('states', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('city_id')->unsigned();
+            $table->string('name');
+            $table->timestamps();
+
+            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
+
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | users table
+        |--------------------------------------------------------------------------
+        |*/
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('role_id')->unsigned();
-            $table->integer('state_id')->unsigned();
-            $table->integer('city_id')->unsigned();
-            $table->integer('agent_id')->unsigned();
+            $table->bigInteger('state_id')->unsigned();
+            $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->string('username');
             $table->string('password');
             $table->string('name');
@@ -30,13 +58,25 @@ class CreateUsersTable extends Migration
             $table->text('uploadCS')->nullable();
             $table->text('level')->nullable();
             $table->boolean('reciveAuto')->default(0);
+            $table->boolean('sendAuto')->default(0);
             $table->text('callCenter')->nullable();
             $table->text('porsantSeller');
             $table->integer('percent')->nullable();
             $table->integer('locallyPrice')->nullable();
             $table->integer('internalPrice')->nullable();
             $table->integer('villagePrice')->nullable();
+
+            $table->Foreign('state_id')->references('id')->on('states')
+            ->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->Foreign('agent_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
             $table->timestamps();
+
+
+            
+
         });
     }
 
@@ -48,5 +88,7 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('cities');
+        Schema::dropIfExists('states');
     }
 }

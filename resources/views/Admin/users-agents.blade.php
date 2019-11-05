@@ -1,19 +1,19 @@
-@extends('Master.layout')
+@extends('Admin.Master.layout')
 
 @section('title')
-نماینده ها
+  نماینده ها
 @endsection
 
 @section('header')
-  @include('Master.header')
+  @include('Admin.Master.header')
 @endsection
 
 @section('sidebar')
-  @include('Master.sidebar')
+  @include('Admin.Master.sidebar')
 @endsection
 
 @section('path')
-  @include('Master.path')
+  @include('Admin.Master.path',['title'=>'تمام کاربران'])
 @endsection
 
 @section('content')
@@ -104,7 +104,7 @@
 @endsection
 
 @section('footer')
-  @include('Master.footer')
+  @include('Admin.Master.footer')
 @endsection
 @section('scripts')
   <script src="{{asset('AdminPanel/plugins/datatables/jquery.dataTables.js')}}"></script>

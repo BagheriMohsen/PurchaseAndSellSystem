@@ -2,27 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7df21098-2ba8-4851-93c6-4099a47cc475" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/StateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/StateController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Product.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_09_27_231946_create_products_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_09_27_231946_create_products_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/AdminPanel/dist/css/custom-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/AdminPanel/dist/css/custom-style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Master/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Master/header.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Master/path.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Master/path.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/products-create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/products-create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/products.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/products.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/states.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/states.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Master/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Master/sidebar.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/Admin/users-create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/users-create.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/Admin/users.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/users.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/agents.blade.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/app/public/.gitignore" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -155,7 +143,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -194,6 +182,8 @@
       <workItem from="1569916743142" duration="282000" />
       <workItem from="1569917048798" duration="2188000" />
       <workItem from="1569970230283" duration="643000" />
+      <workItem from="1570007673479" duration="4309000" />
+      <workItem from="1570093139135" duration="2340000" />
     </task>
     <servers />
   </component>
