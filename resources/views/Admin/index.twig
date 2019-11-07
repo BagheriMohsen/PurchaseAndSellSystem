@@ -1,22 +1,22 @@
-@extends('Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
+{% block title %}
   داشبورد
-@endsection
+{% endblock %}
 
-@section('header')
-  @include('Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Master.path')
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
 <!-- Small boxes (Stat box) -->
 <div class="row">
   <div class="col-lg-3 col-6">
@@ -113,7 +113,7 @@
 </div>
 <!-- /.row -->
 <div class="row mt-5 mb-5">
-  {{-- item --}}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -155,8 +155,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3 ">
     <table class="table table-bordered table-striped">
     <thead>
@@ -198,8 +198,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -241,8 +241,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -284,25 +284,25 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
+  {# end item #}
 </div>
 
 
-{{-- chart --}}
+{# chart #}
 <div class="row text-center d-block mt-5">
   <h4 >نمودار وضعیت سفارش ها در 30 روز گذشته</h4>
   <hr width="300px" style="border-bottom:5px solid red;" />
-{{-- chart --}}
+{# chart #}
   <div class="card mt-3">
     <div class="card-header no-border">
       <div class="d-flex justify-content-between">
         <h3 class="card-title">وضعیت سفارش ها</h3>
-        {{-- <a href="javascript:void(0);">مشاهده گزارش</a> --}}
+         {# <a href="javascript:void(0);">مشاهده گزارش</a>  #}
       </div>
     </div>
     <div class="card-body">
       <div class="d-flex">
-      
+
       </div>
       <!-- /.d-flex -->
 
@@ -332,10 +332,10 @@
   </div>
   <!-- /.chart -->
 </div>
-{{-- end chart --}}
 
-@endsection
 
-@section('footer')
-  @include('Master.footer')
-@endsection
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

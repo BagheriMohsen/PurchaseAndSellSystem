@@ -1,22 +1,22 @@
-@extends('Admin.Master.layout')
+{% extends 'Master/layout' %}
 
-@section('title')
+{% block title %}
   داشبورد
-@endsection
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'داشبورد'])
-@endsection
+{% block path %}
+  {% include 'Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
 <!-- Small boxes (Stat box) -->
 <div class="row">
   <div class="col-lg-3 col-6">
@@ -113,7 +113,7 @@
 </div>
 <!-- /.row -->
 <div class="row mt-5 mb-5">
-  {{-- item --}}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -155,8 +155,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3 ">
     <table class="table table-bordered table-striped">
     <thead>
@@ -198,8 +198,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -241,8 +241,8 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
-  {{-- item --}}
+  {# end item #}
+  {# item #}
   <div class="col-sm-3">
     <table class="table table-bordered table-striped">
     <thead>
@@ -284,15 +284,15 @@
     </tbody>
   </table>
   </div>
-  {{-- end item --}}
+  {# end item #}
 </div>
 
 
-{{-- chart --}}
+{# chart #}
 <div class="row text-center d-block mt-5">
   <h4 >نمودار وضعیت سفارش ها در 30 روز گذشته</h4>
   <hr width="300px" style="border-bottom:5px solid red;" />
-{{-- chart --}}
+{# chart #}
   <div class="card mt-3">
     <div class="card-header no-border">
       <div class="d-flex justify-content-between">
@@ -302,7 +302,7 @@
     </div>
     <div class="card-body">
       <div class="d-flex">
-
+      
       </div>
       <!-- /.d-flex -->
 
@@ -332,10 +332,10 @@
   </div>
   <!-- /.chart -->
 </div>
-{{-- end chart --}}
 
-@endsection
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+{% endblock %}
+
+{% block footer %}
+  {% include 'Master/footer' %}
+{% endblock %}

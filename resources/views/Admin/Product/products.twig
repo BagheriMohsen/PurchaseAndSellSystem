@@ -1,22 +1,22 @@
-@extends('Admin.Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
+{% block title %}
   محصولات
-@endsection
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'محصولات'])
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
                 <a class="btn btn-outline-success btn-sm mb-2" href="{{route('products.create')}}">
                   افزودن محصول
                 </a>
@@ -34,50 +34,50 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($products as $product)
+                  {% for product in products %}
                     <tr class="text-center">
                       <td>
-                        <img style="width:75px;" src="storage/{{$product->image}}" alt="">
+                        <img style="width:75px;" src="/storage/{{product.image}}" alt="">
                       </td>
-                      <td>{{$product->name}}</td>
-                      <td>{{$product->code}}</td>
-                        @if($product->status != null)
+                      <td>{{product.name}}</td>
+                      <td>{{product.code}}</td>
+                        {% if product.status != null %}
                           <td class="text-success" >{{'فعال'}}</td>
-                        @else
+                        {% else %}
                           <td class="text-danger" >{{'غیر فعال'}}</td>
-                        @endif
-                        @if($product->messageStatus != null)
+                        {% endif %}
+                        {% if product.messageStatus != null %}
                           <td class="text-success" >{{'فعال'}}</td>
-                        @else
+                        {% else %}
                           <td class="text-danger" >{{'غیر فعال'}}</td>
-                        @endif
-                      <td>{{$product->price}}</td>
-                      <td>{{$product->buyPrice}}</td>
+                        {% endif %}
+                      <td>{{product.price}}</td>
+                      <td>{{product.buyPrice}}</td>
                       <td>
-                        <a  class="text-success" data-toggle="modal" href="#types{{$product->id}}">
+                        <a  class="text-success" data-toggle="modal" href="#types{{product.id}}">
                           <sub class="text-success">
-                            {{count($product->types)}}
+                            {{product.types.count()}}
                           </sub>
                           <i class="fas fa-plus crud-icon"></i>
                         </a>
-                        <a  class="text-warning " href="{{route('products.edit',$product->id)}}">
+                        <a  class="text-warning " href="{{route('products.edit',product.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
-                        <a  class="text-danger" data-toggle="modal" href="#productDelete{{$product->id}}">
+                        <a  class="text-danger" data-toggle="modal" href="#productDelete{{product.id}}">
                           <i class="far fa-trash-alt crud-icon"></i>
                         </a>
                       </td>
                     </tr>
-                @endforeach
+                {% endfor %}
                   </tbody>
 
                 </table>
 
 
-{{-- delete product --}}
-@foreach($products as $product)
+{# delete product #}
+{% for product in products %}
 <!-- The Modal -->
-<div class="modal fade " id="types{{$product->id}}">
+<div class="modal fade " id="types{{product.id}}">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
@@ -97,31 +97,30 @@
             </tr>
           </thead>
           <tbody>
-          @foreach($product->types as $type)
+          {% for type in product.types %}
             <tr class="text-center">
-              <td>{{$type->name}}</td>
+              <td>{{type.name}}</td>
               <td>
                 <a  class="text-warning " href="#">
                   <i class="far fa-edit crud-icon"></i>
                 </a>
-                <form  action="{{route('types.destroy',$type->id)}}" method="post" >
-                  @csrf
-                  @method('delete')
+                <form  action="{{route('types.destroy',type.id)}}" method="post" >
+                  
                   <button class="btn btn-default text-danger btn-sm" type="submit" name="button">
                     <i class="far fa-trash-alt crud-icon"></i>
                   </button>
                 </form>
               </td>
             </tr>
-        @endforeach
+        {% endfor %}
           </tbody>
 
         </table>
         <form action="{{route('types.store')}}" method="post">
-          @csrf
+        
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="name" placeholder="نوع محصول را وارد کنید" required>
-            <input type="hidden" name="product" value="{{$product->id}}">
+            <input type="hidden" name="product" value="{{product.id}}">
             <div class="input-group-append">
               <button type="submit" class="input-group-text text-success">
                   <i class="far fa-plus-square crud-icon"></i>
@@ -138,13 +137,13 @@
 </div>
 
 </div>
-@endforeach
-{{-- delete product --}}
+{% endfor %}
+{# delete product #}
 
-{{-- ProductType --}}
-@foreach($products as $product)
+{# ProductType #}
+{% for product in products %}
 <!-- The Modal -->
-<div class="modal fade " id="types{{$product->id}}">
+<div class="modal fade " id="types{{product.id}}">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
@@ -158,8 +157,8 @@
       <div class="modal-body text-center ">
         <i class="fas fa-exclamation-triangle text-danger"></i>
           آیا از این بابت مطمئنید؟
-        <form action="{{route('products.destroy',$product->id)}}" method="post">
-          @csrf
+        <form action="{{route('products.destroy',product.id)}}" method="post">
+        
           <div class="input-group mb-3 mx-auto">
 
             <div class="text-center">
@@ -181,11 +180,11 @@
 </div>
 
 </div>
-@endforeach
-{{-- ProductType --}}
+{% endfor %}
+{# ProductType #}
 
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

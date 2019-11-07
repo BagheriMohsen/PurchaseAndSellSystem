@@ -4,39 +4,39 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>
-      @yield('title')
+      {% block title%} {% endblock %}
   </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    @include('Admin.Master.styles')
-    @yield('styles')
+    {% include 'Admin/Master/styles' %}
+    {% block styles %}{% endblock %}
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-  @yield('header')
+  {% block header %}{% endblock %}
 
-  @yield('sidebar')
+  {% block sidebar %}{% endblock %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    @yield('path')
+    {% block path %}{% endblock %}
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
 
-        @yield('content')
+        {% block content %}{% endblock %}
 
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  @yield('footer')
+  {% block footer %}{% endblock %}
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -46,7 +46,9 @@
 </div>
 <!-- ./wrapper -->
 
-  @include('Admin.Master.scripts')
-  @yield('scripts')
+  {% include 'Admin/Master/scripts' %}
+  {# Csrf Token #}
+  <script>window.Laravel = {{ {'csrfToken': csrf_token()}|json_encode()|raw }}</script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->paginate(10);
-        return view('Admin.products',compact('products'));
+        return view('Admin.Product.products',compact('products'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('Admin/products-create');
+        return view('Admin.Product.products-create');
     }
 
     /**
@@ -73,7 +73,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('Admin.products-edit',compact('product'));
+        return view('Admin.Product.products-edit',compact('product'));
     }
 
     /**

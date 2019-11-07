@@ -15,15 +15,19 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('image_id')->unsigned();
             $table->string('code');
             $table->text('name');
-            $table->text('image');
             $table->integer('price');
             $table->integer('buyPrice');
             $table->text('description')->nullable();
-            $table->boolean('status')->nullable();
-            $table->boolean('messageStatus')->nullable();
+            $table->string('status')->nullable();
+            $table->string('messageStatus')->nullable();
             $table->timestamps();
+
+
+            $table->Foreign('image_id')->references('id')->on('media')
+            ->onDelete('CASCADE')->onUpdate('CASCADE');
         });
     }
 

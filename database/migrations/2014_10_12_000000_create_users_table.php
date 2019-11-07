@@ -31,12 +31,16 @@ class CreateUsersTable extends Migration
         |*/
         Schema::create('states', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('image_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
-
+            $table->foreign('city_id')->references('id')->on('cities')
+            ->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->foreign('image_id')->references('id')->on('media')
+            ->onDelete('CASCADE')->onUpdate('CASCADE');
         });
         /*
         |--------------------------------------------------------------------------
