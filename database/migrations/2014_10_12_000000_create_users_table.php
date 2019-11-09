@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
         |*/
         Schema::create('states', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('image_id')->unsigned();
+            $table->bigInteger('image_id')->unsigned()->nullable();
             $table->bigInteger('city_id')->unsigned();
             $table->string('name');
             $table->timestamps();
@@ -49,37 +49,38 @@ class CreateUsersTable extends Migration
         |*/
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('state_id')->unsigned();
+            $table->bigInteger('image_id')->unsigned()->nullable();
             $table->bigInteger('agent_id')->unsigned()->nullable();
+            $table->bigInteger('state_id')->unsigned();
             $table->string('username');
             $table->string('password');
             $table->string('name');
             $table->string('family');
             $table->boolean('sex');
             $table->string('mobile');
-            $table->boolean('status');
-            $table->string('address');
+            $table->string('status')->nullable();
+            $table->string('address')->nullable();
             $table->text('uploadCS')->nullable();
             $table->text('level')->nullable();
-            $table->boolean('reciveAuto')->default(0);
-            $table->boolean('sendAuto')->default(0);
+            $table->string('reciveAuto')->nullable();
+            $table->string('sendAuto')->nullable();
+            $table->string('calType')->nullable();
             $table->text('callCenter')->nullable();
-            $table->text('porsantSeller');
+            $table->text('porsantSeller')->nullable();
             $table->integer('percent')->nullable();
             $table->integer('locallyPrice')->nullable();
             $table->integer('internalPrice')->nullable();
             $table->integer('villagePrice')->nullable();
+            $table->timestamps();
+
+            $table->Foreign('image_id')->references('id')->on('media')
+            ->onUpdate('cascade')->onDelete('cascade');
 
             $table->Foreign('state_id')->references('id')->on('states')
             ->onUpdate('cascade')->onDelete('cascade');
-            
+
             $table->Foreign('agent_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->timestamps();
-
-
-            
 
         });
     }

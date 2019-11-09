@@ -14,7 +14,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::latest()->paginate(10);
-        return view('Admin/cities',compact('cities'));
+        return view('Admin.City&State.cities',compact('cities'));
     }
 
     /**
@@ -35,20 +35,18 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $status = City::where('name',$request->name)->exists();
+        $request->validate([
+            'name'  =>  'required | unique:cities'
+        ],[
+            'name.required' =>  'شهر را وارد نکردید',
+            'name.unique'   =>  'این شهر قبلا ثبت شده است'
+        ]);
 
-        if($status != True){
           City::create([
             'name' => $request->name
           ]);
-          $message  = 'شهر';
-          $message .= $request->name;
-          $message .= 'با موفقیت ثبت شد';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }else{
-          $message = 'این شهر قبلا ثبت شده است';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }
+          $message  =   'شهر '.$request->name.' ثبت شد';
+          return redirect()->route('cities.index')->with('message',$message);
 
 
     }
@@ -84,14 +82,20 @@ class CityController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name'  =>  'required | unique:cities'
+        ],[
+            'name.required' =>  'شهر را وارد نکردید',
+            'name.unique'   =>  'این شهر قبلا ثبت شده است'
+        ]);
+        
         $city = City::findOrFail($id);
+        $cityName = $city->name;
         $city->update([
           'name'  =>  $request->name
         ]);
-        $message  = 'شهر';
-        $message .= $request->name;
-        $message .= 'به روز رسانی شد';
-        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        $message = 'نام شهر'.' '.$cityName.' '.' به شهر '.$request->name.' تغییر پیدا کرد';
+        return redirect()->route('cities.index')->with('message',$message);
     }
 
     /**
@@ -102,7 +106,10 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
+        $city = City::findOrFail($id);
+        $cityName = $city->name;
         City::destroy($id);
-        return redirect()->route('cities.index');
+        $message = 'شهر '.$cityName.' با موفقیت حذف شد';
+        return redirect()->route('cities.index')->with('message',$message);
     }
 }

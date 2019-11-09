@@ -38,7 +38,9 @@ class ProductTypeController extends Controller
           'product_id'  =>  $request->product,
           'name'        =>  $request->name
         ]);
-        return redirect()->route('products.index');
+        $product = 'App\Product'::findOrFail($request->product);
+        $message = $request->name.' به محصول '.$product->name.' اضافه شد ';
+        return redirect()->route('products.index')->with('message',$message);
     }
 
     /**
@@ -77,7 +79,10 @@ class ProductTypeController extends Controller
         'product_id'  =>  $request->product,
         'name'        =>  $request->name
       ]);
-      return redirect()->route('products.index');
+      $product = 'App\Product'::findOrFail($request->product);
+      $message = $request->name.' زیر مجموعه محصول '.$product->name.' به روز رسانی شد ';
+
+      return redirect()->route('products.index')->with('message',$message);
     }
 
     /**
@@ -88,7 +93,11 @@ class ProductTypeController extends Controller
      */
     public function destroy($id)
     {
+        $productType    = ProductType::findOrFail($id);
+        $typeName       =   $productType->name;
+        $product        = 'App\Product'::findOrFail($productType->product_id);
         ProductType::destroy($id);
-        return redirect()->route('products.index');
+        $message = $typeName.' از زیر مجموعه محصول '.$product->name.' حذف شد ';
+        return redirect()->route('products.index')->with('message',$message);
     }
 }

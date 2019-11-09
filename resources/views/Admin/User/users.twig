@@ -1,24 +1,25 @@
-@extends('Admin.Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
+{% block title %}
   کاربران
-@endsection
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'تمام کاربران'])
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
 
-                <table  id="example2" class="table table-bordered table-striped bg-white pt-2 pb-2">
+                <table  id="dtDynamicVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                width="100%">
                   <thead>
                   <tr class="text-center">
                     <th>نام</th>
@@ -30,24 +31,59 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($users as $user)
+                  {% for user in users %}
                     <tr class="text-center">
-                      <td>{{$user->name}}</td>
-                      <td>{{$user->family}}</td>
-                      <td>{{$user->role->name}}</td>
-                      <td>{{$user->state->name}}</td>
-                      @if($user->status != null)
+                      <td>{{user.name}}</td>
+                      <td>{{user.family}}</td>
+                      <td>
+                      {% set roles = user.getRoleNames().first() %}
+                      {% if roles == 'admin' %}
+                      
+                          {{ 'ادمین سایت' }}
+                          
+                        {% elseif roles == "user" %}
+
+                          {{ 'کاربر عادی' }}
+
+                        {% elseif roles == "seller" %}
+
+                          {{ 'فروشنده' }}
+
+                        {% elseif roles == "warehouser" %}
+
+                          {{ 'انباردار' }}
+
+                        {% elseif roles == "agent" %}
+
+                          {{ 'نماینده' }}
+
+                        {% elseif roles == "agentChief" %}
+
+                          {{ 'مدیر نماینده' }}
+
+                        {% elseif roles == "followUpManager" %}
+
+                          {{ 'مدیر پیگیری' }}
+
+                        {% else %}
+
+                          {{ 'نقش خاصی پیدا نشد' }}
+                          
+                      {% endif %}
+                      </td>
+                      <td>{{user.state.name}}</td>
+                      {% if user.status != null %}
                       <td class="text-success">  {{'فعال'}} </td>
-                      @else
+                      {% else %}
                       <td class="text-danger ">   {{'غیر فعال'}} </td>
-                      @endif
+                      {% endif %}
                       <td class="text-center">
-                        @if($user->role->role === 'agent' || $user->role->role === 'agentChief')
+                        {# {% if $user->role->role === 'agent' || $user->role->role === 'agentChief' %} #}
                           <a  class="text-success " href="#">
                             <i class="fas fa-plus crud-icon"></i>
                           </a>
-                        @endif
-                        <a  class="text-warning " href="{{route('users.edit',$user->id)}}">
+                        {# {% endif %} #}
+                        <a  class="text-warning " href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
                         <a class="text-danger " href="#">
@@ -55,14 +91,14 @@
                         </a>
                       </td>
                     </tr>
-                @endforeach
+                {% endfor %}
                   </tbody>
 
                 </table>
 
 
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

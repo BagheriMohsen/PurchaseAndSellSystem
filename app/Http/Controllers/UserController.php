@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use App\User;
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
     {
 
         $users = User::latest()->paginate(10);
-        return view('Admin.users',compact('users'));
+        return view('Admin.User.users',compact('users'));
     }
 
     /**
@@ -26,11 +27,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        $agentChiefs  = User::where('role_id',6)->get();
+        $agentChiefs  = User::Role('agentChief')->get();
 
-        $roles  = 'App\Role'::latest()->get();
-        $cities = 'App\City'::latest()->get();
-        return view('Admin/users-create',compact('cities','roles','agentChiefs'));
+        $roles          =   Role::latest()->get();
+        $cities         =   'App\City'::latest()->get();
+        $agentChiefs    =   User::role('agentChief')->get();
+        return view('Admin.User.users-create',compact('cities','roles','agentChiefs'));
     }
 
     /**
@@ -41,10 +43,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-         User::create([
+         $user = User::create([
           'name'          =>  $request->name,
           'family'        =>  $request->family,
-          'role_id'       =>  $request->role,
           'sex'           =>  $request->sex,
           'username'      =>  $request->username,
           'password'      =>  Hash::make($request->password),
@@ -65,6 +66,7 @@ class UserController extends Controller
           'internalPrice' =>  $request->internal,
           'villagePrice'  =>  $request->village
         ]);
+        $user->assignRole($request->role);
         return redirect()->route('users.index');
     }
 
@@ -87,10 +89,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-      $roles  = 'App\Role'::latest()->get();
+      $roles  = Role::latest()->get();
       $cities = 'App\City'::latest()->get();
       $user = User::findOrFail($id);
-      return view('Admin/users-edit',compact('user','roles','cities'));
+      return view('Admin.User.users-edit',compact('user','roles','cities'));
     }
 
     /**
@@ -106,7 +108,6 @@ class UserController extends Controller
       $user->update([
        'name'          =>  $request->name,
        'family'        =>  $request->family,
-       'role_id'       =>  $request->role,
        'sex'           =>  $request->sex,
        'username'      =>  $request->username,
        'password'      =>  Hash::make($request->password),
@@ -127,6 +128,7 @@ class UserController extends Controller
        'internalPrice' =>  $request->internal,
        'villagePrice'  =>  $request->village
      ]);
+     $user->assignRole($request->role);
      return redirect()->route('users.index');
     }
 
@@ -152,8 +154,8 @@ class UserController extends Controller
     public function agents()
     {
         $products = 'App\Product'::all();
-        $users = User::whereIn('role_id',[5,6])->get();
-        return view('Admin.agents',compact('users','products'));
+        $users = User::Role(['agent', 'agentChief'])->get();
+        return view('Admin.User.users-agents',compact('users','products'));
     }
 
     /*
@@ -163,7 +165,7 @@ class UserController extends Controller
     |*/
     public function sellers(){
       $users = User::whereIn('role_id',2)->get();
-      return view('Admin.sellers',compact('users'));
+      return view('Admin.User.sellers',compact('users'));
     }
 
 }

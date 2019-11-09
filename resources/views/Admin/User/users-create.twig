@@ -1,187 +1,178 @@
-@extends('Admin.Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
-  افزودن کاربر
-@endsection
+{% block title %}
+  {{'اقزودن کاربر'}}
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('styles')
+{% block styles %}
   <link rel="stylesheet" href="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.css')}}">
   <link rel="stylesheet" href="{{asset('AdminPanel/select2/select2.min.css')}}">
-@endsection
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'افزودن کاربر'])
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'افزودن کاربر'} %}
+{% endblock %}
 
-@section('content')
+{% block content %}
 
 <form action="{{route('users.store')}}" method="post">
-  @csrf
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+  
 <div class="row bg-white pt-3 pb-3">
   <h4 class="col-12 pt-2 pb-3">
     اطلاعات عمومی
   </h4>
-  {{-- first section --}}
+  {# first section #}
   <div class="col-sm-4 mx-auto">
     <div class="container-fluid">
       <div class="row">
-        {{-- نام --}}
-        <div class="col-sm-12">
-          <label for="phone-number">نام
-            <span class="text-danger">*</span>
-          </label>
-          <input class="form-control bg-sec" type="text" name="name" value="" required>
+        {# نام #}
+        <div class="md-form mb-4">
+          <input type="text" id="inputIconEx1" class="form-control" name="name" value="">
+          <label for="inputIconEx1">نام</label>
         </div>
-        {{-- نام --}}
-        {{-- نام خانوادگی  --}}
-        <div class="col-sm-12 mt-3">
-          <label for="phone-number">
-            نام خانوادگی
-            <span class="text-danger">*</span>
-          </label>
-          <input class="form-control bg-sec" type="text" name="family" value="" required>
+        {# نام #}
+        {# نام خانوادگی #}
+        <div class="md-form mb-4">
+          <input type="text" id="inputIconEx2" class="form-control" name="family" value="">
+          <label for="inputIconEx2">نام خانوادگی</label>
         </div>
-        {{-- نام خانوادگی  --}}
-        {{-- role --}}
-        <div class="col-sm-12  mt-3">
-          <label for="phone-number">نقش
-            <span class="text-danger">*</span>
-          </label>
-          <select class="form-control bg-sec"  name="role">
-            @foreach($roles as $role)
-              <option value="{{$role->id}}">{{$role->name}}</option>
-            @endforeach
+        {# نام خانوادگی  #}
+        {# role #}
+        <div  class="col-sm-12 mt-3  mb-4">
+          <select class="form-control"  name="role">
+              <option selected>نقش کاربر را مشخص کنید</option>
+            {% for role in roles %}
+              <option value="{{role.id}}" >{{role.persianName}}</option>
+            {% endfor %}
           </select>
         </div>
-        {{-- end role --}}
-        {{-- name and family --}}
-        <div class="col-sm-12 mt-3">
-          <label for="phone-number">شماره همراه
-            <span class="text-danger">*</span>
-          </label>
-          <input class="form-control bg-sec" type="text" name="mobile" value="" required>
+        {# end role #}
+        {# name and family #}
+        <div class="md-form mb-4">
+          <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="">
+          <label for="inputIconEx3">شماره تماس</label>
         </div>
-        {{-- end name and family --}}
+        {# end name and family #}
+        {# name and family #}
+        <div class="md-form mb-4">
+          <input type="text" id="inputIconEx5" class="form-control" name="porsantSeller" value="">
+          <label for="inputIconEx5">پورسانت</label>
+        </div>
+        {# end name and family #}
       </div>
     </div>
   </div>
-  {{-- first section --}}
+  {# {first section #}
 
 
 
-{{-- third section --}}
+{# third section #}
 <div class="col-sm-4 mx-auto">
   <div class="container-fluid">
     <div class="row">
-      {{-- جنسیت --}}
-      <div class="col-sm-12 ">
-        <label for="phone-number">جنسیت
-          <span class="text-danger">*</span>
-        </label>
-        <select class="form-control bg-sec"  name="sex">
-          <option value="1">مرد</option>
-          <option value="0">زن</option>
+      {# جنسیت #}
+      <div class="col-sm-12 mb-4">
+        <select class="form-control "  name="sex">
+          <option selected>جنسیت کاربر را مشخص کنید</option>
+          <option  value="1">مرد</option>
+          <option  value="0">زن</option>
         </select>
       </div>
-      {{-- جنسیت --}}
-      {{-- نقش نماینده --}}
-      <div class="col-sm-12 mt-3">
-        <label for="phone-number">مدیر نماینده
-          <span class="text-danger">*</span>
-        </label>
-        <select class="form-control bg-sec"  name="agent_id">
-          <option value="{{null}}">بدون مدیر</option>
-          @foreach($agentChiefs as $agentChief)
-            <option value="{{$agentChief->id}}">
-              {{$agentChief->name.' '.$agentChief->family}}
-            </option>
-          @endforeach
+      {# جنسیت #}
+      {# نقش نماینده #}
+      <div class="col-sm-12 mt-3 mb-4">
+        <select class="form-control"  name="agent_id">
+          <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
+          
+          {% for chief in agentChiefs %}
+            <option value="{{chief.id}}">{{chief.persianName}}</option>
+          {% else %}
+              <option Disabled >چیزی برای انتخاب وجود ندارد</option>
+          {% endfor %}
+
         </select>
       </div>
-      {{-- نقش نماینده --}}
-      {{-- تعرفه پایه داخلی --}}
-      <div class="col-sm-12 mt-3">
-        <label for="phone-number">تعرفه پایه داخل
-          <span class="text-danger">*</span>
-        </label>
-        <input class="form-control bg-sec" type="text" placeholder="" name="internal" value="" required>
+      {# نقش نماینده #}
+      {# تعرفه پایه داخلی #}
+      <div class="md-form mb-4">
+          <input type="text" id="inputIconEx14" class="form-control" name="internal" value="">
+          <label for="inputIconEx14">تعرفه پایه داخل</label>
       </div>
-      {{-- تعرفه پایه داخلی --}}
-      {{-- تعرفه پایه حومهی --}}
-      <div class="col-sm-12 mt-3">
-        <label for="phone-number">تعرفه پایه حومه
-          <span class="text-danger">*</span>
-        </label>
-        <input class="form-control bg-sec" type="text" placeholder="" name="locally" value="" required>
+      {# تعرفه پایه داخلی #}
+      {# تعرفه پایه حومهی #}
+      <div class="md-form mb-4">
+          <input type="text" id="inputIconEx15" class="form-control" name="locally" value="">
+          <label for="inputIconEx15">تعرفه پایه حومه</label>
       </div>
-      {{-- تعرفه پایه حومه--}}
-      {{-- تعرفه پایه روستای --}}
-      <div class="col-sm-12 mt-3">
-        <label for="phone-number">تعرفه پایه روستا
-          <span class="text-danger">*</span>
-        </label>
-        <input class="form-control bg-sec" type="text" placeholder=""name="village" value="" required>
+      {# تعرفه پایه حومه #}
+      {# تعرفه پایه روستای #}
+      <div class="md-form mb-4">
+          <input type="text" id="inputIconEx16" class="form-control" name="village" value="">
+          <label for="inputIconEx16">تعرفه پایه روستا</label>
       </div>
-      {{-- تعرفه پایه روستا --}}
+      {# تعرفه پایه روستا #}
     </div>
   </div>
 </div>
-{{-- end third section --}}
+{# end third section #}
 
-{{-- second section --}}
+{# second section  #}
 <div class="col-sm-12 mt-5">
   <div class="container-fluid">
     <div class="row">
-      {{--  auto send--}}
+      {# auto send #}
       <div class="col-sm-4 mt-3">
         <h6>ارسال سفارش
-
         </h6>
-        <input type="checkbox"
+        <input  type="checkbox"
+          
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="sendAuto">
+           data-offlabel="دستی" name="sendAuto" >
       </div>
-      {{-- end auto send --}}
-      {{--  auto send--}}
+      {# end auto send #}
+      {# auto send #}
       <div class="col-sm-4 mt-3">
         <h6>برگشت کالا از انبار
 
         </h6>
-        <input type="checkbox"
+        <input style="font-size:30px;"  type="checkbox"
+           
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="reciveAuto">
+           data-offlabel="دستی" name="reciveAuto" >
       </div>
-      {{-- end auto send --}}
-      {{--  auto send--}}
+      {# end auto send #}
+      {# auto send #}
       <div class="col-sm-4 mt-3">
         <h6>نوع محاسبه هزینه کالا
         </h6>
         <input type="checkbox"
+        
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="info"
            data-onlabel="مبلغ فاکتور"
-           data-offlabel="تعرفه تعیین شده" name="calType">
+           data-offlabel="تعرفه تعیین شده" name="calType" >
       </div>
-      {{-- end auto send --}}
+      {# end auto send #}
     </div>
   </div>
 </div>
-{{-- end second section --}}
+{# end second section #}
 
 
 
@@ -193,26 +184,28 @@
   اطلاعات مکان
   </h4>
 
-  {{-- شهر --}}
+  {# شهر  #}
   <div class="col-sm-5  mt-5">
     <select class="cities col-12 bg-white" name="state">
-      @foreach($cities as $city)
-        <optgroup class="bg-info" label="{{$city->name}}">
-            @foreach($city->states as $state)
-              <option value="{{$state->id}}">{{$state->name}}</option>
-            @endforeach
+
+      {% for city in cities %}
+        <optgroup class="bg-info" label="{{city.name}}">
+            {% for state in city.states %}
+              <option value="{{state.id}}">{{state.name}}</option>
+            {% endfor %}
         </optgroup>
-      @endforeach
+      {% endfor %}
 
     </select>
   </div>
-  {{--شهر --}}
-  {{-- آدرس کامل --}}
-  <div class="col-sm-5 px-5">
-    <label for="address">آدرس کامل:</label>
-    <textarea name="address" placeholder="آدرس را بصورت دقیق و کامل وارد کنید..." rows="8" cols="80"></textarea>
+  {# شهر #}
+  {# آدرس کامل #}
+  <div class="md-form col-sm-7">
+    <i class="fas fa-pencil-alt prefix text-dark"></i>
+    <textarea name="address" id="form10" class="md-textarea form-control" rows="8" cols="80"></textarea>
+    <label for="form10">آدرس کامل</label>
   </div>
-  {{-- آدرس کامل --}}
+  {# آدرس کامل #}
 
 
 </div>
@@ -221,51 +214,53 @@
   <h4 class="col-12 pt-2 pb-3">
   حساب کاربری
   </h4>
-  {{-- نام کاربری --}}
-  <div class="col-sm-5 mt-5">
-    <label for="phone-number">نام کاربری
-      <span class="text-danger">*</span>
-    </label>
-    <input class="form-control bg-sec" type="text" placeholder=""name="username" value="" required>
+  {# نام کاربری #}
+  <div class="md-form mb-4 col-sm-5">
+      <input type="text" id="inputIconEx24" class="form-control" name="username"  required>
+      <label for="inputIconEx24">نام کاربری</label>
   </div>
-  {{-- نام کاربری--}}
-  {{-- گذرواژه --}}
-  <div class="col-sm-5 mt-5">
-    <label for="phone-number">گذرواژه
-      <span class="text-danger">*</span>
-    </label>
-    <input class="form-control bg-sec" type="password" placeholder="" name="password" value="" required>
+  {# نام کاربری #}
+  {# گذرواژه #}
+  
+  <div class="md-form mb-4 col-sm-5">
+      <input type="password" id="inputIconEx25" class="form-control" name="username" value="" required>
+      <label for="inputIconEx25">گذرواژه</label>
   </div>
-  {{--گذرواژه--}}
-  {{--  وضعیت--}}
+  {# گذرواژه #}
+  {# وضعیت #}
   <div class="col-sm-2 mt-5">
     <h6>
       وضعیت کاربر
 
     </h6>
     <input type="checkbox"
+       data-size="sm"
        data-toggle="switchbutton"
        data-onstyle="success"
        data-offstyle="danger"
        data-onlabel="فعال"
        data-offlabel="غیر فعال" name="status">
   </div>
-  {{-- وضعیت --}}
+  {# وضعیت #}
 
   <div class="col-12 text-center mt-5">
-    <button class="btn btn-success col-2" type="submit" name="button">ثبت کاربر</button>
+    <button class="btn btn-success btn-sm col-2" type="submit" name="button">
+      <strong class="h6 text-dark">
+        ویرایش کاربر
+      </strong>
+    </button>
   </div>
 </div>
 
 
 </form>
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
 
-@section('scripts')
+{% block scripts %}
   <script src="{{asset('AdminPanel/select2/select2.full.min.js')}}"></script>
   <script src="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.js')}}"></script>
 
@@ -275,4 +270,4 @@
       $('.cities').select2();
   });
   </script>
-@endsection
+{% endblock %}

@@ -29,7 +29,6 @@ class User extends Authenticatable
         'mobile',
         'status',
         'state_id',
-        'role_id',
         'address',
         'uploadCS',
         'level',
@@ -62,14 +61,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    /*
-    |--------------------------------------------------------------------------
-    | Releation with Role Model
-    |--------------------------------------------------------------------------
-    */
-    public function role(){
-      return $this->belongsTo('App\Role');
-    }
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model

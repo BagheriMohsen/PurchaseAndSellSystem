@@ -13,7 +13,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        Illuminate\Http\Exceptions\PostTooLargeException::class,
     ];
 
     /**
@@ -34,6 +34,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        
         parent::report($exception);
     }
 

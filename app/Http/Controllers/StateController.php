@@ -16,7 +16,7 @@ class StateController extends Controller
     {
         $cities = City::latest()->get();
         $states = State::latest()->paginate(10);
-        return view('Admin.states',compact('states','cities'));
+        return view('Admin.City&State.states',compact('states','cities'));
     }
 
     /**
@@ -37,7 +37,7 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        $status = Status::where([
+        $status = State::where([
           ['name','=',$request->name],
           ['city_id','=',$request->city]
         ])->exists();
@@ -47,13 +47,15 @@ class StateController extends Controller
             'name'    =>  $request->name,
             'city_id' =>  $request->city
           ]);
-          $message  = 'استان';
+          $message  = ' استان ';
           $message .= $request->name;
-          $message .= 'با موفقیت ثبت شد';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+          $message .= ' با موفقیت ثبت شد ';
+          return redirect()->route('states.index')->with('message',$message);
         }else{
-          $message = 'این استان برای این شهر قبلا وارد شده است';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+          $message   = ' استان ';
+          $message  .= $request->name;
+          $message  .= ' قبلا برای همین شهر ثبت شده است';
+          return redirect()->route('states.index')->with('error',$message);
         }
 
     }
@@ -94,10 +96,10 @@ class StateController extends Controller
           'name'  =>  $request->name,
           'city_id'=> $request->city
         ]);
-        $message  = 'استان';
-        $message .= $request->name;
-        $message .= 'با موفقیت به روز رسانی شد';
-        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+          $message  = ' استان ';
+          $message .= $request->name;
+          $message .= ' با موفقیت به روز رسانی شد ';
+        return redirect()->route('states.index')->with('message',$message);
     }
 
     /**
@@ -108,7 +110,12 @@ class StateController extends Controller
      */
     public function destroy($id)
     {
+        $state = State::findOrFail($id);
+        $stateName = $state->name;
         State::destroy($id);
-        return redirect()->route('states.index');
+          $message  = ' استان ';
+          $message .= $stateName;
+          $message .= ' با موفقیت از بین لیست استانها حذف شد ';
+        return redirect()->route('states.index')->with('message',$message);
     }
 }

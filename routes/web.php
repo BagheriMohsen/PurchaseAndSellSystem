@@ -33,7 +33,16 @@ Route::middleware('auth')->resource('roles','RoleController');
 | Products Routes
 |--------------------------------------------------------------------------
 |*/
-Route::middleware('auth')->resource('products','ProductController');
+Route::group(['middlware'=>['auth'],'prefix'=>'/admin/products/','as'=>'products.'],function(){
+    Route::get('{slug}','ProductController@edit')->name('edit');
+    Route::get('off/{slug}','ProductController@off_index')->name('off');
+    Route::post('off/{id}','ProductController@off_store')->name('off.store');
+    Route::delete('off/{id}','ProductController@off_destroy')->name('off.destroy');
+});
+Route::middleware('auth')->resource('products','ProductController',['except' => [
+  'show',
+  'edit'
+]]);
 /*
 |--------------------------------------------------------------------------
 | ProductType Routes

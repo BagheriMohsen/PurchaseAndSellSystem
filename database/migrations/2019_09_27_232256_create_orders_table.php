@@ -15,8 +15,6 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('seller_id')->unsigned();
-            $table->bigInteger('supervisor_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('state_id')->unsigned();
             $table->boolean('status')->default(0);
@@ -31,10 +29,11 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
 
 
-            $table->foreign('seller_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('supervisor_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('state_id')->references('id')->on('states')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('state_id')->references('id')->on('states')
+            ->onUpdate('cascade')->onDelete('cascade');
 
         });
     }

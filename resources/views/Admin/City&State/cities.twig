@@ -1,32 +1,35 @@
-@extends('Admin.Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
-  داشبورد
-@endsection
+{% block title %}
+  شهرهای ایران
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'شهرهای ایران'])
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'شهرهای ایران'} %}
+{% endblock %}
 
-@section('content')
+{% block content %}
+  {% include 'Messages/message' %}
+  {% include 'Messages/errors' %}
+
   <div class="row">
     <div class="col-sm-6 mx-auto">
-      <form action="{{route('cities.store')}}" method="post">
-        @csrf
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+      <form  action="{{route('cities.store')}}" method="post">
+        <input type="hidden" name="_token" value="{{csrf_token()}}" />
+        <div class="input-group mb-3 md-form">
+          <input id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
           <div class="input-group-append">
-            <a class="input-group-text text-success">
+            <button type="submit" class="btn btn-sm btn-info input-group-text text-dark">
                 <i class="far fa-plus-square crud-icon"></i>
-            </a>
+            </button>
           </div>
         </div>
       </form>
@@ -38,36 +41,36 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($cities as $city)
+        {% for city in cities %}
           <tr>
-            <td class="text-center">{{$city->name}}</td>
+            <td class="text-center">{{city.name}}</td>
             <td class="text-center">
-              {{-- edit --}}
-              <a  class="text-warning" data-toggle="modal" href="#city{{$city->id}}">
+              {# edit #}
+              <a  class="text-warning" data-toggle="modal" href="#city{{city.id}}">
                 <i class="far fa-edit crud-icon"></i>
               </a>
-              {{-- delete --}}
-              <a class="text-danger"  href="{{route('cities.destroy',$city->id)}}">
+              {# delete #}
+              <a class="text-danger"  data-toggle="modal" href="#cityDelete{{city.id}}">
                   <i class="far fa-trash-alt crud-icon"></i>
               </a>
 
             </td>
           </tr>
-      @endforeach
+        {% endfor %}
         </tbody>
 
       </table>
       <ul class="mx-auto">
-        {!! $cities->render() !!}
+        {{cities.render() | raw}}
       </ul>
     </div>
 
   </div>
 
 
-  @foreach($cities as $city)
+  {% for city in cities %}
   <!-- The Modal -->
-  <div class="modal fade" id="city{{$city->id}}">
+  <div class="modal fade" id="city{{city.id}}">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
@@ -79,15 +82,14 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-
-          <form action="{{route('cities.update',$city->id)}}" method="post">
-            @csrf
-            @method('put')
-            <div class="input-group mb-3">
-              <input type="text" value="{{$city->name}}" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+          <form action="{{route('cities.update',city.id)}}" method="post">
+            <input type="hidden"name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"name="_method" value="put" />
+            <div class="input-group mb-3 md-form">
+              <input value="{{city.name}}" id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
               <div class="input-group-append">
-                <button class="input-group-text ">
-                    <i class="far fa-arrow-alt-circle-up crud-icon text-success"></i>
+                <button type="submit" class="btn btn-sm btn-primary  input-group-text text-light">
+                    <i class="fas fa-pencil-alt crud-icon"></i>
                 </button>
               </div>
             </div>
@@ -108,11 +110,61 @@
   </div>
 
 </div>
-@endforeach
+{% endfor %}
 
 
-@endsection
+{% for city in cities %}
+  <!-- The Modal -->
+  <div class="modal fade" id="cityDelete{{city.id}}">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+        <!-- Modal Header -->
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+
+          <form action="{{route('cities.destroy',city.id)}}" method="post">
+            <input type="hidden"name="_method" value="delete" />
+            <input type="hidden" name="_token" value="{{csrf_token()}}" />
+
+              <div class="text-center">
+                  آیا از پاک کردن شهر
+                  <strong class="text-danger">
+                    {{city.name}} 
+                  </strong>
+                   مطمئن هستید؟
+              </div>
+              
+          
+
+
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button class="btn btn-danger btn-sm row ">
+                  <strong class="h6 text-light col-3">
+                      بله.مطمئنم
+                    <i class="fas fa-trash-alt"></i>
+                  </strong>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

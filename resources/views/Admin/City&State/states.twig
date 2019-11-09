@@ -1,38 +1,41 @@
-@extends('Admin.Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
-  داشبورد
-@endsection
+{% block title %}
+  استانهای ایران
+{% endblock %}
 
-@section('header')
-  @include('Admin.Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('styles')
+{% block styles %}
   <link rel="stylesheet" href="{{asset('AdminPanel/select2/select2.min.css')}}">
-@endsection
+{% endblock %}
 
-@section('sidebar')
-  @include('Admin.Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Admin.Master.path',['title'=>'استانهای ایران'])
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'شهرهای ایران'} %}
+{% endblock %}
 
-@section('content')
+{% block content %}
+  {% include 'Messages/message' %}
+  {% include 'Messages/custom_error' %}
+
   <div class="row">
     <div class="col-sm-10 mx-auto">
       <form class="mx-auto" action="{{route('states.store')}}" method="post">
-        @csrf
+        <input type="hidden" name="_token" value="{{csrf_token()}}" />
         <div class="input-group mb-3 col-sm-10">
           <input type="text" class="form-control" name="name" placeholder="استان مورد نظر را وارد کنید" required>
 
           <div class="input-group-append  col-sm-4 form-control">
             <select class="form-control  bg-white cities-name col-sm-12" name="city">
-              @foreach($cities as $city)
-              <option value="{{$city->id}}">{{$city->name}}</option>
-              @endforeach
+              {% for city in cities %}
+              <option value="{{city.id}}">{{city.name}}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="input-group-append">
@@ -53,35 +56,35 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($states as $state)
+        {% for state in states %}
           <tr>
-            <td class="text-center">{{$state->name}}</td>
-            <td class="text-center">{{$state->city->name}}</td>
+            <td class="text-center">{{state.name}}</td>
+            <td class="text-center">{{state.city.name}}</td>
             <td class="text-center">
-              {{-- edit --}}
-              <a  class="text-warning" data-toggle="modal" href="#state{{$state->id}}">
+              {# edit #}
+              <a  class="text-warning" data-toggle="modal" href="#state{{state.id}}">
                 <i class="far fa-edit crud-icon"></i>
               </a>
-              <a  class="text-danger" data-toggle="modal" href="#stateDelete{{$state->id}}">
+              <a  class="text-danger" data-toggle="modal" href="#stateDelete{{state.id}}">
                 <i class="far fa-trash-alt crud-icon"></i>
               </a>
             </td>
           </tr>
-      @endforeach
+      {% endfor %}
         </tbody>
 
       </table>
       <ul class="mx-auto col-sm-2">
-        {!! $states->render() !!}
+        {{states.render() | raw}}
       </ul>
     </div>
 
   </div>
 
-{{-- edit modal --}}
-  @foreach($states as $state)
+{# edit modal #}
+  {% for state in states %}
   <!-- The Modal -->
-  <div class="modal fade" id="state{{$state->id}}">
+  <div class="modal fade" id="state{{state.id}}">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
@@ -94,17 +97,17 @@
         <!-- Modal body -->
         <div class="modal-body">
 
-          <form action="{{route('states.update',$state->id)}}" method="post">
-            @csrf
-            @method('put')
+          <form action="{{route('states.update',state.id)}}" method="post">
+            <input type="hidden"name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"name="_method" value="put" />
             <div class="input-group mb-3">
-              <input type="text" value="{{$state->name}}" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+              <input type="text" value="{{state.name}}" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
                 <div class="input-group-append  col-sm-12 form-control">
                     <select style="width:100%;" class="form-control  bg-white cities-name " name="city">
-                        <option value="{{$state->city->id}}">{{$state->city->name}}</option>
-                        @foreach($cities as $city)
-                            <option value="{{$city->id}}">{{$city->name}}</option>
-                        @endforeach
+                        <option value="{{state.city.id}}">{{state.city.name}}</option>
+                        {% for city in cities %}
+                            <option value="{{city.id}}">{{city.name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group-append">
@@ -127,11 +130,11 @@
   </div>
 
 </div>
-@endforeach
-{{-- end edit modal --}}
-@foreach($states as $state)
+{% endfor %}
+{# end edit modal #}
+{% for state in states %}
 <!-- The Modal -->
-<div class="modal fade " id="stateDelete{{$state->id}}">
+<div class="modal fade " id="stateDelete{{state.id}}">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
@@ -145,9 +148,9 @@
       <div class="modal-body text-center ">
         <i class="fas fa-exclamation-triangle text-danger"></i>
           آیا از این بابت مطمئنید؟
-        <form action="{{route('states.destroy',$state->id)}}" method="post">
-          @csrf
-          @method('delete')
+        <form action="{{route('states.destroy',state.id)}}" method="post">
+          <input type="hidden" name="_token" value="{{csrf_token()}}" />
+          <input type="hidden" name="_method" value="delete" />
           <div class="input-group mb-3 mx-auto">
 
             <div class="text-center">
@@ -169,21 +172,21 @@
 </div>
 
 </div>
-@endforeach
+{% endfor %}
 
-{{-- delete modal --}}
+{# delete modal #}
 
 
 
-{{-- end delete modal --}}
+{# end delete modal #}
 
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Admin.Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
 
-@section('scripts')
+{% block scripts %}
   <script src="{{asset('AdminPanel/select2/select2.full.min.js')}}"></script>
   <script type="text/javascript">
   // In your Javascript (external .js resource or <script> tag)
@@ -191,4 +194,4 @@
       $('.cities-name').select2();
     });
   </script>
-@endsection
+{% endblock %}

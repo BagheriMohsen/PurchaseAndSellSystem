@@ -1,0 +1,93 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  {{product.name}}
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':product.name} %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% include 'Messages/message' %}
+  {% include 'Messages/custom_error' %}
+    
+    <section class="row bg-white pt-2 pb-3 ">
+
+        <div class="col-sm-4 mx-auto">
+            <form action="{{route('products.off.store',product.id)}}" method="post" class="row">
+                <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                <input type="hidden" name="product_id" value="{{product.id}}" />
+                <!-- numberOfProduct input -->
+                <div class="md-form col-sm-12 m-3">
+                    <input name="numberOfProduct" type="text" id="form1" class="form-control" required>
+                    <label for="form1">تعداد کالا</label>
+                </div>
+                <!-- offPrice input -->
+                <div class="md-form col-sm-12 m-3">
+                    <input name="offPrice" type="text" id="form1" class="form-control" required>
+                    <label for="form1">میزان تخفیف</label>
+                </div>
+
+                <button class="btn btn-sm btn-info">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </form>
+        </div>
+
+
+        <div class="col-sm-7 mx-auto">
+            <table  id="example2" class="table table-bordered table-striped ">
+                <thead>
+                <tr>
+                  <th class="h6">تعداد</th>
+                  <th class="h6">میزان تخفیف</th>
+                  <th class="h6">عملیات</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in product.offs %}
+                <tr>
+                  <td>{{item.numberOfProduct}}</td>
+                  <td>{{item.offPrice}}</td>
+                  <td>
+                  {# Form Delete #}
+                    <form id="formForDelete" action="{{route('products.off.destroy',item.id)}}" method="POST">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                        <input type="hidden" name="_method" value="DELETE" />
+                      <a href="javascript:{}" 
+                        onclick="document.getElementById('formForDelete').submit();" >
+                        <i class="far fa-trash-alt text-danger crud-icon"></i>
+                      </a>
+                    </form>
+                   {# Form Delete #}
+                   
+                  </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+        </div>
+
+
+    </section>
+
+
+  {% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

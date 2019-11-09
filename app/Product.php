@@ -6,15 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
 class Product extends Model implements HasMedia
 {
 
     use HasMediaTrait;
-
+    use Sluggable;
     protected $fillable = [
       'name',
+      'slug',
       'code',
-      'image',
+      'image_id',
       'price',
       'buyPrice',
       'description',
@@ -22,11 +24,30 @@ class Product extends Model implements HasMedia
       'messageStatus'
 
     ];
-    // releation with ProductType Model
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with ProductOff Model
+    |--------------------------------------------------------------------------
+    */
+    public function offs(){
+        return $this->hasMany('App\ProductOff');
+      }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with ProductType Model
+    |--------------------------------------------------------------------------
+    */
     public function types(){
       return $this->hasMany('App\ProductType');
     }
-
     /*
     |--------------------------------------------------------------------------
     | Releate with SpecialTariff
@@ -43,14 +64,14 @@ class Product extends Model implements HasMedia
     public function registerMediaCollections()
     {
         
-        //Thumb image for Article
+        //Thumb image for Product
         $this->addMediaConversion('thumb')
-              ->width(150)
-              ->height(150);
-        //Card image for Article
+              ->width(75)
+              ->height(75);
+        //Card image for Product
         $this->addMediaConversion('card')
-            ->width(350)
-            ->height(300);
+            ->width(400)
+            ->height(400);
     }
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +87,7 @@ class Product extends Model implements HasMedia
     |--------------------------------------------------------------------------
     */
     public function getCardUrlAttribute(){
-        return $this->card->getUrl('card');
+        return $this->productImage->getUrl('card');
     }
     /*
     |--------------------------------------------------------------------------
@@ -74,7 +95,7 @@ class Product extends Model implements HasMedia
     |--------------------------------------------------------------------------
     */
     public function getThumbUrlAttribute(){
-        return $this->card->getUrl('thumb');
+        return $this->productImage->getUrl('thumb');
     }
 
 
