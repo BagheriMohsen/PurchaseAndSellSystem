@@ -6,16 +6,19 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-align-justify crud-icon"></i></a>
       </li>
+    {% if auth_user().getRoleNames().first() == "admin" %}
       <li class="nav-item">
-        <a class="nav-link"  href="{{route('products.create')}}">
-          <i class="far fa-plus-square text-success crud-icon"></i>
+        <a title="افزودن محصول" class="nav-link"  href="{{route('products.create')}}">
+          <i class="far fa-plus-square  crud-icon"></i>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link"  href="{{route('users.create')}}">
-        <i class="fas fa-user-plus text-success crud-icon"></i>
+        <a title="ایجاد اکانت" class="nav-link"  href="{{route('users.create')}}">
+        <i class="fas fa-user-plus  crud-icon"></i>
         </a>
       </li>
+      {% endif %}
+
 
     </ul>
 
@@ -32,7 +35,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 ml-3 img-circle">
+              <img src="#" alt="User Avatar" class="img-size-50 ml-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   حسام موسوی
@@ -48,7 +51,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle ml-3">
+              <img src="#" alt="User Avatar" class="img-size-50 img-circle ml-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   پیمان احمدی
@@ -64,7 +67,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle ml-3">
+              <img src="#" alt="User Avatar" class="img-size-50 img-circle ml-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   سارا وکیلی
@@ -108,9 +111,15 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link"  href="{{route('logout')}}">
+        {% if session('adminLogIn')  %}
+          <a title="برگشت به ادمین پنل" class="nav-link"  href="{{route('users.backToPerivouseAccount')}}">
+            <i class="fas fa-arrow-left crud-icon"></i>
+          </a>
+        {% else %}
+        <a title="خروج از حساب" class="nav-link"  href="{{route('logout')}}">
             <i class="text-danger fas fa-sign-out-alt crud-icon"></i>
         </a>
+        {% endif %}
       </li>
     </ul>
   </nav>

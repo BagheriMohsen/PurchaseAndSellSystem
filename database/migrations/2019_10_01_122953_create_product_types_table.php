@@ -16,10 +16,15 @@ class CreateProductTypesTable extends Migration
         Schema::create('product_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->text('name');
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
 
 
         });

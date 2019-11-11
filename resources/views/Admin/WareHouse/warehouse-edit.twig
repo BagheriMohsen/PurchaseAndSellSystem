@@ -1,0 +1,78 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  {{warehouse.name}}
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':warehouse.name} %}
+{% endblock %}
+
+{% block content %}
+
+        {% include 'Messages/errors' %}
+
+        <form action="{{ route('warehouses.update',warehouse.id) }}" method="post" class="container-fluid bg-white pt-3 pb-3">
+            <input type="hidden" name="_token" value="{{csrf_token()}}" />
+            <input type="hidden" name="_method" value="PUT" />
+            <div class="row">
+                {# نام #}
+                <div class="md-form mb-4 m-2 mx-auto col-sm-3">
+                    <input name="name" value="{{warehouse.name}}" type="text" id="inputIconEx2" class="form-control" >
+                    <label for="inputIconEx2">نام انبار</label>
+                </div>
+                {# تلفن ثابت #}
+                <div class="md-form mb-4 m-2 mx-auto col-sm-3">
+                    <input name="telephon" value="{{warehouse.telephone}}" type="text" id="inputIconEx2" class="form-control" >
+                    <label for="inputIconEx2">تلفن ثابت</label>
+                </div>
+                {# کار پستال #}
+                <div class="md-form mb-4 m-2 mx-auto col-sm-3">
+                    <input name="postalCard" value="{{warehouse.postalCard}}" type="text" id="inputIconEx2" class="form-control" >
+                    <label for="inputIconEx2">کارت پستال</label>
+                </div>
+                {# City #}
+                <div  class="col-sm-3 mt-3  mb-4">
+                <select class="form-control"  name="city">
+                    
+                    {% for city in cities %}
+                        <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
+                    {% endfor %}
+                </select>
+                </div>
+                {# end City #}
+                {# آدرس کامل #}
+                <div class="md-form col-sm-6">
+                    <i class="fas fa-pencil-alt prefix text-dark"></i>
+                    <textarea name="address" id="form10" class="md-textarea form-control" rows="3" cols="80">{{warehouse.address}}</textarea>
+                    <label for="form10">آدرس کامل</label>
+                </div>
+                {# آدرس کامل #}
+                {# توضیحات #}
+                <div class="md-form col-sm-6">
+                    <i class="fas fa-pencil-alt prefix text-dark"></i>
+                    <textarea name="description" id="form11" class="md-textarea form-control" rows="3" cols="80">{{warehouse.description}}</textarea>
+                    <label for="form10">توضیحات</label>
+                </div>
+                {# توضیحات #}
+            </div>
+            <button type="submit" class="btn btn-sm btn-success">
+                <strong class="h6 text-dark">
+                    ذخیره
+                </strong>
+            </button>
+        </form>
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

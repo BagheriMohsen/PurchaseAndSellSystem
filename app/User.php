@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cog\Laravel\Ban\Traits\Bannable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
@@ -15,6 +16,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
     use HasMediaTrait;
+    use Bannable;
     /**
      * The attributes that are mass assignable.
      *
@@ -61,6 +63,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with StoreRoom Model
+    |--------------------------------------------------------------------------
+    */
+    public function storeRooms(){
+        return $this->hasMany('App\StoreRoom');
+    }
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model

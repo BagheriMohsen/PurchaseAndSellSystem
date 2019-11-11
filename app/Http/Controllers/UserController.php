@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 class UserController extends Controller
 {
@@ -166,6 +167,30 @@ class UserController extends Controller
     public function sellers(){
       $users = User::whereIn('role_id',2)->get();
       return view('Admin.User.sellers',compact('users'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | switch to Another Account Without log-out
+    |--------------------------------------------------------------------------
+    |*/
+    public function switchAccount($id){
+        $user_id = auth()->user()->id;
+        $user = User::findOrFail($id);
+        Auth::login($user);
+        session(['adminLogIn' => $user_id ]);
+        return redirect('/')->with('switchSuccess','true');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Back To Perivouse Account
+    |--------------------------------------------------------------------------
+    |*/
+    public function backToPerivouseAccount(){
+        $id= session()->pull('adminLogIn');
+        $user = User::findOrFail($id);
+        Auth::login($user);
+        session()->forget('adminLogIn');
+        return redirect()->route('users.index');
     }
 
 }

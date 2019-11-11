@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lan="fa">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +13,14 @@
     {% block styles %}{% endblock %}
 </head>
 <body class="hold-transition sidebar-mini">
+
+<!-- Preloader -->
+<div id="preloader">
+  <div id="status">&nbsp;</div>
+</div>
+
+
+
 <div class="wrapper">
 
   {% block header %}{% endblock %}
@@ -50,5 +58,14 @@
   {# Csrf Token #}
   <script>window.Laravel = {{ {'csrfToken': csrf_token()}|json_encode()|raw }}</script>
   {% block scripts %}{% endblock %}
+
+<script>
+  $(window).on('load', function() { // makes sure the whole site is loaded 
+    $('#status').fadeOut(); // will first fade out the loading animation 
+    $('#preloader').delay(100).fadeOut('slow'); // will fade out the white DIV that covers the website. 
+    $('body').delay(100).css({'overflow':'visible'});
+  })
+</script>
+
 </body>
 </html>

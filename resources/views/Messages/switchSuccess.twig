@@ -1,0 +1,27 @@
+{% if session('switchSuccess') %}
+<div class="alert alert-info text-dark" role="alert">
+    <a style="float:left" type="button" class="btn btn-dark btn-sm " data-dismiss="alert" aria-label="Close">
+      <strong class="h6 text-light ">
+        {# <i class="fas fa-check crud-icon"></i> #}
+        فهمیدم
+      </strong>
+   </a>
+  <h6 class="alert-heading mt-3">
+  <i class="fas fa-eye crud-icon"></i>
+    شما الان در حال دیدن پنل
+        <strong class="text-danger">
+        {% set role = auth_user().getRoleNames().first() %}
+        {% if role == "mainWarehouser" %}
+                {{"انبار مادر"}}
+        {% elseif role == "fundWarehouser" %}
+                {{"انبار تنخواه"}}
+        {% else %}
+            {{ auth_user().name }} {{" "}} {{ auth_user().family }}
+        {% endif %}
+        </strong>
+    هستید
+  </h6>
+ </br>
+    
+</div>
+{% endif %}

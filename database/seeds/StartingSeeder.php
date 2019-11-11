@@ -30,12 +30,13 @@ class StartingSeeder extends Seeder
           ]);
         /*
         |--------------------------------------------------------------------------
-        | Create User
+        | Create Users
         |--------------------------------------------------------------------------
         |*/
+        #1.create user for admin site
         'App\User'::create([
-            'name'          =>  'محسن',
-            'family'        =>  'باقری',
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
             'sex'           =>  1,
             'username'      =>  'admin',
             'password'      =>  Hash::make('admin2020'),
@@ -55,6 +56,99 @@ class StartingSeeder extends Seeder
             'internalPrice' =>  null,
             'villagePrice'  =>  null
           ]);
-          return redirect()->route('users.index');
+        #2.create user for followUpManger
+        'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'peygiri.sh',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
+          #3.create user for mainWareHouse
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'anbar.m',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
+          #4.create user for fundWareHouse
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'anbar.t',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);  
+        /*
+        |--------------------------------------------------------------------------
+        | Create WareHouse
+        |--------------------------------------------------------------------------
+        |*/
+        #1
+          'App\Warehouse'::create([
+            'user_id'       =>  1,
+            'name'          =>  "انبار مادر",
+            'city_id'       =>  1,
+            'description'   =>  "",
+            'address'       =>  "قم-خیابان ارم",
+            'telephon'      =>  "",
+            'postalCard'    =>  "" 
+        ]);
+        #2
+        'App\Warehouse'::create([
+          'user_id'       =>  1,
+          'name'          =>  "انبار تنخواه",
+          'city_id'       =>  1,
+          'description'   =>  "",
+          'address'       =>  "قم-خیابان ارم",
+          'telephon'      =>  "",
+          'postalCard'    =>  "" 
+      ]);
     }
 }

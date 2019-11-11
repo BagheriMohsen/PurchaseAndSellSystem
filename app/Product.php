@@ -34,6 +34,14 @@ class Product extends Model implements HasMedia
     }
     /*
     |--------------------------------------------------------------------------
+    | Releation with StoreRoom Model
+    |--------------------------------------------------------------------------
+    */
+    public function storeRooms(){
+        return $this->hasMany('App\StoreRoom');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Releation with ProductOff Model
     |--------------------------------------------------------------------------
     */

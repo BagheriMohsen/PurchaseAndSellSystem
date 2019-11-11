@@ -12,14 +12,23 @@ Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 /*
 |--------------------------------------------------------------------------
+| AdminController Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
+  Route::get('/','AdminController@index')->name('index');
+});
+/*
+|--------------------------------------------------------------------------
 | Users Routes
 |--------------------------------------------------------------------------
 |*/
-
 Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('agents','UserController@agents')->name('agents');
     Route::get('sellers','UserController@sellers')->name('sellers');
-});
+    Route::get('{id}/switchAccount','UserController@switchAccount')->name('switchAccount');
+    Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
+  });
 
 Route::middleware('auth')->resource('users','UserController');
 /*
@@ -75,7 +84,17 @@ Route::middleware('auth')->resource('states','StateController');
 Route::middleware('auth')->resource('special-tariffs','SpecialTariffController');
 /*
 |--------------------------------------------------------------------------
-| Custom Routes
+| Store Room Routes
 |--------------------------------------------------------------------------
 |*/
-Route::middleware('auth')->get('/','AdminController@index')->name('admin.index'); // index page for admin
+Route::middleware('auth')->resource('storeRooms','StoreRoomController');
+/*
+|--------------------------------------------------------------------------
+| Warehouse Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','prefix'=>'warehouses','as'=>'warehouses.'],function(){
+    Route::get('{slug}','WarehouseController@inout')->name('inout');
+});
+
+Route::middleware('auth')->resource('warehouses','WarehouseController');

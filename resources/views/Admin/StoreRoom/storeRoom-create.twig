@@ -1,0 +1,138 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  مدیریت انبار
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'مدیریت انبار'} %}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'Messages/message' %}
+
+    <section class="row bg-white pt-3 pb-3">
+        <div class="col-sm-6">
+        {# product #}
+        <div  class="col-sm-8 mx-auto mb-4 mt-3  mb-4">
+            <label for="inputIconEx3">
+            <sup class="text-danger">*</sup>
+            محصول
+            </label>
+          <select class="form-control  bg-white " name="product">
+                <option value="{{null}}">{{'محصول را انتخاب کنید'}}</option>
+              {% for product in products %}
+                <option value="{{product.id}}">{{product.name}}</option>
+              {% endfor %}
+            </select>
+        </div>
+        {# end product #}
+        {# number #}
+        <div class="col-sm-8 mx-auto mb-4 md-form mb-4">
+          <input type="number" id="inputIconEx3" class="form-control" name="mobile" value="">
+          <label for="inputIconEx3">
+          <sup class="text-danger">*</sup>
+          تعداد
+          </label>
+        </div>
+        {# end number #}
+        {# decription #}
+        <div class="md-form mx-auto mb-4 col-sm-8">
+            <i class="fas fa-pencil-alt prefix text-dark"></i>
+            <textarea name="decription" id="form10" class="md-textarea form-control" rows="4" cols="80"></textarea>
+            <label for="form10">توضیحات</label>
+        </div>
+        {# decription #}
+        </div>
+
+        <div class="col-sm-6">
+            <h6>
+                <sup class="text-danger">*</sup>
+                انتخاب ورود/خروج کالا
+            </h6>
+            <!-- Default inline 1-->
+            <div  class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
+                <input name="status" id="in" onclick="check()" type="radio"   >
+                <label  >ورود کالا</label>
+            </div>
+
+            <!-- Default inline 2-->
+            <div  class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
+                <input name="status" id="out" onclick="check()" type="radio"   >
+                <label  >خروج کالا</label>
+            </div>
+
+            <!-- Default inline 3-->
+            <div class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
+                <input name="status" id="anbar" onclick="check()" type="radio"  >
+                <label  >انبار به انبار</label>
+            </div>
+            
+            {# product #}
+            <div  class="col-sm-7 custom-control mt-5">
+                <label>
+                    <sup class="text-danger">*</sup>
+                    وضعیت را انتخاب کنید
+                </label>
+                <select class="form-control  bg-white " name="status">
+                    <option value="{{null}}">{{'چیزی انتخاب نشده'}}</option>
+                    <option style="display:none" class="in" value="">{{'خرید'}}</option>
+                    <option style="display:none" class="in" value="">{{'ورود از انبار دیگر'}}</option>
+                    <option style="display:none" class="in" value="">{{'برگشت محصول'}}</option>
+                    <option style="display:none" class="out" value="">{{'خرابی'}}</option>
+                    <option style="display:none" class="out" value="">{{'اسقاط'}}</option>
+                    <option style="display:none" class="anbar" value="">{{'انتقال به انبار تنخواه'}}</option>
+                </select>
+            </div>
+            {# end product #}
+        </div>
+
+        <button type="submit" class="btn btn-sm btn-info mx-auto">
+            <strong class="h6 text-dark">
+                ذخیره
+            </strong>
+        </button>
+    </section>
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'Admin/Master/footer' %}
+{% endblock %}
+
+{% block scripts %}
+
+  <script src="{{asset('AdminPanel/select2/select2.full.min.js')}}"></script>
+  <script type="text/javascript">
+  // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function() {
+      $('.products-name').select2();
+    });
+  </script>
+    <script>
+        function check(){
+            if($("#in").is(":checked")){
+                $('.in').show();
+                $('.out').hide();
+                $('.anbar').hide();
+            }else if($("#out").is(":checked")){
+                $('.out').show();
+                $('.in').hide();
+                $('.anbar').hide();
+            }else if($("#anbar").is(":checked")){
+                $('.anbar').show();
+                $('.out').hide();
+                $('.in').hide();
+            }
+        }
+    </script>
+{% endblock %}

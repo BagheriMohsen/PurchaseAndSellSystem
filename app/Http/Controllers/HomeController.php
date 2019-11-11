@@ -45,6 +45,7 @@ class HomeController extends Controller
      *
      */
     public function loginToSite(Request $request){
+       
         $status = User::where('username',$request->username)->exists();
 
         if($status == true){

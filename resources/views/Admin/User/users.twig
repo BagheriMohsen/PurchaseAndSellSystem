@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' %}
+  {% include 'Admin/Master/path' with {'title':'کاربران'} %}
 {% endblock %}
 
 {% block content %}
@@ -36,32 +36,36 @@
                       <td>{{user.name}}</td>
                       <td>{{user.family}}</td>
                       <td>
-                      {% set roles = user.getRoleNames().first() %}
-                      {% if roles == 'admin' %}
+                      {% set role = user.getRoleNames().first() %}
+                      {% if role == 'admin' %}
                       
                           {{ 'ادمین سایت' }}
                           
-                        {% elseif roles == "user" %}
+                        {% elseif role == "user" %}
 
                           {{ 'کاربر عادی' }}
 
-                        {% elseif roles == "seller" %}
+                        {% elseif role == "seller" %}
 
                           {{ 'فروشنده' }}
 
-                        {% elseif roles == "warehouser" %}
+                        {% elseif role == "mainWarehouser" %}
 
-                          {{ 'انباردار' }}
+                          {{ 'انبار مادر' }}
 
-                        {% elseif roles == "agent" %}
+                        {% elseif role == "fundWarehouser" %}
+
+                          {{ 'انبار تنخواه' }}
+
+                        {% elseif role == "agent" %}
 
                           {{ 'نماینده' }}
 
-                        {% elseif roles == "agentChief" %}
+                        {% elseif role == "agentChief" %}
 
                           {{ 'مدیر نماینده' }}
 
-                        {% elseif roles == "followUpManager" %}
+                        {% elseif role == "followUpManager" %}
 
                           {{ 'مدیر پیگیری' }}
 
@@ -78,16 +82,33 @@
                       <td class="text-danger ">   {{'غیر فعال'}} </td>
                       {% endif %}
                       <td class="text-center">
-                        {# {% if $user->role->role === 'agent' || $user->role->role === 'agentChief' %} #}
-                          <a  class="text-success " href="#">
+                      
+                        {% if role == "agent" or role == "agentChief" %}
+                          <a  style="pointer-events: none;cursor: default;" title="مشارکت" class="text-success " 
+                            href="#">
                             <i class="fas fa-plus crud-icon"></i>
                           </a>
-                        {# {% endif %} #}
-                        <a  class="text-warning " href="{{route('users.edit',user.id)}}">
+                        {% endif %}
+                        
+                        <a  title="ویرایش" class="text-warning " 
+                          href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
-                        <a class="text-danger " href="#">
-                            <i class="far fa-trash-alt crud-icon"></i>
+
+                        {# Form Delete #}
+                          <form action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
+                              <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                              <input type="hidden" name="_method" value="DELETE" />
+                            <a title="حذف" href="javascript:{}" 
+                              onclick="document.getElementById('formForDelete').submit();" >
+                              <i class="far fa-trash-alt text-danger crud-icon"></i>
+                            </a>
+                          </form>
+                        {# Form Delete #}
+
+                        <a title="ورود به اکانت" class="text-primary " 
+                            href="{{ route('users.switchAccount',user.id) }}">
+                            <i class="fas fa-sign-in-alt crud-icon"></i>
                         </a>
                       </td>
                     </tr>

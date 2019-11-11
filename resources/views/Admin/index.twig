@@ -17,11 +17,14 @@
 {% endblock %}
 
 {% block content %}
+
+  {% include 'Messages/switchSuccess' %}
+
 <!-- Small boxes (Stat box) -->
 <div class="row">
   <div class="col-lg-3 col-6">
     <!-- small box -->
-    <div class="small-box bg-info">
+    <div class="small-box bg-default">
       <div class="inner">
         <strong>سفارشات ثبت شده کال سنتر</strong>
         <div class="mt-3 pt-2 pb-2">
@@ -44,7 +47,7 @@
   <!-- ./col -->
   <div class="col-lg-3 col-6">
     <!-- small box -->
-    <div class="small-box bg-success">
+    <div class="small-box bg-primary">
       <div class="inner">
         <strong>سفارشات در انتظار تحویل</strong>
         <div class="mt-3 pt-2 pb-2">
@@ -89,7 +92,7 @@
   <!-- ./col -->
   <div class="col-lg-3 col-6 ">
     <!-- small box -->
-    <div class="small-box bg-danger">
+    <div class="small-box bg-secondary">
       <div class="inner">
         <strong>سفارشات برگشت خورده</strong>
         <div class="mt-3 pt-2 pb-2">
@@ -118,7 +121,7 @@
     <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th class="bg-info">کالاهای تحویل داده شده امروز</th>
+        <th class="bg-dark">کالاهای تحویل داده شده امروز</th>
       </tr>
     </thead>
     <tbody>
@@ -161,7 +164,7 @@
     <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th class="bg-info">پرفروش ترینها</th>
+        <th class="bg-dark">پرفروش ترینها</th>
       </tr>
     </thead>
     <tbody>
@@ -204,7 +207,7 @@
     <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th class="bg-info">لیست بدهکاران</th>
+        <th class="bg-dark">لیست بدهکاران</th>
       </tr>
     </thead>
     <tbody>
@@ -247,7 +250,7 @@
     <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th class="bg-info">پیامک های دریافتی امروز</th>
+        <th class="bg-dark">پیامک های دریافتی امروز</th>
       </tr>
     </thead>
     <tbody>

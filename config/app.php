@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         TwigBridge\ServiceProvider::class,
+        Cog\Laravel\Ban\Providers\BanServiceProvider::class,
         /*
          * Application Service Providers...
          */

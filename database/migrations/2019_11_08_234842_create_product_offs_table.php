@@ -16,11 +16,15 @@ class CreateProductOffsTable extends Migration
         Schema::create('product_offs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->integer('numberOfProduct');
             $table->integer('offPrice');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')
+            ->onDelete('CASCADE')->onUpdate('CASCADE');
+
+            $table->foreign('user_id')->references('id')->on('users')
             ->onDelete('CASCADE')->onUpdate('CASCADE');
         });
     }

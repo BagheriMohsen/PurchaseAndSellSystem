@@ -16,6 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('image_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('code');
             $table->text('name');
             $table->text('slug');
@@ -28,6 +29,9 @@ class CreateProductsTable extends Migration
 
 
             $table->Foreign('image_id')->references('id')->on('media')
+            ->onDelete('CASCADE')->onUpdate('CASCADE');
+
+            $table->Foreign('user_id')->references('id')->on('users')
             ->onDelete('CASCADE')->onUpdate('CASCADE');
         });
     }

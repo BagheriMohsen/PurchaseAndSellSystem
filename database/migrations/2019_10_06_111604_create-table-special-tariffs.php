@@ -22,8 +22,11 @@ class CreateTableSpecialTariffs extends Migration
           $table->text('villagePrice');
           $table->timestamps();
 
-          $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
-          $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+          $table->foreign('product_id')->references('id')->on('products')
+          ->onUpdate('cascade')->onDelete('cascade');
+          
+          $table->foreign('user_id')->references('id')->on('users')
+          ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
