@@ -1,0 +1,101 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  {{ user.name }}{{' '}}{{ user.family }}
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.css')}}">
+  <link rel="stylesheet" href="{{asset('AdminPanel/select2/select2.min.css')}}">
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':user.username} %}
+{% endblock %}
+
+{% block content %}
+
+  {% include "Messages/message" %}
+  {% include "Messages/errors" %}
+
+
+<form  action="{{route('users.public.update',user.username)}}" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+  <input type="hidden" name="_method" value="put" />
+<div class="row bg-white pt-3 pb-3">
+ 
+  <h6 class="col-12 pt-2 pb-3">
+    {{ user.name }}{{' '}}{{ user.family }}
+  </h6>
+
+<div class="row bg-white pt-2 pb-3 mt-5">
+     
+
+  
+    {# تصویر شاخص #}
+      <div class="col-sm-6">
+        {% if user.image_id is not null %}
+            <img  src="{{ user.cardUrl }}" class="img-circle" alt="User Image">
+        {% elseif user.sex == 1 %}
+            <img style="width:250px;" src="{{asset('img/User/male.png')}}" class="img-circle" alt="User Image">
+        {% else %}
+            <img style="width:250px;" src="{{asset('img/User/female.png')}}" class="img-circle" alt="User Image">
+        {% endif %}
+      </div>
+      <div class="col-sm-6">
+          <div class="row">
+              <div class="md-form mb-5 col-sm-9 mx-auto">
+            <label>تصویرشاخص:</label>
+            <br />
+                
+            <br />
+            <input type="file" id="inputIconEx4" class="form-control" name="image" value="" >
+            </div>
+            {# تصویر شاخص #}
+            {# گذرواژه #}
+            <div class="md-form mb-4 col-sm-9 mx-auto">
+                <input type="password" id="inputIconEx4" class="form-control" name="password" value="" required>
+                <label for="inputIconEx4">گذرواژه</label>
+            </div>
+            {# گذرواژه #}
+          </div>
+        </div>
+      </div>
+
+
+  <div class="col-12 text-center mt-5">
+    <button class="btn btn-success btn-sm col-2" type="submit" name="button">
+      <strong class="h6 text-dark">
+        ذخیره 
+      </strong>
+    </button>
+  </div>
+
+
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{asset('AdminPanel/select2/select2.full.min.js')}}"></script>
+  <script src="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.js')}}"></script>
+
+  <script type="text/javascript">
+  // In your Javascript (external .js resource or <script> tag)
+  $(document).ready(function() {
+      $('.cities').select2();
+  });
+  </script>
+{% endblock %}

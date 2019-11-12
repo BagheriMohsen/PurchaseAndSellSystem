@@ -1,12 +1,10 @@
 <?php
+use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
-Route::get('/test',function(){
-  return view('test');
-});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
@@ -16,7 +14,7 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
-  Route::get('/','AdminController@index')->name('index');
+  Route::get('/home','AdminController@index')->name('index');
 });
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +26,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('sellers','UserController@sellers')->name('sellers');
     Route::get('{id}/switchAccount','UserController@switchAccount')->name('switchAccount');
     Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
+    Route::get('//{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
+    Route::put('/{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
   });
 
 Route::middleware('auth')->resource('users','UserController');
@@ -87,6 +87,10 @@ Route::middleware('auth')->resource('special-tariffs','SpecialTariffController')
 | Store Room Routes
 |--------------------------------------------------------------------------
 |*/
+Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],function(){
+      Route::get('/in','StoreRoomController@inStorage')->name('in');
+      Route::get('/out','StoreRoomController@outStorage')->name('out');
+});
 Route::middleware('auth')->resource('storeRooms','StoreRoomController');
 /*
 |--------------------------------------------------------------------------

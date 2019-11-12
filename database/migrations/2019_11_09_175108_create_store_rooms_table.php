@@ -31,27 +31,31 @@ class CreateStoreRoomsTable extends Migration
         });
         Schema::create('store_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('warehouse_id')->unsigned();
+            $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->bigInteger('number');
             $table->string('in_out');
-            $table->string('roomName');
+            $table->string('status');
             $table->text('description')->nullable();
-            $table->dateTimeTz('in_date')->nullable();
-            $table->dateTimeTz('out_date')->nullable();
+            $table->date('in_date')->nullable();
+            $table->date('out_date')->nullable();
             $table->timestamps();
 
 
-            $table->foreign('user_id')->references('id')->on('users')
-            ->onDelete('cascade')->onUpdate('cascade');
+
 
             $table->foreign('product_id')->references('id')->on('products')
             ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('warehouse_id')->references('id')->on('warehouses')
             ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreign('agent_id')->references('id')->on('users')
+            ->onDelete('cascade')->onUpdate('cascade');
         });
+
+       
     }
 
     /**

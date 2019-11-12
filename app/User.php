@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use Notifiable;
     use HasRoles;
@@ -23,6 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'image_id',
         'name',
         'family',
         'sex',
@@ -106,20 +107,20 @@ class User extends Authenticatable
     {
         
         //Thumb image for Article
-        $this->addMediaConversion('thumb')
-              ->width(150)
-              ->height(150);
+        $this->addMediaConversion('avatar')
+              ->width(50)
+              ->height(50);
         //Card image for Article
         $this->addMediaConversion('card')
-            ->width(350)
-            ->height(300);
+            ->width(250)
+            ->height(250);
     }
     /*
     |--------------------------------------------------------------------------
     | Relate with Media Model
     |--------------------------------------------------------------------------
     */
-    public function productImage(){
+    public function avatarImage(){
         return $this->hasOne(Media::class,'id','image_id');
     }
     /*
@@ -128,15 +129,15 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
     public function getCardUrlAttribute(){
-        return $this->card->getUrl('card');
+        return $this->avatarImage->getUrl('card');
     }
     /*
     |--------------------------------------------------------------------------
     | Call Thumb url in view page
     |--------------------------------------------------------------------------
     */
-    public function getThumbUrlAttribute(){
-        return $this->card->getUrl('thumb');
+    public function getAvatarUrlAttribute(){
+        return $this->avatarImage->getUrl('avatar');
     }
 
 

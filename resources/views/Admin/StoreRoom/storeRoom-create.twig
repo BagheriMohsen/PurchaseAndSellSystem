@@ -19,8 +19,9 @@
 {% block content %}
 
     {% include 'Messages/message' %}
-
-    <section class="row bg-white pt-3 pb-3">
+    {% include 'Messages/errors' %}
+    <form action="{{route('storeRooms.store')}}" method="post" class="row bg-white pt-3 pb-3">
+       <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <div class="col-sm-6">
         {# product #}
         <div  class="col-sm-8 mx-auto mb-4 mt-3  mb-4">
@@ -38,7 +39,7 @@
         {# end product #}
         {# number #}
         <div class="col-sm-8 mx-auto mb-4 md-form mb-4">
-          <input type="number" id="inputIconEx3" class="form-control" name="mobile" value="">
+          <input type="number" id="inputIconEx3" class="form-control" name="number" value="{{ old('number') }}">
           <label for="inputIconEx3">
           <sup class="text-danger">*</sup>
           تعداد
@@ -48,7 +49,7 @@
         {# decription #}
         <div class="md-form mx-auto mb-4 col-sm-8">
             <i class="fas fa-pencil-alt prefix text-dark"></i>
-            <textarea name="decription" id="form10" class="md-textarea form-control" rows="4" cols="80"></textarea>
+            <textarea name="decription" id="form10" class="md-textarea form-control" rows="4" cols="80">{{old('decription')}}</textarea>
             <label for="form10">توضیحات</label>
         </div>
         {# decription #}
@@ -61,19 +62,19 @@
             </h6>
             <!-- Default inline 1-->
             <div  class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
-                <input name="status" id="in" onclick="check()" type="radio"   >
+                <input value="in" name="in_out" id="in" onclick="check()" type="radio"   >
                 <label  >ورود کالا</label>
             </div>
 
             <!-- Default inline 2-->
             <div  class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
-                <input name="status" id="out" onclick="check()" type="radio"   >
+                <input value="out" name="in_out" id="out" onclick="check()" type="radio"   >
                 <label  >خروج کالا</label>
             </div>
 
             <!-- Default inline 3-->
             <div class="col-sm-7 mx-auto custom-control custom-radio custom-control-inline">
-                <input name="status" id="anbar" onclick="check()" type="radio"  >
+                <input value="displacement" name="in_out" id="anbar" onclick="check()" type="radio"  >
                 <label  >انبار به انبار</label>
             </div>
             
@@ -85,12 +86,12 @@
                 </label>
                 <select class="form-control  bg-white " name="status">
                     <option value="{{null}}">{{'چیزی انتخاب نشده'}}</option>
-                    <option style="display:none" class="in" value="">{{'خرید'}}</option>
-                    <option style="display:none" class="in" value="">{{'ورود از انبار دیگر'}}</option>
-                    <option style="display:none" class="in" value="">{{'برگشت محصول'}}</option>
-                    <option style="display:none" class="out" value="">{{'خرابی'}}</option>
-                    <option style="display:none" class="out" value="">{{'اسقاط'}}</option>
-                    <option style="display:none" class="anbar" value="">{{'انتقال به انبار تنخواه'}}</option>
+                    <option style="display:none" class="in"     value="خرید">{{'خرید'}}</option>
+                    <option style="display:none" class="in"     value="ورود از انبار دیگر">{{'ورود از انبار دیگر'}}</option>
+                    <option style="display:none" class="in"     value="برگشت محصول">{{'برگشت محصول'}}</option>
+                    <option style="display:none" class="out"    value="خرابی">{{'خرابی'}}</option>
+                    <option style="display:none" class="out"    value="اسقاط">{{'اسقاط'}}</option>
+                    <option style="display:none" class="anbar"  value="انتقال به انبار تنخواه">{{'انتقال به انبار تنخواه'}}</option>
                 </select>
             </div>
             {# end product #}
@@ -101,7 +102,7 @@
                 ذخیره
             </strong>
         </button>
-    </section>
+    </form>
 
 {% endblock %}
 

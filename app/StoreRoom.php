@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class StoreRoom extends Model
 {
     protected $fillable = [
+      'user_id',
       'product_id',
+      'warehouse_id',
       'user_id',
       'number',
       'in_out',
       'description',
+      'status',
       'in_date',
       'out_date'  
     ];
@@ -21,7 +24,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','agent_id','id');
     }
     /*
     |--------------------------------------------------------------------------

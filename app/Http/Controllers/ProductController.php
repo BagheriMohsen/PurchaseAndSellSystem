@@ -55,6 +55,7 @@ class ProductController extends Controller
         ]);
 
         $product = Product::create([
+          'user_id'       =>  auth()->user()->id,
           'name'          =>  $request->name,
           'code'          =>  $request->code,
           'price'         =>  $request->price,
@@ -122,6 +123,7 @@ class ProductController extends Controller
 
      
       $product->update([
+        'user_id'       =>  auth()->user()->id,
         'name'          =>  $request->name,
         'code'          =>  $request->code,
         'price'         =>  $request->price,
@@ -175,6 +177,7 @@ class ProductController extends Controller
 
         if($status == false){
             'App\ProductOff'::create([
+                'user_id'           =>  auth()->user()->id,
                 'product_id'        =>  $request->product_id,
                 'numberOfProduct'   =>  $request->numberOfProduct,
                 'offPrice'          =>  $request->offPrice

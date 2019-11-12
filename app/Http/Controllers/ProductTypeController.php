@@ -35,6 +35,7 @@ class ProductTypeController extends Controller
     public function store(Request $request)
     {
         ProductType::create([
+          'user_id'     =>  auth()->user()->id,
           'product_id'  =>  $request->product,
           'name'        =>  $request->name
         ]);
@@ -76,6 +77,7 @@ class ProductTypeController extends Controller
     {
       $type = ProductType::findOrFail($id);
       $type->update([
+        'user_id'     =>  auth()->user()->id,
         'product_id'  =>  $request->product,
         'name'        =>  $request->name
       ]);

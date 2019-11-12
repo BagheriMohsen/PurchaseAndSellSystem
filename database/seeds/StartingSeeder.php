@@ -124,7 +124,76 @@ class StartingSeeder extends Seeder
             'locallyPrice'  =>  null,
             'internalPrice' =>  null,
             'villagePrice'  =>  null
-          ]);  
+          ]); 
+          #5.create agentChief
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'agentChief',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
+          #6.create agent
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'agent',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  5,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
+          #7.create seller
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'seller',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
         /*
         |--------------------------------------------------------------------------
         | Create WareHouse

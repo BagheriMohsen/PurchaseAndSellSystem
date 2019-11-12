@@ -41,7 +41,7 @@
                  with font-awesome or any other icon font library -->
                  {% if role.name  == "admin" %}
                  <li class="nav-item">
-                   <a href="{{url('/')}}" class="nav-link">
+                   <a href="{{url('/home')}}" class="nav-link">
                      <i class="fas fa-tachometer-alt "></i>
                      <p>
                         داشبورد
@@ -51,7 +51,7 @@
                  {% endif %}
 
                 {# Products #}
-                {% if user.can('read products') %}
+                {% if role.name == "admin" %}
                   <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="fas fa-box-open"></i>
@@ -75,7 +75,7 @@
                     </ul>
                   </li>
                 {% endif %}
-                {% if user.can('read warehouses') %}
+                {% if role.name == "admin" %}
                   {# warehouse #}
                   <li class="nav-item">
                     <a href="{{route('warehouses.index')}}" class="nav-link">
@@ -87,7 +87,7 @@
                 {% endif %}
 
                 {# main WareHouser #}
-              {% if user.can('read users') %}
+              {% if role.name == "mainWarehouser" or role.name == "fundWarehouser" %}
                 <li class="nav-item has-treeview">
                   <a href="#" class="nav-link">
                       <i class="fas fa-boxes "></i>
@@ -96,12 +96,14 @@
                     </p>
                   </a>
                   <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.create')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>افزودن</p>
-                      </a>
-                    </li>
+                    {% if role.name == "mainWarehouser" %}
+                      <li class="nav-item">
+                        <a href="{{route('storeRooms.create')}}" class="nav-link">
+                          <i class="fas fa-chevron-circle-left"></i>
+                          <p>ورود و خروج</p>
+                        </a>
+                      </li>
+                    {% endif %}
                      <li class="nav-item">
                       <a href="{{route('storeRooms.index')}}" class="nav-link">
                         <i class="fas fa-chevron-circle-left"></i>
@@ -109,19 +111,13 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{route('storeRooms.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>ورودی و خروجی</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.agents')}}" class="nav-link">
+                      <a href="{{route('storeRooms.in')}}" class="nav-link">
                         <i class="fas fa-chevron-circle-left"></i>
                         <p>لیست ورودی انبار</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{route('users.index')}}" class="nav-link">
+                      <a href="{{route('storeRooms.out')}}" class="nav-link">
                         <i class="fas fa-chevron-circle-left"></i>
                         <p>لیست خروجی انبار</p>
                       </a>
@@ -140,7 +136,7 @@
 
 
               {# Users #}
-              {% if user.can('read users') %}
+              {% if role.name == "admin" %}
                 <li class="nav-item has-treeview">
                   <a href="#" class="nav-link">
                       <i class="fas fa-users "></i>
@@ -177,7 +173,7 @@
                 </li>
                 {# users #}
               {% endif %}
-              {% if user.can('read cities') %}
+              {% if role.name == "admin" %}
               {# Citites #}
                <li class="nav-item">
                  <a href="{{route('cities.index')}}" class="nav-link">
@@ -187,7 +183,7 @@
                </li>
                {# Citites #}
               {% endif %}
-              {% if user.can('read states') %}
+              {% if role.name == "admin" %}
                {# States #}
                <li class="nav-item">
                  <a href="{{route('states.index')}}" class="nav-link">
@@ -211,7 +207,7 @@
             <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
               <li class="nav-item">
-                <a href="{{route('users.edit',auth_user().id )}}" class="nav-link">
+                <a href="{{route('users.public.edit',auth_user().username )}}" class="nav-link">
                   <i class="far fa-user"></i>
                   <p>
                     ویرایش پروفایل

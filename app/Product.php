@@ -13,6 +13,7 @@ class Product extends Model implements HasMedia
     use HasMediaTrait;
     use Sluggable;
     protected $fillable = [
+      'user_id',
       'name',
       'slug',
       'code',

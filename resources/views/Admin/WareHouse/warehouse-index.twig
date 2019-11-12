@@ -51,14 +51,14 @@
             </a>
 
             {# Form Delete #}
-                <form action="{{route('warehouses.destroy',warehouse.id)}}" id="formForDelete"  method="POST">
+                {# <form action="{{route('warehouses.destroy',warehouse.id)}}" id="formForDelete"  method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <input type="hidden" name="_method" value="DELETE" />
                 <a title="حذف" href="javascript:{}" 
                     onclick="document.getElementById('formForDelete').submit();" >
                     <i class="far fa-trash-alt text-danger crud-icon"></i>
                 </a>
-                </form>
+                </form> #}
             {# Form Delete #}
 
         </tr>

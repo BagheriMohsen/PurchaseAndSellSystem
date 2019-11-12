@@ -16,9 +16,6 @@ class RolePermissionSeeder extends Seeder
         $role  = Role::create(['name'=>'agent','persianName'=>'نماینده']);
         $role  = Role::create(['name'=>'agentChief','persianName'=>'مدیر نماینده']);
         $role  = Role::create(['name'=>'seller','persianName'=>'فروشنده']);
-        
-        
-        
         $role  = Role::create(['name'=>'admin','persianName'=>'ادمین سایت']);
         /*
         |--------------------------------------------------------------------------

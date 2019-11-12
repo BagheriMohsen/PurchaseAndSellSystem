@@ -177,8 +177,14 @@ class UserController extends Controller
         $user_id = auth()->user()->id;
         $user = User::findOrFail($id);
         Auth::login($user);
+        $role = $user->getRoleNames()->first();
         session(['adminLogIn' => $user_id ]);
-        return redirect('/')->with('switchSuccess','true');
+        if($role == "mainWarehouser" || $role == "fundWarehouser"){
+            return redirect()->route('storeRooms.index')->with('switchSuccess','true');
+        }else{
+            return redirect('/')->with('switchSuccess','true');
+        }
+        
     }
     /*
     |--------------------------------------------------------------------------
@@ -191,6 +197,42 @@ class UserController extends Controller
         Auth::login($user);
         session()->forget('adminLogIn');
         return redirect()->route('users.index');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | User Public Edit
+    |--------------------------------------------------------------------------
+    |*/
+    public function userPublicEdit(){
+        $user = User::findOrFail(auth()->user()->id);
+        return view('Admin.User.users-edit-pass',compact('user'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | User Public Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function userPublicUpdate(Request $request){
+        $request->validate([
+            'password'  =>  'required'
+        ],[
+            'password.required'  =>  'گذرواژه خالی ست'
+        ]);
+        $user = User::findOrFail(auth()->user()->id);
+       
+        if($request->hasFile('image')){
+            $media = $user->addMedia($request->File('image'))->toMediaCollection('Useravatar');
+           
+            $user->update([
+                'image_id'  =>  $media->id
+            ]);
+        $user->update([
+            'password'  =>  Hash::make($request->password)
+        ]);
+        
+        }
+        Auth::login($user);
+        return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات شما به روز رسانی شد');
     }
 
 }

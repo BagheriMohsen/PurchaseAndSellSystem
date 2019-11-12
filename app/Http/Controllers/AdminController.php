@@ -9,7 +9,15 @@ class AdminController extends Controller
 
     public function index(){
 
-      return view('Admin/index');
+      $user = 'App\User'::find(auth()->user()->id);
+      $role = $user->getRoleNames()->first();
+      /*------------------Gate For Role Index Page------------------ */
+      if($role == "mainWarehouser"){
+        return redirect()->route('storeRooms.index');
+      }else{
+        return view('Admin/index');
+      }
+      
 
     }
 

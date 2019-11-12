@@ -8,6 +8,7 @@ class ProductOff extends Model
 {
     
     protected $fillable = [
+        'user_id',
         'product_id',
         'offPrice',
         'numberOfProduct'

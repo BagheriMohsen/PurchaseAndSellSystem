@@ -46,7 +46,7 @@
                   <tbody>
                   {% for product in products %}
                     <tr class="text-center">
-                      <td>
+                      <td class="d-flex justify-content-center">
                         <img src="{{ product.thumbUrl }}" alt="">
                       </td>
                       <td>{{product.name}}</td>
@@ -63,7 +63,7 @@
                         {% endif %}
                       <td>{{product.price}}</td>
                       <td>{{product.buyPrice}}</td>
-                      <td>
+                      <td class="d-flex justify-content-around">
                         <a title="انواع" class="text-success" data-toggle="modal" href="#types{{product.id}}">
                           <sub class="text-success">
                             {{product.types.count()}}
@@ -122,7 +122,7 @@
           {% for type in product.types %}
             <tr class="text-center">
               <td>{{type.name}}</td>
-              <td>
+              <td class="d-flex justify-content-center">
                 <a  class="text-warning btn-sm" href="#">
                   <i class="far fa-edit crud-icon"></i>
                 </a>

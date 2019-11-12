@@ -53,7 +53,7 @@ class HomeController extends Controller
 
           if (Hash::check($request->password, $user[0]->password)){
             Auth::login($user[0]);
-            return redirect('/');
+            return redirect('/home');
           }else{
             return back();
           }
