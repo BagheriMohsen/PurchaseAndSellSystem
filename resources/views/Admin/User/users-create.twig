@@ -48,7 +48,7 @@
         {# نام خانوادگی  #}
         {# role #}
         <div  class="col-sm-12 mt-3  mb-4">
-          <select class="form-control"  name="role">
+          <select id="user_role" class="form-control"  name="role">
               <option selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
               <option value="{{role.id}}" >{{role.persianName}}</option>
@@ -63,9 +63,9 @@
         </div>
         {# end name and family #}
         {# name and family #}
-        <div class="md-form mb-4">
-          <input type="text" id="inputIconEx5" class="form-control" name="porsantSeller" value="">
-          <label for="inputIconEx5">پورسانت</label>
+        <div class="md-form mb-4 disabled">
+          <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="" disabled>
+          <label for="porsantSeller">پورسانت</label>
         </div>
         {# end name and family #}
       </div>
@@ -90,7 +90,7 @@
       {# جنسیت #}
       {# نقش نماینده #}
       <div class="col-sm-12 mt-3 mb-4">
-        <select class="form-control"  name="agent_id">
+        <select id="agent_id" class="form-control disabled"  name="agent_id" disabled="disabled">
           <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
           
           {% for chief in agentChiefs %}
@@ -103,21 +103,21 @@
       </div>
       {# نقش نماینده #}
       {# تعرفه پایه داخلی #}
-      <div class="md-form mb-4">
-          <input type="text" id="inputIconEx14" class="form-control" name="internal" value="">
-          <label for="inputIconEx14">تعرفه پایه داخل</label>
+      <div class="md-form mb-4 disabled">
+          <input type="text" id="tariff_internal" class="form-control" name="internal" value="" disabled>
+          <label for="tariff_internal">تعرفه پایه داخل</label>
       </div>
       {# تعرفه پایه داخلی #}
       {# تعرفه پایه حومهی #}
-      <div class="md-form mb-4">
-          <input type="text" id="inputIconEx15" class="form-control" name="locally" value="">
-          <label for="inputIconEx15">تعرفه پایه حومه</label>
+      <div class="md-form mb-4 disabled">
+          <input type="text" id="tariff_locally" class="form-control" name="locally" value="" disabled>
+          <label for="tariff_locally">تعرفه پایه حومه</label>
       </div>
       {# تعرفه پایه حومه #}
       {# تعرفه پایه روستای #}
-      <div class="md-form mb-4">
-          <input type="text" id="inputIconEx16" class="form-control" name="village" value="">
-          <label for="inputIconEx16">تعرفه پایه روستا</label>
+      <div class="md-form mb-4 disabled">
+          <input type="text" id="tariff_village" class="form-control" name="village" value="" disabled>
+          <label for="tariff_village">تعرفه پایه روستا</label>
       </div>
       {# تعرفه پایه روستا #}
     </div>
@@ -133,13 +133,14 @@
       <div class="col-sm-4 mt-3">
         <h6>ارسال سفارش
         </h6>
-        <input  type="checkbox"
+        <input id="send_order" type="checkbox"
           
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="sendAuto" >
+           data-offlabel="دستی" name="sendAuto"
+           disabled="disabled" >
       </div>
       {# end auto send #}
       {# auto send #}
@@ -147,13 +148,14 @@
         <h6>برگشت کالا از انبار
 
         </h6>
-        <input style="font-size:30px;"  type="checkbox"
+        <input id="return_product" style="font-size:30px;"  type="checkbox"
            
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="reciveAuto" >
+           data-offlabel="دستی" name="reciveAuto"
+           disabled="disabled">
       </div>
       {# end auto send #}
       {# auto send #}

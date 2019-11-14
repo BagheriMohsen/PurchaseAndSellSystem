@@ -1,0 +1,10 @@
+.btn.disabled, .btn:disabled {
+    opacity: 0.45;
+}
+.disabled, :disabled {
+    opacity: 0.5!important;
+}
+.switch-off.btn {
+    padding-left: 1.5rem;
+    padding-right: 0;
+}

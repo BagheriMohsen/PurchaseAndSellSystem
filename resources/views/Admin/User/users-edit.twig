@@ -48,7 +48,7 @@
         {# نام خانوادگی  #}
         {# role #}
         <div  class="col-sm-12 mt-3  mb-4">
-          <select class="form-control"  name="role">
+          <select id="user_role" class="form-control"  name="role">
             {% for role in roles %}
               <option {% if user.getRoleName() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
             {% endfor %}
@@ -63,8 +63,8 @@
         {# end name and family #}
         {# name and family #}
         <div class="md-form mb-4">
-          <input type="text" id="inputIconEx2" class="form-control" name="porsantSeller" value="{{user.porsantSeller}}">
-          <label for="inputIconEx2">پورسانت</label>
+          <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="{{user.porsantSeller}}">
+          <label for="porsantSeller">پورسانت</label>
         </div>
         {# end name and family #}
       </div>
@@ -88,7 +88,7 @@
       {# جنسیت #}
       {# نقش نماینده #}
       <div class="col-sm-12 mt-3 mb-4">
-        <select class="form-control"  name="agent_id">
+        <select id="agent_id" class="form-control"  name="agent_id" disabled="disabled">
           <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
           <option value="">بدون مدیر</option>
           <option value="">نماینده</option>
@@ -97,20 +97,20 @@
       {# نقش نماینده #}
       {# تعرفه پایه داخلی #}
       <div class="md-form mb-4">
-          <input type="text" id="inputIconEx4" class="form-control" name="internal" value="{{user.internalPrice}}">
-          <label for="inputIconEx4">تعرفه پایه داخل</label>
+          <input type="text" id="tariff_internal" class="form-control" name="internal" value="{{user.internalPrice}}" disabled>
+          <label for="tariff_internal">تعرفه پایه داخل</label>
       </div>
       {# تعرفه پایه داخلی #}
       {# تعرفه پایه حومهی #}
       <div class="md-form mb-4">
-          <input type="text" id="inputIconEx4" class="form-control" name="locally" value="{{user.locallyPrice}}">
-          <label for="inputIconEx4">تعرفه پایه حومه</label>
+          <input type="text" id="tariff_locally" class="form-control" name="locally" value="{{user.locallyPrice}}" disabled>
+          <label for="tariff_locally">تعرفه پایه حومه</label>
       </div>
       {# تعرفه پایه حومه #}
       {# تعرفه پایه روستای #}
       <div class="md-form mb-4">
-          <input type="text" id="inputIconEx4" class="form-control" name="village" value="{{user.villagePrice}}">
-          <label for="inputIconEx4">تعرفه پایه روستا</label>
+          <input type="text" id="tariff_village" class="form-control" name="village" value="{{user.villagePrice}}" disabled>
+          <label for="tariff_village">تعرفه پایه روستا</label>
       </div>
       {# تعرفه پایه روستا #}
     </div>
@@ -126,13 +126,14 @@
       <div class="col-sm-4 mt-3">
         <h6>ارسال سفارش
         </h6>
-        <input  type="checkbox"
+        <input id="send_order" type="checkbox"
           
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="sendAuto" {% if user.sendAuto != null %} checked {% endif %}>
+           data-offlabel="دستی" name="sendAuto" {% if user.sendAuto != null %} checked {% endif %}
+           disabled="disabled">
       </div>
       {# end auto send #}
       {# auto send #}
@@ -140,13 +141,14 @@
         <h6>برگشت کالا از انبار
 
         </h6>
-        <input style="font-size:30px;"  type="checkbox"
+        <input id="return_product" style="font-size:30px;"  type="checkbox"
            
            data-toggle="switchbutton"
            data-onstyle="success"
            data-offstyle="danger"
            data-onlabel="خودکار"
-           data-offlabel="دستی" name="reciveAuto" {% if user.reciveAuto != null %} checked {% endif %}>
+           data-offlabel="دستی" name="reciveAuto" {% if user.reciveAuto != null %} checked {% endif %}
+           disabled="disabled">
       </div>
       {# end auto send #}
       {# auto send #}
