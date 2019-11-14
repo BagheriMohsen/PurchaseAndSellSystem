@@ -59,5 +59,6 @@ $(document).ready(function(){
             $('#send_order').parent().addClass('disabled');
         }
      });
+     $('#sellerInfoTable').DataTable();
 });
 

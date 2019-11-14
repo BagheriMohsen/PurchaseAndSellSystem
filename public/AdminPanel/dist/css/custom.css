@@ -8,3 +8,14 @@
     padding-left: 1.5rem;
     padding-right: 0;
 }
+.fluid-button-div{
+    position: fixed;
+    top: 100px;
+    left: 0;
+}
+.content{
+    position: relative;
+}
+#sellersInfo{
+    margin-top: 50px;
+}
