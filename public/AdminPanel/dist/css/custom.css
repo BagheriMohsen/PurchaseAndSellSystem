@@ -10,12 +10,27 @@
 }
 .fluid-button-div{
     position: fixed;
-    top: 100px;
-    left: 0;
+    top: 43%;
+    left: -15px;
+    z-index: 999;
+    transition: left .1s;
+}
+.fluid-button-div:hover{
+    left: -6px;
+}
+.fluid-button-div button{
+    opacity: .5;
+}
+.fluid-button-div button:hover{
+    opacity: 1;
 }
 .content{
     position: relative;
 }
 #sellersInfo{
     margin-top: 50px;
+}
+.pagination .page-item .page-link:focus {
+    background-color: #4285f4;
+    box-shadow: none;
 }
