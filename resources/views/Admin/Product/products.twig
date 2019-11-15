@@ -65,7 +65,7 @@
                       <td>{{product.buyPrice}}</td>
                       <td class="d-flex justify-content-around">
                         <a title="انواع" class="text-success" data-toggle="modal" href="#types{{product.id}}">
-                          <sub class="text-success">
+                          <sub class="text-success" id="typeCounter{{product.id}}">
                             {{product.types.count()}}
                           </sub>
                           <i class="fas fa-plus crud-icon"></i>
@@ -113,7 +113,7 @@
 
       <!-- Modal body -->
       <div class="modal-body text-center">
-          <table  id="example2" class="table table-bordered table-striped bg-white pt-2 pb-2">
+          <table class="table table-bordered table-striped bg-white pt-2 pb-2">
           <thead>
             <tr class="text-center">
               <th>نوع محصول</th>
@@ -148,6 +148,7 @@
                   <form class="pt-1" action="{{ route('types.destroy',type.id) }}"  method="POST">
                       <input type="hidden" name="_token"  value="{{ csrf_token() }}" />
                       <input type="hidden" name="_method" value="DELETE" />
+                      <input type="hidden" name="product" value="{{product.id}}">
                     <a href="javascript:void(0)" class="deleteTypeButton btn-sm">
                       <i class="far fa-trash-alt text-danger crud-icon"></i>
                     </a>
