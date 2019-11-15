@@ -110,7 +110,7 @@
       </div>
 
       <!-- Modal body -->
-      <div class="modal-body text-center makeEditTable">
+      <div class="modal-body text-center">
           <table  id="example2" class="table table-bordered table-striped bg-white pt-2 pb-2">
           <thead>
             <tr class="text-center">
@@ -121,17 +121,25 @@
           <tbody>
           {% for type in product.types %}
             <tr class="text-center">
-              <td>{{type.name}}</td>
+              <td class="productTypeName">
+                <span>{{type.name}}</span>
+                <input class="d-none" type="text" value="{{type.name}}">
+              </td>
               <td class="d-flex justify-content-center">
-                <a  class="text-warning btn-sm" href="#">
+                <a  class="editTypeButton text-warning btn-sm" href="#">
                   <i class="far fa-edit crud-icon"></i>
                 </a>
+                <a  class="confirmEdit text-green btn-sm d-none" href="#">
+                  <i class="far fa-check-square crud-icon"></i>
+                </a>
+                <a  class="cancelEdit text-danger btn-sm d-none" href="#">
+                  <i class="far fa-window-close crud-icon"></i>
+                </a>
                 {# Form Delete #}
-                  <form action="{{ route('types.destroy',type.id) }}" id="formForDelete"  method="POST">
+                  <form class="pt-1" action="{{ route('types.destroy',type.id) }}"  method="POST">
                       <input type="hidden" name="_token"  value="{{ csrf_token() }}" />
                       <input type="hidden" name="_method" value="DELETE" />
-                    <a href="javascript:{}" 
-                      onclick="document.getElementById('formForDelete').submit();" >
+                    <a href="javascript:void(0)" class="deleteTypeButton btn-sm">
                       <i class="far fa-trash-alt text-danger crud-icon"></i>
                     </a>
                   </form>
@@ -142,7 +150,7 @@
           </tbody>
 
         </table>
-        <form action="{{route('types.store')}}" method="post">
+        <form class="storeTypeForm" action="{{route('types.store')}}" method="post">
           <input type="hidden" name="_token" value="{{ csrf_token() }}" />
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="name" placeholder="نوع محصول را وارد کنید" required>
