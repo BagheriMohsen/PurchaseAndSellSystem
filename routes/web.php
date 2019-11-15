@@ -57,7 +57,10 @@ Route::middleware('auth')->resource('products','ProductController',['except' => 
 | ProductType Routes
 |--------------------------------------------------------------------------
 |*/
-Route::middleware('auth')->resource('types','ProductTypeController');
+Route::middleware('auth')->get('types/{id}','ProductTypeController@index')->name('types.index');
+Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
+  'index'
+]]);
 /*
 |--------------------------------------------------------------------------
 | Orders Routes

@@ -11,9 +11,11 @@ class ProductTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $product = 'App\Product'::findOrFail($id);
+       
+         return Response()->json($product->types,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -42,7 +44,7 @@ class ProductTypeController extends Controller
         $product = 'App\Product'::findOrFail($request->product);
         $message = $request->name.' به محصول '.$product->name.' اضافه شد ';
         // return redirect()->route('products.index')->with('message',$message);
-        return $message;
+        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -64,7 +66,8 @@ class ProductTypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $type = ProductType::findOrFail($id);
+        return Response()->json($type,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -86,7 +89,7 @@ class ProductTypeController extends Controller
       $message = $request->name.' زیر مجموعه محصول '.$product->name.' به روز رسانی شد ';
 
     //   return redirect()->route('products.index')->with('message',$message);
-        return $message;
+        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -103,6 +106,6 @@ class ProductTypeController extends Controller
         ProductType::destroy($id);
         $message = $typeName.' از زیر مجموعه محصول '.$product->name.' حذف شد ';
         // return redirect()->route('products.index')->with('message',$message);
-        return $message;
+        return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 }
