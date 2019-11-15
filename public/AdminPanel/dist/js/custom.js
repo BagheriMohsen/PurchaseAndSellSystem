@@ -193,6 +193,34 @@ $(document).ready(function(){
         //     }
         // });
      });
-
+     //All Orders Chart Setup
+     var data = [
+        { y: '2014', a: 50, b: 90 , c: 110 , d: 45},
+        { y: '2015', a: 65,  b: 75 , c: 190 , d: 65},
+        { y: '2016', a: 50,  b: 50 , c: 77 , d: 45},
+        { y: '2017', a: 75,  b: 60 , c: 66 , d: 33},
+        { y: '2018', a: 80,  b: 65 , c: 55 , d: 22},
+        { y: '2019', a: 90,  b: 70 , c: 99 , d: 55},
+        { y: '2020', a: 100, b: 75 , c: 75 , d: 66},
+        { y: '2021', a: 115, b: 75 , c: 37 , d: 33},
+        { y: '2022', a: 120, b: 85 , c: 86 , d: 22},
+        { y: '2023', a: 145, b: 85 , c: 97 , d: 11},
+        { y: '2024', a: 160, b: 95 , c: 34 , d: 22}
+      ],
+      config = {
+        data: data,
+        xkey: 'y',
+        ykeys: ['a', 'b' , 'c' , 'd'],
+        labels: ['سفارشات وصولی', 'سفارشات کنسلی','سفارشات ثبت شده','پیام های دریافتی'],
+        fillOpacity: 0.6,
+        hideHover: 'auto',
+        behaveLikeLine: true,
+        resize: true,
+        pointFillColors:['#ffffff'],
+        pointStrokeColors: ['black'],
+        lineColors:['blue','red','green','yellow']
+    };
+  config.element = 'allOrdersChart';
+  Morris.Line(config);
 });
 
