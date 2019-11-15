@@ -42,6 +42,31 @@ class AppServiceProvider extends ServiceProvider
                 $view ->with(compact('role','user'));
             }
         });
+        /*
+        |--------------------------------------------------------------------------
+        | Notification For Roles
+        |--------------------------------------------------------------------------
+        |*/
+        view()->composer('Admin.Master.header',function($view){
+            if(auth()->check()){
+                // find user detail
+                $user       = 'App\User'::find(auth()->user()->id);
+                // find role name
+                $roleName   = $user->getRoleNames()->first();
+                // find role all detail
+                $role = Role::where('name',$roleName)->firstOrFail();
+
+                if($roleName == "agent" || $roleName == "agentChief"){
+                    $notifs = 'App\StoreRoom'::where(['rcv_agent_id'=>$user->id,'in_out'=>'sendToAgent'])
+                    ->count();
+                }elseif($roleName == "fundWarehouser"){
+                    $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>'sendToFund'])
+                    ->count();
+                }
+
+                $view ->with(compact('role','notifs'));
+            }
+        });
         
 
     }

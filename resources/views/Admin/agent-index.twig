@@ -1,22 +1,22 @@
-@extends('Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
-  داشبورد نماینده
-@endsection
+{% block title %}
+  داشبورد
+{% endblock %}
 
-@section('header')
-  @include('Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Master.path')
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
 
   <div class="row">
             <div class="col-12 col-sm-6 col-md-4">
@@ -108,17 +108,17 @@
 
 
           <div class="row mt-5 mb-5">
-            {{-- item --}}
+            {# item #}
             <div class="col-sm-6 mx-auto">
               <table class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th class="bg-primary text-center">صورت حساب جاری شما</th>
+                  <th class="bg-primary text-center dana-bold">صورت حساب جاری شما</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                       مجموع فروش
                       </div>
@@ -128,7 +128,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                         مجموع پیش واریزی
                       </div>
@@ -138,7 +138,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                         هزینه حمل
                       </div>
@@ -150,18 +150,18 @@
               </tbody>
             </table>
             </div>
-            {{-- end item --}}
-            {{-- item --}}
+            {# end item #}
+            {# item #}
             <div class="col-sm-6  mx-auto">
               <table class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th class="bg-warning text-center">مبلغ بدهی شما</th>
+                  <th class="bg-warning text-center dana-bold">مبلغ بدهی شما</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                       تخفیف
                       </div>
@@ -171,7 +171,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                         جایزه
                       </div>
@@ -181,7 +181,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="row">
+                  <td class="d-flex">
                       <div class="col-10 mx-auto">
                         امتیاز
                       </div>
@@ -193,21 +193,21 @@
               </tbody>
             </table>
             </div>
-            {{-- end item --}}
+            {# end item #}
 
           </div>
 
 
-          {{-- chart --}}
+         {# chart #}
           <div class="row text-center d-block mt-5">
             <h4 >نمودار وضعیت سفارش ها در 30 روز گذشته</h4>
             <hr width="300px" style="border-bottom:5px solid red;" />
-          {{-- chart --}}
+          {# chart #}
             <div class="card mt-3">
               <div class="card-header no-border">
                 <div class="d-flex justify-content-between">
                   <h3 class="card-title">وضعیت سفارش ها</h3>
-                  {{-- <a href="javascript:void(0);">مشاهده گزارش</a> --}}
+                    {# <a href="javascript:void(0);">مشاهده گزارش</a> #}
                 </div>
               </div>
               <div class="card-body">
@@ -240,10 +240,10 @@
             </div>
             <!-- /.chart -->
           </div>
-          {{-- end chart --}}
+          {# end chart #}
 
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

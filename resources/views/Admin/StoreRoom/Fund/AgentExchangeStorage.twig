@@ -1,0 +1,59 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  انبار به انبار نماینده ها 
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'انبار به انبار نماینده ها'} %}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'Messages/message' %}
+
+    <table  id="dtDynamicVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                width="100%">
+                  <thead>
+                  <tr class="text-center">
+                    <th>تصویر</th>
+                    <th>کالا</th>
+                    <th>وضعیت</th>
+                    <th>توضیحات</th>
+                    <th>تعداد</th>
+                    <th>تاریخ خروج</th>
+                    <th >جمع(تومان)</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                 {% for storeRoom in storeRooms %}
+                    <tr class="text-center">
+                      <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
+                      <td>{{storeRoom.product.name}}</td>
+                      <td>{{storeRoom.status}}</td>
+                      <td>{{storeRoom.description}}</td>
+                      <td>{{storeRoom.number}}</td>
+                      <td>{{storeRoom.created_at|date('d-m-Y')}}</td>
+                      {% set price = storeRoom.product.price * storeRoom.number %}
+                      <td>{{ price|number_format}}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+
+                </table>
+
+                
+                
+{% endblock %}
+
+{% block footer %}
+    {% include 'Admin/Master/footer' %}
+{% endblock %}

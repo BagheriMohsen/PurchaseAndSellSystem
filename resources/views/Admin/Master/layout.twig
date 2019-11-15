@@ -54,6 +54,13 @@
 </div>
 <!-- ./wrapper -->
 
+  {# sellers-info #}
+  {% set role = auth_user().getRoleNames().first() %}
+  {% if  role == "admin" or role == "seller" %}
+    {% include 'Admin.Master.sellers-info' %}
+  {% endif %}
+  {# sellers-info #}
+
   {% include 'Admin/Master/scripts' %}
   {# Csrf Token #}
   <script>window.Laravel = {{ {'csrfToken': csrf_token()}|json_encode()|raw }}</script>

@@ -181,6 +181,8 @@ class UserController extends Controller
         session(['adminLogIn' => $user_id ]);
         if($role == "mainWarehouser" || $role == "fundWarehouser"){
             return redirect()->route('storeRooms.index')->with('switchSuccess','true');
+        }elseif($role="agent" || $role == "agentChief"){
+            return redirect()->route('users.AgentDashboard')->with('switchSuccess','true');
         }else{
             return redirect('/')->with('switchSuccess','true');
         }
@@ -233,6 +235,15 @@ class UserController extends Controller
         }
         Auth::login($user);
         return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات شما به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Dashboard Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentDashboard(Request $request){
+        
+        return view('Admin.agent-index');
     }
 
 }

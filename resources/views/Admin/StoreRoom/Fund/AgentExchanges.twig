@@ -201,10 +201,10 @@
                      {# sender #}
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="receiver">تحویل دهنده</label>
-                        <select class="form-control" name="receiver">
-                            <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">ارسال کننده را انتخاب کنید</option>
+                        <select class="form-control" name="sender">
+                            <option {% if old('sender') != null %} style="display:none" {% endif %} value="{{null}}">ارسال کننده را انتخاب کنید</option>
                         {% for agent in agents %}
-                            <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
+                            <option {% if old('sender') == agent.id %} selected {% endif %} value="{{agent.id}}">
                             {{'نام:'}}
                             {{agent.name}}
                             {{'-'}}

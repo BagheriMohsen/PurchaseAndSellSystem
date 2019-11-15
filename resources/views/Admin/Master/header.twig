@@ -31,27 +31,35 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell crud-icon"></i>
-          <span class="badge badge-secondary navbar-badge" style="font-size:12px;">3</span>
+          <span class="badge badge-secondary navbar-badge" style="font-size:12px;">
+            {{notifs}}
+          </span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
-          <span class="dropdown-item dropdown-header">15 نوتیفیکیشن</span>
+          <span class="dropdown-item dropdown-header">
+          {# 15  #}
+          نوتیفیکیشن</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fa fa-envelope ml-2"></i> 4 پیام جدید
-            <span class="float-left text-muted text-sm">3 دقیقه</span>
-          </a>
+          {% if notifs > 0 %}
+              <a 
+              {% if role.name == "agent" or role.name == "agentChief" %}
+                href="{{route('storeRooms.FundReceive')}}"
+              {% else %}
+                href="#"
+              {% endif %}
+               class="dropdown-item">
+                <i class="fa fa-envelope ml-2"></i> 
+                {{notifs}}
+                ورودی تایید نشده
+                {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+              </a>
+          {% else %}
+              <div class="text-center text-muted">
+                چیزی برای نمایش وجود ندارد
+              </div>
+          {% endif %}
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fa fa-users ml-2"></i> 8 درخواست دوستی
-            <span class="float-left text-muted text-sm">12 ساعت</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fa fa-file ml-2"></i> 3 گزارش جدید
-            <span class="float-left text-muted text-sm">2 روز</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">مشاهده همه نوتیفیکیشن</a>
+          {# <a href="#" class="dropdown-item dropdown-footer">مشاهده همه نوتیفیکیشن</a> #}
         </div>
       </li>
       <li class="nav-item">

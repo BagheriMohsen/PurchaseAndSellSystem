@@ -326,7 +326,8 @@ class StoreRoomController extends Controller
             $storeRooms = StoreRoom::where(['warehouse_id'=>1,'in_out'=>'out'])->latest()->paginate(10);
             return view('Admin.StoreRoom.Main.outStorage',compact('storeRooms'));
         }elseif($role == "fundWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>'out'])->latest()->paginate(10);
+            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>['out','sendToAgent']])
+            ->latest()->paginate(10);
             return view('Admin.StoreRoom.Fund.outStorage',compact('storeRooms'));
         }else{
             return abort(404);
@@ -358,7 +359,7 @@ class StoreRoomController extends Controller
     |*/
     public function mainReceive(){
         $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>'sendToFund'])->latest()->paginate(10);
-        return view('Admin.StoreRoom.Main.mainReceive',compact('storeRooms'));
+        return view('Admin.StoreRoom.Fund.mainReceive',compact('storeRooms'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -458,7 +459,7 @@ class StoreRoomController extends Controller
         $storage = 'App\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
-        ])->firstOrFail();
+        ])->first();
 
         if($storage->number < $request->number){
             $message = ' این میزان موجودی در انبار وجود ندارد.موجودی این کالا  '.$storage->number.' عدد در انبار است';
@@ -538,8 +539,166 @@ class StoreRoomController extends Controller
     | send product from agent to agent
     |--------------------------------------------------------------------------
     |*/
-    public function AgentToAgent(){
-        //
+    public function AgentToAgent(Request $request){
+        $request->validate([
+            'date'          =>  'required',
+            'number'        =>  'required',
+            'product'       =>  'required',
+            'receiver'      =>  'required',
+            'sender'        =>  'required',
+            'description'   =>  'required',
+            'transport'     =>  'required',
+            'status'        =>  'required'
+
+        ],[
+            'date.required'             =>  'تاریخ را وارد کنید',
+            'number.required'           =>  'تعداد کالا را وارد نکرده اید',
+            'product.required'          =>  'محصول را انتخاب کنید',
+            'receiver.required'         =>  'گیرنده را انتخاب کنید',
+            'sender.required'           =>  'ارسال کننده را مشخص کنید',
+            'description.required'      =>  'توضیحاتی یادداشت نشده',
+            'transport.required'        =>  'وسیله ارسالی را مشخص کنید',
+            'status.required'           =>  'وضعیت را مشخص کنید'
+        ]);
+        /* Check Agent warehouse for this product  */
+        $status = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['agent_id','=',$request->sender]
+        ])->exists();
+        
+        $sender_storage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['agent_id','=',$request->sender]
+        ])->first();
+       
+        $agent = 'App\User'::findOrFail($request->sender);
+        
+        
+        if($status == True){
+            /* IF storage number less than request number */
+            if($sender_storage->number < $request->number){
+                $message = ' این میزان موجودی در انبار  '.$agent->name.' '.$agent->family;
+                $message .= ' با نام کاربری '.$agent->username.' وجود ندارد';
+                $message .='</br>';
+                $message .= ' در انبار این نماینده '. $agent->username.' '.$sender_storage->number.' عدد از این محصول وجود دارد ';
+                return back()->with('info',$message);
+            }
+            /* Check Agent warehouse for this product  */
+            $receiver_status = 'App\Storage'::where([
+                ['product_id','=',$request->product],
+                ['agent_id','=',$request->receiver]
+            ])->exists();
+            $number = $sender_storage->number - $request->number;
+            $sender_storage->update(['number'=>$number]);
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $sender_storage->id,
+                'rcv_agent_id'      =>  $request->receiver,
+                'sender_agent_id'   =>  $request->sender_agent_id,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'image'             =>  $image,
+                'in_out'            =>  $request->in_out,
+                'out_date'          =>  $request->date
+            ]);
+            
+            return redirect()->route('storeRooms.index')->with('message','کالا به انبار نماینده ارسال شد');
+                
+        }else{
+            $message = "در انبار نماینده ارسال کننده این کالا ثبت نشده";
+            return back()->with('info',$message);
+        }
+
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Display list of product send to agents
+    |--------------------------------------------------------------------------
+    |*/
+    public function SendToAgentList(){
+        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>'sendToAgent'])->latest()->paginate(10);
+        return view('Admin.StoreRoom.Fund.outStorage',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Exchange Storage Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentExchangeStorage(){
+        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>'AgentToAgent'])->latest()->paginate(10);
+        return view('Admin.StoreRoom.Fund.AgentExchangeStorage',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Fund Receive Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function FundReceive(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $storeRooms = StoreRoom::where(['rcv_agent_id'=>$user->id,'in_out'=>'sendToAgent'])->latest()->paginate(10);
+        return view('Admin.StoreRoom.Agent.fundReceive',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Accept Fund Receive
+    |--------------------------------------------------------------------------
+    |*/
+    public function acceptFundReceive($id){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $storeRoom = StoreRoom::findOrFail($id); // this storeRoom
+        $pre_id = $id - 1 ; // previous id for find previous storeRoom
+        $pre_storeRoom = StoreRoom::findOrFail($pre_id); //previous storeRoom
+        $status = 'App\Storage'::where([
+            ['product_id','=',$storeRoom->product_id],
+            ['agent_id','=',$user->id]
+        ])->exists();
+        
+        /* IF product exist in fund warehouse */
+        if($status == True){
+            $storage = 'App\Storage'::where([
+                ['product_id','=',$storeRoom->product_id],
+                ['agent_id','=',$user->id]
+            ])
+            ->firstOrFail();
+           
+            $number = $storage->number + $storeRoom->number;
+            $storage->update(['number'=>$number]);
+            $storeRoom->update([
+                'storage_id'=>$storage->id,
+                'in_out'=>'Received',
+                'in_date'=> Carbon::now()
+                ]);//update in_date and apply this product fot funWarehouse
+            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد به موجودی انبار افزوده شد'; 
+            return back()->with('message',$message);
+        }else{
+            $storage = 'App\Storage'::create([
+                'user_id'       =>  auth()->user()->id,
+                'agent_id'      =>  $user->id,
+                'product_id'    =>  $storeRoom->product_id,
+                'number'        =>  $storeRoom->number
+            ]);
+            
+            $storeRoom->update([
+                'storage_id'=>$storage->id,
+                'in_out'=>'Received',
+                'in_date'=> Carbon::now()
+                ]);//update in_date and apply this product fot funWarehouse
+            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد برای اولین بار به انبار اضافه شد'; 
+            return back()->with('message',$message);
+        }
+    }
+
+    public function AgentIndexWarehouse(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $storages = 'App\Storage'::where('agent_id',$user->id)->latest()->paginate(10);
+        $allProduct = 'App\Storage'::where('agent_id',$user->id)->sum('number');
+        return view('Admin.StoreRoom.Agent.index',compact('storages','allProduct'));
     }
 
 }
