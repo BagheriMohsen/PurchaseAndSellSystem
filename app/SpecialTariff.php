@@ -9,9 +9,7 @@ class SpecialTariff extends Model
     protected $fillable = [
       'user_id',
       'product_id',
-      'internalPrice',
-      'locallyPrice',
-      'villagePrice'
+      'place',
     ];
 
 

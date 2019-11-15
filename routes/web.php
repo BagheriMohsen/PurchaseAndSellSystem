@@ -86,7 +86,10 @@ Route::middleware('auth')->resource('states','StateController');
 | SpecialTariff Routes
 |--------------------------------------------------------------------------
 |*/
-Route::middleware('auth')->resource('special-tariffs','SpecialTariffController');
+Route::get('special-tariffs-index/{id}','SpecialTariffController@index')->name('special-tariffs.index');
+Route::middleware('auth')->resource('special-tariffs','SpecialTariffController',['except'=>[
+  'index'
+]]);
 /*
 |--------------------------------------------------------------------------
 | Store Room Routes

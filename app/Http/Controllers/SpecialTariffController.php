@@ -11,9 +11,11 @@ class SpecialTariffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $user = 'App\User'::findOrFail($id);
+
+        return Response()->json($user->tariffs,200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -37,16 +39,15 @@ class SpecialTariffController extends Controller
 
         $status = SpecialTariff::where([
           ['user_id'    ,'='  ,$request->user_id],
-          ['product_id' ,'='  ,$request->product_id]
+          ['product_id' ,'='  ,$request->product_id],
+          ['place'      ,'='  .$request->place]
         ])->exists();
 
         if($status != True){
           SpecialTariff::create([
             'user_id'       =>  $request->user_id,
             'product_id'    =>  $request->product_id,
-            'internalPrice' =>  $request->internalPrice,
-            'locallyPrice'  =>  $request->locallyPrice,
-            'villagePrice'  =>  $request->villagePrice
+            'place'         =>  $request->place,
           ]);
           $message = 'اطلاعات وارد شد';
           return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
@@ -90,11 +91,10 @@ class SpecialTariffController extends Controller
     {
         $tariff = SpecialTariff::find($id);
         $tariff->update([
-          'user_id'       =>  $request->user_id,
-          'product_id'    =>  $request->product_id,
-          'internalPrice' =>  $request->internalPrice,
-          'locallyPrice'  =>  $request->locallyPrice,
-          'villagePrice'  =>  $request->villagePrice
+          'user_id'         =>  $request->user_id,
+          'product_id'      =>  $request->product_id,
+          'place'           =>  $request->place,
+
         ]);
         return back();
     }
