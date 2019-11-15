@@ -123,26 +123,29 @@ $(document).ready(function(){
         row.find('.productTypeName').children('input').addClass('d-none');
     });
     //Confirm Editing product type
-    $('.confirmEdit').on('click',function(){
+    $('.confirmEdit').on('click',function(event){
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
-        var row = $(this).parent('td').parent('tr');
-        var typeName = row.find('.productTypeName').children('input').val();
-        console.log(typeName);
-        // var actionUrl = form.attr('action');
-        // var CSRF_TOKEN = form.find('input[name="_token"]').val();
-        // var _method = form.find('input[name="_method"]').val();
-        // $.ajax({
-        //     url:actionUrl,
-        //     type:'post',
-        //     data:{
-        //         _token:CSRF_TOKEN,
-        //         _method:_method,
-        //     },
-        //     success:function(response){
-        //         console.log(response);
-        //     }
-        // });
+        var form = $(this).parent('form');
+        var row = $(this).parent('form').parent('td').parent('tr');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var _method = form.find('input[name="_method"]').val();
+        var product_id = form.find('input[name="product"]').val();
+        var name = row.find('.productTypeName').children('input').val();
+        $.ajax({
+            url:actionUrl,
+            type:'put',
+            data:{
+                _token:CSRF_TOKEN,
+                _method:_method,
+                product:product_id,
+                name:name
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
     });
      
 

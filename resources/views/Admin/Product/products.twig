@@ -104,9 +104,11 @@
     <div class="modal-content">
 
       <!-- Modal Header -->
-      <div class="modal-header ">
-
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead">افزودن نوع محصول</p>
       </div>
 
       <!-- Modal body -->
@@ -123,15 +125,22 @@
             <tr class="text-center">
               <td class="productTypeName">
                 <span>{{type.name}}</span>
-                <input class="d-none" type="text" value="{{type.name}}">
+                <input class="d-none text-center" type="text" value="{{type.name}}">
               </td>
               <td class="d-flex justify-content-center">
                 <a  class="editTypeButton text-warning btn-sm" href="#">
                   <i class="far fa-edit crud-icon"></i>
                 </a>
-                <a  class="confirmEdit text-green btn-sm d-none" href="#">
-                  <i class="far fa-check-square crud-icon"></i>
-                </a>
+                {# Form Edit #}
+                <form class="pt-1" action="{{ route('types.update',type.id) }}"  method="POST">
+                  <input type="hidden" name="_token"  value="{{ csrf_token() }}" />
+                  <input type="hidden" name="_method" value="UPDATE" />
+                  <input type="hidden" name="product" value="{{product.id}}">
+                  <a class="confirmEdit text-green btn-sm d-none" href="#">
+                    <i class="far fa-check-square crud-icon"></i>
+                  </a>
+                </form>
+                {# Form Edit #}
                 <a  class="cancelEdit text-danger btn-sm d-none" href="#">
                   <i class="far fa-window-close crud-icon"></i>
                 </a>

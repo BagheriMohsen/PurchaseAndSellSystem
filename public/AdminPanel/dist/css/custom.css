@@ -34,3 +34,6 @@
     background-color: #4285f4;
     box-shadow: none;
 }
+.modal-header button.close{
+    opacity: 1;
+}
