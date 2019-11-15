@@ -127,11 +127,11 @@
                   <i class="far fa-edit crud-icon"></i>
                 </a>
                 {# Form Delete #}
-                  <form action="{{ route('types.destroy',type.id) }}" id="formForDelete"  method="POST">
+                  <form action="{{ route('types.destroy',type.id) }}" id="formTypeForDelete"  method="POST">
                       <input type="hidden" name="_token"  value="{{ csrf_token() }}" />
                       <input type="hidden" name="_method" value="DELETE" />
                     <a href="javascript:{}" 
-                      onclick="document.getElementById('formForDelete').submit();" >
+                      onclick="document.getElementById('formTypeForDelete').submit();" >
                       <i class="far fa-trash-alt text-danger crud-icon"></i>
                     </a>
                   </form>

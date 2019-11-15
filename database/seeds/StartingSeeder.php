@@ -219,5 +219,27 @@ class StartingSeeder extends Seeder
           'telephon'      =>  "",
           'postalCard'    =>  "" 
       ]);
+      /*
+      |--------------------------------------------------------------------------
+      | Create Transport
+      |--------------------------------------------------------------------------
+      |*/
+      #1
+      'App\Transport'::create([
+        'name'          =>  "اتوبوس رانی",
+      ]);
+      #2
+      'App\Transport'::create([
+        'name'          =>  "باربری",
+      ]);
+      #3
+      'App\Transport'::create([
+        'name'          =>  "تاکسیرانی",
+      ]);
+      #4
+      'App\Transport'::create([
+        'name'          =>  "تحویل به نماینده",
+      ]);
+      
     }
 }

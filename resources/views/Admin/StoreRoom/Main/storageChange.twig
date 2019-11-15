@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  ورودی انبار 
+  انبار به انبار 
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'ورودی انبار'} %}
+  {% include 'Admin/Master/path' with {'title':'انبار به انبار'} %}
 {% endblock %}
 
 {% block content %}
@@ -27,8 +27,10 @@
                     <th>تصویر</th>
                     <th>کالا</th>
                     <th>وضعیت</th>
-                    <th>قیمت</th>
+                    <th>توضیحات</th>
                     <th>تعداد</th>
+                    <th>تاریخ ارسال</th>
+                    <th>تاریخ دریافت</th>
                     <th >جمع(تومان)</th>
                   </tr>
                   </thead>
@@ -38,9 +40,12 @@
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
                       <td>{{storeRoom.status}}</td>
-                      <td>{{storeRoom.product.price}}</td>
+                      <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
-                      <td>{{storeRoom.product.price * storeRoom.number | number_format}}</td>
+                      <td>{{storeRoom.created_at}}</td>
+                      <td>{{storeRoom.out_date}}</td>
+                      {% set price = storeRoom.product.price * storeRoom.number %}
+                      <td>{{ price|number_format}}</td>
                     </tr>
                   {% endfor %}
                   </tbody>

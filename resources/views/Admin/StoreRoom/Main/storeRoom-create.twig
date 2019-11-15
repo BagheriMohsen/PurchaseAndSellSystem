@@ -1,0 +1,189 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  مدیریت انبار
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'مدیریت انبار'} %}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'Messages/message' %}
+    {% include 'Messages/info' %}
+    {% include 'Messages/errors' %}
+   <div class="bg-white">
+         
+    <ul class="nav nav-tabs " id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+            aria-selected="true">ورود</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            aria-selected="false">خروج</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+            aria-selected="false">انبار به انبار</a>
+        </li>
+    </ul>
+<div class="tab-content " id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    
+        <form action="{{route('storeRooms.inManage')}}" method="post">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'in'}}" />
+
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">محصول</label>
+                <select class="form-control" name="product">
+                    <option value="{{null}}">محصول را انتخاب کنید</option>
+                {% for product in products %}
+                    <option value="{{product.id}}">{{product.name}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            {# number #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <input type="number" id="inputIconEx5" class="form-control" name="number" value="">
+                <label for="inputIconEx5">تعداد</label>
+            </div>
+            {# end number #}
+            {# description #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <i class="fas fa-pencil-alt prefix text-dark"></i>
+                <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80"></textarea>
+                <label for="form10">توضیحات</label>
+            </div>
+            {# description #}
+            {# status #}
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">وضعیت</label>
+                <select class="form-control" name="status">
+                    <option value="{{'خرید'}}">{{'خرید'}}</option>
+                    <option value="{{'ورود از انبار دیگر'}}">{{'ورود از انبار دیگر'}}</option>
+                    <option value="{{'برگشت محصول'}}">{{'برگشت محصول'}}</option>
+                </select>
+            </div>
+            {# status #}
+            <div class="col-sm-5 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
+    
+    
+    
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+        <form action="{{route('storeRooms.outManage')}}" method="post">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'out'}}" />
+
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">محصول</label>
+                <select class="form-control" name="product">
+                    <option value="{{null}}">محصول را انتخاب کنید</option>
+                {% for product in products %}
+                    <option value="{{product.id}}">{{product.name}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            {# number #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <input type="number" id="inputIconEx5" class="form-control" name="number" value="">
+                <label for="inputIconEx5">تعداد</label>
+            </div>
+            {# end number #}
+            {# description #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <i class="fas fa-pencil-alt prefix text-dark"></i>
+                <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80"></textarea>
+                <label for="form10">توضیحات</label>
+            </div>
+            {# description #}
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">وضعیت</label>
+                <select class="form-control" name="status">
+                    <option value="{{'خرابی'}}">{{'خرابی'}}</option>
+                    <option value="{{'اسقاط'}}">{{'اسقاط'}}</option>
+                </select>
+            </div>
+            <div class="col-sm-5 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
+
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+        <form action="{{route('storeRooms.storageChange')}}" method="post">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'sendToFund'}}" />
+         
+
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">محصول</label>
+                <select class="form-control" name="product">
+                    <option value="{{null}}">محصول را انتخاب کنید</option>
+                {% for product in products %}
+                    <option value="{{product.id}}">{{product.name}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            {# number #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <input type="number" id="inputIconEx5" class="form-control" name="number" value="">
+                <label for="inputIconEx5">تعداد</label>
+            </div>
+            {# end number #}
+            {# description #}
+            <div class="md-form col-sm-5 mt-5 mx-auto">
+                <i class="fas fa-pencil-alt prefix text-dark"></i>
+                <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80"></textarea>
+                <label for="form10">توضیحات</label>
+            </div>
+            {# description #}
+            <div class="col-sm-5 mt-5 mx-auto">
+                <label for="product">وضعیت</label>
+                <select class="form-control" name="status">
+                    <option value="{{'انتقال به انبار تنخواه'}}">{{'انتقال به انبار تنخواه'}}</option>
+                </select>
+            </div>
+            <div class="col-sm-5 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+   </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'Admin/Master/footer' %}
+{% endblock %}
+

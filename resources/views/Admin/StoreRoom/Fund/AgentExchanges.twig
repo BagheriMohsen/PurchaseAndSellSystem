@@ -1,0 +1,278 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}   
+  ارسال به نماینده
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'ارسال به نماینده'} %}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'Messages/message' %}
+    {% include 'Messages/info' %}
+    {% include 'Messages/errors' %}
+
+   <div class="bg-white">
+         
+    <ul class="nav nav-tabs " id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+            aria-selected="true">ارسال به نماینده</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            aria-selected="false">انبار به انبار نماینده ها</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link dana-bold text-dark" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+            aria-selected="false">خروج</a>
+        </li>
+    </ul>
+<div class="tab-content " id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    
+         <form class="row bg-white pt-3 pb-3" action="{{route('storeRooms.sendToAgent')}}" method="post" enctype="multipart/form-data">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'sendToAgent'}}" />
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    
+                     <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('date')}}"  name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
+                        <label for="date-picker-example">تاریخ</label>
+                    </div>
+                  
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="product">محصول</label>
+                        <select class="form-control" name="product">
+                            <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
+                        {% for product in products %}
+                            <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
+                        {% endfor %}
+                        </select>
+                        
+                    </div>
+                    {# number #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <label for="inputIconEx5">تعداد</label>
+                        <span class="text-secondary">
+                            ارزش ریالی:
+                            0
+                        </span>
+                    </div>
+                    {# end number #}
+                    {# receiver #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="receiver">تحویل گیرنده</label>
+                        <select class="form-control" name="receiver">
+                            <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">گیرنده را انتخاب کنید</option>
+                        {% for agent in agents %}
+                            <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
+                            {{'نام:'}}
+                            {{agent.name}}
+                            {{'-'}}
+                            {{'نام کاربری:'}}
+                            {{agent.username}}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# receiver #}
+                    {# description #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <i class="fas fa-pencil-alt prefix text-dark"></i>
+                        <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80">{{old('description')}}</textarea>
+                        <label for="form10">توضیحات</label>
+                    </div>
+                    {# description #}
+                    {# transports #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="transport">وسیله ارسال</label>
+                        <select class="form-control" name="transport">
+                            <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
+                        {% for transport in transports %}
+                            <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# transports #}
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="row">
+                    {# pejak #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input  name="pejak" value="{{old('pejak')}}" type="number" id="inputIconEx5" class="form-control" >
+                        <label for="inputIconEx5">پیجک</label>
+                    </div>
+                    {# end pejak #}
+                    {# image #}
+                    <div class=" col-sm-8 mt-5 mx-auto">
+                        <label for="inputIconEx5">تصویر بارنامه</label>
+                        <br />
+                        <input type="file" id="inputIconEx5" class="form-control" name="image" value="">
+                    </div>
+                    {# end image #}
+                    {# receiver #}
+                        <input type="hidden" name="status" value="انتقال به انبار نماینده" />
+                    {# receiver #}
+                    
+                </div>
+            </div>
+
+
+            
+            <div class="col-sm-6 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
+    
+    
+    
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+         <form class="row bg-white pt-3 pb-3" action="{{route('storeRooms.AgentToAgent')}}" method="post" enctype="multipart/form-data">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'AgentToAgent'}}" />
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('date')}}" name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
+                        <label for="date-picker-example">تاریخ</label>
+                    </div>
+                  
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="product">محصول</label>
+                        <select class="form-control" name="product">
+                            <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
+                        {% for product in products %}
+                            <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
+                        {% endfor %}
+                        </select>
+                        
+                    </div>
+                    {# number #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <label for="inputIconEx5">تعداد</label>
+                        <span class="text-secondary">
+                            ارزش ریالی:
+                            0
+                        </span>
+                    </div>
+                    {# end number #}
+                   
+                    {# description #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <i class="fas fa-pencil-alt prefix text-dark"></i>
+                        <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80">{{old('description')}}</textarea>
+                        <label for="form10">توضیحات</label>
+                    </div>
+                    {# description #}
+                    
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="row">
+                    
+                     {# sender #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="receiver">تحویل دهنده</label>
+                        <select class="form-control" name="receiver">
+                            <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">ارسال کننده را انتخاب کنید</option>
+                        {% for agent in agents %}
+                            <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
+                            {{'نام:'}}
+                            {{agent.name}}
+                            {{'-'}}
+                            {{'نام کاربری:'}}
+                            {{agent.username}}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# sender #}
+                    {# receiver #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="receiver">تحویل گیرنده</label>
+                        <select class="form-control" name="receiver">
+                            <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">گیرنده را انتخاب کنید</option>
+                        {% for agent in agents %}
+                            <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
+                            {{'نام:'}}
+                            {{agent.name}}
+                            {{'-'}}
+                            {{'نام کاربری:'}}
+                            {{agent.username}}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# receiver #}
+                    {# transports #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="transport">وسیله ارسال</label>
+                        <select class="form-control" name="transport">
+                            <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
+                        {% for transport in transports %}
+                            <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# transports #}
+                    {# receiver #}
+                        <input type="hidden" name="status" value="انبار به انبار دو نماینده" />
+                    {# receiver #}
+                    
+                </div>
+            </div>
+
+
+            
+            <div class="col-sm-6 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
+
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+        
+
+    </div>
+</div>
+
+   </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'Admin/Master/footer' %}
+{% endblock %}
+

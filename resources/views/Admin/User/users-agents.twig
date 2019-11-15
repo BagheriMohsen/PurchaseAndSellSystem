@@ -81,6 +81,99 @@
     </table>
 
 </div>
+
+
+
+
+{# special share #}
+{% for user in users %}
+<!-- The Modal -->
+<div class="modal fade " id="types{{user.id}}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header ">
+
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+        <table  class="table table-bordered table-striped bg-white pt-2 pb-2">
+          <thead>
+          <tr class="text-center">
+            <th>محصول</th>
+            <th>تعرفه داخلی</th>
+            <th>تعرفه حومه</th>
+            <th>تعرفه روستا</th>
+            <th>عملیات</th>
+          </tr>
+          </thead>
+          <tbody>
+
+
+            {% for tariff in user.tariffs %}
+              <tr class="text-center">
+                
+                <td>#</td>
+                <th>{{tariff.internalPrice}}</th>
+                <th>{{tariff.locallyPrice}}</th>
+                <th>{{tariff.villagePrice}}</th>
+                <td>
+                  <a  class="text-warning " href="#">
+                    <i class="far fa-edit crud-icon"></i>
+                  </a>
+                  <form  action="{{route('special-tariffs.destroy',tariff.id)}}" method="post" >
+                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                      <input type="hidden" name="_method" value="DELETE" />
+                    <button class="btn btn-default text-danger btn-sm" type="submit" name="button">
+                      <i class="far fa-trash-alt crud-icon"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+
+        {% endfor %}
+
+          </tbody>
+
+        </table>
+        <form action="{{route('special-tariffs.store')}}" method="post">
+           <input type="hidden" name="_token" value="{{csrf_token()}}" />
+          <div class=" mb-3">
+            <div class="form-control bg-white col-sm-5 mx-auto">
+              <select style="width:100%" class="users-product" name="product_id">
+                {% for product in products %}
+                  <option value="{{product.id}}">{{product.name}}</option>
+                {% endfor %}
+
+              </select>
+            </div>
+            <input type="text" class="form-control mt-2 col-sm-5 mx-auto" name="internalPrice" placeholder="تعرفه داخلی" required>
+            <input type="text" class="form-control mt-2 col-sm-5 mx-auto" name="locallyPrice" placeholder="تعرفه حومه" required>
+            <input type="text" class="form-control mt-2 col-sm-5 mx-auto" name="villagePrice" placeholder="تعرفه روستا" required>
+            <input type="hidden" name="user_id" value="{{user.id}}">
+
+              <button type="submit" class="col-sm-4 mx-auto mt-3 btn btn-outline-success">
+                  ثبت
+              </button>
+
+          </div>
+        </form>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+</div>
+{% endfor %}
+{# special share #}
+
+
 {% endblock %}
 
 {% block footer %}

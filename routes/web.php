@@ -88,10 +88,23 @@ Route::middleware('auth')->resource('special-tariffs','SpecialTariffController')
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],function(){
+      Route::get('/','StoreRoomController@index')->name('index');
+      /* MainWareHouse */
+      Route::get('/create','StoreRoomController@create')->name('create');
+      Route::post('/inStore','StoreRoomController@inManage')->name('inManage');
+      Route::post('/outStore','StoreRoomController@outManage')->name('outManage');
+      Route::post('/storageChange','StoreRoomController@storageChange')->name('storageChange');
       Route::get('/in','StoreRoomController@inStorage')->name('in');
       Route::get('/out','StoreRoomController@outStorage')->name('out');
+      Route::get('/storageManage','StoreRoomController@storageManage')->name('storageManage');
+      Route::get('/mainReceive','StoreRoomController@mainReceive')->name('mainReceive');
+      /* FundWareHouse */
+      Route::get('/acceptMainReceive/{id}','StoreRoomController@acceptMainReceive')->name('acceptMainReceive');
+      Route::get('/AgentExchangesForm','StoreRoomController@AgentExchangesForm')->name('AgentExchangesForm');
+      Route::post('/sendToAgent','StoreRoomController@sendToAgent')->name('sendToAgent');
+      Route::post('/AgentToAgent','StoreRoomController@AgentToAgent')->name('AgentToAgent');
 });
-Route::middleware('auth')->resource('storeRooms','StoreRoomController');
+
 /*
 |--------------------------------------------------------------------------
 | Warehouse Routes

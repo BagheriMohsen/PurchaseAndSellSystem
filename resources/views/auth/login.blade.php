@@ -19,19 +19,27 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('Auth/css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('Auth/css/main.css')}}">
+	<link rel="stylesheet" href="{{asset('AdminPanel/dist/css/fontawsome-all.css')}}">
+	<link rel="stylesheet" href="{{asset('AdminPanel/dist/css/custom-style.css')}}">
 <!--===============================================================================================-->
 </head>
 <body >
 
 	<div class="limiter">
+			
 		<div class="container-login100">
+				
 			<div class="wrap-login100">
-				<div class="login100-pic js-tilt" data-tilt>
+				
+				<div class="login100-pic js-tilt text-center" data-tilt>
+					<div class="text-center dana-bold">
+							سامانه خرید و فروش پیامکی
+					</div>
 					<img src="{{asset('Auth/images/img-01.png')}}" alt="IMG">
 				</div>
-
+				
 				<form method="POST" action="{{ route('loginToSite') }}" class="login100-form validate-form">
-					<span class="login100-form-title">
+					<span class="login100-form-title dana-bold">
 						ورود
 					</span>
 						@csrf
@@ -44,7 +52,7 @@
 							@enderror
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
-								<i class="fa fa-envelope" aria-hidden="true"></i>
+								<i class="far fa-user"></i>
 							</span>
 						</div>
 
