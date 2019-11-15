@@ -147,8 +147,52 @@ $(document).ready(function(){
             }
         });
     });
-     
+    //Deleting special tariffs for users via ajax
+    $('.deleteSpecialTariff').on('click',function(event){
+        event.preventDefault();
+        $(this).html('<i class="fas fa-spinner"></i>');
+        var form = $(this).parent('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var _method = form.find('input[name="_method"]').val();
+        $.ajax({
+            url:actionUrl,
+            type:'post',
+            data:{
+                _token:CSRF_TOKEN,
+                _method:_method,
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
+    });
+    //Storing special tariffs for users via ajax
+    $('.storeSTariffForm').submit(function(event){
+        event.preventDefault();
+        $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
+        var actionUrl = $(this).attr('action');
+        var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
+        var user_id = $(this).find('input[name="user_id"]').val();
+        var product_id = $(this).find('select[name="product_id"]').val();
+        var tariff_place = $(this).find('select[name="tariff_place"]').val();
+        var tariff_price = $(this).find('input[name="tariff_price"]').val();
+        console.log(actionUrl,CSRF_TOKEN,user_id,product_id,tariff_price,tariff_place);
+        
 
+        // $.ajax({
+        //     url:actionUrl,
+        //     type:'post',
+        //     data:{
+        //         _token:CSRF_TOKEN,
+        //         product:product_id,
+        //         name:name
+        //     },
+        //     success:function(response){
+        //         console.log(response);
+        //     }
+        // });
+     });
 
 });
 

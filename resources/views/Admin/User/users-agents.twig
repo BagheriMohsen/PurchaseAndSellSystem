@@ -67,6 +67,12 @@
             <td>{{'تعرفه تعیین شده'}}</td>
           {% endif %}
           <td>
+            <a  class="text-success" data-toggle="modal" href="#types{{user.id}}">
+              <sub class="text-success">
+                {{user.tariffs.count()}}
+              </sub>
+              <i class="fas fa-plus crud-icon"></i>
+            </a>
             <a href="{{route('users.edit',user.id)}}" >
               <i class="far fa-edit crud-icon text-warning"></i>
             </a> 
@@ -81,7 +87,125 @@
     </table>
 
 </div>
+{# special share #}
+{% for user in users %}
+<!-- The Modal -->
+<div class="modal fade " id="types{{user.id}}">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead"> افزودن تعرفه های ویژه </p>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+        <table  class="table table-bordered table-striped bg-white pt-2 pb-2">
+          <thead>
+          <tr class="text-center">
+            <th>محصول</th>
+            <th>مبلغ</th>
+            <th>محدوده</th>
+            <th>عملیات</th>
+          </tr>
+          </thead>
+          <tbody>
+
+
+            {% for tariff in user.tariffs %}
+              <tr class="text-center">
+                
+                <td>صابون</td>
+                <th>12000</th>
+                <th>داخل شهر</th>
+                <td>
+                  <form  action="{{route('special-tariffs.destroy',tariff.id)}}" method="post" >
+                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                      <input type="hidden" name="_method" value="DELETE" />
+                    <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
+                      <i class="far fa-trash-alt crud-icon"></i>
+                    </a>
+                  </form>
+                </td>
+              </tr>
+
+        {% endfor %}
+
+          </tbody>
+
+        </table>
+        <form class="storeSTariffForm" action="{{route('special-tariffs.store')}}" method="post">
+            <input type="hidden" name="_token" value="{{csrf_token()}}" />
+            <input type="hidden" name="user_id" value="{{user.id}}">
+            <div class="form-row">
+              <div class="form-group col-sm-6">
+                <label for="product_id">انتخاب محصول:</label>
+                <select class="users-product form-control" name="product_id">
+                  {% for product in products %}
+                    <option value="{{product.id}}">{{product.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="tariff_place">انتخاب محل:</label>
+                <select name="tariff_place" class="form-control">
+                    <option value="0">روستا</option>
+                    <option value="1">داخل شهر</option>
+                    <option value="2">حومه شهر</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="tariff_price">مبلغ:</label>
+                <input type="number" class="form-control" name="tariff_price" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success">ذخیره</button>
+          {# <div class=" mb-3">
+            <div class="form-control col-sm-5 mx-auto">
+              <label for="product_id">انتخاب محصول:</label>
+              <select style="width:100%" class="users-product" name="product_id">
+                {% for product in products %}
+                  <option value="{{product.id}}">{{product.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-control col-sm-5 mx-auto">
+              <label for="tariff_place">انتخاب محل:</label>
+              <select style="width:100%"  name="tariff_place">
+                  <option value="0">روستا</option>
+                  <option value="1">داخل شهر</option>
+                  <option value="2">حومه شهر</option>
+              </select>
+            </div>
+            <div class="form-control col-sm-5 mx-auto">
+              <label for="tariff_price">مبلغ:</label>
+              <input type="number" class="" name="tariff_price" required>
+            </div>
+            <input type="hidden" name="user_id" value="{{user.id}}">
+            <button type="submit" class="col-sm-4 mx-auto mt-3 btn btn-outline-success">
+                ثبت
+            </button>
+
+          </div> #}
+        </form>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+</div>
+{% endfor %}
+{# special share #}
 {% endblock %}
+
+
 
 {% block footer %}
   {% include 'Admin/Master/footer' %}
