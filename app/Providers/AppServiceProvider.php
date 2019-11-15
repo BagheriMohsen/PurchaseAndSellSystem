@@ -62,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
                 }elseif($roleName == "fundWarehouser"){
                     $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>'sendToFund'])
                     ->count();
+                }else{
+                    $notifs = 0;
                 }
 
                 $view ->with(compact('role','notifs'));
