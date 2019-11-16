@@ -213,12 +213,13 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         Auth::login($user);
         $role = $user->getRoleNames()->first();
+       
         session(['adminLogIn' => $user_id ]);
         if($role == "mainWarehouser" || $role == "fundWarehouser"){
             return redirect()->route('storeRooms.index')->with('switchSuccess','true');
-        }elseif($role="agent" || $role == "agentChief"){
+        }elseif($role == "agent" || $role == "agentChief"){
             return redirect()->route('users.AgentDashboard')->with('switchSuccess','true');
-        }elseif($role="seller"){
+        }elseif($role == "seller"){
             return redirect()->route('users.SellerDashboard')->with('switchSuccess','true');
         }else{
             return redirect('/')->with('switchSuccess','true');
