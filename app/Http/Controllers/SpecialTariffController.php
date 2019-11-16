@@ -48,6 +48,7 @@ class SpecialTariffController extends Controller
             'user_id'       =>  $request->user_id,
             'product_id'    =>  $request->product_id,
             'place'         =>  $request->place,
+            'price'         =>  $request->price,
           ]);
           $message = 'اطلاعات وارد شد';
           return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
@@ -94,7 +95,7 @@ class SpecialTariffController extends Controller
           'user_id'         =>  $request->user_id,
           'product_id'      =>  $request->product_id,
           'place'           =>  $request->place,
-
+          'price'           =>  $request->price,
         ]);
         return back();
     }

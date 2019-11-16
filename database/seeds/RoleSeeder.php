@@ -19,6 +19,7 @@ class RoleSeeder extends Seeder
         $followUpManager    = Role::create(['name'=>'followUpManager','persianName'=>'مدیر پیگیری']);
         $mainwarehouser     = Role::create(['name'=>'mainWarehouser','persianName'=>'انبارگردان مادر']);
         $fundwarehouser     = Role::create(['name'=>'fundWarehouser','persianName'=>'انبارگردان تنخواه']);
+        $callCenter         = Role::create(['name'=>'callCenter','persianName'=>'کالسنتر']);
 
         #1.admin site
         $user = 'App\User'::findOrFail(1);
@@ -40,6 +41,9 @@ class RoleSeeder extends Seeder
         $user->assignRole($agent->name);
         #7.seller
         $user = 'App\User'::findOrFail(7);
+        $user->assignRole($seller->name);
+        #8.callCenter
+        $user = 'App\User'::findOrFail(8);
         $user->assignRole($seller->name);
     }
 }

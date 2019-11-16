@@ -194,6 +194,29 @@ class StartingSeeder extends Seeder
             'internalPrice' =>  null,
             'villagePrice'  =>  null
           ]);
+          #8.create seller
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'callCenter',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  0,
+            'reciveAuto'    =>  1,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
         /*
         |--------------------------------------------------------------------------
         | Create WareHouse
@@ -240,6 +263,7 @@ class StartingSeeder extends Seeder
       'App\Transport'::create([
         'name'          =>  "تحویل به نماینده",
       ]);
+
       
     }
 }

@@ -49,8 +49,9 @@
         {# role #}
         <div  class="col-sm-12 mt-3  mb-4">
           <select id="user_role" class="form-control"  name="role">
+         
             {% for role in roles %}
-              <option {% if user.getRoleName() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
+              <option {% if user.getRoleNames().first() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
             {% endfor %}
           </select>
         </div>

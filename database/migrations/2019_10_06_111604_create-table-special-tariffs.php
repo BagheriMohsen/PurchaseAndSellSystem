@@ -18,6 +18,7 @@ class CreateTableSpecialTariffs extends Migration
           $table->bigInteger('product_id')->unsigned();
           $table->bigInteger('user_id')->unsigned();
           $table->string('place');
+          $table->integer('price');
           $table->timestamps();
 
           $table->foreign('product_id')->references('id')->on('products')

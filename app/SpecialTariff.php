@@ -10,6 +10,7 @@ class SpecialTariff extends Model
       'user_id',
       'product_id',
       'place',
+      'price'
     ];
 
 
