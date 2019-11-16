@@ -11,6 +11,8 @@
 {% block styles %}
   <link rel="stylesheet" href="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.css')}}">
   <link rel="stylesheet" href="{{asset('AdminPanel/select2/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('AdminPanel/check-box/checkboxes.min.css')}}">
+
 {% endblock %}
 
 {% block sidebar %}
@@ -22,234 +24,305 @@
 {% endblock %}
 
 {% block content %}
-
 <form action="{{route('users.update',user.id)}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input type="hidden" name="_method" value="put" />
-<div class="row bg-white pt-3 pb-3">
-  <h4 class="col-12 pt-2 pb-3">
-    اطلاعات عمومی
-  </h4>
-  {# first section #}
-  <div class="col-sm-4 mx-auto">
-    <div class="container-fluid">
-      <div class="row">
-        {# نام #}
-        <div class="md-form mb-4">
-          <input type="text" id="inputIconEx1" class="form-control" name="name" value="{{user.name}}">
-          <label for="inputIconEx1">نام</label>
-        </div>
-        {# نام #}
-        {# نام خانوادگی #}
-        <div class="md-form mb-4">
-          <input type="text" id="inputIconEx2" class="form-control" name="family" value="{{user.family}}">
-          <label for="inputIconEx2">نام خانوادگی</label>
-        </div>
-        {# نام خانوادگی  #}
-        {# role #}
-        <div  class="col-sm-12 mt-3  mb-4">
-          <select id="user_role" class="form-control"  name="role">
-         
+  <div class="row bg-white pt-3 pb-3">
+    <h4 class="col-12 pt-2 pb-3">
+      اطلاعات عمومی
+    </h4>
+    {# نام #}
+    <div class="row mx-4">
+      <div class="col-sm-4 md-form mb-4">
+        <input type="text" id="inputIconEx1" class="form-control" name="name" value="{{user.name}}">
+        <label for="inputIconEx1">نام</label>
+      </div>
+      {# نام #}
+      {# نام خانوادگی #}
+      <div class="col-sm-4 md-form mb-4">
+        <input type="text" id="inputIconEx2" class="form-control" name="family" value="{{user.family}}">
+        <label for="inputIconEx2">نام خانوادگی</label>
+      </div>
+      {# نام خانوادگی  #}
+      {# شماره تماس #}
+      <div class="col-sm-4 md-form mb-4">
+        <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="{{user.mobile}}">
+        <label for="inputIconEx3">شماره تماس</label>
+      </div>
+      {#شماره تماس #}
+      {# جنسیت #}
+      <div class="col-sm-4 mb-4">
+        <select class="form-control "  name="sex">
+            <option {% if user.sex != 0 %} selected {% endif %} value="1">مرد</option>
+            <option {% if user.sex != 1 %} selected {% endif %} value="0">زن</option>
+        </select>
+      </div>
+      {# جنسیت #}
+      {# نقش #}
+      <div class="col-sm-4 mb-4">
+        <select id="user_role" class="form-control"  name="role">
+            <option selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
               <option {% if user.getRoleNames().first() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
             {% endfor %}
-          </select>
-        </div>
-        {# end role #}
-        {# name and family #}
-        <div class="md-form mb-4">
-          <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="{{user.mobile}}">
-          <label for="inputIconEx3">شماره تماس</label>
-        </div>
-        {# end name and family #}
-        {# name and family #}
-        <div class="md-form mb-4">
-          <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="{{user.porsantSeller}}">
-          <label for="porsantSeller">پورسانت</label>
-        </div>
-        {# end name and family #}
+        </select>
       </div>
+      {# نقش #}
     </div>
   </div>
-  {# {first section #}
-
-
-
-{# third section #}
-<div class="col-sm-4 mx-auto">
-  <div class="container-fluid">
-    <div class="row">
-      {# جنسیت #}
-      <div class="col-sm-12 mb-4">
-        <select class="form-control "  name="sex">
-          <option {% if user.sex != 0 %} selected {% endif %} value="1">مرد</option>
-          <option {% if user.sex != 1 %} selected {% endif %} value="0">زن</option>
-        </select>
-      </div>
-      {# جنسیت #}
-      {# نقش نماینده #}
-      <div class="col-sm-12 mt-3 mb-4">
-        <select id="agent_id" class="form-control"  name="agent_id" disabled="disabled">
+  <div class="row bg-white pt-3 pb-3">
+    <h4 class="col-12 pt-2 pb-3">
+      اطلاعات تخصصی
+    </h4>
+    <div class="row mx-4 otherRolesFields">
+      {#مدیر نماینده  #}
+      <div class="col-sm-4 mb-4">
+        <select id="agent_id" class="form-control disabled"  name="agent_id" disabled="disabled">
           <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
-          <option value="">بدون مدیر</option>
-          <option value="">نماینده</option>
+          
+          {% for chief in agentChiefs %}
+            <option value="{{chief.id}}">{{chief.persianName}}</option>
+          {% else %}
+              <option Disabled >چیزی برای انتخاب وجود ندارد</option>
+          {% endfor %}
         </select>
       </div>
-      {# نقش نماینده #}
+      {# مدیر نماینده #}
+      <div class="col-12"></div>
+      {#پورسانت فروشنده  #}
+      <div class="col-sm-4 md-form mb-4 disabled">
+        <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="{{user.porsantSeller}}" disabled>
+        <label for="porsantSeller">پورسانت</label>
+      </div>
+      {#پورسانت فروشنده #}
       {# تعرفه پایه داخلی #}
-      <div class="md-form mb-4">
+      <div class="col-sm-4 md-form mb-4 disabled">
           <input type="text" id="tariff_internal" class="form-control" name="internal" value="{{user.internalPrice}}" disabled>
           <label for="tariff_internal">تعرفه پایه داخل</label>
       </div>
       {# تعرفه پایه داخلی #}
       {# تعرفه پایه حومهی #}
-      <div class="md-form mb-4">
+      <div class="col-sm-4 md-form mb-4 disabled">
           <input type="text" id="tariff_locally" class="form-control" name="locally" value="{{user.locallyPrice}}" disabled>
           <label for="tariff_locally">تعرفه پایه حومه</label>
       </div>
       {# تعرفه پایه حومه #}
       {# تعرفه پایه روستای #}
-      <div class="md-form mb-4">
+      <div class="col-sm-4 md-form mb-4 disabled">
           <input type="text" id="tariff_village" class="form-control" name="village" value="{{user.villagePrice}}" disabled>
           <label for="tariff_village">تعرفه پایه روستا</label>
       </div>
       {# تعرفه پایه روستا #}
-    </div>
-  </div>
-</div>
-{# end third section #}
-
-{# second section  #}
-<div class="col-sm-12 mt-5">
-  <div class="container-fluid">
-    <div class="row">
       {# auto send #}
-      <div class="col-sm-4 mt-3">
+      <div class="col-12"></div>
+      <div class="col-sm-4 mb-4">
         <h6>ارسال سفارش
         </h6>
         <input id="send_order" type="checkbox"
           
-           data-toggle="switchbutton"
-           data-onstyle="success"
-           data-offstyle="danger"
-           data-onlabel="خودکار"
-           data-offlabel="دستی" name="sendAuto" {% if user.sendAuto != null %} checked {% endif %}
-           disabled="disabled">
+          data-toggle="switchbutton"
+          data-onstyle="success"
+          data-offstyle="danger"
+          data-onlabel="خودکار"
+          data-offlabel="دستی" name="sendAuto" {% if user.sendAuto != null %} checked {% endif %}
+          disabled="disabled" >
       </div>
       {# end auto send #}
       {# auto send #}
-      <div class="col-sm-4 mt-3">
+      <div class="col-sm-4 mb-4">
         <h6>برگشت کالا از انبار
 
         </h6>
         <input id="return_product" style="font-size:30px;"  type="checkbox"
-           
-           data-toggle="switchbutton"
-           data-onstyle="success"
-           data-offstyle="danger"
-           data-onlabel="خودکار"
-           data-offlabel="دستی" name="reciveAuto" {% if user.reciveAuto != null %} checked {% endif %}
-           disabled="disabled">
+          
+          data-toggle="switchbutton"
+          data-onstyle="success"
+          data-offstyle="danger"
+          data-onlabel="خودکار"
+          data-offlabel="دستی" name="reciveAuto" {% if user.reciveAuto != null %} checked {% endif %}
+          disabled="disabled">
       </div>
       {# end auto send #}
       {# auto send #}
-      <div class="col-sm-4 mt-3">
+      <div class="col-sm-4 mb-4">
         <h6>نوع محاسبه هزینه کالا
         </h6>
-        <input type="checkbox"
+        <input id="calType" type="checkbox"
         
-           data-toggle="switchbutton"
-           data-onstyle="success"
-           data-offstyle="info"
-           data-onlabel="مبلغ فاکتور"
-           data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}>
+          data-toggle="switchbutton"
+          data-onstyle="success"
+          data-offstyle="info"
+          data-onlabel="مبلغ فاکتور"
+          data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}
+          disabled="disabled">
       </div>
       {# end auto send #}
     </div>
+    <div class="row mx-4 callcenterFields d-none">
+      {# امکان بارگذاری شماره #}
+      <div class="col-sm-4 mb-4">
+        <h6>امکان بارگذاری شماره
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="numberUpload" value="active" name="numberUpload">
+            <label for="numberUpload"></label>
+        </div>
+      </div>
+      {# امکان بارگذاری شماره #}
+        
+      {# امکان وارد کردن شماره تکراری #}
+      <div class="col-sm-4 mb-4">
+        <h6>امکان وارد کردن شماره تکراری
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="repeatedNumber" value="active" name="repeatedNumber">
+            <label for="repeatedNumber"></label>
+        </div>
+      </div>
+      {# امکان وارد کردن شماره تکراری #}
+      
+      {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
+      <div class="col-sm-4 mb-4">
+        <h6>امکان وارد کردن سفارش از ثبت سفارش جدید
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="addOrderFromNewOrder" value="active" name="addOrderFromNewOrder">
+            <label for="addOrderFromNewOrder"></label>
+        </div>
+      </div>
+      {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
+
+      {# امکان برگشت شماره #}
+      <div class="col-sm-4 mb-4">
+        <h6>امکان برگشت شماره
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="numberReturn" value="active" name="numberReturn">
+            <label for="numberReturn"></label>
+        </div>
+      </div>
+      {# امکان برگشت شماره #}
+      {# امکان ویرایش شماره تلفن #}
+      <div class="col-sm-4 mb-4">
+        <h6>امکان ویرایش شماره تلفن
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="editNumber" value="active" name="editNumber">
+            <label for="editNumber"></label>
+        </div>
+      </div>
+      {# امکان ویرایش شماره تلفن #}
+
+      {# نمایش تاریخ دریافت پیامک #}
+      <div class="col-sm-4 mb-4">
+        <h6> نمایش تاریخ دریافت پیامک
+          <span class="text-danger">*</span>
+        </h6>
+        <div class="ckbx-style-11">
+            <input type="checkbox" id="smsDate" value="active" name="smsDate">
+            <label for="smsDate"></label>
+        </div>
+      </div>
+      {# نمایش تاریخ دریافت پیامک #}
+      {# نوع کال سنتر #}
+      <div class="col-sm-4 mb-4">
+        <h6>نوع کالسنتر</h6>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="callcenterType" value="normal" checked>معمولی
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="callcenterType" value="marketer">بازاریاب
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="callcenterType" value="channelDist">مویرگی
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-{# end second section #}
+
+  <div class="row bg-white pt-2 pb-3 mt-5">
+    <h4 class="col-12 pt-2 pb-3">
+    اطلاعات مکان
+    </h4>
+
+    {# شهر  #}
+    <div class="col-sm-5  mt-5">
+      <select class="cities col-12 bg-white" name="state">
+        {% for city in cities %}
+          <optgroup class="bg-info" label="{{city.name}}">
+              {% for state in city.states %}
+                <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
+              {% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+    </div>
+    {# شهر #}
+    {# آدرس کامل #}
+    <div class="md-form col-sm-7">
+      <i class="fas fa-pencil-alt prefix text-dark"></i>
+      <textarea name="address" id="form10" class="md-textarea form-control" rows="8" cols="80">{{ user.address }}</textarea>
+      <label for="form10">آدرس کامل</label>
+    </div>
+    {# آدرس کامل #}
 
 
-
-</div>
-
-
-<div class="row bg-white pt-2 pb-3 mt-5">
-  <h4 class="col-12 pt-2 pb-3">
-  اطلاعات مکان
-  </h4>
-
-  {# شهر  #}
-  <div class="col-sm-5  mt-5">
-    <select class="cities col-12 bg-white" name="state">
-
-      {% for city in cities %}
-        <optgroup class="bg-info" label="{{city.name}}">
-            {% for state in city.states %}
-              <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
-            {% endfor %}
-        </optgroup>
-      {% endfor %}
-
-    </select>
   </div>
-  {# شهر #}
-  {# آدرس کامل #}
-  <div class="md-form col-sm-7">
-    <i class="fas fa-pencil-alt prefix text-dark"></i>
-    <textarea name="address" id="form10" class="md-textarea form-control" rows="8" cols="80">{{ user.address }}</textarea>
-    <label for="form10">آدرس کامل</label>
+
+  <div class="row bg-white pt-2 pb-3 mt-5">
+    <h4 class="col-12 pt-2 pb-3">
+    حساب کاربری
+    </h4>
+    {# نام کاربری #}
+    <div class="md-form mb-4 col-sm-5">
+        <input type="text" id="inputIconEx24" class="form-control" name="username" value="{{user.username}}"  required>
+        <label for="inputIconEx24">نام کاربری</label>
+    </div>
+    {# نام کاربری #}
+    {# گذرواژه #}
+    
+    <div class="md-form mb-4 col-sm-5">
+        <input type="password" id="inputIconEx25" class="form-control" name="password" value="" required>
+        <label for="inputIconEx25">گذرواژه</label>
+    </div>
+    {# گذرواژه #}
+    {# وضعیت #}
+    <div class="col-sm-2 mt-5">
+      <h6>
+        وضعیت کاربر
+
+      </h6>
+      <input type="checkbox"
+        data-size="sm"
+        data-toggle="switchbutton"
+        data-onstyle="success"
+        data-offstyle="danger"
+        data-onlabel="فعال"
+        data-offlabel="غیر فعال" name="status" {% if user.status != null %} checked {% endif %}>
+    </div>
+    {# وضعیت #}
+
+    <div class="col-12 text-center mt-5">
+      <button class="btn btn-success btn-sm col-2" type="submit" name="button">
+        <strong class="h6 text-dark">
+          ویرایش کاربر
+        </strong>
+      </button>
+    </div>
   </div>
-  {# آدرس کامل #}
-
-
-</div>
-
-<div class="row bg-white pt-2 pb-3 mt-5">
-  <h4 class="col-12 pt-2 pb-3">
-  حساب کاربری
-  </h4>
-  {# نام کاربری #}
-  <div class="md-form mb-4 col-sm-5">
-      <input type="text" id="inputIconEx4" class="form-control" name="username" value="{{user.username}}" required>
-      <label for="inputIconEx4">نام کاربری</label>
-  </div>
-  {# نام کاربری #}
-  {# گذرواژه #}
-  
-  <div class="md-form mb-4 col-sm-5">
-      <input type="password" id="inputIconEx4" class="form-control" name="password" value="" required>
-      <label for="inputIconEx4">گذرواژه</label>
-  </div>
-  {# گذرواژه #}
-  {# وضعیت #}
-  <div class="col-sm-2 mt-5">
-    <h6>
-      وضعیت کاربر
-
-    </h6>
-    <input type="checkbox"
-       data-size="sm"
-       data-toggle="switchbutton"
-       data-onstyle="success"
-       data-offstyle="danger"
-       data-onlabel="فعال"
-       data-offlabel="غیر فعال" name="status" {% if user.status != null %} checked {% endif %}>
-  </div>
-  {# وضعیت #}
-
-  <div class="col-12 text-center mt-5">
-    <button class="btn btn-success btn-sm col-2" type="submit" name="button">
-      <strong class="h6 text-dark">
-        ویرایش کاربر
-      </strong>
-    </button>
-  </div>
-</div>
-
-
 </form>
+
 {% endblock %}
 
 {% block footer %}
