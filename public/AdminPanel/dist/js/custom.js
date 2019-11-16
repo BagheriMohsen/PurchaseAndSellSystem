@@ -49,7 +49,7 @@ $(document).ready(function(){
      // enabled send order checkbox when agent role selected
      $('#user_role').on('click',function(event){
         var user_value = event.target.value;
-        if(user_value === '2'){
+        if(user_value === '2' || user_value === '3'){
             $('#send_order').prop('disabled',false);
             $('#send_order').parent().prop('disabled',false);
             $('#send_order').parent().removeClass('disabled');
@@ -62,7 +62,7 @@ $(document).ready(function(){
       // enabled type of product price calculation checkbox when agent role selected
       $('#user_role').on('click',function(event){
         var user_value = event.target.value;
-        if(user_value === '2'){
+        if(user_value === '2' || user_value === '3'){
             $('#calType').prop('disabled',false);
             $('#calType').parent().prop('disabled',false);
             $('#calType').parent().removeClass('disabled');
