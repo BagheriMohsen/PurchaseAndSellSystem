@@ -52,9 +52,9 @@
       {# جنسیت #}
       <div class="col-sm-4 mb-4">
         <select class="form-control "  name="sex">
-          <option selected>جنسیت کاربر را مشخص کنید</option>
-          <option  value="1">مرد</option>
-          <option  value="0">زن</option>
+            <option selected>جنسیت کاربر را مشخص کنید</option>
+            <option  value="1">مرد</option>
+            <option  value="0">زن</option>
         </select>
       </div>
       {# جنسیت #}
@@ -62,14 +62,13 @@
       <div class="col-sm-4 mb-4">
         <select id="user_role" class="form-control"  name="role">
             <option selected>نقش کاربر را مشخص کنید</option>
-          {% for role in roles %}
+            {% for role in roles %}
             <option value="{{role.id}}" >{{role.persianName}}</option>
-          {% endfor %}
+            {% endfor %}
         </select>
       </div>
       {# نقش #}
     </div>
-    
   </div>
   <div class="row bg-white pt-3 pb-3">
     <h4 class="col-12 pt-2 pb-3">
@@ -125,7 +124,7 @@
           data-onstyle="success"
           data-offstyle="danger"
           data-onlabel="خودکار"
-          data-offlabel="دستی" name="sendAuto"
+          data-offlabel="دستی" name="sendAuto" 
           disabled="disabled" >
       </div>
       {# end auto send #}
@@ -140,7 +139,7 @@
           data-onstyle="success"
           data-offstyle="danger"
           data-onlabel="خودکار"
-          data-offlabel="دستی" name="reciveAuto"
+          data-offlabel="دستی" name="reciveAuto" 
           disabled="disabled">
       </div>
       {# end auto send #}
@@ -154,7 +153,7 @@
           data-onstyle="success"
           data-offstyle="info"
           data-onlabel="مبلغ فاکتور"
-          data-offlabel="تعرفه تعیین شده" name="calType" 
+          data-offlabel="تعرفه تعیین شده" 
           disabled="disabled">
       </div>
       {# end auto send #}
@@ -260,7 +259,6 @@
     {# شهر  #}
     <div class="col-sm-5  mt-5">
       <select class="cities col-12 bg-white" name="state">
-
         {% for city in cities %}
           <optgroup class="bg-info" label="{{city.name}}">
               {% for state in city.states %}
@@ -268,7 +266,6 @@
               {% endfor %}
           </optgroup>
         {% endfor %}
-
       </select>
     </div>
     {# شهر #}
@@ -289,7 +286,7 @@
     </h4>
     {# نام کاربری #}
     <div class="md-form mb-4 col-sm-5">
-        <input type="text" id="inputIconEx24" class="form-control" name="username"  required>
+        <input type="text" id="inputIconEx24" class="form-control" name="username" value=""  required>
         <label for="inputIconEx24">نام کاربری</label>
     </div>
     {# نام کاربری #}
@@ -312,7 +309,7 @@
         data-onstyle="success"
         data-offstyle="danger"
         data-onlabel="فعال"
-        data-offlabel="غیر فعال" name="status">
+        data-offlabel="غیر فعال" name="status" >
     </div>
     {# وضعیت #}
 
