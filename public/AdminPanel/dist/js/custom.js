@@ -83,7 +83,7 @@ $(document).ready(function(){
             $('.otherRolesFields').removeClass('d-none');
         }
      });
-     $('#user_role').click();
+    
      // Setup table for seller information
      $('#sellerInfoTable').DataTable();
     //Updating product types via ajax

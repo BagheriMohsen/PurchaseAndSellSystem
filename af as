@@ -1,0 +1,24 @@
+[33mcbcac13[m[33m ([m[1;36mHEAD -> [m[1;32mDevelop[m[33m)[m user_create and user_edit callcenter fields added and overall layout changed
+[33ma503047[m[33m ([m[1;31morigin/HEAD[m[33m, [m[1;31morigin/Develop[m[33m)[m add callCenter role and add price to special-tariff
+[33m465f65e[m header notif bugFix
+[33md74767b[m modify special-tariff migration,model and controller
+[33m1f03d09[m Merge branch 'Develop' of https://github.com/BagheriMohsen/PurchaseAndSellSystem into Develop
+[33mdf7daea[m add notification in fundWareHouse,agent,agentChief and create sellers-info in master directory and modify fund,agent warehouse
+[33mb9bf5f6[m Product type's modal ajax COMPLETED
+[33mafb25cc[m =modify productType controller and add json response for ajax
+[33m149c402[m modify products and user-agents page
+[33m40d07c0[m add storage for manage storeRoom,modify login page with dana-fontm,modify mainWarehouse-create,exchange between two warehouse and exit product fron this warehouse
+[33mf6f3969[m Adding morris chart ui to dashboard and cutom.js
+[33mb2a246a[m Modifying special tariif modal for agents and adding ajax codes
+[33m1dc19d6[m 1)productTypeController returning just $message 2)Edit form and ajax for edit added
+[33mf53c9a2[m Completing ui for buyer info modal and toggle
+[33m890b9f4[m Modifying product type modal for ajax part_1
+[33mf3b8233[m 1)md datatable addon added 2)easy access to seller info via modal in dashboard (temperory ui)
+[33mabce76b[m 1)change key value in config/app.php 2)creating custom.css and custom.js 3)applying disable and enabled inputs for different roles
+[33m5f9a394[m[33m ([m[1;31morigin/master[m[33m)[m modify user edit profile
+[33m30a44fc[m appned dana font,create StoreRoom controller,model,migration and view,create WareHouse controller,model,view,create admin switch account without logout,remove vazir font family,install ban composer
+[33m8f4cbe6[m complete twig template engine for all views create ProductOff routes and migration,add Message and validate message for all views
+[33m5b708f8[m change blade template engine to twig,composer medialibrary installed
+[33m75ebc36[m install composer Permission&ROle,create starting and RolePermission Seeder
+[33m2de956a[m add product-edit,user-edit,ProductTypeController and changing states,users-create,users,products,product-create,ProductController,UserController and StateController
+[33mf46afa4[m add online-shop to git for first time
