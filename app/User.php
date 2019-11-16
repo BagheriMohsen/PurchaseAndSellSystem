@@ -45,6 +45,15 @@ class User extends Authenticatable implements HasMedia
         'locallyPrice',
         'internalPrice',
         'villagePrice',
+        'uploadCS_status',
+        'allowNumber',
+        'allowNumberBack',
+        'allowNumberDup',
+        'allowNewOrder',
+        'messageStatus',
+        'determinPercent',
+        'porsantType',
+        'forceOrder'
     ];
 
     /**

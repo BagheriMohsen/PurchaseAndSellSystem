@@ -28,6 +28,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
     Route::get('//{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
     Route::put('/{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
+    Route::get('/uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
     /* Agent Dashboard */
     Route::get('/Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
   });

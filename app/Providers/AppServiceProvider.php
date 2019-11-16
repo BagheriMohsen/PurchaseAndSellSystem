@@ -69,7 +69,18 @@ class AppServiceProvider extends ServiceProvider
                 $view ->with(compact('role','notifs'));
             }
         });
-        
+        /*
+        |--------------------------------------------------------------------------
+        | Seller work information for sellers and admin
+        |--------------------------------------------------------------------------
+        |*/
+        view()->composer('Admin.Master.sellers-info',function($view){
+            if(auth()->check()){
+                // find user detail
+                $sellers       = 'App\User'::Role('seller')->get();
+                $view ->with(compact('sellers'));
+            }
+        });
 
     }
 }
