@@ -52,13 +52,13 @@
                 توضیحات:
                 {{warehouse.description}}
             </p>
-            <p class="mb-0">
+            {# <p class="mb-0">
                 <a style="text-decoration:none;" class="text-dark" href="">
                     لیست کاربرانی 
                 <a/>
                 که به این انبار دسترسی دارند
                
-            </p>
+            </p> #}
         
         
         </div>
@@ -83,19 +83,23 @@
             <th>محصول</th>
             <th>تعداد</th>
             <th>ورودی-خروجی</th>
-            <th >توضیحات</th>
             <th >تاریخ ورود</th>
             <th >تاریخ خروج</th>
             </tr>
         </thead>
         <tbody>
-        {% for storeRooms in storeRoom %}
+        {% for storeRoom in storeRooms %}
         <tr class="text-center">
-            <td>{{storeRoom.product.title}}</td>
+            <td>{{storeRoom.product.name}}</td>
             <td>{{storeRoom.number}}</td>
-            <td>{{storeRoom.in_out}}</td>
-            <td>{{storeRoom.description}}</td>
-            <td>{{storeRoom.in_date}}</td>
+            <td>
+                {% if storeRoom.description is not null %}
+                    {{storeRoom.description}}
+                {% else %}
+                    {{'توضیحات ندارد'}}
+                {% endif %}
+            </td>
+            <td>{{storeRoom.created_at|date('Y-m-d')}}</td>
             <td>{{storeRoom.out_date}}</td>
         </tr>
         {% endfor %}

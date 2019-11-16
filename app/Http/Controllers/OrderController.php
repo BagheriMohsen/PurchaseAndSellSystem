@@ -23,7 +23,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.Order.order-create');
     }
 
     /**

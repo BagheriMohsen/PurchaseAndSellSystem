@@ -1,0 +1,107 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  داشبورد
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
+
+{% block content %}
+
+  {% include 'Messages/switchSuccess' %}
+
+<!-- Small boxes (Stat box) -->
+<div class="row">
+    <div style="flex-basis:250px;" class=" text-center bg-white shadow pt-3 pb-5 mx-auto">
+        <strong>تارگت میانگین</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+  <div style="flex-basis:250px;" class=" text-center bg-white shadow pt-3 pb-5 mx-auto">
+        <strong>تارگت فروش</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+  <div style="flex-basis:250px;" class=" text-center bg-white shadow pt-3 pb-5 mx-auto">
+        <strong>تارگت درصد ثبت</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+   <div style="flex-basis:250px;" class=" text-center bg-primary shadow pt-3 pb-5 mx-auto">
+        <strong>مدال ها</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+</div>
+<!-- /.row -->
+<div class="row mt-5 mb-5">
+  {# item #}
+  <div class="col-sm-12">
+    <table class="table table-bordered table-striped">
+        <div class="bg-primary pt-3 pb-3 text-center dana-bold">عملکرد امروز</div>
+    <tbody>
+      <tr>
+        <td>دریافتی </td>
+        <td>ثبت </td>
+        <td>کل فروش </td>
+        <td>میانگین کالا </td>
+        <td>میانگین فاکتور</td>
+        <td>درصد ثبت</td>
+        <td>درصد ثبت کل</td>
+        <td>درصد وصول کل</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  </div>
+  {# end item #}
+ 
+</div>
+
+<div class="row">
+    <div class="col-sm-5">
+        {# item #}
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped">
+                <div class="bg-primary pt-3 pb-3 text-center dana-bold">رتبه داخل کالسنتر</div>
+            <tbody>
+            <tr>
+                <td>رتبه</td>
+                <td>نام فروشنده</td>
+                <td>اعتبار امروز</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        {# end item #}
+    </div>
+<div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

@@ -61,7 +61,18 @@
                  </li>
                  {% endif %}
                 {# Agent Dashboard #}
-
+                 {# Seller Dashboard #}
+                  {% if role.name  == "seller" %}
+                 <li class="nav-item">
+                   <a href="{{route('users.SellerDashboard')}}" class="nav-link">
+                     <i class="fas fa-tachometer-alt "></i>
+                     <p>
+                        داشبورد
+                     </p>
+                   </a>
+                 </li>
+                 {% endif %}
+                {# Seller Dashboard #}
                 {# Products #}
                 {% if role.name == "admin" %}
                   <li class="nav-item has-treeview">
@@ -97,6 +108,36 @@
                   </li>
                   {# warehouse #}
                 {% endif %}
+
+                {# Order #}
+                {% if role.name == "seller" %}
+                  <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-boxes "></i>
+                      <p>
+                        سفارشات
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="{{route('orders.create')}}" class="nav-link">
+                          <i class="fas fa-chevron-circle-left"></i>
+                          <p>سفارش جدید</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{{route('storeRooms.index')}}" class="nav-link">
+                          <i class="fas fa-chevron-circle-left"></i>
+                          <p>سفارشات</p>
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                {% endif %}
+                {# main WareHouser #}
+                {# Order #}
+
 
                 {# main WareHouser #}
               {% if role.name == "mainWarehouser" %}

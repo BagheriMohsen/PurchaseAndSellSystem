@@ -51,7 +51,7 @@
       {#شماره تماس #}
       {# جنسیت #}
       <div class="col-sm-4 mb-4">
-        <select class="form-control "  name="sex">
+        <select class="form-control "  name="sex" required>
             <option selected>جنسیت کاربر را مشخص کنید</option>
             <option  value="1">مرد</option>
             <option  value="0">زن</option>
@@ -78,16 +78,25 @@
       {#مدیر نماینده  #}
       <div class="col-sm-4 mb-4">
         <select id="agent_id" class="form-control disabled"  name="agent_id" disabled="disabled">
-          <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
-          
+          <option selected value="{{null}}">بدون مدیر نماینده</option>
           {% for chief in agentChiefs %}
-            <option value="{{chief.id}}">{{chief.persianName}}</option>
+            <option value="{{chief.id}}">{{chief.username}}</option>
           {% else %}
               <option Disabled >چیزی برای انتخاب وجود ندارد</option>
           {% endfor %}
         </select>
       </div>
       {# مدیر نماینده #}
+      {#callcenter manager   #}
+      <div class="col-sm-4 mb-4">
+        <select id="callcenter_id" class="form-control disabled"  name="callCenter" disabled="disabled">
+            <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
+          {% for callCenter in callCenters %}
+            <option  value="{{callCenter.id}}">{{callCenter.username}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {# allcenter manager  #}
       <div class="col-12"></div>
       {#پورسانت فروشنده  #}
       <div class="col-sm-4 md-form mb-4 disabled">
@@ -153,19 +162,34 @@
           data-onstyle="success"
           data-offstyle="info"
           data-onlabel="مبلغ فاکتور"
-          data-offlabel="تعرفه تعیین شده" 
+          data-offlabel="تعرفه تعیین شده" name="calType"
           disabled="disabled">
       </div>
       {# end auto send #}
     </div>
     <div class="row mx-4 callcenterFields d-none">
+      {# price calculation type #}
+      <div class="col-sm-4 mb-4">
+        <h6>نوع محاسبه هزینه کالا
+        </h6>
+        <input type="checkbox"
+        
+          data-toggle="switchbutton"
+          data-onstyle="success"
+          data-offstyle="info"
+          data-onlabel="مبلغ فاکتور"
+          data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter"
+          >
+      </div>
+      {# price calculation type #}
+      <div class="col-12"></div>
       {# امکان بارگذاری شماره #}
       <div class="col-sm-4 mb-4">
         <h6>امکان بارگذاری شماره
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="numberUpload" value="active" name="numberUpload">
+            <input type="checkbox" id="numberUpload" value="active" name="allowNumber">
             <label for="numberUpload"></label>
         </div>
       </div>
@@ -177,7 +201,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="repeatedNumber" value="active" name="repeatedNumber">
+            <input type="checkbox" id="repeatedNumber" value="active" name="allowNumberDup">
             <label for="repeatedNumber"></label>
         </div>
       </div>
@@ -189,7 +213,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="addOrderFromNewOrder" value="active" name="addOrderFromNewOrder">
+            <input type="checkbox" id="addOrderFromNewOrder" value="active" name="allowNewOrder">
             <label for="addOrderFromNewOrder"></label>
         </div>
       </div>
@@ -201,7 +225,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="numberReturn" value="active" name="numberReturn">
+            <input type="checkbox" id="numberReturn" value="active" name="allowNumberBack">
             <label for="numberReturn"></label>
         </div>
       </div>
@@ -212,7 +236,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="editNumber" value="active" name="editNumber">
+            <input type="checkbox" id="editNumber" value="active" name="allowNumberEdit">
             <label for="editNumber"></label>
         </div>
       </div>
@@ -224,7 +248,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="smsDate" value="active" name="smsDate">
+            <input type="checkbox" id="smsDate" value="active" name="messageStatus">
             <label for="smsDate"></label>
         </div>
       </div>
@@ -234,17 +258,17 @@
         <h6>نوع کالسنتر</h6>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="normal" checked>معمولی
+            <input type="radio" class="form-check-input" name="callCenterType" value="normal" checked>معمولی
           </label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="marketer">بازاریاب
+            <input type="radio" class="form-check-input" name="callCenterType" value="marketer">بازاریاب
           </label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="channelDist">مویرگی
+            <input type="radio" class="form-check-input" name="callCenterType" value="channelDist">مویرگی
           </label>
         </div>
       </div>

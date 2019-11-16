@@ -32,8 +32,9 @@ class UserController extends Controller
 
         $roles          =   Role::latest()->get();
         $cities         =   'App\City'::latest()->get();
-        $agentChiefs    =   User::role('agentChief')->get();
-        return view('Admin.User.users-create',compact('cities','roles','agentChiefs'));
+        $agentChiefs    =   User::Role('agentChief')->get();
+        $callCenters    =   User::Role('callCenter')->get();
+        return view('Admin.User.users-create',compact('cities','roles','agentChiefs','callCenters'));
     }
 
     /**
@@ -63,12 +64,14 @@ class UserController extends Controller
             'porsantSeller'         =>  $request->porsantSeller,
             'percent'               =>  $request->percent,
             'calType'               =>  $request->calType,
+            'calTypeCallCenter'     =>  $request->calTypeCallCenter,
             'callCenterType'        =>  $request->callCenterType,
             'locallyPrice'          =>  $request->locally,
             'internalPrice'         =>  $request->internal,
             'villagePrice'          =>  $request->village,
             'allowNumber'           =>  $request->allowNumber,
             'allowNumberBack'       =>  $request->allowNumberBack,
+            'allowNumberEdit'       =>  $request->allowNumberEdit,
             'allowNumberDup'        =>  $request->allowNumberDup,
             'allowNewOrder'         =>  $request->allowNewOrder,
             'messageStatus'         =>  $request->messageStatus,
@@ -102,7 +105,9 @@ class UserController extends Controller
       $roles  = Role::latest()->get();
       $cities = 'App\City'::latest()->get();
       $user = User::findOrFail($id);
-      return view('Admin.User.users-edit',compact('user','roles','cities'));
+      $agentChiefs    =   User::Role('agentChief')->get();
+      $callCenters    =   User::Role('callCenter')->get();
+      return view('Admin.User.users-edit',compact('user','roles','cities','callCenters','agentChiefs'));
     }
 
     /**
@@ -134,6 +139,7 @@ class UserController extends Controller
        'porsantSeller'      =>  $request->porsantSeller,
        'percent'            =>  $request->percent,
        'calType'            =>  $request->calType,
+       'calTypeCallCenter'  =>  $request->calTypeCallCenter,
        'locallyPrice'       =>  $request->locally,
        'internalPrice'      =>  $request->internal,
        'villagePrice'       =>  $request->village,
@@ -141,6 +147,7 @@ class UserController extends Controller
        'allowNumber'        =>  $request->allowNumber,
        'allowNumberBack'    =>  $request->allowNumberBack,
        'allowNumberDup'     =>  $request->allowNumberDup,
+       'allowNumberEdit'    =>  $request->allowNumberEdit,
        'allowNewOrder'      =>  $request->allowNewOrder,
        'messageStatus'      =>  $request->messageStatus,
        'determinPercent'    =>  $request->determinPercent,
@@ -211,6 +218,8 @@ class UserController extends Controller
             return redirect()->route('storeRooms.index')->with('switchSuccess','true');
         }elseif($role="agent" || $role == "agentChief"){
             return redirect()->route('users.AgentDashboard')->with('switchSuccess','true');
+        }elseif($role="seller"){
+            return redirect()->route('users.SellerDashboard')->with('switchSuccess','true');
         }else{
             return redirect('/')->with('switchSuccess','true');
         }
@@ -272,6 +281,14 @@ class UserController extends Controller
     public function AgentDashboard(Request $request){
         
         return view('Admin.agent-index');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Seller Dashboard Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function SellerDashboard(){
+        return view('Admin.seller-index');
     }
     /*
     |--------------------------------------------------------------------------

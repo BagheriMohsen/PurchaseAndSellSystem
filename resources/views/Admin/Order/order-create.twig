@@ -1,43 +1,51 @@
-@extends('Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
+{% block title %}
   ثبت سفارش
-@endsection
+{% endblock %}
 
-@section('header')
-  @include('Master.header')
-@endsection
+{% block styles %}
+  <link rel="stylesheet" href="{{asset('AdminPanel/check-box/checkboxes.min.css')}}">
+{% endblock %}
 
-@section('sidebar')
-  @include('Master.sidebar')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('path')
-  @include('Master.path')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('content')
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% include 'Messages/message' %}
+  {% include 'Messages/errors' %}
 
 <div class="row bg-white pt-3 pb-3">
   <h4 class="pt-2 pb-2 col-12 text-center">
     مشخصات مشتری
     <hr width="200px" style="border-bottom:5px solid red;" />
   </h4>
-  {{-- cell-phone --}}
+  {# cell-phone #}
   <div class="col-sm-3 mt-1">
     <label for="phone-number">موبایل(بدون صفر)
       <span class="text-danger">*</span>
     </label>
     <input class="form-control bg-sec" type="text" placeholder="مثال:9106769465"name="cell-phone" value="" required>
   </div>
-  {{-- landline-phone --}}
+  {# landline-phone #}
   <div class="col-sm-3 mt-1">
     <label for="phone-number">تلفن ثابت
       <span class="text-danger">*</span>
     </label>
     <input class="form-control bg-sec" type="text" placeholder="مثال:9106769465"name="landline-phone" value="" required>
   </div>
-  {{-- state --}}
+  {# state #}
   <div class="col-sm-3 mt-1">
     <label for="phone-number">استان
       <span class="text-danger">*</span>
@@ -47,7 +55,7 @@
       <option value="">کهک</option>
     </select>
   </div>
-  {{-- country --}}
+  {# country #}
   <div class="col-sm-3 mt-1">
     <label for="phone-number">شهر
       <span class="text-danger">*</span>
@@ -57,36 +65,36 @@
       <option value="">تهران</option>
     </select>
   </div>
-  {{-- detail:name-family-code-hbd --}}
+  {# detail:name-family-code-hbd #}
   <div class="col-sm-6 mt-5">
     <div class="container-fluid">
       <div class="row">
-        {{-- name and family --}}
+        {# name and family #}
         <div class="col-sm-12">
           <label for="phone-number">نام و نام خانوادگی
             <span class="text-danger">*</span>
           </label>
           <input class="form-control bg-sec" type="text" placeholder="محسن باقری"name="landline-phone" value="" required>
         </div>
-        {{-- code --}}
+        {# code #}
         <div class="col-sm-6 mt-4">
           <label for="phone-number">کد پستی
             <span class="text-danger">*</span>
           </label>
           <input class="form-control bg-sec" type="text" placeholder="محسن باقری"name="landline-phone" value="" required>
         </div>
-        {{-- HBD --}}
+        {# HBD #}
         <div class="col-sm-6 mt-4">
           <label for="phone-number">تاریخ تولد
             <span class="text-danger">*</span>
           </label>
           <input class="form-control bg-sec" type="date" placeholder="محسن باقری"name="landline-phone" value="" required>
         </div>
-        {{-- end --}}
+        {# end #}
       </div>
     </div>
   </div>
-  {{-- address --}}
+  {# address #}
   <div class="col-sm-6 mt-5">
     <label for="phone-number">آدرس
       <span class="text-danger">*</span>
@@ -104,7 +112,7 @@
     محصولات
     <hr width="150px" style="border-bottom:5px solid red;" />
   </h4>
-    {{-- item row --}}
+    {# item row #}
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3">
@@ -150,7 +158,7 @@
 
     </div>
   </div>
-  {{-- end item row --}}
+  {# end item row #}
 
   <a class="btn btn-success mt-4" href="#">
     افزودن محصول
@@ -160,7 +168,7 @@
 
 
 <div class="row mt-5 bg-white pt-3 pb-3">
-  {{-- title --}}
+  {# title #}
   <h4 class="pt-2 pb-2 col-12 text-center">
     پرداخت
     <hr width="150px" style="border-bottom:5px solid red;" />
@@ -230,8 +238,8 @@
   </button>
 </div>
 </div>
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Master.footer')
-@endsection
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

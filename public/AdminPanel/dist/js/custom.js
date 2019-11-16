@@ -11,6 +11,17 @@ $(document).ready(function(){
             $('#agent_id').addClass('disabled');
         }
     });
+    // enabled callcenter_id option when seller role selected
+    $('#user_role').on('click',function(event){
+        var user_value = event.target.value;
+        if(user_value === '4'){
+            $('#callcenter_id').prop('disabled',false);
+            $('#callcenter_id').removeClass('disabled');
+        }else{
+            $('#callcenter_id').prop('disabled',true);
+            $('#callcenter_id').addClass('disabled');
+        }
+    });
     // enabled tariff inputs when agent and agent manager roles selected
     $('#user_role').on('click',function(event){
         var user_value = event.target.value;
@@ -49,7 +60,7 @@ $(document).ready(function(){
      // enabled send order checkbox when agent role selected
      $('#user_role').on('click',function(event){
         var user_value = event.target.value;
-        if(user_value === '2'){
+        if(user_value === '2' || user_value === '3'){
             $('#send_order').prop('disabled',false);
             $('#send_order').parent().prop('disabled',false);
             $('#send_order').parent().removeClass('disabled');
@@ -62,7 +73,7 @@ $(document).ready(function(){
       // enabled type of product price calculation checkbox when agent role selected
       $('#user_role').on('click',function(event){
         var user_value = event.target.value;
-        if(user_value === '2'){
+        if(user_value === '2' || user_value === '3'){
             $('#calType').prop('disabled',false);
             $('#calType').parent().prop('disabled',false);
             $('#calType').parent().removeClass('disabled');

@@ -32,6 +32,9 @@ Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('/uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
     /* Agent Dashboard */
     Route::get('/Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
+    /* Seller Dashboard */
+    Route::get('/Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
+
   });
 
 Route::middleware('auth')->resource('users','UserController');

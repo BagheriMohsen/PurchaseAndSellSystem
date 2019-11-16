@@ -6,7 +6,7 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-align-justify crud-icon"></i></a>
       </li>
-    {% if auth_user().getRoleNames().first() == "admin" %}
+    {% if auth_user().getRoleNames().first() == "admin" or session('adminLogIn') %}
       <li class="nav-item">
         <a title="افزودن محصول" class="nav-link"  href="{{route('products.create')}}">
           <i class="far fa-plus-square  crud-icon"></i>

@@ -138,6 +138,7 @@ class WarehouseController extends Controller
     |*/
     public function inout($slug){
         $warehouse  = Warehouse::where('slug',$slug)->firstOrFail();
+        
         $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
         ->latest()->paginate(10);
         return view('Admin.WareHouse.inout',compact('storeRooms','warehouse'));

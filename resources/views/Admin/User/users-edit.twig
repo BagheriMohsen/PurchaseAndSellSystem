@@ -63,7 +63,7 @@
         <select id="user_role" class="form-control"  name="role">
             <option selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
-              <option {% if user.getRoleNames().first() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
+                <option {% if user.getRoleNames().first() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}{{' '}}{{role.id}}</option>
             {% endfor %}
         </select>
       </div>
@@ -88,6 +88,16 @@
         </select>
       </div>
       {# مدیر نماینده #}
+      {#callcenter manager   #}
+      <div class="col-sm-4 mb-4">
+        <select id="callcenter_id" class="form-control disabled"  name="callCenter" disabled="disabled">
+            <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
+          {% for callCenter in callCenters %}
+            <option  {% if callCenter.id == user.callCenter %} selected {% endif %} value="{{callCenter.id}}">{{callCenter.username}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {# callcenter manager  #}
       <div class="col-12"></div>
       {#پورسانت فروشنده  #}
       <div class="col-sm-4 md-form mb-4 disabled">
@@ -158,14 +168,28 @@
       </div>
       {# end auto send #}
     </div>
-    <div class="row mx-4 callcenterFields d-none">
+        <div class="row mx-4 callcenterFields d-none">
+          {# price calculation type #}
+          <div class="col-sm-4 mb-4">
+            <h6>نوع محاسبه هزینه کالا
+            </h6>
+            <input type="checkbox"
+              {% if user.calTypeCallCenter is not null %} checked {% endif %}
+              data-toggle="switchbutton"
+              data-onstyle="success"
+              data-offstyle="info"
+              data-onlabel="مبلغ فاکتور"
+              data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter">
+          </div>
+      {# price calculation type #}
+      <div class="col-12"></div>
       {# امکان بارگذاری شماره #}
       <div class="col-sm-4 mb-4">
         <h6>امکان بارگذاری شماره
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="numberUpload" value="active" name="numberUpload">
+            <input {% if user.allowNumber is not null %} checked {% endif %} type="checkbox" id="numberUpload" value="active" name="allowNumber">
             <label for="numberUpload"></label>
         </div>
       </div>
@@ -177,7 +201,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="repeatedNumber" value="active" name="repeatedNumber">
+            <input {% if user.allowNumberDup is not null %} checked {% endif %} type="checkbox" id="repeatedNumber" value="active" name="allowNumberDup">
             <label for="repeatedNumber"></label>
         </div>
       </div>
@@ -189,7 +213,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="addOrderFromNewOrder" value="active" name="addOrderFromNewOrder">
+            <input {% if user.allowNewOrder is not null %} checked {% endif %} type="checkbox" id="addOrderFromNewOrder" value="active" name="allowNewOrder">
             <label for="addOrderFromNewOrder"></label>
         </div>
       </div>
@@ -201,7 +225,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="numberReturn" value="active" name="numberReturn">
+            <input {% if user.allowNumberBack is not null %} checked {% endif %} type="checkbox" id="numberReturn" value="active" name="allowNumberBack">
             <label for="numberReturn"></label>
         </div>
       </div>
@@ -212,7 +236,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="editNumber" value="active" name="editNumber">
+            <input {% if user.allowNumberEdit is not null %} checked {% endif %} type="checkbox" id="editNumber" value="active" name="allowNumberEdit">
             <label for="editNumber"></label>
         </div>
       </div>
@@ -224,7 +248,7 @@
           <span class="text-danger">*</span>
         </h6>
         <div class="ckbx-style-11">
-            <input type="checkbox" id="smsDate" value="active" name="smsDate">
+            <input {% if user.messageStatus is not null %} checked {% endif %} type="checkbox" id="smsDate" value="active" name="messageStatus">
             <label for="smsDate"></label>
         </div>
       </div>
@@ -234,17 +258,17 @@
         <h6>نوع کالسنتر</h6>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="normal" checked>معمولی
+            <input {% if user.callCenterType == "normal" %} checked {% endif %} type="radio" class="form-check-input" name="callCenterType" value="normal" checked>معمولی
           </label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="marketer">بازاریاب
+            <input {% if user.callCenterType ==  "marketer" %} checked {% endif %} type="radio" class="form-check-input" name="callCenterType" value="marketer">بازاریاب
           </label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callcenterType" value="channelDist">مویرگی
+            <input {% if user.callCenterType == "channelDist" %} checked {% endif %} type="radio" class="form-check-input" name="callCenterType" value="channelDist">مویرگی
           </label>
         </div>
       </div>
@@ -337,7 +361,7 @@
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function() {
       $('.cities').select2();
-      $('#user_role').click();
+     
   });
   </script>
 {% endblock %}

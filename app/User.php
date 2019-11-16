@@ -54,7 +54,9 @@ class User extends Authenticatable implements HasMedia
         'determinPercent',
         'porsantType',
         'forceOrder',
-        'callCenterType'
+        'callCenterType',
+        'allowNumberEdit',
+        'calTypeCallCenter'
     ];
 
     /**
