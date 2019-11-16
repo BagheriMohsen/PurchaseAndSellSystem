@@ -4,6 +4,10 @@
   کاسنتر ها
 {% endblock %}
 
+{% block styles %}
+  <link rel="stylesheet" href="{{asset('AdminPanel/check-box/checkboxes.min.css')}}">
+{% endblock %}
+
 {% block header %}
   {% include 'Admin/Master/header' %}
 {% endblock %}
@@ -40,76 +44,49 @@
                       <td>{{user.name}}</td>
                       <td>{{user.username}}</td>
                       <td>
-                      {% set role = user.getRoleNames().first() %}
-                      {% if role == 'admin' %}
-                      
-                          {{ 'ادمین سایت' }}
-                          
-                        {% elseif role == "user" %}
-
-                          {{ 'کاربر عادی' }}
-
-                        {% elseif role == "seller" %}
-
-                          {{ 'فروشنده' }}
-
-                        {% elseif role == "callCenter" %}
-
-                        {{ 'کالسنتر' }}
-
-                        {% elseif role == "mainWarehouser" %}
-
-                          {{ 'انبار مادر' }}
-
-                        {% elseif role == "fundWarehouser" %}
-
-                          {{ 'انبار تنخواه' }}
-
-                        {% elseif role == "agent" %}
-
-                          {{ 'نماینده' }}
-
-                        {% elseif role == "agentChief" %}
-
-                          {{ 'مدیر نماینده' }}
-
-                        {% elseif role == "followUpManager" %}
-
-                          {{ 'مدیر پیگیری' }}
-
+                        {% if user.callCenterType == "channelDist" %}
+                          {{'مویرگی'}}
+                        {% elseif user.callCenterType == "marketer" %}
+                          {{'بازاریابی'}}
                         {% else %}
-
-                          {{ 'نقش خاصی پیدا نشد' }}
-                          
-                      {% endif %}
+                          {{'معمولی'}}
+                        {% endif %}
                       </td>
-                      <td>{{user.state.name}}</td>
-                      {% if user.status != null %}
-                      <td class="text-success">  {{'فعال'}} </td>
+                      <td>
+                        {# ارسال پیامک #}
+                        
+                          <div class="ckbx-style-11">
+                              <input {% if user.allowNewOrder is not null %} checked {% endif %} type="checkbox" id="ckbx-style-12-1" value="active" name="allowNewOrder">
+                              <label for="ckbx-style-12-1"></label>
+                          </div>
+                        
+                        {# ارسال پیامک #}
+                      </td>
+                      <td>
+                        {% if user.allowNumber is null %}
+                            {{'ندارد'}}
+                        {% else %}
+                            {{'دارد'}}
+                        {% endif %}
+                      </td>
+                      {% if user.porsantType is null %}
+                        <td class="text-success">  {{'مبلغ ثابت و کالای فاکتور'}} </td>
                       {% else %}
-                      <td class="text-danger ">   {{'غیر فعال'}} </td>
+                        <td class="text-danger ">   {{'براساس درصد مبلغ فاکتور'}} </td>
                       {% endif %}
-                      {% if user.uploadCS_status is null %}
+                     
                         <td class="text-danger ">
-                          <i title="تایید نشده" class="fas fa-exclamation-triangle crud-icon text-warning"></i>
+                           {% if user.determinPercent is null %}
+                                {{'ندارد'}}
+                            {% else %}
+                                {{'دارد'}}
+                            {% endif %}
                         </td>
-                      {% else %}
-                        <td class="text-danger ">
-                          <i title="تایید شده" class="fas fa-check-double crud-icon text-success"></i>
-                         </td>
-                      {% endif %}
+                     
+                     
                       <td class="d-flex justify-content-between">
                       
-                        {# {% if role == "agent" or role == "agentChief" %}
-                          <a  style="pointer-events: none;cursor: default;" title="مشارکت" class="text-success " 
-                            href="#">
-                            <i class="fas fa-plus crud-icon"></i>
-                          </a>
-                        {% endif %} #}
-                        <a  title="مدارک" class="text-primary " 
-                         data-toggle="modal" href="#resources{{user.id}}">
-                          <i class="far fa-address-book crud-icon"></i>
-                        </a>
+                       
                         <a  title="ویرایش" class="text-warning " 
                           href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
