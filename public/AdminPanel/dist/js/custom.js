@@ -1,5 +1,5 @@
 $(document).ready(function(){
-//Create users
+    //Create users
     // enabled agent_id option when agent role selected
     $('#user_role').on('click',function(event){
         var user_value = event.target.value;
@@ -59,6 +59,31 @@ $(document).ready(function(){
             $('#send_order').parent().addClass('disabled');
         }
      });
+      // enabled type of product price calculation checkbox when agent role selected
+      $('#user_role').on('click',function(event){
+        var user_value = event.target.value;
+        if(user_value === '2'){
+            $('#calType').prop('disabled',false);
+            $('#calType').parent().prop('disabled',false);
+            $('#calType').parent().removeClass('disabled');
+        }else{
+            $('#calType').prop('disabled',true);
+            $('#calType').parent().prop('disabled',true);
+            $('#calType').parent().addClass('disabled');
+        }
+     });
+     // Show callcenter fields and hide other fields when callcenter role selected
+     $('#user_role').on('click',function(event){
+        var user_value = event.target.value;
+        if(user_value === '9'){
+            $('.callcenterFields').removeClass('d-none');
+            $('.otherRolesFields').addClass('d-none');
+        }else{
+            $('.callcenterFields').addClass('d-none');
+            $('.otherRolesFields').removeClass('d-none');
+        }
+     });
+     $('#user_role').click();
      // Setup table for seller information
      $('#sellerInfoTable').DataTable();
     //Updating product types via ajax
@@ -303,21 +328,18 @@ $(document).ready(function(){
         var product_id = $(this).find('select[name="product_id"]').val();
         var tariff_place = $(this).find('select[name="tariff_place"]').val();
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
-        console.log(actionUrl,CSRF_TOKEN,user_id,product_id,tariff_price,tariff_place);
-        
-
-        // $.ajax({
-        //     url:actionUrl,
-        //     type:'post',
-        //     data:{
-        //         _token:CSRF_TOKEN,
-        //         product:product_id,
-        //         name:name
-        //     },
-        //     success:function(response){
-        //         console.log(response);
-        //     }
-        // });
+        $.ajax({
+            url:actionUrl,
+            type:'post',
+            data:{
+                user_id:user_id,
+                product:product_id,
+                place:tariff_place
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
      });
     //All Orders Chart Setup
     if(document.querySelector('#allOrdersChart')){
