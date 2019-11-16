@@ -67,6 +67,7 @@ class CreateUsersTable extends Migration
             $table->string('sendAuto')->nullable();
             $table->string('calType')->nullable();
             $table->string('callCenter')->nullable();
+            $table->string('callCenterType')->nullable();
             $table->string('allowNumber')->nullable();
             $table->string('allowNumberBack')->nullable();
             $table->string('allowNumberDup')->nullable();

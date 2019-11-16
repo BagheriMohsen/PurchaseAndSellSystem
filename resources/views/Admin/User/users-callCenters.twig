@@ -1,0 +1,249 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  کاسنتر ها
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'کاسنتر ها'} %}
+{% endblock %}
+
+{% block content %}
+
+        {% include 'Messages/message' %}
+
+                <table  id="dtDynamicVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                width="100%">
+                  <thead>
+                  <tr class="text-center">
+                    <th>نام</th>
+                    <th>نام کاربری</th>
+                    <th>نوع کالسنتر</th>
+                    <th>ثبت جدید</th>
+                    <th >ویرایش شماره تلفن</th>
+                    <th >نحوه محاسبه پورسانت</th>
+                    <th >امکان تعیین درصد</th>
+                    <th >عملیات</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for user in users %}
+                    <tr class="text-center">
+                      <td>{{user.name}}</td>
+                      <td>{{user.username}}</td>
+                      <td>
+                      {% set role = user.getRoleNames().first() %}
+                      {% if role == 'admin' %}
+                      
+                          {{ 'ادمین سایت' }}
+                          
+                        {% elseif role == "user" %}
+
+                          {{ 'کاربر عادی' }}
+
+                        {% elseif role == "seller" %}
+
+                          {{ 'فروشنده' }}
+
+                        {% elseif role == "callCenter" %}
+
+                        {{ 'کالسنتر' }}
+
+                        {% elseif role == "mainWarehouser" %}
+
+                          {{ 'انبار مادر' }}
+
+                        {% elseif role == "fundWarehouser" %}
+
+                          {{ 'انبار تنخواه' }}
+
+                        {% elseif role == "agent" %}
+
+                          {{ 'نماینده' }}
+
+                        {% elseif role == "agentChief" %}
+
+                          {{ 'مدیر نماینده' }}
+
+                        {% elseif role == "followUpManager" %}
+
+                          {{ 'مدیر پیگیری' }}
+
+                        {% else %}
+
+                          {{ 'نقش خاصی پیدا نشد' }}
+                          
+                      {% endif %}
+                      </td>
+                      <td>{{user.state.name}}</td>
+                      {% if user.status != null %}
+                      <td class="text-success">  {{'فعال'}} </td>
+                      {% else %}
+                      <td class="text-danger ">   {{'غیر فعال'}} </td>
+                      {% endif %}
+                      {% if user.uploadCS_status is null %}
+                        <td class="text-danger ">
+                          <i title="تایید نشده" class="fas fa-exclamation-triangle crud-icon text-warning"></i>
+                        </td>
+                      {% else %}
+                        <td class="text-danger ">
+                          <i title="تایید شده" class="fas fa-check-double crud-icon text-success"></i>
+                         </td>
+                      {% endif %}
+                      <td class="d-flex justify-content-between">
+                      
+                        {# {% if role == "agent" or role == "agentChief" %}
+                          <a  style="pointer-events: none;cursor: default;" title="مشارکت" class="text-success " 
+                            href="#">
+                            <i class="fas fa-plus crud-icon"></i>
+                          </a>
+                        {% endif %} #}
+                        <a  title="مدارک" class="text-primary " 
+                         data-toggle="modal" href="#resources{{user.id}}">
+                          <i class="far fa-address-book crud-icon"></i>
+                        </a>
+                        <a  title="ویرایش" class="text-warning " 
+                          href="{{route('users.edit',user.id)}}">
+                          <i class="far fa-edit crud-icon"></i>
+                        </a>
+
+                        {# Form Delete #}
+                          <form action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
+                              <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                              <input type="hidden" name="_method" value="DELETE" />
+                            <a title="حذف" href="javascript:{}" 
+                              onclick="document.getElementById('formForDelete').submit();" >
+                              <i class="far fa-trash-alt text-danger crud-icon"></i>
+                            </a>
+                          </form>
+                        {# Form Delete #}
+
+                        <a title="ورود به اکانت" class="text-primary " 
+                            href="{{ route('users.switchAccount',user.id) }}">
+                            <i class="fas fa-sign-in-alt crud-icon"></i>
+                        </a>
+                      </td>
+                    </tr>
+                {% endfor %}
+                  </tbody>
+
+                </table>
+
+
+
+
+
+
+
+
+
+{# seller resources #}
+{% for user in users %}
+<!-- The Modal -->
+<div class="modal fade " id="resources{{user.id}}">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead"> مدارک
+          {{user.name}}{{' '}}{{user.family}}
+         </p>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+        {# user avatar #}
+        <div class="col-sm-12">
+          <strong>
+            نام کاربری:
+          </strong>
+          {{user.username}}
+          
+        </div>
+        <div class="col-sm-12">
+          <strong>
+            نام :
+          </strong>
+          {{user.name}}
+          <strong>
+            نام خانوادگی :
+          </strong>
+          {{user.family}}
+        </div>
+        <div class="col-12">
+            {% if user.image_id is not null %}
+              <img  src="{{ user.cardUrl }}" class="img-circle" alt="{{user.name}}">
+            {% elseif user.sex == 1 %}
+                <img style="width:250px;" src="{{asset('img/User/male.png')}}" class="img-circle" alt="{{user.name}}">
+            {% else %}
+                <img style="width:250px;" src="{{asset('img/User/female.png')}}" class="img-circle" alt="{{user.name}}">
+            {% endif %}
+        </div>
+        <div>
+          <strong>
+            تصویر کارت ملی :
+          </strong>
+        </div>
+        <div class="col-12">
+           <img  src="/storage/{{ user.uploadCS }}" class="img-circle" alt="{{user.name}}">
+        </div>
+        {% if user.uploadCS_status is null %}
+          <form action="{{route('users.uploadCS_status',user.id)}}">
+            <input type="hidden" name="_token" value="{{csrf_token()}}"  /> 
+            <input type="hidden" name="status" value="{{'apply'}}" />
+            <button class="btn btn-info btn-sm"  >
+              <strong class="text-dark h6">
+                تایید مدارک
+              </strong>
+              <i class="fas fa-check crud-icon text-dark"></i>
+            </button>
+         </form>
+        {% else %}
+         <form action="{{route('users.uploadCS_status',user.id)}}">
+         <input type="hidden" name="_token" value="{{csrf_token()}}"  /> 
+         <input type="hidden" name="status" value="{{null}}" />
+           <button class="btn btn-danger btn-sm"  >
+          
+            <strong class="text-dark h6">
+              تایید نشده
+            </strong>
+            <i class="fas fa-times crud-icon text-dark"></i>
+          </button>
+         </form>
+        {% endif %}
+       
+      
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+</div>
+{% endfor %}
+{# seller resources #}
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

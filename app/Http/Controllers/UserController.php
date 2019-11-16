@@ -63,6 +63,7 @@ class UserController extends Controller
             'porsantSeller'         =>  $request->porsantSeller,
             'percent'               =>  $request->percent,
             'calType'               =>  $request->calType,
+            'callCenterType'        =>  $request->callCenterType,
             'locallyPrice'          =>  $request->locally,
             'internalPrice'         =>  $request->internal,
             'villagePrice'          =>  $request->village,
@@ -136,7 +137,7 @@ class UserController extends Controller
        'locallyPrice'       =>  $request->locally,
        'internalPrice'      =>  $request->internal,
        'villagePrice'       =>  $request->village,
-       'calType'            =>  $request->calType,
+       'callCenterType'     =>  $request->callCenterType,
        'allowNumber'        =>  $request->allowNumber,
        'allowNumberBack'    =>  $request->allowNumberBack,
        'allowNumberDup'     =>  $request->allowNumberDup,
@@ -177,7 +178,6 @@ class UserController extends Controller
         $users = User::Role(['agent', 'agentChief'])->get();
         return view('Admin.User.users-agents',compact('users','products'));
     }
-
     /*
     |--------------------------------------------------------------------------
     | Sellers Details
@@ -186,6 +186,15 @@ class UserController extends Controller
     public function sellers(){
       $users = User::Role(['seller'])->get();
       return view('Admin.User.users-sellers',compact('users'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | CallCenters Details
+    |--------------------------------------------------------------------------
+    |*/
+    public function callCenter(){
+        $users = User::Role(['callCenter'])->get();
+        return view('Admin.User.users-callCenters',compact('users'));
     }
     /*
     |--------------------------------------------------------------------------

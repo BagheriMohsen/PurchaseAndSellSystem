@@ -53,7 +53,8 @@ class User extends Authenticatable implements HasMedia
         'messageStatus',
         'determinPercent',
         'porsantType',
-        'forceOrder'
+        'forceOrder',
+        'callCenterType'
     ];
 
     /**

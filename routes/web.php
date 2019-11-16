@@ -24,6 +24,7 @@ Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
 Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('agents','UserController@agents')->name('agents');
     Route::get('sellers','UserController@sellers')->name('sellers');
+    Route::get('callCenters','UserController@callCenter')->name('callCenters');
     Route::get('{id}/switchAccount','UserController@switchAccount')->name('switchAccount');
     Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
     Route::get('//{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
