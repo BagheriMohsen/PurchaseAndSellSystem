@@ -45,27 +45,36 @@ class UserController extends Controller
     public function store(Request $request)
     {
          $user = User::create([
-          'name'          =>  $request->name,
-          'family'        =>  $request->family,
-          'sex'           =>  $request->sex,
-          'username'      =>  $request->username,
-          'password'      =>  Hash::make($request->password),
-          'mobile'        =>  $request->mobile,
-          'status'        =>  $request->status,
-          'state_id'      =>  $request->state,
-          'address'       =>  $request->address,
-          'uploadCS'      =>  $request->uploadCS,
-          'level'         =>  $request->level,
-          'sendAuto'      =>  $request->sendAuto,
-          'reciveAuto'    =>  $request->reciveAuto,
-          'callCenter'    =>  $request->callCenter,
-          'agent_id'      =>  $request->agent_id,
-          'porsantSeller' =>  $request->porsantSeller,
-          'percent'       =>  $request->percent,
-        //   'calType'       =>  $request->calType,
-          'locallyPrice'  =>  $request->locally,
-          'internalPrice' =>  $request->internal,
-          'villagePrice'  =>  $request->village
+            'name'                  =>  $request->name,
+            'family'                =>  $request->family,
+            'sex'                   =>  $request->sex,
+            'username'              =>  $request->username,
+            'password'              =>  Hash::make($request->password),
+            'mobile'                =>  $request->mobile,
+            'status'                =>  $request->status,
+            'state_id'              =>  $request->state,
+            'address'               =>  $request->address,
+            'uploadCS'              =>  $request->uploadCS,
+            'level'                 =>  $request->level,
+            'sendAuto'              =>  $request->sendAuto,
+            'reciveAuto'            =>  $request->reciveAuto,
+            'callCenter'            =>  $request->callCenter,
+            'agent_id'              =>  $request->agent_id,
+            'porsantSeller'         =>  $request->porsantSeller,
+            'percent'               =>  $request->percent,
+            'calType'               =>  $request->calType,
+            'callCenterType'        =>  $request->callCenterType,
+            'locallyPrice'          =>  $request->locally,
+            'internalPrice'         =>  $request->internal,
+            'villagePrice'          =>  $request->village,
+            'allowNumber'           =>  $request->allowNumber,
+            'allowNumberBack'       =>  $request->allowNumberBack,
+            'allowNumberDup'        =>  $request->allowNumberDup,
+            'allowNewOrder'         =>  $request->allowNewOrder,
+            'messageStatus'         =>  $request->messageStatus,
+            'determinPercent'       =>  $request->determinPercent,
+            'porsantType'           =>  $request->porsantType,
+            'forceOrder'            =>  $request->forceOrder
         ]);
         $user->assignRole($request->role);
         return redirect()->route('users.index');
@@ -107,27 +116,38 @@ class UserController extends Controller
     {
       $user = User::findOrFail($id);
       $user->update([
-       'name'          =>  $request->name,
-       'family'        =>  $request->family,
-       'sex'           =>  $request->sex,
-       'username'      =>  $request->username,
-       'password'      =>  Hash::make($request->password),
-       'mobile'        =>  $request->mobile,
-       'status'        =>  $request->status,
-       'state_id'      =>  $request->state,
-       'address'       =>  $request->address,
-       'uploadCS'      =>  $request->uploadCS,
-       'level'         =>  $request->level,
-       'sendAuto'      =>  $request->sendAuto,
-       'reciveAuto'    =>  $request->reciveAuto,
-       'callCenter'    =>  $request->callCenter,
-       'agent_id'      =>  $request->agent_id,
-       'porsantSeller' =>  $request->porsantSeller,
-       'percent'       =>  $request->percent,
-       'calType'       =>  $request->calType,
-       'locallyPrice'  =>  $request->locally,
-       'internalPrice' =>  $request->internal,
-       'villagePrice'  =>  $request->village
+       'name'               =>  $request->name,
+       'family'             =>  $request->family,
+       'sex'                =>  $request->sex,
+       'username'           =>  $request->username,
+       'password'           =>  Hash::make($request->password),
+       'mobile'             =>  $request->mobile,
+       'status'             =>  $request->status,
+       'state_id'           =>  $request->state,
+       'address'            =>  $request->address,
+       'uploadCS'           =>  $request->uploadCS,
+       'level'              =>  $request->level,
+       'sendAuto'           =>  $request->sendAuto,
+       'reciveAuto'         =>  $request->reciveAuto,
+       'callCenter'         =>  $request->callCenter,
+       'agent_id'           =>  $request->agent_id,
+       'porsantSeller'      =>  $request->porsantSeller,
+       'percent'            =>  $request->percent,
+       'calType'            =>  $request->calType,
+       'locallyPrice'       =>  $request->locally,
+       'internalPrice'      =>  $request->internal,
+       'villagePrice'       =>  $request->village,
+       'callCenterType'     =>  $request->callCenterType,
+       'allowNumber'        =>  $request->allowNumber,
+       'allowNumberBack'    =>  $request->allowNumberBack,
+       'allowNumberDup'     =>  $request->allowNumberDup,
+       'allowNewOrder'      =>  $request->allowNewOrder,
+       'messageStatus'      =>  $request->messageStatus,
+       'determinPercent'    =>  $request->determinPercent,
+       'porsantType'        =>  $request->porsantType,
+       'forceOrder'         =>  $request->forceOrder
+
+
      ]);
      $user->assignRole($request->role);
      return redirect()->route('users.index');
@@ -158,15 +178,23 @@ class UserController extends Controller
         $users = User::Role(['agent', 'agentChief'])->get();
         return view('Admin.User.users-agents',compact('users','products'));
     }
-
     /*
     |--------------------------------------------------------------------------
     | Sellers Details
     |--------------------------------------------------------------------------
     |*/
     public function sellers(){
-      $users = User::whereIn('role_id',2)->get();
-      return view('Admin.User.sellers',compact('users'));
+      $users = User::Role(['seller'])->get();
+      return view('Admin.User.users-sellers',compact('users'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | CallCenters Details
+    |--------------------------------------------------------------------------
+    |*/
+    public function callCenter(){
+        $users = User::Role(['callCenter'])->get();
+        return view('Admin.User.users-callCenters',compact('users'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -244,6 +272,21 @@ class UserController extends Controller
     public function AgentDashboard(Request $request){
         
         return view('Admin.agent-index');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Apply uploadCS
+    |--------------------------------------------------------------------------
+    |*/
+    public function uploadCS_status($id,Request $request){
+        $user = User::findOrFail($id);
+        $user->update(['uploadCS_status'=>$request->status]);
+        if($request->status != null){
+            $message = "مدارک ".$user->name.' '.$user->family.' تایید شد';
+        }else{
+            $message = "مدارک ".$user->name.' '.$user->family.' از حالت تایید خارج شد';
+        }
+        return back()->with('message',$message);
     }
 
 }

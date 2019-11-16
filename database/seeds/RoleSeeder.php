@@ -44,6 +44,6 @@ class RoleSeeder extends Seeder
         $user->assignRole($seller->name);
         #8.callCenter
         $user = 'App\User'::findOrFail(8);
-        $user->assignRole($seller->name);
+        $user->assignRole($callCenter->name);
     }
 }

@@ -25,67 +25,27 @@
         <table class="table" id="sellerInfoTable">
           <thead>
             <tr>
-              <th scope="col">نام فروشنده</th>
-              <th scope="col"> تعداد کل فروش</th>
+              <th scope="col ">
+                <strong>
+                  نام فروشنده
+                </strong>
+              </th>
+              
+              <th scope="col ">
+                <strong>
+                  تعداد کل فروش
+                </strong>
+               </th>
             </tr>
           </thead>
           <tbody>
+          {% for seller in sellers %}
             <tr>
-              <td>احمد رضایی</td>
-              <td>3000</td>
+              <td>{{seller.name}}{{' '}}{{seller.family}}</td>
+              <td>-</td>
             </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>رضا ملایی</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>سسسسس</td>
-              <td>100</td>
-            </tr>
+          {% endfor %}
+            
           </tbody>
         </table>
       </div>
