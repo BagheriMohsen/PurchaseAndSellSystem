@@ -54,6 +54,7 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
+            $table->string('product_type')->nullable();
             $table->integer('count');
             $table->integer('off');
 
