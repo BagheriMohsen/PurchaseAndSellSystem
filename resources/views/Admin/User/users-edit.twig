@@ -24,6 +24,12 @@
 {% endblock %}
 
 {% block content %}
+
+  {% include 'Messages/message' %}
+  {% include 'Messages/info' %}
+  {% include 'Messages/errors' %}
+
+
 <form action="{{route('users.update',user.id)}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input type="hidden" name="_method" value="put" />
@@ -59,15 +65,61 @@
       </div>
       {# جنسیت #}
       {# نقش #}
+      {% set userRole = user.getRoleNames().first() %}
       <div class="col-sm-4 mb-4">
         <select id="user_role" class="form-control"  name="role">
             <option selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
-                <option {% if user.getRoleNames().first() == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}{{' '}}{{role.id}}</option>
+                <option {% if userRole == role.name %} selected {% endif %} value="{{role.id}}">{{role.persianName}}</option>
             {% endfor %}
         </select>
       </div>
       {# نقش #}
+      {# cities Under Control #}
+      {% if userRole == "followUpManager" %}
+     
+      <div class="col-sm-4 mb-4">
+        <table class="table table-bordered table-striped">
+          <div >
+          
+           <form action="{{route('users.followUpManager.cityStore')}}" >
+              <input type="hidden" name="_token" value="{{csrf_token()}}" />
+              <input type="hidden" name="user_id" value="{{user.id}}" />
+              <div class="input-group mb-3 md-form">
+                <input name="CityName" placeholder="نام شهر را وارد کنید" id="inputValidationEx" type="text" class="form-control text-light"  required>
+                
+                <div class="input-group-append">
+                  <button  class="btn btn-sm btn-info input-group-text text-dark">
+                      <i class="far fa-plus-square crud-icon"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <tbody>
+            <tr>
+              <td>ردیف</td>
+              <td>شهر</td>
+              <td>عملیات</td>
+            </tr>
+          {% for cityControl in user.citiesUnderControl %}
+            <tr>
+              <td>#</td>
+              <td>{{cityControl.name}}</td>
+              <td>
+                {# Form Delete #}
+                  <a title="حذف" href="{{route('users.followUpManagerCityClear',cityControl.name)}}">
+                    <i class="far fa-trash-alt text-danger crud-icon"></i>
+                  </a>
+                {# Form Delete #}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+      {# cities Under Control #}
     </div>
   </div>
   <div class="row bg-white pt-3 pb-3">
@@ -346,6 +398,9 @@
     </div>
   </div>
 </form>
+
+
+
 
 {% endblock %}
 

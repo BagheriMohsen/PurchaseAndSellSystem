@@ -39,315 +39,51 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
-                 {% if role.name  == "admin" %}
-                 <li class="nav-item">
-                   <a href="{{url('/home')}}" class="nav-link">
-                     <i class="fas fa-tachometer-alt "></i>
-                     <p>
-                        داشبورد
-                     </p>
-                   </a>
-                 </li>
-                 {% endif %}
-                {# Agent Dashboard #}
-                  {% if role.name  == "agent" or role.name  == "agentChief" %}
-                 <li class="nav-item">
-                   <a href="{{route('users.AgentDashboard')}}" class="nav-link">
-                     <i class="fas fa-tachometer-alt "></i>
-                     <p>
-                        داشبورد
-                     </p>
-                   </a>
-                 </li>
-                 {% endif %}
-                {# Agent Dashboard #}
-                 {# Seller Dashboard #}
-                  {% if role.name  == "seller" %}
-                 <li class="nav-item">
-                   <a href="{{route('users.SellerDashboard')}}" class="nav-link">
-                     <i class="fas fa-tachometer-alt "></i>
-                     <p>
-                        داشبورد
-                     </p>
-                   </a>
-                 </li>
-                 {% endif %}
-                {# Seller Dashboard #}
-                {# Products #}
+                
+                <!--
+                Admin Sidebar
+                -->
                 {% if role.name == "admin" %}
-                  <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-box-open"></i>
-                      <p>
-                        محصولات
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="{{route('products.create')}}" class="nav-link">
-                          <i class="fas fa-chevron-circle-left"></i>
-                          <p>افزودن</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="{{route('products.index')}}" class="nav-link">
-                          <i class="fas fa-chevron-circle-left"></i>
-                          <p>تمام محصولات</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
+                    {% include 'Admin/Master/SideBarRole/Admin' %}
+                <!--
+                Agent Sidebar
+                -->
+                {% elseif role.name == "agent" %}
+                    {% include 'Admin/Master/SideBarRole/Agent' %}
+                <!--
+                AgentChief Sidebar
+                -->
+                {% elseif role.name == "agentChief" %}
+                    {% include 'Admin/Master/SideBarRole/agentChief' %}
+                <!--
+                Seller Sidebar
+                -->
+                {% elseif role.name == "seller" %}
+                    {% include 'Admin/Master/SideBarRole/Seller' %}
+                <!--
+                FundWareHouser Sidebar
+                -->
+                {% elseif role.name == "fundWarehouser" %}
+                    {% include 'Admin/Master/SideBarRole/FundWareHouser' %}
+                <!--
+                  MainWareHouser Sidebar
+                -->
+                {% elseif role.name == "mainWarehouser" %}
+                    {% include 'Admin/Master/SideBarRole/MainWareHouser' %}
+                <!--
+                  FollowUpManager Sidebar
+                -->
+                {% elseif role.name == "followUpManager" %}
+                  {% include 'Admin/Master/SideBarRole/FollowUpManager' %}
+                <!--
+                  callCenter Sidebar
+                -->
+                {% elseif role.name == "callCenter" %}
+                  {% include 'Admin/Master/SideBarRole/callCenter' %}
                 {% endif %}
-                {% if role.name == "admin" %}
-                  {# warehouse #}
-                  <li class="nav-item">
-                    <a href="{{route('warehouses.index')}}" class="nav-link">
-                      <i class="fas fa-boxes "></i>
-                      <p>لیست انبارها</p>
-                    </a>
-                  </li>
-                  {# warehouse #}
-                {% endif %}
+                
+              
 
-                {# Order #}
-                {% if role.name == "seller" %}
-                  <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-boxes "></i>
-                      <p>
-                        سفارشات
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="{{route('orders.create')}}" class="nav-link">
-                          <i class="fas fa-chevron-circle-left"></i>
-                          <p>سفارش جدید</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="{{route('storeRooms.index')}}" class="nav-link">
-                          <i class="fas fa-chevron-circle-left"></i>
-                          <p>سفارشات</p>
-                        </a>
-                      </li>
-                      
-                    </ul>
-                  </li>
-                {% endif %}
-                {# main WareHouser #}
-                {# Order #}
-
-
-                {# main WareHouser #}
-              {% if role.name == "mainWarehouser" %}
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                      <i class="fas fa-boxes "></i>
-                    <p>
-                      انبار
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                   
-                      <li class="nav-item">
-                        <a href="{{route('storeRooms.create')}}" class="nav-link">
-                          <i class="fas fa-chevron-circle-left"></i>
-                          <p>ورود و خروج</p>
-                        </a>
-                      </li>
-                   
-                     <li class="nav-item">
-                      <a href="{{route('storeRooms.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>موجودی</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.in')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست ورودی انبار</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.out')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست خروجی انبار</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.storageManage')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست انبار به انبار</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>مرجوعی از انبار تنخواه</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                {# main WareHouser #}
-              {% endif %}
-               
-               {# fund Warehouser #}
-              {% if role.name == "fundWarehouser" %}
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                      <i class="fas fa-boxes "></i>
-                    <p>
-                      انبار
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                   <li class="nav-item">
-                      <a href="{{route('storeRooms.mainReceive')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>ورود از انبار مرکزی</p>
-                      </a>
-                    </li>
-                     <li class="nav-item">
-                      <a href="{{route('storeRooms.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>موجودی</p>
-                      </a>
-                    </li>
-                   <li class="nav-item">
-                      <a href="{{route('storeRooms.AgentExchangesForm')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>ورود و خروج</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.in')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست ورودی انبار</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.out')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست خروجی انبار</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.SendToAgentList')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>کالاهای خروجی به انبار نماینده</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.AgentExchangeStorage')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>لیست انبار به انبار نماینده</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>برگشت کالا از انبار نماینده</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                {# fund Warehouser #}
-              {% endif %}
-
-              {# Agent Warehouser #}
-              {% if role.name == "agent" or role.name == "agentChief" %}
-                  <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                      <i class="fas fa-boxes "></i>
-                    <p>
-                      انبار
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                   <li class="nav-item">
-                      <a href="{{route('storeRooms.FundReceive')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>ورود از انبار تنخواه</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('storeRooms.AgentIndexWarehouse')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>موجودی</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              {% endif %}
-              {# Agent Warehouser #}
-
-              {# Users #}
-              {% if role.name == "admin" %}
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                      <i class="fas fa-users "></i>
-                    <p>
-                      کاربران
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="{{route('users.create')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>افزودن</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.sellers')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>فروشندگان</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.callCenters')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>کالسنترها</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.agents')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>نماینده ها</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('users.index')}}" class="nav-link">
-                        <i class="fas fa-chevron-circle-left"></i>
-                        <p>دیگر کاربران</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                {# users #}
-              {% endif %}
-              {% if role.name == "admin" %}
-              {# Citites #}
-               <li class="nav-item">
-                 <a href="{{route('cities.index')}}" class="nav-link">
-                   <i class="fas fa-city"></i>
-                  <p>شهر ها</p>
-                 </a>
-               </li>
-               {# Citites #}
-              {% endif %}
-              {% if role.name == "admin" %}
-               {# States #}
-               <li class="nav-item">
-                 <a href="{{route('states.index')}}" class="nav-link">
-                   <i class="fas fa-building"></i>
-                   <p>
-                     استان ها
-                   </p>
-                 </a>
-               </li>
-              {# States #}
-              {% endif %}
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

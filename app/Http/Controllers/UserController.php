@@ -217,8 +217,10 @@ class UserController extends Controller
         session(['adminLogIn' => $user_id ]);
         if($role == "mainWarehouser" || $role == "fundWarehouser"){
             return redirect()->route('storeRooms.index')->with('switchSuccess','true');
-        }elseif($role == "agent" || $role == "agentChief"){
+        }elseif($role == "agent"){
             return redirect()->route('users.AgentDashboard')->with('switchSuccess','true');
+        }elseif($role == "agentChief"){
+            return redirect()->route('users.AgentChiefDashboard')->with('switchSuccess','true');
         }elseif($role == "seller"){
             return redirect()->route('users.SellerDashboard')->with('switchSuccess','true');
         }else{
@@ -285,6 +287,14 @@ class UserController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
+    | Agent Chief Dashboard Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentChiefDashboard(){
+        return view('Admin.agentChief-index');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Seller Dashboard Page
     |--------------------------------------------------------------------------
     |*/
@@ -306,5 +316,46 @@ class UserController extends Controller
         }
         return back()->with('message',$message);
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Follow Up Manager City Store
+    |--------------------------------------------------------------------------
+    |*/
+    public function followUpManagerCityStore(Request $request){
+        $id = $request->user_id;
+        
+        $cityExists = 'App\City'::where('name',$request->CityName)->exists();
+       
+        if($cityExists == false){
+            return redirect()->route('users.edit',[$id])->with('info','ابتدا این شهر را در سیستم ذخیره کنید');
+        }
+
+        $status = 'App\City'::where([
+            ['name','=',$request->CityName],
+            ['followUpManager','!=',null]
+        ])->exists();
+
+        if($status == True){
+            return redirect()->route('users.edit',[$id])->with('info','شهر انتخاب شده قبلا در سیستم ثبت شده');
+        }else{
+           
+            $city = 'App\City'::where('name',$request->CityName)->firstOrFail();
+            $city->update(['followUpManager'=>$id]);
+            return redirect()->route('users.edit',[$id])->with('message','این شهر به این مدیر پیگیری اختصاص پیدا کرد');
+        }
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Follow Up Manager City Clear
+    |--------------------------------------------------------------------------
+    |*/
+    public function followUpManagerCityClear($CityName){
+        $city = 'App\City'::where('name',$CityName)->firstOrFail();
+        $id = $city->followUpManager;
+        $city->update(['followUpManager'=>null]);
+        return redirect()->route('users.edit',[$id])->with('message','این شهر از لیست این مدیر پیگیری خارج شد');
+    }
+
 
 }

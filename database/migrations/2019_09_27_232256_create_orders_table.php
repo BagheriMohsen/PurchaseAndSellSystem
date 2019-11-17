@@ -13,19 +13,27 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
+        /*
+        |--------------------------------------------------------------------------
+        | orders table
+        |--------------------------------------------------------------------------
+        |*/
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('city_id')->unsigned();
-            $table->bigInteger('state_id')->unsigned();
-            $table->boolean('status')->default(0);
-            $table->boolean('sellerAllow')->default(0);
-            $table->boolean('supervisior_confirm_date')->default(0);
-            $table->string('agent_level');
-            $table->string('customerName');
-            $table->string('customerFamily');
-            $table->string('postalCard');
-            $table->string('address');
-            $table->string('phoneNumber');
+            $table->bigInteger('city_id')->unsigned()->nullable();
+            $table->bigInteger('state_id')->unsigned()->nullable();
+            $table->string('mobile');
+            $table->string('telephone')->nullable();
+            $table->string('fullName')->nullable();
+            $table->string('paymentMethod')->nullable();
+            $table->integer('sendCost')->nullable();
+            $table->integer('prePrice')->nullable();
+            $table->integer('checkPrice')->nullable();
+            $table->string('status')->nullable();
+            $table->text('description')->nullable();
+            $table->string('postalCode')->nullable();
+            $table->Date('HBD_Date')->nullable();
+            $table->text('address')->nullable();
             $table->timestamps();
 
 
@@ -34,6 +42,28 @@ class CreateOrdersTable extends Migration
 
             $table->foreign('state_id')->references('id')->on('states')
             ->onUpdate('cascade')->onDelete('cascade');
+
+
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | pivot table order and product
+        |--------------------------------------------------------------------------
+        |*/
+        Schema::create('order_product', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
+            $table->integer('count');
+            $table->integer('off');
+
+            $table->foreign('order_id')->references('id')->on('orders')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('product_id')->references('id')->on('products')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            
 
         });
     }
@@ -46,5 +76,6 @@ class CreateOrdersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('orders');
+        Schema::dropIfExists('order_product');
     }
 }

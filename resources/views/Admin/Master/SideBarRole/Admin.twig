@@ -1,0 +1,101 @@
+{# Dashboard #}
+<li class="nav-item">
+    <a href="{{url('/home')}}" class="nav-link">
+        <i class="fas fa-tachometer-alt "></i>
+        <p>
+        داشبورد
+        </p>
+    </a>
+</li>
+{# products #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-box-open"></i>
+        <p>
+        محصولات
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+        <a href="{{route('products.create')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>افزودن</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="{{route('products.index')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>تمام محصولات</p>
+        </a>
+        </li>
+    </ul>
+</li>
+{# products #}
+{# warehouse #}
+<li class="nav-item">
+    <a href="{{route('warehouses.index')}}" class="nav-link">
+        <i class="fas fa-boxes "></i>
+        <p>لیست انبارها</p>
+    </a>
+</li>
+{# warehouse #}
+{# Users #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-users "></i>
+        <p>
+            کاربران
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('users.create')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>افزودن</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('users.sellers')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>فروشندگان</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('users.callCenters')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>کالسنترها</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('users.agents')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>نماینده ها</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('users.index')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>دیگر کاربران</p>
+            </a>
+        </li>
+    </ul>
+</li>
+{# Users #}
+{# Citites #}
+<li class="nav-item">
+    <a href="{{route('cities.index')}}" class="nav-link">
+    <i class="fas fa-city"></i>
+    <p>شهر ها</p>
+    </a>
+</li>
+{# Citites #}
+{# States #}
+<li class="nav-item">
+    <a href="{{route('states.index')}}" class="nav-link">
+    <i class="fas fa-building"></i>
+    <p>
+        استان ها
+    </p>
+    </a>
+</li>
+{# States #}

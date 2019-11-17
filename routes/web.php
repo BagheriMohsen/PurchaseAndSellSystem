@@ -30,8 +30,12 @@ Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
     Route::get('//{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
     Route::put('/{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
     Route::get('/uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
+    Route::get('followUpManagerCityStore','UserController@followUpManagerCityStore')->name('followUpManager.cityStore');
+    Route::get('followUpManagerCityClear/{CityName}','UserController@followUpManagerCityClear')->name('followUpManagerCityClear');
     /* Agent Dashboard */
     Route::get('/Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
+    /* Agent Chief Dashboard */
+    Route::get('/AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
     Route::get('/Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
 
@@ -73,6 +77,9 @@ Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
 | Orders Routes
 |--------------------------------------------------------------------------
 |*/
+Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],function(){
+    Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
+});
 Route::middleware('auth')->resource('orders','OrderController');
 /*
 |--------------------------------------------------------------------------

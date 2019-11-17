@@ -1,0 +1,120 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  داشبورد
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
+
+{% block content %}
+
+  {% include 'Messages/switchSuccess' %}
+
+<!-- Small boxes (Stat box) -->
+<div class="row">
+    <div style="flex-basis:230px;" class=" text-center bg-default shadow pt-3 pb-5 mx-auto">
+        <strong>سفارشات تحویل داده شده نمایندگان</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+  <div style="flex-basis:230px;" class=" text-center bg-secondary shadow pt-3 pb-5 mx-auto">
+        <strong>سفارشات برگشت خورده نمایندگان</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+  <div style="flex-basis:230px;" class=" text-center bg-light shadow pt-3 pb-5 mx-auto">
+        <strong>فاکتورهای در انتظار تحویل</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+   <div style="flex-basis:230px;" class=" text-center bg-warning shadow pt-3 pb-5 mx-auto">
+        <strong>مالی مدیر نماینده</strong>
+        <div>
+        <i style="font-size:72px" class="mt-3 ion ion-bag "></i>
+        </div>
+    </div>
+  <!-- ./col -->
+</div>
+<!-- /.row -->
+<div class="row mt-5 mb-5">
+  {# item #}
+  <div class="col-sm-4">
+    <table class="table table-bordered table-striped">
+        <div class="bg-primary pt-3 pb-3 text-center dana-bold">درصد وصولی نمایندگان</div>
+    <tbody>
+     <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>25%</td>
+      </tr>
+      <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>75%</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  {# end item #}
+ {# item #}
+  <div class="col-sm-4">
+    <table class="table table-bordered table-striped">
+        <div class="bg-primary pt-3 pb-3 text-center dana-bold">تعداد فاکتورهای در انتظار تحویل نمایندگان</div>
+    <tbody>
+      <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>0 </td>
+      </tr>
+      <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>0 </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  {# end item #}
+  {# item #}
+  <div class="col-sm-4">
+    <table class="table table-bordered table-striped">
+        <div class="bg-primary pt-3 pb-3 text-center dana-bold">مبالغ بدهی نمایندگان</div>
+    <tbody>
+      <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>5,000 </td>
+      </tr>
+      <tr>
+        <td>آقای احمدی نماینده تهران</td>
+        <td>5,000 </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  {# end item #}
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

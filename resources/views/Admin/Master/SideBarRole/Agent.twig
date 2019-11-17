@@ -1,0 +1,34 @@
+{#  Dashboard #}
+<li class="nav-item">
+    <a href="{{route('users.AgentDashboard')}}" class="nav-link">
+        <i class="fas fa-tachometer-alt "></i>
+        <p>
+        داشبورد
+        </p>
+    </a>
+</li>
+{#  Dashboard #}
+{#  WareHouse #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-boxes "></i>
+    <p>
+        انبار
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+    <li class="nav-item">
+        <a href="{{route('storeRooms.FundReceive')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p>ورود از انبار تنخواه</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('storeRooms.AgentIndexWarehouse')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p>موجودی</p>
+        </a>
+    </li>
+    </ul>
+</li>
+{#  WareHouse #}

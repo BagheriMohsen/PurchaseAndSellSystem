@@ -1,22 +1,24 @@
-@extends('Master.layout')
+{% extends 'Admin/Master/layout' %}
 
-@section('title')
-لیست نماینده
-@endsection
+{% block title %}
+  لیست سفارشات شما
+{% endblock %}
 
-@section('header')
-  @include('Master.header')
-@endsection
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
 
-@section('sidebar')
-  @include('Master.sidebar')
-@endsection
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
 
-@section('path')
-  @include('Master.path')
-@endsection
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
 
-@section('content')
+{% block content %}
+
+  {% include 'Messages/switchSuccess' %}
 
   <div class="row">
     <div class="card ">
@@ -126,12 +128,12 @@
 
 
 
-@endsection
+{% endblock %}
 
-@section('footer')
-  @include('Master.footer')
-@endsection
-@section('scripts')
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+{% block scripts %}
   <script src="{{asset('AdminPanel/plugins/datatables/jquery.dataTables.js')}}"></script>
   <script src="{{asset('AdminPanel/plugins/datatables/dataTables.bootstrap4.js')}}"></script>
   <script>
@@ -161,4 +163,4 @@
     });
   });
 </script>
-@endsection
+{% endblock %}
