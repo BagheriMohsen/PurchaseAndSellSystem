@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
@@ -21,23 +20,23 @@ Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
 | Users Routes
 |--------------------------------------------------------------------------
 |*/
-Route::group(['middleware'=>'auth','prefix'=>'users','as'=>'users.'],function(){
+Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function(){
     Route::get('agents','UserController@agents')->name('agents');
     Route::get('sellers','UserController@sellers')->name('sellers');
     Route::get('callCenters','UserController@callCenter')->name('callCenters');
     Route::get('{id}/switchAccount','UserController@switchAccount')->name('switchAccount');
     Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
-    Route::get('//{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
-    Route::put('/{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
-    Route::get('/uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
+    Route::get('{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
+    Route::put('{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
+    Route::get('uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
     Route::get('followUpManagerCityStore','UserController@followUpManagerCityStore')->name('followUpManager.cityStore');
     Route::get('followUpManagerCityClear/{CityName}','UserController@followUpManagerCityClear')->name('followUpManagerCityClear');
     /* Agent Dashboard */
-    Route::get('/Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
+    Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
     /* Agent Chief Dashboard */
-    Route::get('/AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
+    Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
-    Route::get('/Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
+    Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
 
   });
 
@@ -79,7 +78,9 @@ Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
 |*/
 Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],function(){
     Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
-});
+    Route::get('ProductList','OrderController@ProductList')->name('ProductList');
+    Route::get('AgentExistInState/{StateName}','OrderController@AgentExistInState')->name('AgentExistInState');
+  });
 Route::middleware('auth')->resource('orders','OrderController');
 /*
 |--------------------------------------------------------------------------

@@ -110,4 +110,37 @@ class OrderController extends Controller
     public function AgentOrderList(){
         return view('Admin.Order.Agent.orders-index');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Product List 
+    |--------------------------------------------------------------------------
+    |*/
+    public function ProductList(){
+        $products = 'App\Product'::with('types')->get();
+        return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Exist In State?
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentExistInState($StateName){
+        $state = 'App\State'::where('name',$StateName)->get()->first();
+        if($state != null){
+            $user = 'App\User'::where('state_id',$state->id)->Role(['agent','agentChief'])->get();
+        
+            if($user->toArray() !== false){
+                $message = 'سیستم ارسال در این شهر دارای نماینده است';
+                return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+            }else{
+                $message = 'سیستم ارسال در این شهر دارای نماینده نمیباشد.این ارسال توسط پست ارسال خواهد شد';
+                return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+            }
+        }else{
+            $message = 'خطای سیستم:شهری به این اسم وجود ندارد';
+            return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    
 }

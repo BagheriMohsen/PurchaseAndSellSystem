@@ -268,11 +268,15 @@ class UserController extends Controller
             $user->update([
                 'image_id'  =>  $media->id
             ]);
+        }
+        if($request->hasFile('uploadCS')){
+            Storage::disk('public')->delete($user->uploadCS);
+            $uploadCS = Storage::disk('public')->put('UploadCS',$requst->uploadCS);
+            $user->update(['uploadCS'=>$uploadCS]);
+        }
         $user->update([
             'password'  =>  Hash::make($request->password)
         ]);
-        
-        }
         Auth::login($user);
         return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات شما به روز رسانی شد');
     }

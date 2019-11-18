@@ -37,7 +37,8 @@
   </h6>
 
 <div class="row bg-white pt-2 pb-3 mt-5">
-     
+
+    {% set roleName = user.getRoleNames().first() %} 
 
   
     {# تصویر شاخص #}
@@ -49,17 +50,37 @@
         {% else %}
             <img style="width:250px;" src="{{asset('img/User/female.png')}}" class="img-circle" alt="User Image">
         {% endif %}
+
+        {% if roleName == "seller" %}
+          {# تصویر کارت ملی #}
+          <div class="col-sm-12 mx-auto">
+              <img src="/storage/{{user.uploadCS}}" />
+          </div>
+          {# تصویر کارت ملی #}
+        {% endif %}
       </div>
       <div class="col-sm-6">
           <div class="row">
-              <div class="md-form mb-5 col-sm-9 mx-auto">
-            <label>تصویرشاخص:</label>
-            <br />
-                
-            <br />
-            <input type="file" id="inputIconEx4" class="form-control" name="image" value="" >
+          {# تصویر آواتار #}
+            <div class="md-form mb-5 col-sm-9 mx-auto">
+              <label>آواتار شما:</label>
+              <br /><br />
+              <input type="file" id="inputIconEx4" class=" form-control" name="image" value="" >
             </div>
-            {# تصویر شاخص #}
+            {# تصویر آواتار #}
+            
+            {% if roleName == "seller" %}
+              {# تصویر کارت ملی #}
+              <div class="md-form mb-5 col-sm-9 mx-auto">
+                <label>تصویر کارت ملی:</label>
+                <br /><br />
+                <input type="file" id="inputIconEx4" class=" form-control" name="uploadCS" value="" >
+                {% if user.uploadCS is null %}
+                  <span class="right badge badge-danger">شما هنوز تصویر کارت ملی خود را آپلود نکرده اید</span>
+                {% endif %}
+              </div>
+              {# تصویر کارت ملی #}
+            {% endif %}
             {# گذرواژه #}
             <div class="md-form mb-4 col-sm-9 mx-auto">
                 <input type="password" id="inputIconEx4" class="form-control" name="password" value="" required>

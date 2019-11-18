@@ -100,6 +100,10 @@
                   <i class="far fa-user"></i>
                   <p>
                     ویرایش پروفایل
+                  {% if role.name == "seller" and user.uploadCS is null %}
+                  <span class="right badge badge-danger">ناقصی مدارک</span>
+                  {% endif %}
+                  
                   </p>
                 </a>
               </li>
