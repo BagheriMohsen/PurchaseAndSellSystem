@@ -9,6 +9,7 @@ class Order extends Model
    protected $fillable = [
     'city_id',
     'state_id',
+    'status_id',
     'mobile',
     'telephone',
     'fullName',
@@ -20,7 +21,8 @@ class Order extends Model
     'description',
     'postalCode',
     'address',
-    'HBD_Date'
+    'HBD_Date',
+   
    ];
     /*
     |--------------------------------------------------------------------------
@@ -29,6 +31,14 @@ class Order extends Model
     |*/
     public function products(){
         return $this->belongsToMany('App\Product');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with ProductStatus Model
+    |--------------------------------------------------------------------------
+    */
+    public function status(){
+        return $this->belongsTo('App\OrderStatus');
     }
 
 }

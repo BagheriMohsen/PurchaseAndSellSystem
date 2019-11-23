@@ -67,7 +67,10 @@
             <td>{{'تعرفه تعیین شده'}}</td>
           {% endif %}
           <td>
-            <a  class="text-success" data-toggle="modal" href="#types{{user.id}}">
+            <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.username )}}" >
+                <i class="far fa-user crud-icon text-primary"></i>
+            </a>
+            <a  class="text-success" data-toggle="modal" href="#special{{user.id}}">
               <sub class="text-success">
                 {{user.tariffs.count()}}
               </sub>
@@ -75,10 +78,10 @@
             </a>
             <a href="{{route('users.edit',user.id)}}" >
               <i class="far fa-edit crud-icon text-warning"></i>
-            </a> 
+            </a>
             <a href="{{route('users.destroy',user.id)}}" >
               <i class="far fa-trash-alt crud-icon text-danger"></i>
-            </a> 
+            </a>
           </td>
         </tr>
       {% endfor %}
@@ -90,7 +93,7 @@
 {# special share #}
 {% for user in users %}
 <!-- The Modal -->
-<div class="modal fade " id="types{{user.id}}">
+<div class="modal fade " id="special{{user.id}}">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
 
@@ -118,15 +121,22 @@
 
             {% for tariff in user.tariffs %}
               <tr class="text-center">
-                
-                <td>صابون</td>
-                <th>12000</th>
-                <th>داخل شهر</th>
-                <td>
+
+                <td>{{ tariff.product.name }}</td>
+                <th>{{ tariff.price }}</th>
+              {% if tariff.place == "suburb" %}
+                  <th>{{ "حومه شهر" }}</th>
+              {% elseif  tariff.place == "internal" %}
+                  <th>{{ "داخل شهر" }}</th>
+              {% else  %}
+                 <th>{{ "روستا" }}</th>
+              {% endif %}
+                  <td>
                   <form  action="{{route('special-tariffs.destroy',tariff.id)}}" method="post" >
                       <input type="hidden" name="_token" value="{{csrf_token()}}" />
                       <input type="hidden" name="_method" value="DELETE" />
-                    <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
+                      <input type="hidden" name="user_id" value="{{user.id}}">
+                      <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
                       <i class="far fa-trash-alt crud-icon"></i>
                     </a>
                   </form>
@@ -153,9 +163,9 @@
               <div class="form-group col-sm-6">
                 <label for="tariff_place">انتخاب محل:</label>
                 <select name="tariff_place" class="form-control">
-                    <option value="0">روستا</option>
-                    <option value="1">داخل شهر</option>
-                    <option value="2">حومه شهر</option>
+                    <option value="village">روستا</option>
+                    <option value="internal">داخل شهر</option>
+                    <option value="suburb">حومه شهر</option>
                 </select>
               </div>
               <div class="form-group col-sm-6">

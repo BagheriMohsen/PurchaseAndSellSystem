@@ -2,15 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7df21098-2ba8-4851-93c6-4099a47cc475" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/online-shop.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/online-shop.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/StateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/StateController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/StoreRoomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/StoreRoomController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Master/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Master/sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/users-create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/users-create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Admin/users.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/users.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/agents.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/StartingSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/StartingSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/AdminPanel/dist/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/AdminPanel/dist/js/custom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/City&amp;State/cities.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/City&amp;State/cities.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/City&amp;State/states.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/City&amp;State/states.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Master/SideBarRole/Admin.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Master/SideBarRole/Admin.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/Order/order-create.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/Order/order-create.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-agents.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-agents.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-callCenters.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-callCenters.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-create.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-create.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-edit-pass.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-edit-pass.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-edit.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-edit.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users-sellers.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users-sellers.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/Admin/User/users.twig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Admin/User/users.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/index.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/product-new.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/sales-person.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/test.blade.php" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -129,6 +148,29 @@
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/laravel/framework" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/league/glide" />
+      <path value="$PROJECT_DIR$/vendor/morilog/jalali" />
+      <path value="$PROJECT_DIR$/vendor/cocur/slugify" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/intervention/image" />
+      <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/twig/intl-extra" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/vendor/cviebrock/eloquent-sluggable" />
+      <path value="$PROJECT_DIR$/vendor/spatie/image" />
+      <path value="$PROJECT_DIR$/vendor/spatie/pdf-to-image" />
+      <path value="$PROJECT_DIR$/vendor/spatie/image-optimizer" />
+      <path value="$PROJECT_DIR$/vendor/spatie/temporary-directory" />
+      <path value="$PROJECT_DIR$/vendor/symfony/intl" />
+      <path value="$PROJECT_DIR$/vendor/spatie/laravel-medialibrary" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/vendor/spatie/laravel-permission" />
+      <path value="$PROJECT_DIR$/vendor/beberlei/assert" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/vendor/rcrowe/twigbridge" />
+      <path value="$PROJECT_DIR$/vendor/cybercog/laravel-ban" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/maennchen/zipstream-php" />
     </include_path>
   </component>
   <component name="ProjectId" id="1ROC4lGeBkHSYs5rN5ERb3pqe9D" />
@@ -184,6 +226,10 @@
       <workItem from="1569970230283" duration="643000" />
       <workItem from="1570007673479" duration="4309000" />
       <workItem from="1570093139135" duration="2340000" />
+      <workItem from="1574340715355" duration="73000" />
+      <workItem from="1574494482355" duration="3110000" />
+      <workItem from="1574507237671" duration="6373000" />
+      <workItem from="1574539994192" duration="1264000" />
     </task>
     <servers />
   </component>

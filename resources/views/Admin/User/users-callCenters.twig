@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  کاسنتر ها
+  کالسنتر ها
 {% endblock %}
 
 {% block styles %}
@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'کاسنتر ها'} %}
+  {% include 'Admin/Master/path' with {'title':'کالسنتر ها'} %}
 {% endblock %}
 
 {% block content %}
@@ -54,12 +54,12 @@
                       </td>
                       <td>
                         {# ارسال پیامک #}
-                        
+
                           <div class="ckbx-style-11">
                               <input {% if user.allowNewOrder is not null %} checked {% endif %} type="checkbox" id="ckbx-style-12-1" value="active" name="allowNewOrder">
                               <label for="ckbx-style-12-1"></label>
                           </div>
-                        
+
                         {# ارسال پیامک #}
                       </td>
                       <td>
@@ -74,7 +74,7 @@
                       {% else %}
                         <td class="text-danger ">   {{'براساس درصد مبلغ فاکتور'}} </td>
                       {% endif %}
-                     
+
                         <td class="text-danger ">
                            {% if user.determinPercent is null %}
                                 {{'ندارد'}}
@@ -82,12 +82,14 @@
                                 {{'دارد'}}
                             {% endif %}
                         </td>
-                     
-                     
+
+
                       <td class="d-flex justify-content-between">
-                      
-                       
-                        <a  title="ویرایش" class="text-warning " 
+
+                        <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.username )}}" >
+                            <i class="far fa-user crud-icon text-primary"></i>
+                        </a>
+                        <a  title="ویرایش" class="text-warning "
                           href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
@@ -96,14 +98,14 @@
                           <form action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
                               <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                               <input type="hidden" name="_method" value="DELETE" />
-                            <a title="حذف" href="javascript:{}" 
+                            <a title="حذف" href="javascript:{}"
                               onclick="document.getElementById('formForDelete').submit();" >
                               <i class="far fa-trash-alt text-danger crud-icon"></i>
                             </a>
                           </form>
                         {# Form Delete #}
 
-                        <a title="ورود به اکانت" class="text-primary " 
+                        <a title="ورود به اکانت" class="text-primary "
                             href="{{ route('users.switchAccount',user.id) }}">
                             <i class="fas fa-sign-in-alt crud-icon"></i>
                         </a>
@@ -138,7 +140,7 @@
           {{user.name}}{{' '}}{{user.family}}
          </p>
       </div>
-      
+
       <!-- Modal body -->
       <div class="modal-body text-center ">
         {# user avatar #}
@@ -147,7 +149,7 @@
             نام کاربری:
           </strong>
           {{user.username}}
-          
+
         </div>
         <div class="col-sm-12">
           <strong>
@@ -178,7 +180,7 @@
         </div>
         {% if user.uploadCS_status is null %}
           <form action="{{route('users.uploadCS_status',user.id)}}">
-            <input type="hidden" name="_token" value="{{csrf_token()}}"  /> 
+            <input type="hidden" name="_token" value="{{csrf_token()}}"  />
             <input type="hidden" name="status" value="{{'apply'}}" />
             <button class="btn btn-info btn-sm"  >
               <strong class="text-dark h6">
@@ -189,10 +191,10 @@
          </form>
         {% else %}
          <form action="{{route('users.uploadCS_status',user.id)}}">
-         <input type="hidden" name="_token" value="{{csrf_token()}}"  /> 
+         <input type="hidden" name="_token" value="{{csrf_token()}}"  />
          <input type="hidden" name="status" value="{{null}}" />
            <button class="btn btn-danger btn-sm"  >
-          
+
             <strong class="text-dark h6">
               تایید نشده
             </strong>
@@ -200,8 +202,8 @@
           </button>
          </form>
         {% endif %}
-       
-      
+
+
 
       </div>
 

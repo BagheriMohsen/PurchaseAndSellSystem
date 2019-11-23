@@ -693,7 +693,11 @@ class StoreRoomController extends Controller
             return back()->with('message',$message);
         }
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Index Warehouse
+    |--------------------------------------------------------------------------
+    |*/
     public function AgentIndexWarehouse(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $storages = 'App\Storage'::where('agent_id',$user->id)->latest()->paginate(10);

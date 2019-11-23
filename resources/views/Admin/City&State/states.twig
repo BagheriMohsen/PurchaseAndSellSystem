@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  استانهای ایران
+  شهرهای ایران
 {% endblock %}
 
 {% block header %}
@@ -29,7 +29,7 @@
       <form class="mx-auto" action="{{route('states.store')}}" method="post">
         <input type="hidden" name="_token" value="{{csrf_token()}}" />
         <div class="input-group mb-3 col-sm-10">
-          <input type="text" class="form-control" name="name" placeholder="استان مورد نظر را وارد کنید" required>
+          <input type="text" class="form-control" name="name" placeholder="شهر مورد نظر را وارد کنید" required>
 
           <div class="input-group-append  col-sm-4 form-control">
             <select class="form-control  bg-white cities-name col-sm-12" name="city">
@@ -50,8 +50,8 @@
       <table  id="example2" class="table table-bordered table-striped  bg-white pt-2 pb-2">
         <thead>
         <tr>
-          <th class="text-center">شهر</th>
           <th class="text-center">استان</th>
+          <th class="text-center">شهر</th>
           <th class="text-center">عملیات</th>
         </tr>
         </thead>
@@ -101,7 +101,7 @@
             <input type="hidden"name="_token" value="{{csrf_token()}}" />
             <input type="hidden"name="_method" value="put" />
             <div class="input-group mb-3">
-              <input type="text" value="{{state.name}}" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+              <input type="text" value="{{state.name}}" class="form-control" name="name" placeholder="نام استان را وارد کنید" required>
                 <div class="input-group-append  col-sm-12 form-control">
                     <select style="width:100%;" class="form-control  bg-white cities-name " name="city">
                         <option value="{{state.city.id}}">{{state.city.name}}</option>

@@ -76,18 +76,17 @@
                         <a  title="تخفیفات" class="text-primary" href="{{route('products.off',product.slug)}}">
                           <i class="fas fa-tags crud-icon"></i>
                         </a>
-                        
+
                         {# Form Delete #}
-                          <form action="{{route('products.destroy',product.id)}}" id="formForDelete"  method="POST">
+                          <form action="{{route('products.destroy',product.id)}}" class="deleteConfirm"  method="POST">
                               <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                               <input type="hidden" name="_method" value="DELETE" />
-                            <a title="حذف" href="javascript:{}" 
-                              onclick="document.getElementById('formForDelete').submit();" >
+                            <button type="submit" class="" title="حذف">
                               <i class="far fa-trash-alt text-danger crud-icon"></i>
-                            </a>
+                            </button>
                           </form>
                         {# Form Delete #}
-                        
+
                       </td>
                     </tr>
                 {% endfor %}

@@ -47,14 +47,14 @@ class StateController extends Controller
             'name'    =>  $request->name,
             'city_id' =>  $request->city
           ]);
-          $message  = ' استان ';
+          $message  = ' شهر ';
           $message .= $request->name;
           $message .= ' با موفقیت ثبت شد ';
           return redirect()->route('states.index')->with('message',$message);
         }else{
-          $message   = ' استان ';
+          $message   = ' شهر ';
           $message  .= $request->name;
-          $message  .= ' قبلا برای همین شهر ثبت شده است';
+          $message  .= ' قبلا برای همین استان ثبت شده است';
           return redirect()->route('states.index')->with('error',$message);
         }
 
@@ -96,7 +96,7 @@ class StateController extends Controller
           'name'  =>  $request->name,
           'city_id'=> $request->city
         ]);
-          $message  = ' استان ';
+          $message  = ' شهر ';
           $message .= $request->name;
           $message .= ' با موفقیت به روز رسانی شد ';
         return redirect()->route('states.index')->with('message',$message);
@@ -113,9 +113,9 @@ class StateController extends Controller
         $state = State::findOrFail($id);
         $stateName = $state->name;
         State::destroy($id);
-          $message  = ' استان ';
+          $message  = ' شهر ';
           $message .= $stateName;
-          $message .= ' با موفقیت از بین لیست استانها حذف شد ';
+          $message .= ' با موفقیت از بین لیست شهرها حذف شد ';
         return redirect()->route('states.index')->with('message',$message);
     }
 }

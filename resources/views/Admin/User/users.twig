@@ -38,9 +38,9 @@
                       <td>
                       {% set role = user.getRoleNames().first() %}
                       {% if role == 'admin' %}
-                      
+
                           {{ 'ادمین سایت' }}
-                          
+
                         {% elseif role == "user" %}
 
                           {{ 'کاربر عادی' }}
@@ -76,7 +76,7 @@
                         {% else %}
 
                           {{ 'نقش خاصی پیدا نشد' }}
-                          
+
                       {% endif %}
                       </td>
                       <td>{{user.state.name}}</td>
@@ -85,42 +85,42 @@
                       {% else %}
                       <td class="text-danger ">   {{'غیر فعال'}} </td>
                       {% endif %}
-                      <td class="d-flex justify-content-between">
-                      
-                        {# {% if role == "agent" or role == "agentChief" %}
-                          <a  style="pointer-events: none;cursor: default;" title="مشارکت" class="text-success " 
-                            href="#">
-                            <i class="fas fa-plus crud-icon"></i>
-                          </a>
-                        {% endif %} #}
-                        
-                        <a  title="ویرایش" class="text-warning " 
+                      <td class="d-flex">
+
+                        <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.username )}}" >
+                            <i class="far fa-user crud-icon text-primary"></i>
+                        </a>
+                        <a  title="ویرایش" class="text-warning mx-auto"
                           href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
 
                         {# Form Delete #}
-                          <form action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
-                              <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                              <input type="hidden" name="_method" value="DELETE" />
-                            <a title="حذف" href="javascript:{}" 
-                              onclick="document.getElementById('formForDelete').submit();" >
+                          <form class="mx-auto deleteConfirm" action="{{route('users.destroy',user.id)}}" method="POST">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button title="حذف" type="submit">
                               <i class="far fa-trash-alt text-danger crud-icon"></i>
-                            </a>
+                            </button>
                           </form>
                         {# Form Delete #}
-
-                        <a title="ورود به اکانت" class="text-primary " 
-                            href="{{ route('users.switchAccount',user.id) }}">
-                            <i class="fas fa-sign-in-alt crud-icon"></i>
-                        </a>
+                        {% if role != "admin" %}
+                            <a title="ورود به اکانت" class="text-primary mx-auto"
+                                href="{{ route('users.switchAccount',user.id) }}">
+                                <i class="fas fa-sign-in-alt crud-icon"></i>
+                            </a>
+                        {% else %}
+                            <a title="ورود به اکانت" class="text-dark mx-auto"
+                               href="#">
+                                <i class="fas fa-sign-in-alt crud-icon"></i>
+                            </a>
+                        {% endif %}
                       </td>
                     </tr>
                 {% endfor %}
                   </tbody>
 
                 </table>
-
 
 {% endblock %}
 

@@ -120,11 +120,16 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
       $user = User::findOrFail($id);
+      if(isset($request->username)){
+          $username = $request->username;
+      }else{
+          $username = $user->username;
+      }
       $user->update([
        'name'               =>  $request->name,
        'family'             =>  $request->family,
        'sex'                =>  $request->sex,
-       'username'           =>  $request->username,
+       'username'           =>  $username,
        'password'           =>  Hash::make($request->password),
        'mobile'             =>  $request->mobile,
        'status'             =>  $request->status,
@@ -153,8 +158,6 @@ class UserController extends Controller
        'determinPercent'    =>  $request->determinPercent,
        'porsantType'        =>  $request->porsantType,
        'forceOrder'         =>  $request->forceOrder
-
-
      ]);
      $user->assignRole($request->role);
      return redirect()->route('users.index');
@@ -245,8 +248,8 @@ class UserController extends Controller
     | User Public Edit
     |--------------------------------------------------------------------------
     |*/
-    public function userPublicEdit(){
-        $user = User::findOrFail(auth()->user()->id);
+    public function userPublicEdit($username){
+        $user = User::where('username',$username)->firstOrFail();
         return view('Admin.User.users-edit-pass',compact('user'));
     }
     /*
@@ -254,19 +257,19 @@ class UserController extends Controller
     | User Public Update
     |--------------------------------------------------------------------------
     |*/
-    public function userPublicUpdate(Request $request){
+    public function userPublicUpdate(Request $request,$username){
         $request->validate([
             'password'  =>  'required'
         ],[
             'password.required'  =>  'گذرواژه خالی ست'
         ]);
-        $user = User::findOrFail(auth()->user()->id);
+        $user = User::where('username',$username)->firstOrFail();
        
         if($request->hasFile('image')){
             $media = $user->addMedia($request->File('image'))->toMediaCollection('Useravatar');
            
             $user->update([
-                'image_id'  =>  $media->id
+                'image_id'  =>  $media->id,
             ]);
         }
         if($request->hasFile('uploadCS')){
@@ -275,10 +278,11 @@ class UserController extends Controller
             $user->update(['uploadCS'=>$uploadCS]);
         }
         $user->update([
+            'status'             =>  $request->status,
             'password'  =>  Hash::make($request->password)
         ]);
         Auth::login($user);
-        return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات شما به روز رسانی شد');
+        return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات به روز رسانی شد');
     }
     /*
     |--------------------------------------------------------------------------
@@ -340,12 +344,12 @@ class UserController extends Controller
         ])->exists();
 
         if($status == True){
-            return redirect()->route('users.edit',[$id])->with('info','شهر انتخاب شده قبلا در سیستم ثبت شده');
+            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','شهر انتخاب شده قبلا در سیستم ثبت شده');
         }else{
            
             $city = 'App\City'::where('name',$request->CityName)->firstOrFail();
             $city->update(['followUpManager'=>$id]);
-            return redirect()->route('users.edit',[$id])->with('message','این شهر به این مدیر پیگیری اختصاص پیدا کرد');
+            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر به این مدیر پیگیری اختصاص پیدا کرد');
         }
 
     }
@@ -358,7 +362,7 @@ class UserController extends Controller
         $city = 'App\City'::where('name',$CityName)->firstOrFail();
         $id = $city->followUpManager;
         $city->update(['followUpManager'=>null]);
-        return redirect()->route('users.edit',[$id])->with('message','این شهر از لیست این مدیر پیگیری خارج شد');
+        return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر از لیست این مدیر پیگیری خارج شد');
     }
 
 

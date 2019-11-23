@@ -38,9 +38,11 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        
         $order = Order::create([
             'city_id'       =>      $request->city,
             'state_id'      =>      $request->state,
+            'status_id'     =>      1,
             'mobile'        =>      $request->mobile,
             'telephone'     =>      $request->telephone,
             'fullName'      =>      $request->fullName,
@@ -54,7 +56,11 @@ class OrderController extends Controller
             'address'       =>      $request->address,
             'HBD_Date'      =>      $request->HBD_Date
         ]);
-        $order->sync($request->category);
+        
+        foreach($request->orderArray as $item){
+
+        }
+
         return back();
     }
 
@@ -130,15 +136,15 @@ class OrderController extends Controller
             $user = 'App\User'::where('state_id',$state->id)->Role(['agent','agentChief'])->get();
         
             if($user->toArray() !== false){
-                $message = 'سیستم ارسال در این شهر دارای نماینده است';
-                return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده است','state'=>'2'];
+                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
             }else{
-                $message = 'سیستم ارسال در این شهر دارای نماینده نمیباشد.این ارسال توسط پست ارسال خواهد شد';
-                return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده نمیباشد.این ارسال توسط پست ارسال خواهد شد','state'=>'1'];
+                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
             }
         }else{
-            $message = 'خطای سیستم:شهری به این اسم وجود ندارد';
-            return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+            $result = ['message'=>'خطای سیستم:شهری به این اسم وجود ندارد','state'=>'0'];
+            return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
         }
     }
 

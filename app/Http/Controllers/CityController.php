@@ -38,14 +38,14 @@ class CityController extends Controller
         $request->validate([
             'name'  =>  'required | unique:cities'
         ],[
-            'name.required' =>  'شهر را وارد نکردید',
-            'name.unique'   =>  'این شهر قبلا ثبت شده است'
+            'name.required' =>  'استان را وارد نکردید',
+            'name.unique'   =>  'این استان قبلا ثبت شده است'
         ]);
 
           City::create([
             'name' => $request->name
           ]);
-          $message  =   'شهر '.$request->name.' ثبت شد';
+          $message  =   'استان '.$request->name.' ثبت شد';
           return redirect()->route('cities.index')->with('message',$message);
 
 
@@ -85,8 +85,8 @@ class CityController extends Controller
         $request->validate([
             'name'  =>  'required | unique:cities'
         ],[
-            'name.required' =>  'شهر را وارد نکردید',
-            'name.unique'   =>  'این شهر قبلا ثبت شده است'
+            'name.required' =>  'استان را وارد نکردید',
+            'name.unique'   =>  'این استان قبلا ثبت شده است'
         ]);
         
         $city = City::findOrFail($id);
@@ -94,7 +94,7 @@ class CityController extends Controller
         $city->update([
           'name'  =>  $request->name
         ]);
-        $message = 'نام شهر'.' '.$cityName.' '.' به شهر '.$request->name.' تغییر پیدا کرد';
+        $message = 'نام استان'.' '.$cityName.' '.' به استان '.$request->name.' تغییر پیدا کرد';
         return redirect()->route('cities.index')->with('message',$message);
     }
 
@@ -109,7 +109,7 @@ class CityController extends Controller
         $city = City::findOrFail($id);
         $cityName = $city->name;
         City::destroy($id);
-        $message = 'شهر '.$cityName.' با موفقیت حذف شد';
+        $message = 'استان '.$cityName.' با موفقیت حذف شد';
         return redirect()->route('cities.index')->with('message',$message);
     }
 }

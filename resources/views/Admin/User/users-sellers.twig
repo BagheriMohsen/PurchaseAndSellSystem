@@ -97,25 +97,22 @@
                           <i title="تایید شده" class="fas fa-check-double crud-icon text-success"></i>
                          </td>
                       {% endif %}
-                      <td class="d-flex justify-content-between">
+                      <td class="d-flex">
                       
-                        {# {% if role == "agent" or role == "agentChief" %}
-                          <a  style="pointer-events: none;cursor: default;" title="مشارکت" class="text-success " 
-                            href="#">
-                            <i class="fas fa-plus crud-icon"></i>
-                          </a>
-                        {% endif %} #}
-                        <a  title="مدارک" class="text-primary " 
+                         <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.username )}}" >
+                            <i class="far fa-user crud-icon text-primary"></i>
+                        </a>
+                        <a  title="مدارک" class="text-primary mx-auto " 
                          data-toggle="modal" href="#resources{{user.id}}">
                           <i class="far fa-address-book crud-icon"></i>
                         </a>
-                        <a  title="ویرایش" class="text-warning " 
+                        <a  title="ویرایش" class="text-warning mx-auto" 
                           href="{{route('users.edit',user.id)}}">
                           <i class="far fa-edit crud-icon"></i>
                         </a>
 
                         {# Form Delete #}
-                          <form action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
+                          <form class="mx-auto" action="{{route('users.destroy',user.id)}}" id="formForDelete"  method="POST">
                               <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                               <input type="hidden" name="_method" value="DELETE" />
                             <a title="حذف" href="javascript:{}" 
@@ -125,7 +122,7 @@
                           </form>
                         {# Form Delete #}
 
-                        <a title="ورود به اکانت" class="text-primary " 
+                        <a class="mx-auto" title="ورود به اکانت" class="text-primary " 
                             href="{{ route('users.switchAccount',user.id) }}">
                             <i class="fas fa-sign-in-alt crud-icon"></i>
                         </a>

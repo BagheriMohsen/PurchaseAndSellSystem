@@ -263,7 +263,29 @@ class StartingSeeder extends Seeder
       'App\Transport'::create([
         'name'          =>  "تحویل به نماینده",
       ]);
+      /*
+      |--------------------------------------------------------------------------
+      | Create Order Status
+      |--------------------------------------------------------------------------
+      |*/
+      'App\OrderStatus'::create(['name'=>'ثبت سفارش']);
+      'App\OrderStatus'::create(['name'=>'ارسال به کالسنتر']);
+      'App\OrderStatus'::create(['name'=>'ارسال به فروشنده']);
+      'App\OrderStatus'::create(['name'=>'تماس مجدد']);
+      'App\OrderStatus'::create(['name'=>'انصراف']);
+      'App\OrderStatus'::create(['name'=>'برگشت به فروشنده']);
+      'App\OrderStatus'::create(['name'=>'در انتظار تحویل']);
+      'App\OrderStatus'::create(['name'=>'برگشت به مدیر پیگیری']);
+      'App\OrderStatus'::create(['name'=>'غیر قابل ارسال']);
+      'App\OrderStatus'::create(['name'=>'وصولی']);
+      'App\OrderStatus'::create(['name'=>'کنسلی']);
+      'App\OrderStatus'::create(['name'=>'معلق']);
+      'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
+      'App\OrderStatus'::create(['name'=>'خام']);
 
-      
+
+
     }
+
+
 }

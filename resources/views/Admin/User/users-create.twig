@@ -12,6 +12,12 @@
   <link rel="stylesheet" href="{{asset('AdminPanel/switch-button/bootstrap-switch-button.min.css')}}">
   <link rel="stylesheet" href="{{asset('AdminPanel/select2/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('AdminPanel/check-box/checkboxes.min.css')}}">
+  <style>
+    .switch{
+      width: 133.188px!important;
+      height: 45.875px!important;
+    }
+  </style>
 {% endblock %}
 
 {% block sidebar %}
@@ -74,204 +80,204 @@
     <h4 class="col-12 pt-2 pb-3">
       اطلاعات تخصصی
     </h4>
-    <div class="row mx-4 otherRolesFields">
-      {#مدیر نماینده  #}
-      <div class="col-sm-4 mb-4">
-        <select id="agent_id" class="form-control disabled"  name="agent_id" disabled="disabled">
-          <option selected value="{{null}}">بدون مدیر نماینده</option>
-          {% for chief in agentChiefs %}
-            <option value="{{chief.id}}">{{chief.username}}</option>
-          {% else %}
-              <option Disabled >چیزی برای انتخاب وجود ندارد</option>
-          {% endfor %}
-        </select>
-      </div>
-      {# مدیر نماینده #}
-      {#callcenter manager   #}
-      <div class="col-sm-4 mb-4">
-        <select id="callcenter_id" class="form-control disabled"  name="callCenter" disabled="disabled">
-            <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
-          {% for callCenter in callCenters %}
-            <option  value="{{callCenter.id}}">{{callCenter.username}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      {# allcenter manager  #}
-      <div class="col-12"></div>
-      {#پورسانت فروشنده  #}
-      <div class="col-sm-4 md-form mb-4 disabled">
-        <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="" disabled>
-        <label for="porsantSeller">پورسانت</label>
-      </div>
-      {#پورسانت فروشنده #}
-      {# تعرفه پایه داخلی #}
-      <div class="col-sm-4 md-form mb-4 disabled">
-          <input type="text" id="tariff_internal" class="form-control" name="internal" value="" disabled>
-          <label for="tariff_internal">تعرفه پایه داخل</label>
-      </div>
-      {# تعرفه پایه داخلی #}
-      {# تعرفه پایه حومهی #}
-      <div class="col-sm-4 md-form mb-4 disabled">
-          <input type="text" id="tariff_locally" class="form-control" name="locally" value="" disabled>
-          <label for="tariff_locally">تعرفه پایه حومه</label>
-      </div>
-      {# تعرفه پایه حومه #}
-      {# تعرفه پایه روستای #}
-      <div class="col-sm-4 md-form mb-4 disabled">
-          <input type="text" id="tariff_village" class="form-control" name="village" value="" disabled>
-          <label for="tariff_village">تعرفه پایه روستا</label>
-      </div>
-      {# تعرفه پایه روستا #}
-      {# auto send #}
-      <div class="col-12"></div>
-      <div class="col-sm-4 mb-4">
-        <h6>ارسال سفارش
-        </h6>
-        <input id="send_order" type="checkbox"
-          
-          data-toggle="switchbutton"
-          data-onstyle="success"
-          data-offstyle="danger"
-          data-onlabel="خودکار"
-          data-offlabel="دستی" name="sendAuto" 
-          disabled="disabled" >
-      </div>
-      {# end auto send #}
-      {# auto send #}
-      <div class="col-sm-4 mb-4">
-        <h6>برگشت کالا از انبار
+    <div class="col-12 mx-4 otherRolesFields">
+      <div class="row mx-4">
+        {#مدیر نماینده  #}
+        <div class="col-sm-4 mb-4 d-none">
+          <select id="agent_id" class="form-control"  name="agent_id">
+            <option selected value="{{null}}">بدون مدیر نماینده</option>
+            {% for chief in agentChiefs %}
+              <option value="{{chief.id}}">{{chief.username}}</option>
+            {% else %}
+                <option Disabled >چیزی برای انتخاب وجود ندارد</option>
+            {% endfor %}
+          </select>
+        </div>
+        {# مدیر نماینده #}
+        {# مدیر کالسنتر #}
+        <div class="col-sm-4 mb-4 d-none">
+          <select id="callcenter_id" class="form-control"  name="callCenter">
+              <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
+            {% for callCenter in callCenters %}
+              <option  value="{{callCenter.id}}">{{callCenter.username}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {# مدیر کالسنتر #}
+        <div class="col-12"></div>
+        {#پورسانت فروشنده  #}
+        <div class="col-sm-4 md-form mb-4 d-none">
+          <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="">
+          <label for="porsantSeller">پورسانت</label>
+        </div>
+        {#پورسانت فروشنده #}
+        {# تعرفه پایه داخلی #}
+        <div class="col-sm-4 md-form mb-4 d-none">
+            <input type="text" id="tariff_internal" class="form-control" name="internal" value="">
+            <label for="tariff_internal">تعرفه پایه داخل</label>
+        </div>
+        {# تعرفه پایه داخلی #}
+        {# تعرفه پایه حومهی #}
+        <div class="col-sm-4 md-form mb-4 d-none">
+            <input type="text" id="tariff_locally" class="form-control" name="locally" value="">
+            <label for="tariff_locally">تعرفه پایه حومه</label>
+        </div>
+        {# تعرفه پایه حومه #}
+        {# تعرفه پایه روستای #}
+        <div class="col-sm-4 md-form mb-4 d-none">
+            <input type="text" id="tariff_village" class="form-control" name="village" value="">
+            <label for="tariff_village">تعرفه پایه روستا</label>
+        </div>
+        {# تعرفه پایه روستا #}
+        {# auto send #}
+        <div class="col-12"></div>
+        <div class="col-sm-4 mb-4 d-none">
+          <h6>ارسال سفارش
+          </h6>
+          <input id="send_order" type="checkbox"
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="danger"
+            data-onlabel="خودکار"
+            data-offlabel="دستی" name="sendAuto">
+        </div>
+        {# end auto send #}
+        {# auto send #}
+        <div class="col-sm-4 mb-4 d-none">
+          <h6>برگشت کالا از انبار
 
-        </h6>
-        <input id="return_product" style="font-size:30px;"  type="checkbox"
+          </h6>
+          <input id="return_product" style="font-size:30px;"  type="checkbox"
+            
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="danger"
+            data-onlabel="خودکار"
+            data-offlabel="دستی" name="reciveAuto">
+        </div>
+        {# end auto send #}
+        {# auto send #}
+        <div class="col-sm-4 mb-4 d-none">
+          <h6>نوع محاسبه هزینه کالا
+          </h6>
+          <input id="calType" type="checkbox"
           
-          data-toggle="switchbutton"
-          data-onstyle="success"
-          data-offstyle="danger"
-          data-onlabel="خودکار"
-          data-offlabel="دستی" name="reciveAuto" 
-          disabled="disabled">
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="info"
+            data-onlabel="مبلغ فاکتور"
+            data-offlabel="تعرفه تعیین شده" name="calType">
+        </div>
+        {# end auto send #}
       </div>
-      {# end auto send #}
-      {# auto send #}
-      <div class="col-sm-4 mb-4">
-        <h6>نوع محاسبه هزینه کالا
-        </h6>
-        <input id="calType" type="checkbox"
-        
-          data-toggle="switchbutton"
-          data-onstyle="success"
-          data-offstyle="info"
-          data-onlabel="مبلغ فاکتور"
-          data-offlabel="تعرفه تعیین شده" name="calType"
-          disabled="disabled">
-      </div>
-      {# end auto send #}
     </div>
-    <div class="row mx-4 callcenterFields d-none">
-      {# price calculation type #}
-      <div class="col-sm-4 mb-4">
-        <h6>نوع محاسبه هزینه کالا
-        </h6>
-        <input type="checkbox"
+    <div class="col-12 mx-4 callcenterFields d-none">
+      <div class="row mx-4">
+            {# price calculation type #}
+        <div class="col-sm-4 mb-4">
+          <h6>نوع محاسبه هزینه کالا
+          </h6>
+          <input type="checkbox"
+          
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="info"
+            data-onlabel="مبلغ فاکتور"
+            data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter">
+        </div>
+        {# price calculation type #}
+        <div class="col-12"></div>
+        {# امکان بارگذاری شماره #}
+        <div class="col-sm-4 mb-4">
+          <h6>امکان بارگذاری شماره
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="numberUpload" value="active" name="allowNumber">
+              <label for="numberUpload"></label>
+          </div>
+        </div>
+        {# امکان بارگذاری شماره #}
+          
+        {# امکان وارد کردن شماره تکراری #}
+        <div class="col-sm-4 mb-4">
+          <h6>امکان وارد کردن شماره تکراری
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="repeatedNumber" value="active" name="allowNumberDup">
+              <label for="repeatedNumber"></label>
+          </div>
+        </div>
+        {# امکان وارد کردن شماره تکراری #}
         
-          data-toggle="switchbutton"
-          data-onstyle="success"
-          data-offstyle="info"
-          data-onlabel="مبلغ فاکتور"
-          data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter"
-          >
-      </div>
-      {# price calculation type #}
-      <div class="col-12"></div>
-      {# امکان بارگذاری شماره #}
-      <div class="col-sm-4 mb-4">
-        <h6>امکان بارگذاری شماره
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="numberUpload" value="active" name="allowNumber">
-            <label for="numberUpload"></label>
+        {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
+        <div class="col-sm-4 mb-4">
+          <h6>امکان وارد کردن سفارش از ثبت سفارش جدید
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="addOrderFromNewOrder" value="active" name="allowNewOrder">
+              <label for="addOrderFromNewOrder"></label>
+          </div>
         </div>
-      </div>
-      {# امکان بارگذاری شماره #}
-        
-      {# امکان وارد کردن شماره تکراری #}
-      <div class="col-sm-4 mb-4">
-        <h6>امکان وارد کردن شماره تکراری
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="repeatedNumber" value="active" name="allowNumberDup">
-            <label for="repeatedNumber"></label>
-        </div>
-      </div>
-      {# امکان وارد کردن شماره تکراری #}
-      
-      {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
-      <div class="col-sm-4 mb-4">
-        <h6>امکان وارد کردن سفارش از ثبت سفارش جدید
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="addOrderFromNewOrder" value="active" name="allowNewOrder">
-            <label for="addOrderFromNewOrder"></label>
-        </div>
-      </div>
-      {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
+        {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
 
-      {# امکان برگشت شماره #}
-      <div class="col-sm-4 mb-4">
-        <h6>امکان برگشت شماره
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="numberReturn" value="active" name="allowNumberBack">
-            <label for="numberReturn"></label>
+        {# امکان برگشت شماره #}
+        <div class="col-sm-4 mb-4">
+          <h6>امکان برگشت شماره
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="numberReturn" value="active" name="allowNumberBack">
+              <label for="numberReturn"></label>
+          </div>
         </div>
-      </div>
-      {# امکان برگشت شماره #}
-      {# امکان ویرایش شماره تلفن #}
-      <div class="col-sm-4 mb-4">
-        <h6>امکان ویرایش شماره تلفن
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="editNumber" value="active" name="allowNumberEdit">
-            <label for="editNumber"></label>
+        {# امکان برگشت شماره #}
+        {# امکان ویرایش شماره تلفن #}
+        <div class="col-sm-4 mb-4">
+          <h6>امکان ویرایش شماره تلفن
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="editNumber" value="active" name="allowNumberEdit">
+              <label for="editNumber"></label>
+          </div>
         </div>
-      </div>
-      {# امکان ویرایش شماره تلفن #}
+        {# امکان ویرایش شماره تلفن #}
 
-      {# نمایش تاریخ دریافت پیامک #}
-      <div class="col-sm-4 mb-4">
-        <h6> نمایش تاریخ دریافت پیامک
-          <span class="text-danger">*</span>
-        </h6>
-        <div class="ckbx-style-11">
-            <input type="checkbox" id="smsDate" value="active" name="messageStatus">
-            <label for="smsDate"></label>
+        {# نمایش تاریخ دریافت پیامک #}
+        <div class="col-sm-4 mb-4">
+          <h6> نمایش تاریخ دریافت پیامک
+            <span class="text-danger">*</span>
+          </h6>
+          <div class="ckbx-style-11">
+              <input type="checkbox" id="smsDate" value="active" name="messageStatus">
+              <label for="smsDate"></label>
+          </div>
+        </div>
+        {# نمایش تاریخ دریافت پیامک #}
+        {# نوع کال سنتر #}
+        <div class="col-sm-4 mb-4">
+          <h6>نوع کالسنتر</h6>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="callCenterType" value="normal" checked>معمولی
+            </label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="callCenterType" value="marketer">بازاریاب
+            </label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="callCenterType" value="channelDist">مویرگی
+            </label>
+          </div>
         </div>
       </div>
-      {# نمایش تاریخ دریافت پیامک #}
-      {# نوع کال سنتر #}
-      <div class="col-sm-4 mb-4">
-        <h6>نوع کالسنتر</h6>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callCenterType" value="normal" checked>معمولی
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callCenterType" value="marketer">بازاریاب
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="callCenterType" value="channelDist">مویرگی
-          </label>
-        </div>
-      </div>
+  
     </div>
   </div>
 

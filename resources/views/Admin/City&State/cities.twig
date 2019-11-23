@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  شهرهای ایران
+  استانهای ایران
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'شهرهای ایران'} %}
+  {% include 'Admin/Master/path' with {'title':'استانهای ایران'} %}
 {% endblock %}
 
 {% block content %}
@@ -25,7 +25,7 @@
       <form  action="{{route('cities.store')}}" method="post">
         <input type="hidden" name="_token" value="{{csrf_token()}}" />
         <div class="input-group mb-3 md-form">
-          <input id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+          <input id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام استان را وارد کنید" required>
           <div class="input-group-append">
             <button type="submit" class="btn btn-sm btn-info input-group-text text-dark">
                 <i class="far fa-plus-square crud-icon"></i>
@@ -36,7 +36,7 @@
       <table  id="example2" class="table table-bordered table-striped  bg-white pt-2 pb-2">
         <thead>
         <tr>
-          <th class="text-center">نام شهر</th>
+          <th class="text-center">نام استان</th>
           <th class="text-center">عملیات</th>
         </tr>
         </thead>
@@ -86,7 +86,7 @@
             <input type="hidden"name="_token" value="{{csrf_token()}}" />
             <input type="hidden"name="_method" value="put" />
             <div class="input-group mb-3 md-form">
-              <input value="{{city.name}}" id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام شهر را وارد کنید" required>
+              <input value="{{city.name}}" id="inputValidationEx" type="text" class="form-control" name="name" placeholder="نام استان را وارد کنید" required>
               <div class="input-group-append">
                 <button type="submit" class="btn btn-sm btn-primary  input-group-text text-light">
                     <i class="fas fa-pencil-alt crud-icon"></i>
@@ -133,7 +133,7 @@
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
 
               <div class="text-center">
-                  آیا از پاک کردن شهر
+                  آیا از پاک کردن استان
                   <strong class="text-danger">
                     {{city.name}} 
                   </strong>

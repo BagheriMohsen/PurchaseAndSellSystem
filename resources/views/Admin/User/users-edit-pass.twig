@@ -31,17 +31,17 @@
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input type="hidden" name="_method" value="put" />
 <div class="row bg-white pt-3 pb-3">
- 
+
   <h6 class="col-12 pt-2 pb-3">
     {{ user.name }}{{' '}}{{ user.family }}
   </h6>
 
 <div class="row bg-white pt-2 pb-3 mt-5">
 
-    {% set roleName = user.getRoleNames().first() %} 
+    {% set roleName = user.getRoleNames().first() %}
 
-  
-    {# تصویر شاخص #}
+
+    {# avatar image #}
       <div class="col-sm-6">
         {% if user.image_id is not null %}
             <img  src="{{ user.cardUrl }}" class="img-circle" alt="User Image">
@@ -52,50 +52,54 @@
         {% endif %}
 
         {% if roleName == "seller" %}
-          {# تصویر کارت ملی #}
+          {# code meli picture #}
           <div class="col-sm-12 mx-auto">
               <img src="/storage/{{user.uploadCS}}" />
           </div>
-          {# تصویر کارت ملی #}
+          {# code meli picture #}
         {% endif %}
       </div>
       <div class="col-sm-6">
           <div class="row">
-          {# تصویر آواتار #}
+          {# avatar #}
             <div class="md-form mb-5 col-sm-9 mx-auto">
               <label>آواتار شما:</label>
               <br /><br />
               <input type="file" id="inputIconEx4" class=" form-control" name="image" value="" >
             </div>
-            {# تصویر آواتار #}
-            
+            {# avatar #}
+
             {% if roleName == "seller" %}
-              {# تصویر کارت ملی #}
+              {# uploadCS #}
               <div class="md-form mb-5 col-sm-9 mx-auto">
                 <label>تصویر کارت ملی:</label>
                 <br /><br />
                 <input type="file" id="inputIconEx4" class=" form-control" name="uploadCS" value="" >
-                {% if user.uploadCS is null %}
+                {% if auth_user().getRoleNames().first() == "admin" and user.uploadCS is null %}
+                  <span class="right badge badge-danger">این فروشنده هنوز تصویر کارت ملی خود را آپلود نکرده است</span>
+                {% elseif user.uploadCS is null %}
                   <span class="right badge badge-danger">شما هنوز تصویر کارت ملی خود را آپلود نکرده اید</span>
                 {% endif %}
               </div>
-              {# تصویر کارت ملی #}
+              {# uploadCS #}
             {% endif %}
-            {# گذرواژه #}
+            {# password #}
             <div class="md-form mb-4 col-sm-9 mx-auto">
                 <input type="password" id="inputIconEx4" class="form-control" name="password" value="" required>
                 <label for="inputIconEx4">گذرواژه</label>
             </div>
-            {# گذرواژه #}
+            {# password #}
           </div>
         </div>
       </div>
 
 
+
+
   <div class="col-12 text-center mt-5">
     <button class="btn btn-success btn-sm col-2" type="submit" name="button">
       <strong class="h6 text-dark">
-        ذخیره 
+        ذخیره
       </strong>
     </button>
   </div>
