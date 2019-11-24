@@ -125,6 +125,7 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/AgentExchangesForm','StoreRoomController@AgentExchangesForm')->name('AgentExchangesForm');
       Route::post('/sendToAgent','StoreRoomController@sendToAgent')->name('sendToAgent');
       Route::post('/AgentToAgent','StoreRoomController@AgentToAgent')->name('AgentToAgent');
+      Route::post('/returnToMain','StoreRoomController@returnToMain')->name('returnToMain');
       Route::get('/AgentExchangeStorage','StoreRoomController@AgentExchangeStorage')->name('AgentExchangeStorage');
       Route::get('/SendToAgentList','StoreRoomController@SendToAgentList')->name('SendToAgentList');
       Route::get('/returnFromAgents','StoreRoomController@returnFromAgents')->name('returnFromAgents');

@@ -675,6 +675,74 @@ class StoreRoomController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
+    | Return To Main WareHouse
+    |--------------------------------------------------------------------------
+    |*/
+    public function returnToMain(Request $request){
+        $status = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',2]
+        ])->exists();
+
+        if($status == false){
+            return back()->with('message','این کالا در انبار موجود نیست');
+        }
+
+        $fundWarestorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',2]
+        ])->first();
+        $mainWarestorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',1]
+        ])->first();
+        if($fundWarestorage->number > $request->number){
+            
+            // create store room for fundWareHouse
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $sender_storage->id,
+                'receiver_id'       =>  1,
+                'sender_id'         =>  2,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  9,
+                'out_date'          =>  $request->date
+            ]);
+            // create store room for mainWareHouse
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $sender_storage->id,
+                'receiver_id'       =>  1,
+                'sender_id'         =>  2,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  4,
+                'in_date'           =>  $request->date
+            ]);
+            // FundWareHouse Storage 
+            $numberInFundHouse = $fundWarestorage->number - $request->number;
+            $fundWarestorage->update(['number'=>$numberInFundHouse]);
+            // MainWareHouse Storage
+            $numberInMainHouse = $mainWarestorage->number + $request->number;
+            $mainWarestorage->update(['number'=>$numberInMainHouse]);
+            $message = 'این کالا به انبار مادر برگشت داده شد';
+            return back()->with('message',$message);
+    
+        }else{
+            $message = ' این میزان موجودی در انبار تنخواه موجود نیست  ';
+            $message .= ' در انبار این '.$fundWarestorage->number.' عدد از این محصول وجود دارد ';
+            return back()->with('message',$message);
+        }   
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Display list of product send to agents
     |--------------------------------------------------------------------------
     |*/

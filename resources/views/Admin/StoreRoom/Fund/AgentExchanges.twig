@@ -264,6 +264,80 @@
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
+         <form class="row bg-white pt-3 pb-3" action="{{route('storeRooms.returnToMain')}}" method="post" enctype="multipart/form-data">
+            <input type="hidden"    name="_token" value="{{csrf_token()}}" />
+            <input type="hidden"    name="in_out" value="{{'returnToMain'}}" />
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    
+                     <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('date')}}"  name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
+                        <label for="date-picker-example">تاریخ</label>
+                    </div>
+                  
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="product">محصول</label>
+                        <select class="form-control" name="product">
+                            <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
+                        {% for product in products %}
+                            <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
+                        {% endfor %}
+                        </select>
+                        
+                    </div>
+                    {# number #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <label for="inputIconEx5">تعداد</label>
+                        <span class="text-secondary">
+                            ارزش ریالی:
+                            0
+                        </span>
+                    </div>
+                    {# end number #}
+                    
+                    {# description #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <i class="fas fa-pencil-alt prefix text-dark"></i>
+                        <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80">{{old('description')}}</textarea>
+                        <label for="form10">توضیحات</label>
+                    </div>
+                    {# description #}
+                    {# transports #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="transport">وسیله ارسال</label>
+                        <select class="form-control" name="transport">
+                            <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
+                        {% for transport in transports %}
+                            <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# transports #}
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="row">
+                    {# receiver #}
+                        <input type="hidden" name="status" value="برگشت کالا به انبار نماینده" />
+                    {# receiver #}
+                    
+                </div>
+            </div>
+
+
+            
+            <div class="col-sm-6 mt-5 mx-auto">
+                <button class="btn btn-sm btn-success">
+                    <strong class="h6 text-dark">
+                        ذخیره
+                    </strong>
+                </button>
+            </div>
+        </form>
         
 
     </div>
