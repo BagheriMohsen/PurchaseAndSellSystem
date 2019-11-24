@@ -740,5 +740,8 @@ $(document).ready(function(){
     }
     $('#sendToAgentForm').on('change', calculateCargoValue);
     $('#storeToStoreAgents').on('change', calculateCargoValue);
+    $('#productReceive').on('change', calculateCargoValue);
+    $('#productExit').on('change', calculateCargoValue);
+    $('#warehouseToTankhah').on('change', calculateCargoValue);
 });
 
