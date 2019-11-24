@@ -48,7 +48,7 @@
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
-                      <td>{{storeRoom.created_at|date('d-m-Y')}}</td>
+                      <td class="timestamp">{{storeRoom.created_at}}</td>
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                       <td>
@@ -109,7 +109,7 @@
                     </div>
                     <div class="d-flex">
                         <div>تاریخ ارسال:</div>
-                        <div>{{storeRoom.created_at|date('Y-m-d')}}</div>
+                        <div class="timestamp">{{storeRoom.created_at}}</div>
                     </div>
                  <a  class="btn btn-success btn-sm text-dark"
                     href="{{ route('storeRooms.acceptMainReceive',storeRoom.id) }}">
