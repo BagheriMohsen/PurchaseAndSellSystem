@@ -27,7 +27,7 @@
             <th>نام</th>
             <th>شهر</th>
             <th>تلفن ثابت</th>
-            <th>کارت پستال</th>
+            <th>مسئول انبار</th>
             <th >عملیات</th>
             </tr>
         </thead>
@@ -37,7 +37,7 @@
             <td>{{warehouse.name}}</td>
             <td>{{warehouse.cities.name}}</td>
             <td>{{warehouse.telephone}}</td>
-            <td>{{warehouse.postalCard}}</td>
+            <td>{{warehouse.user.name}}{{' '}}{{warehouse.user.family}}</td>
             <td class="text-center">
             
             <a  title="ورودی و خروجی انبار" class="text-primary " 

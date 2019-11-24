@@ -25,7 +25,7 @@ class CreateStoreRoomsTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
-            $table->string('telephon')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('postalCard')->nullable();
             $table->text('address');
             $table->timestamps();
@@ -84,10 +84,9 @@ class CreateStoreRoomsTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('storage_id')->unsigned()->nullable();
             $table->bigInteger('warehouse_id')->unsigned()->nullable();
-            $table->bigInteger('rcv_agent_id')->unsigned()->nullable();
-            $table->bigInteger('sender_agent_id')->unsigned()->nullable();
+            $table->bigInteger('receiver_id')->unsigned()->nullable();
+            $table->bigInteger('sender_id')->unsigned()->nullable();
             $table->bigInteger('number');
-            $table->string('in_out');
             $table->string('status');
             $table->integer('cost')->default(0);
             $table->text('description')->nullable();
@@ -107,10 +106,10 @@ class CreateStoreRoomsTable extends Migration
             $table->foreign('warehouse_id')->references('id')->on('warehouses')
             ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->foreign('sender_agent_id')->references('id')->on('users')
+            $table->foreign('sender_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->foreign('rcv_agent_id')->references('id')->on('users')
+            $table->foreign('receiver_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('user_id')->references('id')->on('users')

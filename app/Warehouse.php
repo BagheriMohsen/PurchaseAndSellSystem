@@ -13,7 +13,7 @@ class Warehouse extends Model
         'name',
         'slug',
         'description',
-        'telephon',
+        'telephone',
         'postalCard',
         'address'
     ];
@@ -41,5 +41,13 @@ class Warehouse extends Model
     */
     public function cities(){
         return $this->belongsTo('App\City','city_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function user(){
+        return $this->hasOne('App\User','id','user_id');
     }
 }

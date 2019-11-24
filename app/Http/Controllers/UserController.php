@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 class UserController extends Controller
 {
@@ -17,7 +18,13 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::latest()->paginate(10);
+        $users = User::Role([
+            'normalUser',
+            'admin',
+            'followUpManager',
+            'mainWarehouser',
+            'fundWarehouser'
+            ])->get();
         return view('Admin.User.users',compact('users'));
     }
 

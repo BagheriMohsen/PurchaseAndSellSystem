@@ -103,6 +103,7 @@ class WarehouseController extends Controller
             'city.required'     =>      'شهر انتخاب نشده',
             'address.required'  =>      'لطفا فیلد آدرس را پر کنید'
         ]);
+      
         $warehouse = Warehouse::findOrFail($id);
         $warehouse->update([
             'user_id'       =>  auth()->user()->id,
@@ -110,7 +111,7 @@ class WarehouseController extends Controller
             'city_id'       =>  $request->city,
             'description'   =>  $request->description,
             'address'       =>  $request->address,
-            'telephon'      =>  $request->telephon,
+            'telephone'      =>  $request->telephon,
             'postalCard'    =>  $request->postalCard 
         ]);
         $message = $request->name.' به روز رسانی شد';

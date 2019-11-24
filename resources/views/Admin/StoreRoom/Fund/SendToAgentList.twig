@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  انبار به انبار نماینده ها 
+  ارسالها به انبار نماینده ها 
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'انبار به انبار نماینده ها'} %}
+  {% include 'Admin/Master/path' with {'title':'ارسالها به انبار نماینده ها'} %}
 {% endblock %}
 
 {% block content %}
@@ -26,12 +26,12 @@
                   <tr class="text-center">
                     <th>تصویر</th>
                     <th>کالا</th>
-                    <th>انبار نماینده مبدا</th>
                     <th>انبار نماینده مقصد</th>
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
                     <th>تاریخ خروج</th>
+                    <th>تاریخ دریافت</th>
                     <th >جمع(تومان)</th>
                   </tr>
                   </thead>
@@ -40,12 +40,12 @@
                     <tr class="text-center">
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
-                      <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
-                      <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
+                      <td>{{storeRoom.receiver.name}}{{' '}}{{ storeRoom.receiver.family }}</td>
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
                       <td>{{storeRoom.created_at|date('d-m-Y')}}</td>
+                      <td>{{storeRoom.out_date|date('d-m-Y')}}</td>
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                     </tr>

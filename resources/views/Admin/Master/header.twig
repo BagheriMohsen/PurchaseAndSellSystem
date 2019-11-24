@@ -43,7 +43,9 @@
           {% if notifs > 0 %}
               <a 
               {% if role.name == "agent" or role.name == "agentChief" %}
-                href="{{route('storeRooms.FundReceive')}}"
+                href="{{route('storeRooms.AgentReceive')}}"
+              {% elseif role.name == "fundWarehouser" %}
+                href="{{route('storeRooms.mainReceive')}}"
               {% else %}
                 href="#"
               {% endif %}
