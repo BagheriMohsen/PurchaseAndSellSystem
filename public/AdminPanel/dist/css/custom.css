@@ -37,3 +37,21 @@
 .modal-header button.close{
     opacity: 1;
 }
+.switch-w-h{
+    width: 133.188px!important;
+    height: 45.875px!important;
+}
+.content-wrapper>.content{
+    padding: 0;
+}
+.dataTables_filter{
+    text-align: left;
+}
+.dataTables_filter label{
+    text-align: right;
+}
+.deleteConfirm button{
+    background: initial;
+    border: 0;
+    cursor: pointer;
+}

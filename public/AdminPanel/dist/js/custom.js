@@ -85,7 +85,7 @@ $(document).ready(function(){
                     <a  class="editTypeButton text-warning btn-sm d-none" href="#">
                         <i class="far fa-edit crud-icon"></i>
                     </a>
-                    <form class="pt-1" action="http://mastery-code.ir/types/${value.id}"  method="POST">
+                    <form class="pt-1" action="http://127.0.0.1:8000/types/${value.id}"  method="POST">
                         <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                         <input type="hidden" name="_method" value="UPDATE" />
                         <input type="hidden" name="product" value="${value.product_id}">
@@ -96,7 +96,7 @@ $(document).ready(function(){
                     <a  class="cancelEdit text-danger btn-sm d-none" href="#">
                         <i class="far fa-window-close crud-icon"></i>
                     </a>
-                        <form class="pt-1" action="http://mastery-code.ir/types/${value.id}"  method="POST">
+                        <form class="pt-1" action="http://127.0.0.1:8000/types/${value.id}"  method="POST">
                             <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                             <input type="hidden" name="_method" value="DELETE" />
                             <input type="hidden" name="product" value="${value.product_id}">
@@ -179,7 +179,7 @@ $(document).ready(function(){
     var getProductTypes = function(product_id,CSRF_TOKEN){
 
         $.ajax({
-            url:'http://mastery-code.ir/types/'+ product_id,
+            url:'http://127.0.0.1:8000/types/'+ product_id,
             type:'Get',
             success:function(response){
                 updateProductTypes(response,product_id,CSRF_TOKEN);
@@ -195,7 +195,6 @@ $(document).ready(function(){
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var product_id = $(this).find('input[name="product"]').val();
         var name = $(this).find('input[name="name"]').val();
-        console.log(actionUrl,CSRF_TOKEN,product_id,name);
         $.ajax({
             url:actionUrl,
             type:'post',
@@ -279,9 +278,7 @@ $(document).ready(function(){
 
     //Updating special tariff table data
     var updateSpecialTariff = function(specialList,user_id,CSRF_TOKEN,product_name){
-        console.log(specialList);
-        var specialList = specialList[specialList.length - 1];
-        console.log(specialList);
+        var newSpecial = specialList[specialList.length - 1];
         var user_id = user_id;
         var special_type_counter_id = '#specialCounter'+user_id;
         var special_modal_tbody_selector = '#special'+ user_id +' '+'tbody';
@@ -289,21 +286,21 @@ $(document).ready(function(){
         $(special_type_counter_id).html(specialList.length);
         // special_modal_tbody.innerHTML = '';
 
-        if(specialList.place == 'village'){
-            specialList.place = 'روستا';
-        }else if(specialList.place == 'internal'){
-            specialList.place = 'داخل شهر';
+        if(newSpecial.place == 'village'){
+            newSpecial.place = 'روستا';
+        }else if(newSpecial.place == 'internal'){
+            newSpecial.place = 'داخل شهر';
         }else{
-            specialList.place = 'حومه شهر';
+            newSpecial.place = 'حومه شهر';
         };
         special_modal_tbody.innerHTML +=`
         <tr class="text-center">
             
         <td>${product_name}</td>
-        <th>${specialList.price}</th>
-        <th>${specialList.place}</th>
+        <th>${newSpecial.price}</th>
+        <th>${newSpecial.place}</th>
         <td>
-          <form  action="http://mastery-code.ir/special-tariffs/${specialList.id}" method="post" >
+          <form  action="http://127.0.0.1:8000/special-tariffs/${newSpecial.id}" method="post" >
               <input type="hidden" name="_token" value="${CSRF_TOKEN}" />
               <input type="hidden" name="_method" value="DELETE" />
               <input type="hidden" name="user_id" value="${user_id}">
@@ -341,7 +338,7 @@ $(document).ready(function(){
     //Getting special tariff table data
     var getSpecialTariff = function(user_id,CSRF_TOKEN,product_name){
         $.ajax({
-            url:'http://mastery-code.ir/special-tariffs-index/'+ user_id,
+            url:'http://127.0.0.1:8000/special-tariffs-index/'+ user_id,
             type:'Get',
             success:function(response){
                 updateSpecialTariff(response,user_id,CSRF_TOKEN,product_name);
@@ -491,7 +488,7 @@ $(document).ready(function(){
     if(document.querySelector('#orderForm')){
         // Getting product list for seller order table 
         $.ajax({
-            url:'http://mastery-code.ir/admin/orders/ProductList',
+            url:'http://127.0.0.1:8000/admin/orders/ProductList',
             type:'GET',
             success:function(response){
                 productList = response;
@@ -608,7 +605,7 @@ $(document).ready(function(){
         $('#cityAgent').html('');
         var cityName = document.querySelector('#city').selectedOptions[0].innerText;
         $.ajax({
-            url:'http://mastery-code.ir/orders/AgentExistInState/' + cityName,
+            url:'http://127.0.0.1:8000/orders/AgentExistInState/' + cityName,
             type:'Get',
             success:function(response){
                 if(response.state == 2){
