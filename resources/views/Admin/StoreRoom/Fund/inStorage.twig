@@ -56,7 +56,7 @@
                       <td class="timestamp">{{storeRoom.created_at}}</td>
                       {% else %}
                         <td class="timestamp">{{storeRoom.created_at}}</td>
-                        <td>{{storeRoom.in_date}}</td>
+                        <td class="justDate">{{storeRoom.in_date}}</td>
                       {% endif %}
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>

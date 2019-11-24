@@ -45,7 +45,7 @@
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
                       <td class="timestamp">{{storeRoom.created_at}}</td>
-                      <td>{{storeRoom.out_date|date('d-m-Y')}}</td>
+                      <td class="timestamp">{{storeRoom.out_date}}</td>
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                     </tr>

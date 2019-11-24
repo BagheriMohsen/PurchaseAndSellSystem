@@ -109,7 +109,7 @@
                     </div>
                     <div class="d-flex">
                         <div>تاریخ ارسال:</div>
-                        <div>{{storeRoom.created_at|date('Y-m-d')}}</div>
+                        <div class="timestamp">{{storeRoom.created_at}}</div>
                     </div>
                  <a  class="btn btn-success btn-sm text-dark"
                     href="{{ route('storeRooms.acceptMainReceive',storeRoom.id) }}">

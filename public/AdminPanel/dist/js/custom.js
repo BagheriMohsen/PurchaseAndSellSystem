@@ -666,6 +666,7 @@ $(document).ready(function(){
     }
     // Turn js date object to jalali date
     function gregorian_to_jalali(gy,gm,gd,h,m,s){
+        var result = '';
         g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
         if(gy > 1600){
             jy=979;
@@ -686,14 +687,24 @@ $(document).ready(function(){
         }
         jm=(days < 186)?1+parseInt(days/31):7+parseInt((days-186)/30);
         jd=1+((days < 186)?(days%31):((days-186)%30));
-        var hours = addZero(h);
-        var minutes = addZero(m);
-        var seconds = addZero(s);
-        return jy +'/' + jm + '/' + jd + ' ' + hours + ":" + minutes + ":" + seconds;
+        result = jy +'/' + jm + '/' + jd;
+
+        if(h && m && s){
+            var hours = addZero(h);
+            var minutes = addZero(m);
+            var seconds = addZero(s);
+            result += ' ' + hours + ":" + minutes + ":" + seconds;
+        }
+        return result;
     }
     $('.timestamp').each(function(index,value){
         var jalaliTime = convertTimeStampToJalali(value.innerHTML)
         value.innerHTML = (jalaliTime);
+    });
+    $('.justDate').each(function(index,value){
+        var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
+        var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+        value.innerHTML = jalaliDate;
     });
 });
 
