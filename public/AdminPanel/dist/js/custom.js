@@ -622,6 +622,10 @@ $(document).ready(function(){
             event.preventDefault();
         }
     });
+    // Add comma to numbers
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     //Overall value for store room table 
     if($('#storeRoomTable').length){
         var rowSum = $('#storeRoomTable .rowSum');
@@ -629,7 +633,7 @@ $(document).ready(function(){
         rowSum.each(function(index,value){
             overallSum += parseInt(value.innerText.replace(/\,/g,''));
         });
-        $('#overAllSum').html(overallSum);
+        $('#overAllSum').html(numberWithCommas(overallSum));
     }
     // Add comma to numeric inputs
     $('input.number').keyup(function(event) {
@@ -643,5 +647,7 @@ $(document).ready(function(){
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+    // Setup persian datepicker for date inputs
+    $(".persianDatePicker").pDatepicker();
 });
 

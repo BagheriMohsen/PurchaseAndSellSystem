@@ -49,10 +49,9 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('date')}}"  name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
-                        <label for="date-picker-example">تاریخ</label>
-                    </div>
-                  
+                        <input value="{{old('date')}}"  name="date" type="text"  class="form-control persianDatePicker cursor-pointer">
+                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                    </div>                  
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="product">محصول</label>
                         <select class="form-control" name="product">
@@ -158,8 +157,8 @@
                 <div class="row">
                     
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('date')}}" name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
-                        <label for="date-picker-example">تاریخ</label>
+                        <input value="{{old('date')}}" name="date" class="form-control persianDatePicker cursor-pointer">
+                        {# <label for="date-picker-example">تاریخ</label> #}
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
