@@ -60,9 +60,17 @@ $(document).ready(function(){
         }
     });
 
-    // Setup table for quick access to salesman sell amount
-    $('#sellerInfoTable,#productTable').DataTable();
-
+    // Order and Product section tables
+    $('#productTable,#orderTable').DataTable();
+    //User sections tables
+    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
+    //Dashboard tables
+    $('sellerInfoTable').DataTable();
+    //Store room tables
+    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
+    //Warehouse tables
+    $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
+    
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
         var CSRF_TOKEN = CSRF_TOKEN;
