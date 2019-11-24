@@ -65,12 +65,11 @@ $(document).ready(function(){
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
     //Dashboard tables
-    $('sellerInfoTable').DataTable();
+    $('#sellerInfoTable').DataTable();
     //Store room tables
     $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
     //Warehouse tables
     $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
-    
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
         var CSRF_TOKEN = CSRF_TOKEN;
@@ -636,5 +635,14 @@ $(document).ready(function(){
             event.preventDefault();
         }
     });
+    //Overall value for store room table 
+    if($('#storeRoomTable').length){
+        var rowSum = $('#storeRoomTable .rowSum');
+        var overallSum = 0;
+        rowSum.each(function(index,value){
+            overallSum += parseInt(value.innerText.replace(/\,/g,''));
+        });
+        $('#overAllSum').html(overallSum);
+    }
 });
 
