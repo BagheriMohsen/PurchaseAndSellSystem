@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  انبار به انبار نماینده ها 
+  ورودی انبار 
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'انبار به انبار نماینده ها'} %}
+  {% include 'Admin/Master/path' with {'title':'ورودی انبار'} %}
 {% endblock %}
 
 {% block content %}
@@ -26,12 +26,16 @@
                   <tr class="text-center">
                     <th>تصویر</th>
                     <th>کالا</th>
-                    <th>انبار نماینده مبدا</th>
-                    <th>انبار نماینده مقصد</th>
+                    <th>انبار مبدا</th>
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
-                    <th>تاریخ خروج</th>
+                    {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
+                    <th>تاریخ ورود</th>
+                    {% else %}
+                    <th>تاریخ ارسال</th>
+                    <th>تاریخ دریافت</th>
+                    {% endif %}
                     <th >جمع(تومان)</th>
                   </tr>
                   </thead>
@@ -40,12 +44,20 @@
                     <tr class="text-center">
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
-                      <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
-                      <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
+                      {% if storeRoom.sender_id == 2 %}
+                        <td>{{'انبار تنخواه'}}</td>
+                      {% else %}    
+                        <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
+                      {% endif %}
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
-                      <td>{{storeRoom.created_at|date('d-m-Y')}}</td>
+                      {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
+                      <td>{{storeRoom.created_at}}</td>
+                      {% else %}
+                        <td>{{storeRoom.created_at.toDateString()}}</td>
+                        <td>{{storeRoom.in_date}}</td>
+                      {% endif %}
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                     </tr>

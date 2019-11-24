@@ -224,22 +224,22 @@ class StartingSeeder extends Seeder
         |*/
         #1
           'App\Warehouse'::create([
-            'user_id'       =>  1,
+            'user_id'       =>  3,
             'name'          =>  "انبار مادر",
             'city_id'       =>  1,
             'description'   =>  "",
             'address'       =>  "قم-خیابان ارم",
-            'telephon'      =>  "",
+            'telephone'      =>  "",
             'postalCard'    =>  "" 
         ]);
         #2
         'App\Warehouse'::create([
-          'user_id'       =>  1,
+          'user_id'       =>  4,
           'name'          =>  "انبار تنخواه",
           'city_id'       =>  1,
           'description'   =>  "",
           'address'       =>  "قم-خیابان ارم",
-          'telephon'      =>  "",
+          'telephone'      =>  "",
           'postalCard'    =>  "" 
       ]);
       /*
@@ -282,9 +282,24 @@ class StartingSeeder extends Seeder
       'App\OrderStatus'::create(['name'=>'معلق']);
       'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
       'App\OrderStatus'::create(['name'=>'خام']);
-
-
-
+      /*
+      |--------------------------------------------------------------------------
+      | Store Room Status
+      |--------------------------------------------------------------------------
+      |*/
+      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار مادر']);
+      'App\StoreRoomStatus'::create(['name'=>'ارسال به انبار تنخواه']);
+      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار مادر']);
+      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه']);
+      'App\StoreRoomStatus'::create(['name'=>'ورود از انبار مرکزی-پذیرفته نشده']);
+      'App\StoreRoomStatus'::create(['name'=>'ورود از انبار مرکزی-پذیرفته شده']);
+      'App\StoreRoomStatus'::create(['name'=>'ارسال به نماینده']);
+      'App\StoreRoomStatus'::create(['name'=>'انبار به انبار نماینده']);
+      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار تنخواه']);
+      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته نشده']);
+      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
+      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار نماینده']);
+      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه']);
     }
 
 

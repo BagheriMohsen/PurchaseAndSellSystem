@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  ورود از انبار تنخواه 
+  ورودی های تایید نشده 
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'ورود از انبار تنخواه '} %}
+  {% include 'Admin/Master/path' with {'title':'ورودی های تایید نشده'} %}
 {% endblock %}
 
 {% block content %}
@@ -26,6 +26,7 @@
                   <tr class="text-center">
                     <th>تصویر</th>
                     <th>کالا</th>
+                    <th>انبار مبدا</th>
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
@@ -39,6 +40,11 @@
                     <tr class="text-center">
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
+                      {% if storeRoom.sender_id == 2 %}
+                        <td>{{'انبار تنخواه'}}</td>
+                      {% else %}    
+                        <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
+                      {% endif %}
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>

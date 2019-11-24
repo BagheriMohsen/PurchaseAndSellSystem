@@ -70,6 +70,7 @@
             <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.username )}}" >
                 <i class="far fa-user crud-icon text-primary"></i>
             </a>
+
             <a  class="text-success" data-toggle="modal" href="#special{{user.id}}">
               <sub class="text-success">
                 {{user.tariffs.count()}}
@@ -82,6 +83,12 @@
             <a href="{{route('users.destroy',user.id)}}" >
               <i class="far fa-trash-alt crud-icon text-danger"></i>
             </a>
+            {% if role != "admin" %}
+                <a title="ورود به اکانت" class="text-primary mx-auto"
+                    href="{{ route('users.switchAccount',user.id) }}">
+                    <i class="fas fa-sign-in-alt crud-icon"></i>
+                </a>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}

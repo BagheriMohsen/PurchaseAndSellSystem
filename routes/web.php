@@ -118,18 +118,22 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/in','StoreRoomController@inStorage')->name('in');
       Route::get('/out','StoreRoomController@outStorage')->name('out');
       Route::get('/storageManage','StoreRoomController@storageManage')->name('storageManage');
+      Route::get('/returnFromFund','StoreRoomController@returnFromFund')->name('returnFromFund');
       /* FundWareHouse */
       Route::get('/mainReceive','StoreRoomController@mainReceive')->name('mainReceive');
       Route::get('/acceptMainReceive/{id}','StoreRoomController@acceptMainReceive')->name('acceptMainReceive');
       Route::get('/AgentExchangesForm','StoreRoomController@AgentExchangesForm')->name('AgentExchangesForm');
       Route::post('/sendToAgent','StoreRoomController@sendToAgent')->name('sendToAgent');
       Route::post('/AgentToAgent','StoreRoomController@AgentToAgent')->name('AgentToAgent');
-      Route::get('AgentExchangeStorage','StoreRoomController@AgentExchangeStorage')->name('AgentExchangeStorage');
-      Route::get('SendToAgentList','StoreRoomController@SendToAgentList')->name('SendToAgentList');
+      Route::get('/AgentExchangeStorage','StoreRoomController@AgentExchangeStorage')->name('AgentExchangeStorage');
+      Route::get('/SendToAgentList','StoreRoomController@SendToAgentList')->name('SendToAgentList');
+      Route::get('/returnFromAgents','StoreRoomController@returnFromAgents')->name('returnFromAgents');
       /* AgentWareHouse */
-      Route::get('/FundReceive','StoreRoomController@FundReceive')->name('FundReceive');
+      Route::get('/AgentReceive','StoreRoomController@AgentReceive')->name('AgentReceive');
       Route::get('/acceptFundReceive/{id}','StoreRoomController@acceptFundReceive')->name('acceptFundReceive');
       Route::get('/AgentIndexWarehouse','StoreRoomController@AgentIndexWarehouse')->name('AgentIndexWarehouse');
+      Route::get('/AgentOut','StoreRoomController@AgentOut')->name('AgentOut');
+      Route::get('/AgentIn','StoreRoomController@AgentIn')->name('AgentIn');
     });
 
 /*

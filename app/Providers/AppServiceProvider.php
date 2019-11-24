@@ -57,10 +57,10 @@ class AppServiceProvider extends ServiceProvider
                 $role = Role::where('name',$roleName)->firstOrFail();
 
                 if($roleName == "agent" || $roleName == "agentChief"){
-                    $notifs = 'App\StoreRoom'::where(['rcv_agent_id'=>$user->id,'in_out'=>'sendToAgent'])
+                    $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
                 }elseif($roleName == "fundWarehouser"){
-                    $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>'sendToFund'])
+                    $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>5])
                     ->count();
                 }else{
                     $notifs = 0;

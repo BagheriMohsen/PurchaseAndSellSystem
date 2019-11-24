@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  انبار به انبار نماینده ها 
+  برگشت کالا از انبار نماینده 
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'انبار به انبار نماینده ها'} %}
+  {% include 'Admin/Master/path' with {'title':'برگشت کالا از انبار نماینده'} %}
 {% endblock %}
 
 {% block content %}
@@ -26,8 +26,6 @@
                   <tr class="text-center">
                     <th>تصویر</th>
                     <th>کالا</th>
-                    <th>انبار نماینده مبدا</th>
-                    <th>انبار نماینده مقصد</th>
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
@@ -40,8 +38,6 @@
                     <tr class="text-center">
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
-                      <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
-                      <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>

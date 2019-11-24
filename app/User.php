@@ -89,7 +89,15 @@ class User extends Authenticatable implements HasMedia
     | Releation with StoreRoom Model
     |--------------------------------------------------------------------------
     */
-    public function storeRooms(){
+    public function receives(){
+        return $this->hasMany('App\StoreRoom');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with StoreRoom Model
+    |--------------------------------------------------------------------------
+    */
+    public function sends(){
         return $this->hasMany('App\StoreRoom');
     }
     /*

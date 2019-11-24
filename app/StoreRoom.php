@@ -10,11 +10,12 @@ class StoreRoom extends Model
    
     protected $fillable = [
       'user_id',
+      'agent_id',
       'product_id',
       'warehouse_id',
       'storage_id',
-      'rcv_agent_id',
-      'sender_agent_id',
+      'receiver_id',
+      'sender_id',
       'user_id',
       'number',
       'in_out',
@@ -25,11 +26,27 @@ class StoreRoom extends Model
     ];
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Releation with StoreRoomStatus Model
     |--------------------------------------------------------------------------
     */
-    public function user(){
-        return $this->belongsTo('App\User','agent_id','id');
+    public function status(){
+        return $this->belongsTo('App\StoreRoomStatus','in_out','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model - sender
+    |--------------------------------------------------------------------------
+    */
+    public function sender(){
+        return $this->belongsTo('App\User','sender_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model - receiver
+    |--------------------------------------------------------------------------
+    */
+    public function receiver(){
+        return $this->belongsTo('App\User','receiver_id','id');
     }
     /*
     |--------------------------------------------------------------------------
