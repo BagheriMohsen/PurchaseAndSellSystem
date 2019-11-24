@@ -1,64 +1,51 @@
 $(document).ready(function(){
+    var checkUserRole = function(){
+        var user_value = $('#user_role').val();
 
-    // enabled agent_id option when agent role selected in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '2'){
+        // enabled agent_id option when agent role selected in create&edit user page
+        if(user_value == '2'){
             $('#agent_id').parent().removeClass('d-none');
         }else{
             $('#agent_id').parent().addClass('d-none');
         }
-    });
-    // enabled callcenter_id option when seller role selected in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '4'){
+
+        // enabled callcenter_id option when seller role selected in create&edit user page
+        if(user_value == '4'){
             $('#callcenter_id').parent().removeClass('d-none');
         }else{
             $('#callcenter_id').parent().addClass('d-none');
         }
-    });
 
-    // enabled tariff inputs when agent and agent manager roles selected in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '2'){
+        // enabled tariff inputs when agent and agent manager roles selected in create&edit user page
+        if(user_value == '2'){
             $('#tariff_internal,#tariff_locally,#tariff_village').parent().removeClass('d-none');
         }else{
             $('#tariff_internal,#tariff_locally,#tariff_village').parent().addClass('d-none');
         }
-    });
-    // enabled commission input when seller role selected in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '4'){
+        // enabled commission input when seller role selected in create&edit user page
+        if(user_value == '4'){
             $('#porsantSeller').parent().removeClass('d-none');
         }else{
             $('#porsantSeller').parent().addClass('d-none');
         }
-    });
-
-    // Enable sending order, product return from warehouse and type of calculating product price for agent role in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '2'){
-            $('#send_order,#calType,#return_product').parent().parent().removeClass('d-none');
+        // Enable sending order, product return from warehouse and type of calculating product price for agent role in create&edit user page
+        if(user_value == '2'){
+            $('#send_order,#calType,#return_product').parents('.col-sm-4').removeClass('d-none');
         }else{
-            $('#send_order,#calType,#return_product').parent().parent().addClass('d-none');
+            $('#send_order,#calType,#return_product').parents('.col-sm-4').addClass('d-none');
         }
-    });
 
-    // Show callcenter fields and hide other fields when callcenter role selected in create&edit user page
-    $('#user_role').on('click',function(event){
-        var user_value = event.target.value;
-        if(user_value === '9'){
+        // Show callcenter fields and hide other fields when callcenter role selected in create&edit user page
+        if(user_value == '9'){
             $('.callcenterFields').removeClass('d-none');
             $('.otherRolesFields').addClass('d-none');
         }else{
             $('.callcenterFields').addClass('d-none');
             $('.otherRolesFields').removeClass('d-none');
         }
-    });
+    };
+    checkUserRole();
+    $('#user_role').on('change', checkUserRole);
 
     // Order and Product section tables
     $('#productTable,#orderTable').DataTable();
@@ -644,5 +631,17 @@ $(document).ready(function(){
         });
         $('#overAllSum').html(overallSum);
     }
+    // Add comma to numeric inputs
+    $('input.number').keyup(function(event) {
+
+        // skip for arrow keys
+        if(event.which >= 37 && event.which <= 40) return;
+        // format number
+        $(this).val(function(index, value) {
+            return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        });
+    });
 });
 

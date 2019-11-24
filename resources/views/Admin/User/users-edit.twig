@@ -72,7 +72,7 @@
       {# جنسیت #}
       {# نقش #}
       {% set userRole = user.getRoleNames().first() %}
-      <div class="col-sm-4 mb-4">
+      <div class="col-sm-4 mb-4 d-none">
         <select id="user_role" class="form-control"  name="role">
             <option selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
@@ -80,6 +80,16 @@
             {% endfor %}
         </select>
       </div>
+      <div class="col-sm-4 mb-4">
+        {% for role in roles %}
+            {% if userRole == role.name %}
+              <select class="form-control" Disabled>
+                <option>{{role.persianName}}</option>
+              </select>
+             {% endif %} 
+        {% endfor %}
+      </div>
+  
       {# نقش #}
 
     </div>
@@ -116,25 +126,25 @@
         <div class="col-12"></div>
         {#پورسانت فروشنده  #}
         <div class="col-sm-4 md-form mb-4 d-none">
-          <input type="text" id="porsantSeller" class="form-control" name="porsantSeller" value="{{user.porsantSeller}}">
+          <input type="text" id="porsantSeller" class="form-control number" name="porsantSeller" value="{{user.porsantSeller}}">
           <label for="porsantSeller">پورسانت</label>
         </div>
         {#پورسانت فروشنده #}
         {# تعرفه پایه داخلی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_internal" class="form-control" name="internal" value="{{user.internalPrice}}">
+            <input type="text" id="tariff_internal" class="form-control number" name="internal" value="{{user.internalPrice}}">
             <label for="tariff_internal">تعرفه پایه داخل</label>
         </div>
         {# تعرفه پایه داخلی #}
         {# تعرفه پایه حومهی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_locally" class="form-control" name="locally" value="{{user.locallyPrice}}">
+            <input type="text" id="tariff_locally" class="form-control number" name="locally" value="{{user.locallyPrice}}">
             <label for="tariff_locally">تعرفه پایه حومه</label>
         </div>
         {# تعرفه پایه حومه #}
         {# تعرفه پایه روستای #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_village" class="form-control" name="village" value="{{user.villagePrice}}">
+            <input type="text" id="tariff_village" class="form-control number" name="village" value="{{user.villagePrice}}">
             <label for="tariff_village">تعرفه پایه روستا</label>
         </div>
         {# تعرفه پایه روستا #}
@@ -419,6 +429,7 @@
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function() {
       $('.cities').select2();
+      
   });
   </script>
 {% endblock %}
