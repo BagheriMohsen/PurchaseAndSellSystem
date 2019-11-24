@@ -53,9 +53,9 @@
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
                       {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
-                      <td>{{storeRoom.created_at}}</td>
+                      <td class="timestamp">{{storeRoom.created_at}}</td>
                       {% else %}
-                        <td>{{storeRoom.created_at.toDateString()}}</td>
+                        <td class="timestamp">{{storeRoom.created_at}}</td>
                         <td>{{storeRoom.in_date}}</td>
                       {% endif %}
                       {% set price = storeRoom.product.price * storeRoom.number %}
