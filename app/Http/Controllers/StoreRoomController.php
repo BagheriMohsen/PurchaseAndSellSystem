@@ -463,7 +463,8 @@ class StoreRoomController extends Controller
             'status.required'           =>  'وضعیت را مشخص کنید'
         ]);
        
-        $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
+      
+        
         $status = 'App\Storage'::where([
             ['agent_id','=',$request->receiver],
             ['product_id','=',$request->product_id]
@@ -478,6 +479,7 @@ class StoreRoomController extends Controller
             $message = ' این میزان موجودی در انبار وجود ندارد.موجودی این کالا  '.$storage->number.' عدد در انبار است';
             return redirect()->back()->with('info',$message);
         }
+        $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
         /* IF this product is exist in agent storage */
         if($status == True){
             /* update storage for this houseware  */

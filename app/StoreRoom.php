@@ -22,7 +22,8 @@ class StoreRoom extends Model
       'description',
       'status',
       'in_date',
-      'out_date'  
+      'out_date',
+      'image' 
     ];
     /*
     |--------------------------------------------------------------------------
