@@ -1,4 +1,5 @@
 $(document).ready(function(){
+   
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
 
@@ -706,5 +707,41 @@ $(document).ready(function(){
         var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
         value.innerHTML = jalaliDate;
     });
+    // $(".waves-effect").click(function () {
+    //     toastr["info"]("I was launched via jQuery!")
+    // });
+    // toastr.info('Are you the 6 fingered man?')
+    // Calculating sent cargo to agent from tankhah warehouse in agentExchangeForm page
+    function getProductPrice(products,product_id){
+        var price = 0;
+        $.each(products,function(index,value){
+            if(value.id == product_id){
+               price = value.price;
+            }
+        });
+        return price;
+    }
+    function calculateCargoValue(){
+        var self = $(this);
+        $(this).find('.cargoValue').html('<i class="fas fa-spinner"></i>');
+        var product_id = $(this).find('select[name="product"]').val();
+        if(product_id){
+            $.ajax({
+                url:'http://127.0.0.1:8000/admin/orders/ProductList',
+                type:'GET',
+                success:function(response){
+                    var price = parseInt(getProductPrice(response,product_id));
+                    var number = parseInt(self.find('input[name="number"]').val());
+                    number = number || 0;
+                    self.find('.cargoValue').html(numberWithCommas(price*number));
+                }
+            });
+        }
+    }
+    $('#sendToAgentForm').on('change', calculateCargoValue);
+    $('#storeToStoreAgents').on('change', calculateCargoValue);
+    $('#productReceive').on('change', calculateCargoValue);
+    $('#productExit').on('change', calculateCargoValue);
+    $('#warehouseToTankhah').on('change', calculateCargoValue);
 });
 
