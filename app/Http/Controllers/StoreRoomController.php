@@ -19,12 +19,12 @@ class StoreRoomController extends Controller
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
-            $storages = 'App\Storage'::where('warehouse_id',1)->paginate();
+            $storages = 'App\Storage'::where('warehouse_id',1)->paginate(1000);
             $allProduct = 'App\Storage'::where('warehouse_id',1)->sum('number');
             
             
         }else{
-            $storages = 'App\Storage'::where('warehouse_id',2)->paginate();
+            $storages = 'App\Storage'::where('warehouse_id',2)->paginate(1000);
             $allProduct = 'App\Storage'::where('warehouse_id',2)->sum('number');
            
         }
@@ -303,7 +303,8 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnFromFund(){
-        return view('Admin.StoreRoom.Main.returnFromFund');
+        $storeRooms = StoreRoom::where(['receiver_id'=>1,'in_out'=>4])->latest()->paginate(1000);
+        return view('Admin.StoreRoom.Main.returnFromFund',compact('storeRooms'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -315,10 +316,10 @@ class StoreRoomController extends Controller
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>1,'in_out'=>1])->latest()->paginate(10);
+            $storeRooms = StoreRoom::where(['warehouse_id'=>1,'in_out'=>1])->latest()->paginate(1000);
             return view('Admin.StoreRoom.Main.inStorage',compact('storeRooms'));
         }elseif($role == "fundWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>6])->latest()->paginate(10);
+            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>6])->latest()->paginate(1000);
             return view('Admin.StoreRoom.Fund.inStorage',compact('storeRooms'));
         }else{
             return abort(404);
@@ -338,7 +339,7 @@ class StoreRoomController extends Controller
             $storeRooms = StoreRoom::where(['warehouse_id'=>1,'in_out'=>3])->latest()->paginate(10);
             return view('Admin.StoreRoom.Main.outStorage',compact('storeRooms'));
         }elseif($role == "fundWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>9])
+            $storeRooms = StoreRoom::where(['sender_id'=>2,'in_out'=>9])
             ->latest()->paginate(10);
             return view('Admin.StoreRoom.Fund.outStorage',compact('storeRooms'));
         }else{
@@ -462,7 +463,8 @@ class StoreRoomController extends Controller
             'status.required'           =>  'وضعیت را مشخص کنید'
         ]);
        
-        $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
+      
+        
         $status = 'App\Storage'::where([
             ['agent_id','=',$request->receiver],
             ['product_id','=',$request->product_id]
@@ -477,6 +479,7 @@ class StoreRoomController extends Controller
             $message = ' این میزان موجودی در انبار وجود ندارد.موجودی این کالا  '.$storage->number.' عدد در انبار است';
             return redirect()->back()->with('info',$message);
         }
+        $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
         /* IF this product is exist in agent storage */
         if($status == True){
             /* update storage for this houseware  */
@@ -601,7 +604,7 @@ class StoreRoomController extends Controller
         ])->first();
        
         $agent = 'App\User'::findOrFail($request->sender);
-        
+       
         
         if($status == True){
             /* IF storage number less than request number */
@@ -619,6 +622,7 @@ class StoreRoomController extends Controller
             ])->exists();
             $number = $sender_storage->number - $request->number;
             $sender_storage->update(['number'=>$number]);
+            
             // create store room for fundWareHouse
             StoreRoom::create([
                 'user_id'           =>  auth()->user()->id,
@@ -673,13 +677,160 @@ class StoreRoomController extends Controller
 
 
     }
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Return Product To Main WareHouse Storage
+    |--------------------------------------------------------------------------
+    |*/
+    public function returnToMain(Request $request){
+        $status = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',2]
+        ])->exists();
+
+        if($status == false){
+            return back()->with('message','این کالا در انبار موجود نیست');
+        }
+       
+        $fundWarestorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',2]
+        ])->first();
+        $mainWarestorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',1]
+        ])->first();
+        if($fundWarestorage->number > $request->number){
+            
+            // create store room for fundWareHouse
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $fundWarestorage->id,
+                'receiver_id'       =>  1,
+                'sender_id'         =>  2,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  9,
+                'out_date'          =>  $request->date
+            ]);
+            // create store room for mainWareHouse
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $fundWarestorage->id,
+                'receiver_id'       =>  1,
+                'sender_id'         =>  2,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  4,
+                'in_date'           =>  $request->date
+            ]);
+            // FundWareHouse Storage 
+            $numberInFundHouse = $fundWarestorage->number - $request->number;
+            $fundWarestorage->update(['number'=>$numberInFundHouse]);
+            // MainWareHouse Storage
+            $numberInMainHouse = $mainWarestorage->number + $request->number;
+            $mainWarestorage->update(['number'=>$numberInMainHouse]);
+            $message = 'این کالا به انبار مادر برگشت داده شد';
+            return back()->with('message',$message);
+    
+        }else{
+            $message = ' این میزان موجودی در انبار تنخواه موجود نیست  ';
+            $message .= ' در انبار این '.$fundWarestorage->number.' عدد از این محصول وجود دارد ';
+            return back()->with('message',$message);
+        }   
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Return To Fund Form Page
+    |--------------------------------------------------------------------------
+    |*/
+    public function returnToFundForm(){
+        $products = 'App\Product'::latest()->get();
+        return view('Admin.StoreRoom.Agent.returnToFund',compact('products'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Return Product To Fund WareHouse Storage
+    |--------------------------------------------------------------------------
+    |*/
+    public function returnToFund(Request $request){
+        $id = auth()->user()->id;
+        $status = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['agent_id','=',$id]
+        ])->exists();
+
+        if($status == false){
+            return back()->with('message','این کالا در انبار شما موجود نیست');
+        }
+       
+        $AgentStorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['agent_id','=',$id]
+        ])->first();
+        $FundWareStorage = 'App\Storage'::where([
+            ['product_id','=',$request->product],
+            ['warehouse_id','=',2]
+        ])->first();
+        if($AgentStorage->number > $request->number){
+            
+            // create store room for AgentStorage
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $AgentStorage->id,
+                'receiver_id'       =>  2,
+                'sender_id'         =>  $id,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  12,
+                'out_date'          =>  $request->date
+            ]);
+            // create store room for FundWareStorage
+            StoreRoom::create([
+                'user_id'           =>  auth()->user()->id,
+                'storage_id'        =>  $FundWareStorage->id,
+                'receiver_id'       =>  2,
+                'sender_id'         =>  $id,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'in_out'            =>  13,
+                'in_date'           =>  $request->date
+            ]);
+            // AgentWareHouse Storage 
+            $numberInAgent = $AgentStorage->number - $request->number;
+            $AgentStorage->update(['number'=>$numberInAgent]);
+            // FundWareHouse Storage
+            $numberInFundWare = $FundWareStorage->number + $request->number;
+            $FundWareStorage->update(['number'=>$numberInFundWare]);
+            $message = 'این کالا به انبار تنخواه برگشت داده شد';
+            return back()->with('message',$message);
+    
+        }else{
+            $message = ' این میزان موجودی در انبار شما موجود نیست  ';
+            $message .= ' در انبار شما '.$fundWarestorage->number.' عدد از این محصول وجود دارد ';
+            return back()->with('message',$message);
+        }  
+    }
     /*
     |--------------------------------------------------------------------------
     | Display list of product send to agents
     |--------------------------------------------------------------------------
     |*/
     public function SendToAgentList(){
-        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>7])->latest()->paginate(10);
+        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>7])->latest()->paginate(1000);
         return view('Admin.StoreRoom.Fund.SendToAgentList',compact('storeRooms'));
     }
     /*
@@ -688,7 +839,8 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnFromAgents(){
-        return view('Admin.StoreRoom.Fund.returnFromAgents');
+        $storeRooms = StoreRoom::where(['receiver_id'=>2,'in_out'=>13])->latest()->paginate(1000);
+        return view('Admin.StoreRoom.Fund.returnFromAgents',compact('storeRooms'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -696,7 +848,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentExchangeStorage(){
-        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>8])->latest()->paginate(10);
+        $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>8])->latest()->paginate(1000);
         return view('Admin.StoreRoom.Fund.AgentExchangeStorage',compact('storeRooms'));
     }
     /*

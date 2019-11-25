@@ -39,26 +39,26 @@
     {# نام #}
     <div class="row mx-4">
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx1" class="form-control" name="name" value="">
+        <input type="text" id="inputIconEx1" class="form-control" name="name" value="" required>
         <label for="inputIconEx1">نام</label>
       </div>
       {# نام #}
       {# نام خانوادگی #}
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx2" class="form-control" name="family" value="">
+        <input type="text" id="inputIconEx2" class="form-control" name="family" value="" required>
         <label for="inputIconEx2">نام خانوادگی</label>
       </div>
       {# نام خانوادگی  #}
       {# شماره تماس #}
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="">
+        <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="" required>
         <label for="inputIconEx3">شماره تماس</label>
       </div>
       {#شماره تماس #}
       {# جنسیت #}
       <div class="col-sm-4 mb-4">
         <select class="form-control "  name="sex" required>
-            <option selected>جنسیت کاربر را مشخص کنید</option>
+            <option  value="{{null}}" selected>جنسیت کاربر را مشخص کنید</option>
             <option  value="1">مرد</option>
             <option  value="0">زن</option>
         </select>
@@ -66,8 +66,8 @@
       {# جنسیت #}
       {# نقش #}
       <div class="col-sm-4 mb-4">
-        <select id="user_role" class="form-control"  name="role">
-            <option selected>نقش کاربر را مشخص کنید</option>
+        <select id="user_role" class="form-control"  name="role" required>
+            <option value="{{null}}" selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
             <option value="{{role.id}}" >{{role.persianName}}</option>
             {% endfor %}

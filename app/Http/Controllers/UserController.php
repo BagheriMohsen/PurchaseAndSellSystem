@@ -52,6 +52,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+       
          $user = User::create([
             'name'                  =>  $request->name,
             'family'                =>  $request->family,
@@ -68,14 +69,14 @@ class UserController extends Controller
             'reciveAuto'            =>  $request->reciveAuto,
             'callCenter'            =>  $request->callCenter,
             'agent_id'              =>  $request->agent_id,
-            'porsantSeller'         =>  $request->porsantSeller,
+            'porsantSeller'         =>  (float) str_replace(',', '', $request->porsantSeller),
             'percent'               =>  $request->percent,
             'calType'               =>  $request->calType,
             'calTypeCallCenter'     =>  $request->calTypeCallCenter,
             'callCenterType'        =>  $request->callCenterType,
-            'locallyPrice'          =>  $request->locally,
-            'internalPrice'         =>  $request->internal,
-            'villagePrice'          =>  $request->village,
+            'locallyPrice'          =>  (float) str_replace(',', '', $request->locally),
+            'internalPrice'         =>  (float) str_replace(',', '', $request->internal),
+            'villagePrice'          =>  (float) str_replace(',', '', $request->village),
             'allowNumber'           =>  $request->allowNumber,
             'allowNumberBack'       =>  $request->allowNumberBack,
             'allowNumberEdit'       =>  $request->allowNumberEdit,
@@ -132,6 +133,9 @@ class UserController extends Controller
       }else{
           $username = $user->username;
       }
+     
+
+        
       $user->update([
        'name'               =>  $request->name,
        'family'             =>  $request->family,
@@ -142,19 +146,19 @@ class UserController extends Controller
        'status'             =>  $request->status,
        'state_id'           =>  $request->state,
        'address'            =>  $request->address,
-       'uploadCS'           =>  $request->uploadCS,
+       'uploadCS'           =>  $user->uploadCS,
        'level'              =>  $request->level,
        'sendAuto'           =>  $request->sendAuto,
        'reciveAuto'         =>  $request->reciveAuto,
        'callCenter'         =>  $request->callCenter,
        'agent_id'           =>  $request->agent_id,
-       'porsantSeller'      =>  $request->porsantSeller,
+       'porsantSeller'      =>  (float) str_replace(',', '', $request->porsantSeller),
        'percent'            =>  $request->percent,
        'calType'            =>  $request->calType,
        'calTypeCallCenter'  =>  $request->calTypeCallCenter,
-       'locallyPrice'       =>  $request->locally,
-       'internalPrice'      =>  $request->internal,
-       'villagePrice'       =>  $request->village,
+       'locallyPrice'       =>  (float) str_replace(',', '', $request->locally),
+       'internalPrice'      =>  (float) str_replace(',', '', $request->internal),
+       'villagePrice'       =>  (float) str_replace(',', '', $request->village),
        'callCenterType'     =>  $request->callCenterType,
        'allowNumber'        =>  $request->allowNumber,
        'allowNumberBack'    =>  $request->allowNumberBack,
@@ -255,8 +259,8 @@ class UserController extends Controller
     | User Public Edit
     |--------------------------------------------------------------------------
     |*/
-    public function userPublicEdit($username){
-        $user = User::where('username',$username)->firstOrFail();
+    public function userPublicEdit($id){
+        $user = User::findOrFail($id);
         return view('Admin.User.users-edit-pass',compact('user'));
     }
     /*
@@ -264,13 +268,13 @@ class UserController extends Controller
     | User Public Update
     |--------------------------------------------------------------------------
     |*/
-    public function userPublicUpdate(Request $request,$username){
+    public function userPublicUpdate(Request $request,$id){
         $request->validate([
             'password'  =>  'required'
         ],[
             'password.required'  =>  'گذرواژه خالی ست'
         ]);
-        $user = User::where('username',$username)->firstOrFail();
+        $user = User::findOrFail($id);
        
         if($request->hasFile('image')){
             $media = $user->addMedia($request->File('image'))->toMediaCollection('Useravatar');
@@ -281,15 +285,20 @@ class UserController extends Controller
         }
         if($request->hasFile('uploadCS')){
             Storage::disk('public')->delete($user->uploadCS);
-            $uploadCS = Storage::disk('public')->put('UploadCS',$requst->uploadCS);
+            $uploadCS = Storage::disk('public')->put('UploadCS',$request->uploadCS);
             $user->update(['uploadCS'=>$uploadCS]);
+        }else{
+            $user->update(['uploadCS'=>$user->uploadCS]);
         }
         $user->update([
             'status'             =>  $request->status,
             'password'  =>  Hash::make($request->password)
         ]);
-        Auth::login($user);
-        return redirect()->route('users.public.edit',[$user->username])->with('message','مشخصات به روز رسانی شد');
+        if($user->id == auth()->user()->id){
+            Auth::login($user);
+        }
+        
+        return redirect()->route('users.public.edit',[$user->id])->with('message','مشخصات به روز رسانی شد');
     }
     /*
     |--------------------------------------------------------------------------

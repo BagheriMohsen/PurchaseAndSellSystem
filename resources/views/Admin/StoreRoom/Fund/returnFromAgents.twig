@@ -26,6 +26,7 @@
                   <tr class="text-center">
                     <th>تصویر</th>
                     <th>کالا</th>
+                    <th>انبار مبدا</th>
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
@@ -38,10 +39,11 @@
                     <tr class="text-center">
                       <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
                       <td>{{storeRoom.product.name}}</td>
+                      <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
-                      <td class="timestamp">{{storeRoom.created_at}}</td>
+                      <td class="timestamp">{{storeRoom.created_at | date('Y/m/d')}}</td>
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                     </tr>

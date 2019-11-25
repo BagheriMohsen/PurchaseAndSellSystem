@@ -85,7 +85,7 @@
                 
             </div>
             <div class="modal-body">
-                    <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" />
+                    {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
                     <div class="d-flex mt-3">
                         <div>نام:</div>
                         <div>{{storeRoom.product.name}}</div>
@@ -110,6 +110,10 @@
                     <div class="d-flex">
                         <div>تاریخ ارسال:</div>
                         <div class="timestamp">{{storeRoom.created_at}}</div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div>تصویر بارنامه:</div>
+                        <img class="col-sm-12" src="/storage/{{storeRoom.image}}" />
                     </div>
                  <a  class="btn btn-success btn-sm text-dark"
                     href="{{ route('storeRooms.acceptMainReceive',storeRoom.id) }}">
