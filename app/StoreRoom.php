@@ -15,6 +15,7 @@ class StoreRoom extends Model
       'warehouse_id',
       'storage_id',
       'receiver_id',
+      'transport_id',
       'sender_id',
       'user_id',
       'number',

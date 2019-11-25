@@ -462,7 +462,8 @@ class StoreRoomController extends Controller
             'transport.required'        =>  'وسیله ارسالی را مشخص کنید',
             'status.required'           =>  'وضعیت را مشخص کنید'
         ]);
-       
+            
+     
       
         
         $status = 'App\Storage'::where([
@@ -506,7 +507,7 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  7,
-                'in_date'       =>  $request->date
+                'out_date'      =>  $request->date
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -541,7 +542,8 @@ class StoreRoomController extends Controller
                 'description'   =>  $request->description,
                 'status'        =>  $request->status,
                 'image'         =>  $image,
-                'in_out'        =>  7
+                'in_out'        =>  7,
+                'out_date'      =>  $request->date
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -680,7 +682,7 @@ class StoreRoomController extends Controller
     
     /*
     |--------------------------------------------------------------------------
-    | Return Product To Main WareHouse Storage
+    | Return Product To Main WareHouse Storage-From Fund To Main
     |--------------------------------------------------------------------------
     |*/
     public function returnToMain(Request $request){
@@ -757,11 +759,17 @@ class StoreRoomController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
-    | Return Product To Fund WareHouse Storage
+    | Return Product To Fund WareHouse Storage-From Agent To Fund
     |--------------------------------------------------------------------------
     |*/
     public function returnToFund(Request $request){
         $id = auth()->user()->id;
+        $user = User::findOrFail($id);
+
+        if($user->backToWareHouse == null){
+            return back()->with('message','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
+        }
+
         $status = 'App\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$id]
@@ -863,7 +871,7 @@ class StoreRoomController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
-    | Accept Fund Receive
+    | Accept Fund Receive-In Agent Panel
     |--------------------------------------------------------------------------
     |*/
     public function acceptFundReceive($id){
@@ -891,7 +899,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update in_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد به موجودی انبار افزوده شد'; 
             return back()->with('message',$message);
         }else{
@@ -908,7 +916,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update in_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد برای اولین بار به انبار اضافه شد'; 
             return back()->with('message',$message);
         }
