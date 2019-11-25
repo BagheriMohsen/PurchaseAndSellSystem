@@ -21,42 +21,39 @@
     {% include 'Messages/message' %}
 
     <table  id="agentOutTable" class="table table-striped table-bordered table-sm" cellspacing="0"
-                width="100%">
-                  <thead>
-                  <tr class="text-center">
-                    <th>تصویر</th>
-                    <th>کالا</th>
-                    <th>انبار مقصد</th>
-                    <th>وضعیت</th>
-                    <th>توضیحات</th>
-                    <th>تعداد</th>
-                    <th>تاریخ خروج</th>
-                    <th>تاریخ دریافت</th>
-                    <th >جمع(تومان)</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                 {% for storeRoom in storeRooms %}
-                    <tr class="text-center">
-                      <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
-                      <td>{{storeRoom.product.name}}</td>
-                      {% if storeRoom.receiver_id == 2 %}
-                        <td>{{'انبار تنخواه'}}</td>
-                      {% else %}
-                        <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
-                      {% endif %}
-                      <td>{{storeRoom.status}}</td>
-                      <td>{{storeRoom.description}}</td>
-                      <td>{{storeRoom.number}}</td>
-                      <td class="timestamp">{{storeRoom.created_at}}</td>
-                      <td class="justDate">{{storeRoom.in_date}}</td>
-                      {% set price = storeRoom.product.price * storeRoom.number %}
-                      <td>{{ price|number_format}}</td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-
-                </table>
+        width="100%">
+          <thead>
+          <tr class="text-center">
+            <th>تصویر</th>
+            <th>کالا</th>
+            <th>انبار مقصد</th>
+            <th>وضعیت</th>
+            <th>توضیحات</th>
+            <th>تعداد</th>
+            <th>تاریخ خروج</th>
+            <th >جمع(تومان)</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for storeRoom in storeRooms %}
+            <tr class="text-center">
+              <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
+              <td>{{storeRoom.product.name}}</td>
+              {% if storeRoom.receiver_id == 2 %}
+                <td>{{'انبار تنخواه'}}</td>
+              {% else %}
+                <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
+              {% endif %}
+              <td>{{storeRoom.status}}</td>
+              <td>{{storeRoom.description}}</td>
+              <td>{{storeRoom.number}}</td>
+              <td class="timestamp">{{storeRoom.created_at | date('Y/m/d')}}</td>
+              {% set price = storeRoom.product.price * storeRoom.number %}
+              <td>{{ price|number_format}}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
 
                 
                 

@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}   
-  ارسال به نماینده
+  ورود و خروج
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'ارسال به نماینده'} %}
+  {% include 'Admin/Master/path' with {'title':'ورود و خروج'} %}
 {% endblock %}
 
 {% block content %}
@@ -49,8 +49,7 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('date')}}"  name="date" type="text"  class="form-control persianDatePicker cursor-pointer">
-                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                        <input type="date" value="{{old('date')}}" name="date" class="form-control  cursor-pointer">                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
                     </div>                  
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="product">محصول</label>
@@ -157,8 +156,7 @@
                 <div class="row">
                     
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('date')}}" name="date" class="form-control persianDatePicker cursor-pointer">
-                        {# <label for="date-picker-example">تاریخ</label> #}
+                        <input type="date" value="{{old('date')}}" name="date" class="form-control  cursor-pointer">                        {# <label for="date-picker-example">تاریخ</label> #}
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
@@ -271,8 +269,8 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('date')}}"  name="date" placeholder="Selected date" type="date" id="date-picker-example" class="form-control datepicker">
-                        <label for="date-picker-example">تاریخ</label>
+                        <input type="date" value="{{old('date')}}" name="date" class="form-control  cursor-pointer">
+                        {# <label for="date-picker-example">تاریخ</label> #}
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
@@ -304,7 +302,7 @@
                     </div>
                     {# description #}
                     {# transports #}
-                    <div class="col-sm-8 mt-5 mx-auto">
+                    {# <div class="col-sm-8 mt-5 mx-auto">
                         <label for="transport">وسیله ارسال</label>
                         <select class="form-control" name="transport">
                             <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
@@ -312,7 +310,7 @@
                             <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
                         {% endfor %}
                         </select>
-                    </div>
+                    </div> #}
                     {# transports #}
                 </div>
             </div>
@@ -321,7 +319,7 @@
             <div class="col-sm-6">
                 <div class="row">
                     {# receiver #}
-                        <input type="hidden" name="status" value="برگشت کالا به انبار نماینده" />
+                        <input type="hidden" name="status" value="برگشت کالا به انبار مادر" />
                     {# receiver #}
                     
                 </div>

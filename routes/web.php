@@ -26,8 +26,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('callCenters','UserController@callCenter')->name('callCenters');
     Route::get('{id}/switchAccount','UserController@switchAccount')->name('switchAccount');
     Route::get('backToPerivouseAccount','UserController@backToPerivouseAccount')->name('backToPerivouseAccount');
-    Route::get('{username}/Myedit','UserController@userPublicEdit')->name('public.edit');
-    Route::put('{username}/Myupdate','UserController@userPublicUpdate')->name('public.update');
+    Route::get('{id}/Myedit','UserController@userPublicEdit')->name('public.edit');
+    Route::put('{id}/Myupdate','UserController@userPublicUpdate')->name('public.update');
     Route::get('uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
     Route::get('followUpManagerCityStore','UserController@followUpManagerCityStore')->name('followUpManager.cityStore');
     Route::get('followUpManagerCityClear/{CityName}','UserController@followUpManagerCityClear')->name('followUpManagerCityClear');
@@ -135,6 +135,8 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/AgentIndexWarehouse','StoreRoomController@AgentIndexWarehouse')->name('AgentIndexWarehouse');
       Route::get('/AgentOut','StoreRoomController@AgentOut')->name('AgentOut');
       Route::get('/AgentIn','StoreRoomController@AgentIn')->name('AgentIn');
+      Route::get('/returnToFundForm','StoreRoomController@returnToFundForm')->name('returnToFundForm');
+      Route::post('/returnToFund','StoreRoomController@returnToFund')->name('returnToFund');
     });
 
 /*

@@ -126,25 +126,25 @@
         <div class="col-12"></div>
         {#پورسانت فروشنده  #}
         <div class="col-sm-4 md-form mb-4 d-none">
-          <input type="text" id="porsantSeller" class="form-control number" name="porsantSeller" value="{{user.porsantSeller}}">
+          <input type="text" id="porsantSeller" class="form-control number" name="porsantSeller" value="{{user.porsantSeller | number_format }}">
           <label for="porsantSeller">پورسانت</label>
         </div>
         {#پورسانت فروشنده #}
         {# تعرفه پایه داخلی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_internal" class="form-control number" name="internal" value="{{user.internalPrice}}">
+            <input type="text" id="tariff_internal" class="form-control number" name="internal" value="{{user.internalPrice | number_format }}">
             <label for="tariff_internal">تعرفه پایه داخل</label>
         </div>
         {# تعرفه پایه داخلی #}
         {# تعرفه پایه حومهی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_locally" class="form-control number" name="locally" value="{{user.locallyPrice}}">
+            <input type="text" id="tariff_locally" class="form-control number" name="locally" value="{{user.locallyPrice | number_format }}">
             <label for="tariff_locally">تعرفه پایه حومه</label>
         </div>
         {# تعرفه پایه حومه #}
         {# تعرفه پایه روستای #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_village" class="form-control number" name="village" value="{{user.villagePrice}}">
+            <input type="text" id="tariff_village" class="form-control number" name="village" value="{{user.villagePrice | number_format }}">
             <label for="tariff_village">تعرفه پایه روستا</label>
         </div>
         {# تعرفه پایه روستا #}
