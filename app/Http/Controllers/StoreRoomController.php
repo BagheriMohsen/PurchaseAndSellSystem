@@ -542,8 +542,7 @@ class StoreRoomController extends Controller
                 'description'   =>  $request->description,
                 'status'        =>  $request->status,
                 'image'         =>  $image,
-                'in_out'        =>  7,
-                'out_date'      =>  $request->date
+                'out_date'      =>  7
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -764,12 +763,11 @@ class StoreRoomController extends Controller
     |*/
     public function returnToFund(Request $request){
         $id = auth()->user()->id;
-        $user = User::findOrFail($id);
+        $user = 'App\User'::findOrFail($id);
 
         if($user->backToWareHouse == null){
             return back()->with('message','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
         }
-
         $status = 'App\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$id]
