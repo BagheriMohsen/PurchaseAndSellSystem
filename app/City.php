@@ -8,6 +8,7 @@ class City extends Model
 {
     protected $fillable = [
       'name',
+      'state_id',
       'followUpManager'
     ];
 
@@ -16,8 +17,8 @@ class City extends Model
     | Releation with State Model
     |--------------------------------------------------------------------------
     */
-    public function states(){
-      return $this->hasMany('App\State');
+    public function state(){
+      return $this->belongsTo('App\State');
     }
     /*
     |--------------------------------------------------------------------------

@@ -13,21 +13,22 @@ class StartingSeeder extends Seeder
     {
         /*
         |--------------------------------------------------------------------------
-        | Create City
-        |--------------------------------------------------------------------------
-        |*/
-        'App\City'::create([
-            'name' => 'قم'
-          ]);
-        /*
-        |--------------------------------------------------------------------------
         | Create State
         |--------------------------------------------------------------------------
         |*/
         'App\State'::create([
             'name'    =>  'قم',
-            'city_id' =>  1
+        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | Create City
+        |--------------------------------------------------------------------------
+        |*/
+        'App\City'::create([
+            'name'      => 'قم',
+            'state_id'  =>  1
           ]);
+        
         /*
         |--------------------------------------------------------------------------
         | Create Users
@@ -42,6 +43,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  1,
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -65,6 +67,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  1,
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -88,6 +91,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  1,
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -111,6 +115,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  1,
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',

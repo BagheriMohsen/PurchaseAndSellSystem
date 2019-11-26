@@ -692,7 +692,7 @@ class StoreRoomController extends Controller
         ])->exists();
 
         if($status == false){
-            return back()->with('message','این کالا در انبار موجود نیست');
+            return back()->with('info','این کالا در انبار موجود نیست');
         }
        
         $fundWarestorage = 'App\Storage'::where([
@@ -767,7 +767,7 @@ class StoreRoomController extends Controller
         $user = 'App\User'::findOrFail($id);
 
         if($user->backToWareHouse == null){
-            return back()->with('message','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
+            return back()->with('info','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
         }
         $status = 'App\Storage'::where([
             ['product_id','=',$request->product],
@@ -775,7 +775,7 @@ class StoreRoomController extends Controller
         ])->exists();
 
         if($status == false){
-            return back()->with('message','این کالا در انبار شما موجود نیست');
+            return back()->with('info','این کالا در انبار شما موجود نیست');
         }
        
         $AgentStorage = 'App\Storage'::where([
@@ -898,7 +898,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update out_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد به موجودی انبار افزوده شد'; 
             return back()->with('message',$message);
         }else{
@@ -915,7 +915,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['out_date'=>Carbon::now()]);// update out_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update out_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد برای اولین بار به انبار اضافه شد'; 
             return back()->with('message',$message);
         }

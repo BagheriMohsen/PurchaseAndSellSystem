@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
         | cities table
         |--------------------------------------------------------------------------
         |*/
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('states', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->timestamps();
@@ -29,18 +29,15 @@ class CreateUsersTable extends Migration
         | states table
         |--------------------------------------------------------------------------
         |*/
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('image_id')->unsigned()->nullable();
-            $table->bigInteger('city_id')->unsigned();
+            $table->bigInteger('state_id')->unsigned();
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')
+            $table->foreign('state_id')->references('id')->on('cities')
             ->onUpdate('cascade')->onDelete('cascade');
-            
-            $table->foreign('image_id')->references('id')->on('media')
-            ->onDelete('CASCADE')->onUpdate('CASCADE');
+
         });
         /*
         |--------------------------------------------------------------------------
@@ -51,8 +48,8 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('image_id')->unsigned()->nullable();
             $table->bigInteger('agent_id')->unsigned()->nullable();
-            $table->bigInteger('city_id')->unsigned();
-            $table->bigInteger('state_id')->unsigned();
+            $table->bigInteger('city_id')->unsigned()->nullable();
+            $table->bigInteger('state_id')->unsigned()->nullable();
             $table->string('username');
             $table->string('password');
             $table->string('name');

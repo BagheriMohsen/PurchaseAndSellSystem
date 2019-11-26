@@ -25,8 +25,6 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->bigInteger('seller_id')->unsigned()->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
-            $table->bigInteger('status')->unsigned()->nullable();
-            $table->bigInteger('lastStatus')->unsigned()->nullable();
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
@@ -53,11 +51,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('state_id')->references('id')->on('states')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('status')->references('id')->on('order_statuses')
-            ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->foreign('lastStatus')->references('id')->on('order_statuses')
-            ->onUpdate('cascade')->onDelete('cascade');
+            
 
 
         });
@@ -117,7 +111,6 @@ class CreateOrdersTable extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->Date('payDate')->nullable();
-            $table->Integer('amount')->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')

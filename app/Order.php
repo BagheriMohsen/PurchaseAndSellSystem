@@ -9,7 +9,11 @@ class Order extends Model
    protected $fillable = [
     'city_id',
     'state_id',
-    'status_id',
+    'status',
+    'lastStatus',
+    'seller_id',
+    'agent_id',
+    'pay_id',
     'mobile',
     'telephone',
     'fullName',
@@ -21,6 +25,7 @@ class Order extends Model
     'description',
     'postalCode',
     'address',
+    'addressConfirm',
     'HBD_Date',
    
    ];

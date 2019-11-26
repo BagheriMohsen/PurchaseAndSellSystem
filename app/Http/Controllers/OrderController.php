@@ -42,7 +42,9 @@ class OrderController extends Controller
         $order = Order::create([
             'city_id'       =>      $request->city,
             'state_id'      =>      $request->state,
-            'status_id'     =>      1,
+            'status'        =>      1,
+            'lastStatus'    =>      0,
+            'seller_id'     =>      auth()->user()->id,
             'mobile'        =>      $request->mobile,
             'telephone'     =>      $request->telephone,
             'fullName'      =>      $request->fullName,
