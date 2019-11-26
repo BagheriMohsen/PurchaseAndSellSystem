@@ -595,23 +595,27 @@ $(document).ready(function(){
         $('#overallPrice').html(overallPrice);
     });
     //Checking if city has agent exist when seller gives order
-    $('#orderForm #city').on('click',function(event){
+    $('#orderForm #city').on('change',function(event){
         event.preventDefault();
         $('#cityAgent').html('');
-        var cityName = document.querySelector('#city').selectedOptions[0].innerText;
-        $.ajax({
-            url:'http://127.0.0.1:8000/orders/AgentExistInState/' + cityName,
-            type:'Get',
-            success:function(response){
-                if(response.state == 2){
-                    $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
-                }else if(response.state == 1){
-                    $('#cityAgent').html('<span class="text-secondary">'+ response.message +'</span>');
-                }else{
-                    $('#cityAgent').html('<span class="text-danger">'+ response.message +'</span>');
+        var city = document.querySelector('#city');
+        if(city.value){
+            var cityName = city.selectedOptions[0].innerText;
+            console.log(cityName);
+            $.ajax({
+                url:'http://127.0.0.1:8000/admin/orders/AgentExistInState/' + cityName,
+                type:'Get',
+                success:function(response){
+                    if(response.state == 2){
+                        $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
+                    }else if(response.state == 1){
+                        $('#cityAgent').html('<span class="text-secondary">'+ response.message +'</span>');
+                    }else{
+                        $('#cityAgent').html('<span class="text-danger">'+ response.message +'</span>');
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 
     // Confirm before delete for all delete buttons in all pages
