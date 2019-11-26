@@ -57,9 +57,15 @@ class OrderController extends Controller
             'HBD_Date'      =>      $request->HBD_Date
         ]);
         
-        foreach($request->orderArray as $item){
+        // foreach($request->orderArray as $item){
 
-        }
+        //     'App\OrderProduct'::create([
+        //         'order_id'      =>  $oreder->id,
+        //         'product_id'    =>  $item->product,
+        //         'count'         =>  $item->count,
+        //         'off'           =>  $item->off
+        //     ]);
+        // }
 
         return back();
     }
@@ -131,11 +137,14 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentExistInState($StateName){
-        $state = 'App\State'::where('name',$StateName)->get()->first();
-        if($state != null){
-            $user = 'App\User'::where('state_id',$state->id)->Role(['agent','agentChief'])->get();
         
-            if($user->toArray() !== false){
+        $state = 'App\State'::where('name',$StateName)->exists();
+       
+        if($state == True){
+            $state = 'App\State'::where('name',$StateName)->get()->first();
+            $user = 'App\User'::where('state_id',$state->id)->Role(['agent','agentChief'])->get();
+           
+            if($user->toArray() != false){
                 $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده است','state'=>'2'];
                 return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
             }else{
