@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' %}
+  {% include 'Admin/Master/path' with {'title':'در انتظار تحویل'} %}
 {% endblock %}
 
 {% block content %}
@@ -54,36 +54,37 @@
                     </thead>
                     <tbody>
                     <tr>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
+                      <td>1398-06-03</td>
+                      <td>1398-06-03</td>
+                      <td>قم <br> قم</td>
+                      <td>آدرس</td>
+                      <td></td>
+                      <td>آقای محسنی</td>
+                      <td>0253324423 <br> 091921434</td>
+                      <td>صابون</td>
+                      <td>5000000</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>5000</td>
+                      <td>نقدی</td>
+                      <td>آقای فتحی</td>
+                      <td>توضیحات فروشنده</td>
+                      <td>توضیحات ارسال</td>
+                      <td>
+                        <a  class="text-secondary" href="#">
+                          <i class="fa fa-list-alt"></i>
+                        </a>
+                        <a  class="text-secondary" data-toggle="modal" href="#details">
+                          <i class="fa fa-list-ul"></i>
+                        </a>
+                        <a  class="text-success" data-toggle="modal" href="#condition">
+                          <i class="fa fa-cogs"></i>
+                        </a>
+                      </td>
                     </tr>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                      <th>موتور رندر</th>
-                      <th>مرورگر</th>
-                      <th>سیستم عامل</th>
-                      <th>ورژن</th>
-                      <th>امتیاز</th>
-                    </tr>
-                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->
@@ -97,7 +98,7 @@
                 تعیین وضعیت
                 <span class="text-danger">*</span>
               </label>
-              <select class="bg-light p-2 pb-2" name="status">
+              <select class="p-2 pb-2" name="status">
                 <option value="">گزینه ای انتخاب نشده</option>
                 <option value="">تحویل به مشتری(داخل شهری)</option>
                 <option value="">تحویل به مشتری(بیرون شهری)</option>
@@ -138,6 +139,47 @@
             </div>
           </from>
 
+<!-- Details modal -->
+<div class="modal fade " id="details">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead">جزئیات سفارش</p>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+        <div class="row">
+          <div class="col-6">
+            <table  id="orderTable" class="table" cellspacing="2"width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End details modal -->
+<!-- Order condition modal -->
+<div class="modal fade " id="condition">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead">جزئیات سفارش  </p>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+      </div>
+    </div>
+  </div>
+</div>
+<!--End details modal -->
 
 
 
