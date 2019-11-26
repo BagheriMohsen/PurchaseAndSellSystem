@@ -57,17 +57,16 @@ class OrderController extends Controller
             'HBD_Date'      =>      $request->HBD_Date
         ]);
         
-        // foreach($request->orderArray as $item){
-
-        //     'App\OrderProduct'::create([
-        //         'order_id'      =>  $oreder->id,
-        //         'product_id'    =>  $item->product,
-        //         'count'         =>  $item->count,
-        //         'off'           =>  $item->off
-        //     ]);
-        // }
-
-        return back();
+        foreach($request->orderArray as $item){
+            'App\OrderProduct'::create([
+                'order_id'      =>  $order->id,
+                'product_id'    =>  $item['product_id'],
+                'count'         =>  $item['count'],
+                'off'           =>  $item['off'],
+                'product_type'  =>  $item['type']
+            ]);
+        }
+        return Response()->json('سفارش با موفقیت ثبت شد',200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**

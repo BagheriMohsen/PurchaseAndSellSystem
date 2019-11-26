@@ -80,7 +80,7 @@ $(document).ready(function(){
                     <a  class="editTypeButton text-warning btn-sm d-none" href="#">
                         <i class="far fa-edit crud-icon"></i>
                     </a>
-                    <form class="pt-1" action="http://127.0.0.1:8000/types/${value.id}"  method="POST">
+                    <form class="pt-1" action="http://localhost:8000/types/${value.id}"  method="POST">
                         <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                         <input type="hidden" name="_method" value="UPDATE" />
                         <input type="hidden" name="product" value="${value.product_id}">
@@ -91,7 +91,7 @@ $(document).ready(function(){
                     <a  class="cancelEdit text-danger btn-sm d-none" href="#">
                         <i class="far fa-window-close crud-icon"></i>
                     </a>
-                        <form class="pt-1" action="http://127.0.0.1:8000/types/${value.id}"  method="POST">
+                        <form class="pt-1" action="http://localhost:8000/types/${value.id}"  method="POST">
                             <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                             <input type="hidden" name="_method" value="DELETE" />
                             <input type="hidden" name="product" value="${value.product_id}">
@@ -174,7 +174,7 @@ $(document).ready(function(){
     var getProductTypes = function(product_id,CSRF_TOKEN){
 
         $.ajax({
-            url:'http://127.0.0.1:8000/types/'+ product_id,
+            url:'http://localhost:8000/types/'+ product_id,
             type:'Get',
             success:function(response){
                 updateProductTypes(response,product_id,CSRF_TOKEN);
@@ -295,7 +295,7 @@ $(document).ready(function(){
         <th>${newSpecial.price}</th>
         <th>${newSpecial.place}</th>
         <td>
-          <form  action="http://127.0.0.1:8000/special-tariffs/${newSpecial.id}" method="post" >
+          <form  action="http://localhost:8000/special-tariffs/${newSpecial.id}" method="post" >
               <input type="hidden" name="_token" value="${CSRF_TOKEN}" />
               <input type="hidden" name="_method" value="DELETE" />
               <input type="hidden" name="user_id" value="${user_id}">
@@ -333,7 +333,7 @@ $(document).ready(function(){
     //Getting special tariff table data
     var getSpecialTariff = function(user_id,CSRF_TOKEN,product_name){
         $.ajax({
-            url:'http://127.0.0.1:8000/special-tariffs-index/'+ user_id,
+            url:'http://localhost:8000/special-tariffs-index/'+ user_id,
             type:'Get',
             success:function(response){
                 updateSpecialTariff(response,user_id,CSRF_TOKEN,product_name);
@@ -483,7 +483,7 @@ $(document).ready(function(){
     if(document.querySelector('#orderForm')){
         // Getting product list for seller order table 
         $.ajax({
-            url:'http://127.0.0.1:8000/admin/orders/ProductList',
+            url:'http://localhost:8000/admin/orders/ProductList',
             type:'GET',
             success:function(response){
                 productList = response;
@@ -605,7 +605,7 @@ $(document).ready(function(){
             var cityName = city.selectedOptions[0].innerText;
             console.log(cityName);
             $.ajax({
-                url:'http://127.0.0.1:8000/admin/orders/AgentExistInState/' + cityName,
+                url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
                 type:'Get',
                 success:function(response){
                     $('#agentStatue').val(response.state);
@@ -753,7 +753,7 @@ $(document).ready(function(){
         var product_id = $(this).find('select[name="product"]').val();
         if(product_id){
             $.ajax({
-                url:'http://127.0.0.1:8000/admin/orders/ProductList',
+                url:'http://localhost:8000/admin/orders/ProductList',
                 type:'GET',
                 success:function(response){
                     var price = parseInt(getProductPrice(response,product_id));

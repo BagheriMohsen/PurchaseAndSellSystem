@@ -441,6 +441,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function sendToAgent(Request $request){
+       
         $request->validate([
             'date'          =>  'required',
             'number'        =>  'required',
@@ -541,7 +542,8 @@ class StoreRoomController extends Controller
                 'description'   =>  $request->description,
                 'status'        =>  $request->status,
                 'image'         =>  $image,
-                'out_date'        =>  7
+                'in_out'        =>  7,
+                'out_date'      =>  $request->date
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
