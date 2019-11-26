@@ -35,7 +35,7 @@ class User extends Authenticatable implements HasMedia
         'address',
         'uploadCS',
         'level',
-        'reciveAuto',
+        'backToWareHouse',
         'sendAuto',
         'callCenter',
         'agent_id',
