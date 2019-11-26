@@ -528,7 +528,7 @@ $(document).ready(function(){
         var orderArray = [];
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
-            orderObject.name = value.querySelector('.productSelect').value;
+            orderObject.product_id = value.querySelector('.productSelect').value;
             orderObject.count = value.querySelector('input[name="count"]').value;
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
@@ -552,7 +552,7 @@ $(document).ready(function(){
         var status = form.find('input[name="status"]').val();
         var description = form.find('textarea[name="description"]').val();
         var formData = {
-            CSRF_TOKEN:CSRF_TOKEN,
+            _token:CSRF_TOKEN,
             mobile:mobile,
             telephone:telephone,
             state:state,

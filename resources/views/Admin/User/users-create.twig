@@ -153,7 +153,7 @@
             data-onstyle="success"
             data-offstyle="danger"
             data-onlabel="فعال"
-            data-offlabel="غیر فعال" name="reciveAuto">
+            data-offlabel="غیر فعال" name="backToWareHouse">
         </div>
         {# end auto send #}
         {# auto send #}
@@ -291,8 +291,8 @@
       </label>
       <select id="state" class="form-control"  name="state">
         <option value="{{null}}">استان را انتخاب کنید</option>
-        {% for state in states %}
-        <option value="{{state.id}}">{{state.name}}</option>
+        {% for city in cities %}
+        <option value="{{city.id}}">{{city.name}}</option>
         {% endfor %}
       </select>
     </div>
@@ -302,9 +302,9 @@
       </label>
       <select id="city" class="form-control" name="city">
         <option value="{{null}}">شهر را انتخاب کنید</option>
-        {% for city in cities %}
-        <option value="{{city.id}}">{{city.name}}</option>
-        {% endfor %}
+          {% for state in states %}
+            <option value="{{state.id}}">{{state.name}}</option>
+          {% endfor %}
       </select>
     </div>
     {# شهر  #}
