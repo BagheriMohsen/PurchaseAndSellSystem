@@ -81,7 +81,7 @@
       اطلاعات تخصصی
     </h4>
     <div class="col-12 mx-4 otherRolesFields">
-      <div class="row mx-4">
+      <div class="row">
         {#مدیر نماینده  #}
         <div class="col-sm-4 mb-4 d-none">
           <select id="agent_id" class="form-control"  name="agent_id">
@@ -152,8 +152,8 @@
             data-toggle="switchbutton"
             data-onstyle="success"
             data-offstyle="danger"
-            data-onlabel="خودکار"
-            data-offlabel="دستی" name="reciveAuto">
+            data-onlabel="فعال"
+            data-offlabel="غیر فعال" name="reciveAuto">
         </div>
         {# end auto send #}
         {# auto send #}
@@ -172,7 +172,7 @@
       </div>
     </div>
     <div class="col-12 mx-4 callcenterFields d-none">
-      <div class="row mx-4">
+      <div class="row">
             {# price calculation type #}
         <div class="col-sm-4 mb-4">
           <h6>نوع محاسبه هزینه کالا
@@ -285,9 +285,30 @@
     <h4 class="col-12 pt-2 pb-3">
     اطلاعات مکان
     </h4>
-
-    {# شهر  #}
+    {# state #}
     <div class="col-sm-5  mt-5">
+      <label for="state">استان
+      </label>
+      <select id="state" class="form-control"  name="state">
+        <option value="{{null}}">استان را انتخاب کنید</option>
+        {% for state in states %}
+        <option value="{{state.id}}">{{state.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {# city #}
+    <div class="col-sm-5  mt-5">
+      <label for="city">شهر
+      </label>
+      <select id="city" class="form-control" name="city">
+        <option value="{{null}}">شهر را انتخاب کنید</option>
+        {% for city in cities %}
+        <option value="{{city.id}}">{{city.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {# شهر  #}
+    {# <div class="col-sm-5  mt-5">
       <select class="cities col-12 bg-white" name="state">
         {% for city in cities %}
           <optgroup class="bg-info" label="{{city.name}}">
@@ -297,7 +318,7 @@
           </optgroup>
         {% endfor %}
       </select>
-    </div>
+    </div> #}
     {# شهر #}
     {# آدرس کامل #}
     <div class="md-form col-sm-7">
@@ -315,36 +336,36 @@
     حساب کاربری
     </h4>
     {# نام کاربری #}
-    <div class="md-form mb-4 col-sm-5">
+    <div class="col-sm-4 md-form mb-4">
         <input type="text" id="inputIconEx24" class="form-control" name="username" value=""  required>
         <label for="inputIconEx24">نام کاربری</label>
     </div>
     {# نام کاربری #}
     {# گذرواژه #}
     
-    <div class="md-form mb-4 col-sm-5">
+    <div class="col-sm-4 md-form mb-4">
         <input type="password" id="inputIconEx25" class="form-control" name="password" value="" required>
         <label for="inputIconEx25">گذرواژه</label>
     </div>
     {# گذرواژه #}
+    <div class="col-12"></div>
     {# وضعیت #}
-    <div class="col-sm-2 mt-5">
+    <div class="col-sm-4 mt-5">
       <h6>
         وضعیت کاربر
 
       </h6>
       <input type="checkbox"
-        data-size="sm"
         data-toggle="switchbutton"
         data-onstyle="success"
         data-offstyle="danger"
         data-onlabel="فعال"
-        data-offlabel="غیر فعال" name="status" >
+        data-offlabel="غیر فعال" name="status" checked>
     </div>
     {# وضعیت #}
-
+    
     <div class="col-12 text-center mt-5">
-      <button class="btn btn-success btn-sm col-2" type="submit" name="button">
+      <button class="btn btn-success" type="submit" name="button">
         <strong class="h6 text-dark">
           افزودن کاربر
         </strong>

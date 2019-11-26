@@ -43,30 +43,30 @@
 						ورود
 					</span>
 						@csrf
-						<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-							<input class="input100" type="text" name="username" placeholder="username">
+						<div class="wrap-input100 validate-input text-right" data-validate = "Valid email is required: ex@abc.xyz">
+							<input class="input100 text-right" type="text" name="username" placeholder="نام کاربری">
 							@error('username')
 									<span class="invalid-feedback" role="alert">
 											<strong>{{ $message }}</strong>
 									</span>
 							@enderror
 							<span class="focus-input100"></span>
-							<span class="symbol-input100">
+							{{-- <span class="symbol-input100">
 								<i class="far fa-user"></i>
-							</span>
+							</span> --}}
 						</div>
 
-						<div   class="wrap-input100 validate-input" data-validate = "Password is required">
-							<input class="input100" type="password" name="password" placeholder="Password">
+						<div   class="wrap-input100 validate-input text-right" data-validate = "Password is required">
+							<input class="input100 text-right" type="password" name="password" placeholder="گذرواژه">
 							@error('password')
 									<span class="invalid-feedback" role="alert">
 											<strong>{{ $message }}</strong>
 									</span>
 							@enderror
 							<span class="focus-input100"></span>
-							<span class="symbol-input100">
+							{{-- <span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
-							</span>
+							</span> --}}
 						</div>
 
 						<div class="container-login100-form-btn">

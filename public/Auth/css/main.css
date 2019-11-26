@@ -12,7 +12,7 @@
   font-family:dana-bold;
   src: url(../../AdminPanel/dist/font/dana-bold.woff);
 }
-body ,div,section,nav,li,ul,span,i
+body ,div,section,nav,li,ul,span,i,label,input
 {
   font-family: dana-reqular !important;
 }
