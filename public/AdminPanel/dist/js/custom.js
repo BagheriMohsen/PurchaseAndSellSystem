@@ -538,8 +538,8 @@ $(document).ready(function(){
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var mobile = form.find('input[name="mobile"]').val();
         var telephone = form.find('input[name="telephone"]').val();
-        var state = form.find('input[name="state"]').val();
-        var city = form.find('input[name="city"]').val();
+        var state_id = form.find('select[name="state"]').val();
+        var city_id = form.find('select[name="city"]').val();
         var fullName = form.find('input[name="fullName"]').val();
         var postalCode = form.find('input[name="postalCode"]').val();
         var HBD_Date = form.find('input[name="HBD_Date"]').val();
@@ -555,8 +555,8 @@ $(document).ready(function(){
             _token:CSRF_TOKEN,
             mobile:mobile,
             telephone:telephone,
-            state:state,
-            city:city,
+            state_id:state_id,
+            city_id:city_id,
             fullName:fullName,
             postalCode:postalCode,
             HBD_Date:HBD_Date,
@@ -566,7 +566,7 @@ $(document).ready(function(){
             cashAmount:cashAmount,
             prePrice:prePrice,
             checkPrice:checkPrice,
-            state:status,
+            status:status,
             description:description,
             orderArray:orderArray
         }
@@ -651,6 +651,11 @@ $(document).ready(function(){
     var isoDate;
     // Setup persian datepicker for date inputs
     $(".persianDatePicker").pDatepicker({
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
         format : 'YYYY-MM-DD',
         initialValue : false,
         onSelect: function(unix){
