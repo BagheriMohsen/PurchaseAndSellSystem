@@ -39,7 +39,7 @@ class Product extends Model implements HasMedia
     |--------------------------------------------------------------------------
     |*/
     public function orders(){
-        return $this->belongsToMany('App\Order');
+        return $this->hasMany('App\OrderProduct');
     }
     /*
     |--------------------------------------------------------------------------

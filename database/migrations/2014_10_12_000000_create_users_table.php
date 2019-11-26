@@ -51,6 +51,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('image_id')->unsigned()->nullable();
             $table->bigInteger('agent_id')->unsigned()->nullable();
+            $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('state_id')->unsigned();
             $table->string('username');
             $table->string('password');
@@ -89,6 +90,9 @@ class CreateUsersTable extends Migration
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->Foreign('state_id')->references('id')->on('states')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->Foreign('city_id')->references('id')->on('cities')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->Foreign('agent_id')->references('id')->on('users')

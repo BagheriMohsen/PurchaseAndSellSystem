@@ -15,4 +15,21 @@ class OrderProduct extends Model
         'count',
         'off'
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Releate to Product table
+    |--------------------------------------------------------------------------
+    |*/
+    public function product(){
+        return $this->belongsTo('App\Product');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate to Order table
+    |--------------------------------------------------------------------------
+    |*/
+    public function order(){
+        return $this->belongsTo('App\Order');
+    }
 }

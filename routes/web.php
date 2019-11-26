@@ -4,6 +4,15 @@
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
+Route::get('/order-test',function(){
+    'App\OrderProduct'::create([
+      'order_id'      =>  1,
+      'product_id'    =>  1,
+      'count'         =>  2,
+      'off'           =>  300,
+      'product_type'  =>  'test'
+  ]);
+});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');

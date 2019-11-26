@@ -541,7 +541,7 @@ class StoreRoomController extends Controller
                 'description'   =>  $request->description,
                 'status'        =>  $request->status,
                 'image'         =>  $image,
-                'out_date'        =>  7
+                'out_date'      =>  $request->date
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
