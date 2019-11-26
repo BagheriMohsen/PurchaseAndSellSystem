@@ -551,12 +551,14 @@ $(document).ready(function(){
         var checkPrice = form.find('input[name="checkPrice"]').val();
         var status = form.find('input[name="status"]').val();
         var description = form.find('textarea[name="description"]').val();
+        var agentStatue = form.find('#agentStatue').val();
         var formData = {
             _token:CSRF_TOKEN,
             mobile:mobile,
             telephone:telephone,
             state_id:state_id,
             city_id:city_id,
+            agentStatue:agentStatue,
             fullName:fullName,
             postalCode:postalCode,
             HBD_Date:HBD_Date,
@@ -606,6 +608,7 @@ $(document).ready(function(){
                 url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
                 type:'Get',
                 success:function(response){
+                    $('#agentStatue').val(response.state);
                     if(response.state == 2){
                         $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
                     }else if(response.state == 1){
