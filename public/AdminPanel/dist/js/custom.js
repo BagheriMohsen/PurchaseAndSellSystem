@@ -498,6 +498,7 @@ $(document).ready(function(){
             type:'GET',
             success:function(response){
                 productList = response;
+                console.log(response);
                 addOrderTable();
             }
         });
@@ -516,7 +517,7 @@ $(document).ready(function(){
                     typeSelect.innerHTML = '';
                     item.types.forEach(function(value){
                         typeSelect.innerHTML +=`
-                            <option value="${value.name}">${value.name}</option>
+                            <option value="${value.id}">${value.name}</option>
                         `;
                     });
                 }
