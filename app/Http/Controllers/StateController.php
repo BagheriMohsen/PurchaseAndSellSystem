@@ -114,7 +114,9 @@ class StateController extends Controller
     }
 
     public function AllStatesAndCitiesName(){
-        $states = State::with('cities')->latest()->get();
+        $states = State::with(array('cities'=>function($query){
+            $query->select('state_id','name');
+        }))->get();
         return Response()->json($states,200,[],JSON_UNESCAPED_UNICODE);
     }
 
