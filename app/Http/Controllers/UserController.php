@@ -39,9 +39,16 @@ class UserController extends Controller
 
         $roles          =   Role::latest()->get();
         $cities         =   'App\City'::latest()->get();
+        $states         =   'App\State'::latest()->get();
         $agentChiefs    =   User::Role('agentChief')->get();
         $callCenters    =   User::Role('callCenter')->get();
-        return view('Admin.User.users-create',compact('cities','roles','agentChiefs','callCenters'));
+        return view('Admin.User.users-create',compact(
+            'cities',
+            'states',
+            'roles',
+            'agentChiefs',
+            'callCenters'
+        ));
     }
 
     /**
@@ -62,6 +69,7 @@ class UserController extends Controller
             'mobile'                =>  $request->mobile,
             'status'                =>  $request->status,
             'state_id'              =>  $request->state,
+            'city_id'               =>  $request->city,
             'address'               =>  $request->address,
             'uploadCS'              =>  $request->uploadCS,
             'level'                 =>  $request->level,
@@ -111,11 +119,18 @@ class UserController extends Controller
     public function edit($id)
     {
       $roles  = Role::latest()->get();
-      $cities = 'App\City'::latest()->get();
+      $cities         =   'App\City'::latest()->get();
+      $states         =   'App\State'::latest()->get();
       $user = User::findOrFail($id);
       $agentChiefs    =   User::Role('agentChief')->get();
       $callCenters    =   User::Role('callCenter')->get();
-      return view('Admin.User.users-edit',compact('user','roles','cities','callCenters','agentChiefs'));
+      return view('Admin.User.users-edit',compact(
+          'user',
+          'roles',
+          'cities',
+          'states',
+          'callCenters',
+          'agentChiefs'));
     }
 
     /**
@@ -145,6 +160,7 @@ class UserController extends Controller
        'mobile'             =>  $request->mobile,
        'status'             =>  $request->status,
        'state_id'           =>  $request->state,
+       'city_id'            =>  $request->city,
        'address'            =>  $request->address,
        'uploadCS'           =>  $user->uploadCS,
        'level'              =>  $request->level,

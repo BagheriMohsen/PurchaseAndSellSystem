@@ -11,7 +11,14 @@ class City extends Model
       'state_id',
       'followUpManager'
     ];
-
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function users(){
+      return $this->hasMany('App\User');
+    }
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model
@@ -35,5 +42,13 @@ class City extends Model
     */
     public function followUpManager(){
       return $this->belongsTo('App\User','followUpManager','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orders(){
+      return $this->hasMany('App\Order');
     }
 }

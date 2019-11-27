@@ -27,7 +27,7 @@ class OrderController extends Controller
         
         $cities     = 'App\City'::latest()->get();
         $states     = 'App\State'::latest()->get();
-        return view('Admin.Order.order-create',compact('cities','states','products'));
+        return view('Admin.Order.Seller.order-create',compact('cities','states','products'));
     }
 
     /**
@@ -38,28 +38,37 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // $status = 'App\City'::find($request->city_id)->exists();
+
+        // if($status == True){
+        //     $city = 'App\City'::findOrFail($request->city_id);
+        //     $user = 'App\User'::where('city_id',$city->id)->Role('agent')->firstOrFail();
+            
         
+        // }
+
         $order = Order::create([
-            'city_id'       =>      $request->city,
-            'state_id'      =>      $request->state,
-            'status'        =>      1,
-            'lastStatus'    =>      0,
-            'seller_id'     =>      auth()->user()->id,
-            'mobile'        =>      $request->mobile,
-            'telephone'     =>      $request->telephone,
-            'fullName'      =>      $request->fullName,
-            'paymentMethod' =>      $request->paymentMethod,
-            'sendCost'      =>      $request->sendCost,
-            'prePrice'      =>      $request->prePrice,
-            'checkPrice'    =>      $request->checkPrice,
-            'status'        =>      $request->status,
-            'description'   =>      $request->description,
-            'postalCode'    =>      $request->postalCode,
-            'address'       =>      $request->address,
-            'HBD_Date'      =>      $request->HBD_Date
+            'city_id'           =>      $request->city_id,
+            'state_id'          =>      $request->state_id,
+            'status'            =>      1,
+            'lastStatus'        =>      1,
+            'seller_id'         =>      auth()->user()->id,
+            'mobile'            =>      $request->mobile,
+            'telephone'         =>      $request->telephone,
+            'fullName'          =>      $request->fullName,
+            'paymentMethod'     =>      $request->paymentMethod,
+            'shippingCost'      =>      $request->shippingCost,
+            'prePayment'        =>      $request->prePayment,
+            'cashPrice'         =>      $request->cashPrice,
+            'chequePrice'       =>      $request->chequePrice,
+            'instant'           =>      $request->instant,
+            'sellerDescription' =>      $request->sellerDescription,
+            'postalCode'        =>      $request->postalCode,
+            'address'           =>      $request->address,
+            'HBD_Date'          =>      $request->HBD_Date
         ]);
-        
-        foreach($request->orderArray as $item){
+        $items = $request->orderArray;
+        foreach($items as $item){
             'App\OrderProduct'::create([
                 'order_id'      =>  $order->id,
                 'product_id'    =>  $item['product_id'],
@@ -137,25 +146,36 @@ class OrderController extends Controller
     | Agent Exist In State?
     |--------------------------------------------------------------------------
     |*/
-    public function AgentExistInState($StateName){
+    public function AgentExistInState($CityName){
         
-        $state = 'App\State'::where('name',$StateName)->exists();
-       
-        if($state == True){
-            $state = 'App\State'::where('name',$StateName)->get()->first();
-            $user = 'App\User'::where('state_id',$state->id)->Role(['agent','agentChief'])->get();
+        $city = 'App\City'::where('name',$CityName)->exists();
+   
+        if($city == True){
+            $city = 'App\City'::where('name',$CityName)->get()->first();
+          
+            $user = 'App\User'::where('city_id',$city->id)->Role(['agent','agentChief'])->get();
            
             if($user->toArray() != false){
                 $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده است','state'=>'2'];
-                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
+                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$city);
             }else{
                 $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده نمیباشد.این ارسال توسط پست ارسال خواهد شد','state'=>'1'];
-                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
+                return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$city);
             }
         }else{
             $result = ['message'=>'خطای سیستم:شهری به این اسم وجود ندارد','state'=>'0'];
-            return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$state);
+            return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$city);
         }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Seller Orders Lists
+    |--------------------------------------------------------------------------
+    |*/
+    public function sellerOrdersLists(){
+        $orders = Order::latest()->paginate(10);
+        return view('Admin.Order.Seller.seller-orders',compact('orders'));
     }
 
     

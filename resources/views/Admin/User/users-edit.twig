@@ -304,19 +304,30 @@
     <h4 class="col-12 pt-2 pb-3">
     اطلاعات مکان
     </h4>
+   
     {# state #}
     <div class="col-sm-5  mt-5">
-        <label for="state">استان
-        </label>
-        <select id="state" class="form-control"  name="state">
-          <option value="{{null}}">استان را انتخاب کنید</option>
-          {% for state in states %}
-          <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
-          {# <option value="{{state.id}}">{{state.name}}</option> #}
-          {% endfor %}
-        </select>
-      </div>
+      <label for="state">استان
+      </label>
+      <select id="state" class="form-control"  name="state">
+        <option value="{{null}}">استان را انتخاب کنید</option>
+        {% for state in states %}
+        <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
     {# city #}
+    <div class="col-sm-5  mt-5">
+      <label for="city">شهر
+      </label>
+      <select id="city" class="form-control" name="city">
+        <option value="{{null}}">شهر را انتخاب کنید</option>
+          {% for city in cities %}
+            <option {% if city.id == user.city_id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>
+          {% endfor %}
+      </select>
+    </div>
+    {# city  #}
     <div class="col-sm-5  mt-5">
       <label for="city">شهر
       </label>
@@ -392,10 +403,10 @@
           <div class="input-group mb-3 md-form">
             {# <input name="CityName" placeholder="نام شهر را وارد کنید" id="inputValidationEx" type="text" class="form-control text-light"  required> #}
             <select name="CityName" class="form-control" required>
-              {% for city in cities %}
-                <optgroup label="{{city.name}}">
-                    {% for state in city.states %}
-                      <option  value="{{state.name}}">{{state.name}}</option>
+              {% for state in states %}
+                <optgroup label="{{state.name}}">
+                    {% for city in state.cities %}
+                      <option  value="{{city.name}}">{{city.name}}</option>
                     {% endfor %}
                 </optgroup>
               {% endfor %}

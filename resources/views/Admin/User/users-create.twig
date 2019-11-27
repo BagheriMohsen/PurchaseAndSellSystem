@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  {{'اقزودن کاربر'}}
+  {{'افزودن کاربر'}}
 {% endblock %}
 
 {% block header %}
@@ -291,8 +291,8 @@
       </label>
       <select id="state" class="form-control"  name="state">
         <option value="{{null}}">استان را انتخاب کنید</option>
-        {% for city in cities %}
-        <option value="{{city.id}}">{{city.name}}</option>
+        {% for state in states %}
+        <option value="{{state.id}}">{{state.name}}</option>
         {% endfor %}
       </select>
     </div>
@@ -302,12 +302,12 @@
       </label>
       <select id="city" class="form-control" name="city">
         <option value="{{null}}">شهر را انتخاب کنید</option>
-          {% for state in states %}
-            <option value="{{state.id}}">{{state.name}}</option>
+          {% for city in cities %}
+            <option value="{{city.id}}">{{city.name}}</option>
           {% endfor %}
       </select>
     </div>
-    {# شهر  #}
+    {# city  #}
     {# <div class="col-sm-5  mt-5">
       <select class="cities col-12 bg-white" name="state">
         {% for city in cities %}

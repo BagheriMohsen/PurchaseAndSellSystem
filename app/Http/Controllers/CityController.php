@@ -42,7 +42,7 @@ class CityController extends Controller
           ['name','=',$request->name],
           ['state_id','=',$request->state]
         ])->exists();
-
+          
         if($status != true){
           City::create([
             'name'    =>  $request->name,

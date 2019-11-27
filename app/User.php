@@ -32,6 +32,7 @@ class User extends Authenticatable implements HasMedia
         'mobile',
         'status',
         'state_id',
+        'city_id',
         'address',
         'uploadCS',
         'level',
@@ -107,6 +108,14 @@ class User extends Authenticatable implements HasMedia
     */
     public function state(){
       return $this->belongsTo('App\State');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with City Model
+    |--------------------------------------------------------------------------
+    */
+    public function city(){
+        return $this->belongsTo('App\City');
     }
     /*
     |--------------------------------------------------------------------------

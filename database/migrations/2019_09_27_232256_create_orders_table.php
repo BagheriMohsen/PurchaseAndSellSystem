@@ -24,25 +24,39 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('state_id')->unsigned()->nullable();
             $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->bigInteger('seller_id')->unsigned()->nullable();
+            $table->bigInteger('callCenter_id')->unsigned()->nullable();
+            $table->bigInteger('followUpManager_id')->unsigned()->nullable();
+            $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
             $table->string('paymentMethod')->nullable();
-            $table->integer('sendCost')->nullable();
-            $table->integer('prePrice')->nullable();
-            $table->integer('checkPrice')->nullable();
-            $table->text('description')->nullable();
+            $table->integer('shippingCost')->nullable();
+            $table->integer('prePayment')->nullable();
+            $table->integer('cashPrice')->nullable();
+            $table->integer('chequePrice')->nullable();
+            $table->text('sellerDescription')->nullable();
+            $table->text('sendDescription')->nullable();
             $table->string('postalCode')->nullable();
             $table->Date('HBD_Date')->nullable();
+            $table->Date('returnDate')->nullable();
+            $table->string('instant')->default('IsNot');
             $table->text('address')->nullable();
             $table->string('addressConfirm')->nullable();
+            $table->string('gift')->nullable();
             $table->timestamps();
 
             $table->foreign('agent_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('seller_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('callCenter_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('followUpManager_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('city_id')->references('id')->on('cities')

@@ -35,7 +35,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('state_id')->references('id')->on('cities')
+            $table->foreign('state_id')->references('id')->on('states')
             ->onUpdate('cascade')->onDelete('cascade');
 
         });

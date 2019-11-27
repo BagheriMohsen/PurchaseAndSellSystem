@@ -545,12 +545,12 @@ $(document).ready(function(){
         var HBD_Date = form.find('input[name="HBD_Date"]').val();
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
-        var sendCost = form.find('input[name="sendCost"]').val();
-        var cashAmount = form.find('input[name="cashAmount"]').val();
-        var prePrice = form.find('input[name="prePrice"]').val();
-        var checkPrice = form.find('input[name="checkPrice"]').val();
-        var status = form.find('input[name="status"]').val();
-        var description = form.find('textarea[name="description"]').val();
+        var shippingCost = form.find('input[name="shippingCost"]').val();
+        var cashPrice = form.find('input[name="cashPrice"]').val();
+        var prePayment = form.find('input[name="prePayment"]').val();
+        var chequePrice = form.find('input[name="chequePrice"]').val();
+        var instant = form.find('input[name="instant"]').val();
+        var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
         var formData = {
             _token:CSRF_TOKEN,
@@ -564,12 +564,12 @@ $(document).ready(function(){
             HBD_Date:HBD_Date,
             address:address,
             paymentMethod:paymentMethod,
-            sendCost:sendCost,
-            cashAmount:cashAmount,
-            prePrice:prePrice,
-            checkPrice:checkPrice,
-            status:status,
-            description:description,
+            shippingCost:shippingCost,
+            cashPrice:cashPrice,
+            prePayment:prePayment,
+            chequePrice:chequePrice,
+            instant:instant,
+            sellerDescription:sellerDescription,
             orderArray:orderArray
         }
         console.log(formData);

@@ -39,14 +39,14 @@
           <label for="mobile">موبایل(بدون صفر)
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="مثال:9106769465"name="mobile" value="" >
+          <input class="form-control bg-sec" type="text" name="mobile" value="" required>
         </div>
         {# landline-phone #}
         <div class="col-sm-3 mt-1">
           <label for="telephone">تلفن ثابت
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="مثال:9106769465"name="telephone" value="" >
+          <input class="form-control bg-sec" type="text" name="telephone" value="" required>
         </div>
         
         {# state #}
@@ -54,10 +54,10 @@
           <label for="city">استان
             <span class="text-danger">*</span>
           </label>
-          <select id="state" class="form-control bg-sec"  name="state">
+          <select id="state" class="form-control bg-sec"  name="state" required>
             <option value="{{null}}">استان را انتخاب کنید</option>
-            {% for city in cities %}
-            <option value="{{city.id}}">{{city.name}}</option>
+            {% for state in states %}
+            <option value="{{state.id}}">{{state.name}}</option>
             {% endfor %}
           </select>
         </div>
@@ -66,10 +66,10 @@
           <label for="state">شهر
             <span class="text-danger">*</span>
           </label>
-          <select id="city" class="form-control bg-sec" name="city">
+          <select id="city" class="form-control bg-sec" name="city" required>
             <option value="{{null}}">شهر را انتخاب کنید</option>
-            {% for state in states %}
-            <option value="{{state.id}}">{{state.name}}</option>
+            {% for city in cities %}
+            <option value="{{city.id}}">{{city.name}}</option>
             {% endfor %}
           </select>
           <div id="cityAgent" class="mt-2"></div>
@@ -85,14 +85,14 @@
                 <label for="fullName">نام و نام خانوادگی
                   <span class="text-danger">*</span>
                 </label>
-                <input class="form-control bg-sec" type="text" placeholder="محسن باقری"name="fullName" value="" >
+                <input class="form-control bg-sec" type="text" name="fullName" value="" required>
               </div>
               {# code #}
               <div class="col-sm-6 mt-4">
                 <label for="postalCode">کد پستی
                   <span class="text-danger">*</span>
                 </label>
-                <input class="form-control bg-sec" type="text" placeholder="محسن باقری"name="postalCode" value="" >
+                <input class="form-control bg-sec" type="text"  name="postalCode" value="" >
               </div>
               {# HBD #}
               <div class="col-sm-6 mt-4">
@@ -110,7 +110,7 @@
           <label for="address">آدرس
             <span class="text-danger">*</span>
           </label>
-          <textarea rows="5" cols="50" class="form-control bg-sec" type="text" placeholder="مثال:9106769465" name="address" value=""></textarea>
+          <textarea rows="5" cols="50" class="form-control bg-sec" type="text"  name="address" value=""></textarea>
         </div>
       </div>
       <div class="row mt-5 bg-white pt-3 pb-3">
@@ -140,12 +140,12 @@
         </h4>
 
         <div class="col-sm-2">
-          <input class=" bg-sec" type="radio" placeholder="100" name="paymentMethod" value="cash" checked>
+          <input class=" bg-sec" type="radio"  name="paymentMethod" value="cash" checked>
           <label for="paymentMethod">نقدی
           </label>
 
           <br />
-          <input class=" bg-sec" type="radio" placeholder="100" name="paymentMethod" value="nocash" >
+          <input class=" bg-sec" type="radio" name="paymentMethod" value="nocash" >
           <label for="paymentMethod">غیر نقدی
           </label>
 
@@ -154,46 +154,46 @@
           <label for="sendCost">هزینه ارسال
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="100" name="sendCost" value="">
+          <input class="form-control bg-sec" type="text"  name="shippingCost" value="">
         </div>
 
         <div class="col-sm-3">
           <label for="cashAmount">مبلغ پرداخت نقدی
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="100" name="cashAmount" value="" >
+          <input class="form-control bg-sec" type="text"  name="cashPrice" value="" >
         </div>
 
         <div class="col-sm-3">
           <label for="prePrice">مبلغ پیش واریزی
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="100" name="prePrice" value="" >
+          <input class="form-control bg-sec" type="text"  name="prePayment" value="" >
         </div>
 
         <div class="col-sm-4 mt-4 ">
           <label for="checkPrice">مبلغ پرداخت بصورت چک
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text" placeholder="100"name="checkPrice" value="" >
+          <input class="form-control bg-sec" type="text"  name="chequePrice" value="" >
         </div>
         <div class="col-sm-4 mt-4 mx-auto">
-          <input class=" bg-sec" type="radio" placeholder="100" name="status" value="normal" checked>
-          <label for="status">عادی
+          <input class=" bg-sec" type="radio"  name="instant" value="IsNot" checked>
+          <label for="instant">عادی
           </label>
 
           <br />
-          <input class=" bg-sec" type="radio" placeholder="100"name="status" value="fast" >
-          <label for="status">فوری
+          <input class=" bg-sec" type="radio"  name="instant" value="ItIs" >
+          <label for="instant">فوری
           </label>
 
         </div>
 
         <div class="col-sm-6 mt-5">
-          <label for="phone-number">توضیحات
+          <label for="sellerDescription">توضیحات
             <span class="text-danger">*</span>
           </label>
-          <textarea rows="10" cols="50" class="form-control bg-sec" type="text"  name="description" value="" ></textarea>
+          <textarea rows="10" cols="50" class="form-control bg-sec" type="text"  name="sellerDescription" value="" ></textarea>
         </div>
       </div>
       <div class="col-sm-12 mt-5 text-center">

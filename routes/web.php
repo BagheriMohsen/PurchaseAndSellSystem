@@ -5,12 +5,25 @@
 |--------------------------------------------------------------------------
 |*/
 Route::get('/order-test',function(){
-    'App\OrderProduct'::create([
-      'order_id'      =>  1,
-      'product_id'    =>  1,
-      'count'         =>  2,
-      'off'           =>  300,
-      'product_type'  =>  'test'
+    $order = 'App\Order'::create([
+      'city_id'       =>      1,
+      'state_id'      =>      1,
+      'status'        =>      1,
+      'lastStatus'    =>      1,
+      'seller_id'     =>      1,
+      'mobile'        =>      2121,
+      'telephone'     =>      42424,
+      'fullName'      =>      'mohsen',
+      'paymentMethod' =>      'cheque',
+      'shippingCost'  =>      2000,
+      'prePayment'    =>      3000,
+      'cashPrice'     =>      22000,
+      'chequePrice'   =>      25000,
+      'instant'       =>      'IsNot',
+      'description'   =>      'nothing',
+      'postalCode'    =>      251752,
+      'address'       =>      'addresss',
+    
   ]);
 });
 Auth::routes();
@@ -86,9 +99,12 @@ Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],function(){
-    Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
+    /* Sellers */
     Route::get('ProductList','OrderController@ProductList')->name('ProductList');
-    Route::get('AgentExistInState/{StateName}','OrderController@AgentExistInState')->name('AgentExistInState');
+    Route::get('AgentExistInState/{CityName}','OrderController@AgentExistInState')->name('AgentExistInState');
+    Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
+    /* Agents */
+    Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
   });
 Route::middleware('auth')->resource('orders','OrderController');
 /*

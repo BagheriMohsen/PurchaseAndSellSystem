@@ -58,8 +58,8 @@
         <tbody>
         {% for city in cities %}
           <tr>
-            <td class="text-center">{{city.name}}</td>
             <td class="text-center">{{city.state.name}}</td>
+            <td class="text-center">{{city.name}}</td>
             <td class="text-center">
               {# edit #}
               <a  class="text-warning" data-toggle="modal" href="#city{{city.id}}">
