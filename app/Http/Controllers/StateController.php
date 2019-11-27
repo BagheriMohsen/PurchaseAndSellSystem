@@ -112,4 +112,10 @@ class StateController extends Controller
         $message = 'استان '.$stateName.' با موفقیت حذف شد';
         return redirect()->route('states.index')->with('message',$message);
     }
+
+    public function AllStatesAndCitiesName(){
+        $states = State::with('cities')->latest()->get();
+        return Response()->json($states,200,[],JSON_UNESCAPED_UNICODE);
+    }
+
 }

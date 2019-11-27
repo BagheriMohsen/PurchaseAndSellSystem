@@ -38,21 +38,36 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // $status = 'App\City'::find($request->city_id)->exists();
-
-        // if($status == True){
-        //     $city = 'App\City'::findOrFail($request->city_id);
-        //     $user = 'App\User'::where('city_id',$city->id)->Role('agent')->firstOrFail();
+        /*###################IF###################*/
+            $city = 'App\City'::where('name',$name)->first();
             
-        
-        // }
+            // Find Agent In This City if agent send auto is not null
+            $userSendAuto = 'App\User'::where([
+            ['city_id','=',$city->id],
+            ['sendAuto','!=',Null]
+            ])->first();
+            // if find agent send auto not null
+            if($userSendAuto != null){
+                $agent_id = $userSendAuto->id;
+                $followUpManager_id = null;
+            }else{
+                $agent_id = null;
+                $followUpManager_id = $city->followUpManager;
 
+                if($followUpManager_id == null){
+                    $user = 'App\User'::role('followUpManager')->first();
+                    $followUpManager_id = $user->id;
+                }
+            }
+        /*##################ENDIF##################*/
         $order = Order::create([
             'city_id'           =>      $request->city_id,
             'state_id'          =>      $request->state_id,
+            'agent_id'          =>      $agent_id,
+            'followUpManager_id'=>      $followUpManager_id,
+            'seller_id'         =>      auth()->user()->id,
             'status'            =>      1,
             'lastStatus'        =>      1,
-            'seller_id'         =>      auth()->user()->id,
             'mobile'            =>      $request->mobile,
             'telephone'         =>      $request->telephone,
             'fullName'          =>      $request->fullName,

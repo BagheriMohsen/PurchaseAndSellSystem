@@ -4,27 +4,33 @@
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
-Route::get('/order-test',function(){
-    $order = 'App\Order'::create([
-      'city_id'       =>      1,
-      'state_id'      =>      1,
-      'status'        =>      1,
-      'lastStatus'    =>      1,
-      'seller_id'     =>      1,
-      'mobile'        =>      2121,
-      'telephone'     =>      42424,
-      'fullName'      =>      'mohsen',
-      'paymentMethod' =>      'cheque',
-      'shippingCost'  =>      2000,
-      'prePayment'    =>      3000,
-      'cashPrice'     =>      22000,
-      'chequePrice'   =>      25000,
-      'instant'       =>      'IsNot',
-      'description'   =>      'nothing',
-      'postalCode'    =>      251752,
-      'address'       =>      'addresss',
+Route::get('/order-test/{name}',function($name){
+
+    //Find City
+    $city = 'App\City'::where('name',$name)->first();
     
-  ]);
+    // Find Agent In This City if agent send auto is not null
+    $userSendAuto = 'App\User'::where([
+    ['city_id','=',$city->id],
+    ['sendAuto','!=',Null]
+    ])->first();
+
+    // if find agent send auto not null
+    if($userSendAuto != null){
+
+        $agent_id = $userSendAuto->id;
+        $followUpManager_id = null;
+    }else{
+        $agent_id = null;
+        $followUpManager_id = $city->followUpManager;
+        if($followUpManager_id == null){
+          $user = 'App\User'::role('followUpManager')->first();
+          $followUpManager_id = $user->id;
+        }
+    }
+    echo 'agent:'.$agent_id;
+    echo '<br/>';
+    echo 'followUpManager:'.$followUpManager_id;
 });
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
@@ -109,16 +115,19 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
 Route::middleware('auth')->resource('orders','OrderController');
 /*
 |--------------------------------------------------------------------------
+| States Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middlware'=>['auth'],'prefix'=>'/states/','as'=>'states.'],function(){
+    Route::get('AllStatesAndCitiesName','StateController@AllStatesAndCitiesName')->name('AllStatesAndCitiesName');
+});
+Route::middleware('auth')->resource('states','StateController');
+/*
+|--------------------------------------------------------------------------
 | Cities Routes
 |--------------------------------------------------------------------------
 |*/
 Route::middleware('auth')->resource('cities','CityController');
-/*
-|--------------------------------------------------------------------------
-| States Routes
-|--------------------------------------------------------------------------
-|*/
-Route::middleware('auth')->resource('states','StateController');
 /*
 |--------------------------------------------------------------------------
 | SpecialTariff Routes
