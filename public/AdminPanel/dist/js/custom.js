@@ -769,6 +769,7 @@ $(document).ready(function(){
     $('#productReceive').on('change', calculateCargoValue);
     $('#productExit').on('change', calculateCargoValue);
     $('#warehouseToTankhah').on('change', calculateCargoValue);
+    $('#tankhahExit').on('change', calculateCargoValue);
     // $('#sendToAgentForm').on('click',function(){
     //     // $(this).val() = isoDate;
     //     console.log(isoDate);

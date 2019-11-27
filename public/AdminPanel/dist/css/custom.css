@@ -58,3 +58,6 @@
 .cursor-pointer{
     cursor: pointer;
 }
+.toolbox{
+    display: none!important;
+}
