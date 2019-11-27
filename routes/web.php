@@ -110,7 +110,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('AgentExistInState/{CityName}','OrderController@AgentExistInState')->name('AgentExistInState');
     Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
     /* Agents */
-    Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
+    Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
   });
 Route::middleware('auth')->resource('orders','OrderController');
 /*

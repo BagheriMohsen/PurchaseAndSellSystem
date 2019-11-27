@@ -144,8 +144,10 @@ class OrderController extends Controller
     | Agent Order List
     |--------------------------------------------------------------------------
     |*/
-    public function AgentOrderList(){
-        return view('Admin.Order.Agent.orders-index');
+    public function AgentOrderLists(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
+        return view('Admin.Order.Agent.agent-orders',compact('orders'));
     }
     /*
     |--------------------------------------------------------------------------

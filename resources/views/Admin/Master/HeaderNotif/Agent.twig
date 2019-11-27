@@ -1,0 +1,19 @@
+{% if notifs > 0 %}
+    <a 
+        href="{{route('storeRooms.AgentReceive')}}"
+        class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{notifs}}
+        ورودی تایید نشده
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}
+ {% if orderNotif > 0 %}
+    <a 
+        href="{{route('orders.AgentOrderLists')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{orderNotif}}
+        در انتظار تحویل
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

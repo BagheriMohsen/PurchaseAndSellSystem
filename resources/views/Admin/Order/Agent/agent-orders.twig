@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  لیست سفارشات ثبت شده
+  در انتظار تحویل
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'لیست سفارشات ثبت شده'} %}
+  {% include 'Admin/Master/path' with {'title':'در انتظار تحویل'} %}
 {% endblock %}
 
 {% block content %}
@@ -21,15 +21,23 @@
   {% include 'Messages/switchSuccess' %}
 
   <div class="row">
+   
     <div class="card col-sm-12">
+     
                 <div class="card-header">
-                  <ul>
-                    {{ orders.render | raw }}
-                  </ul>
+                  <a class="col-3 btn btn-warning btn-sm" href="#">
+                    <strong class="h6 text-dark">
+                      برگشت به مدیر پیگیری
+                    </strong>
+                  </a>
+
+                  
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body col-12 mx-auto">
-                  <table  id="orderTable" class="table table-striped table-bordered table-sm">
+                
+                  <table  id="orderTable" class="table table-striped table-bordered table-sm" cellspacing="0"
+                width="100%">
                     <thead>
                     <tr>
                       <th>تاریخ ثبت</th>
@@ -65,10 +73,10 @@
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>
-                          <a  title="ویرایش" class="text-warning mx-auto"
+                          {# <a  title="ویرایش" class="text-warning mx-auto"
                             href="#">
                             <i class="far fa-edit crud-icon"></i>
-                          </a>
+                          </a> #}
                         </td>
                       </tr>
                     {% endfor %}
@@ -79,6 +87,38 @@
                 <!-- /.card-body -->
               </div>
           </div>
+
+
+      <from class="row">
+
+            <div class="col-sm-6">
+              <label for="status">
+                تعیین وضعیت
+                <span class="text-danger">*</span>
+              </label>
+              <select class="p-2 pb-2 form-control col-sm-6" name="status">
+                <option value="">گزینه ای انتخاب نشده</option>
+                <option value="">تحویل به مشتری(داخل شهری)</option>
+                <option value="">تحویل به مشتری(بیرون شهری)</option>
+                <option value="">تحویل به مشتری(روستا)</option>
+                <option value="">معلق</option>
+                <option value="">انصراف مشتری</option>
+              </select>
+              <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="button" name="button">
+                <strong class="h6 text-dark">
+                  ذخیره
+                </strong>
+              </button>
+
+              <div class="mt-5 text-center">
+
+              </div>
+
+
+            </div>
+
+            
+          </from>
 
           
 {# Order Product #}
