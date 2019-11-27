@@ -444,7 +444,7 @@ $(document).ready(function(){
               <label for="product_name">انتخاب محصول
                 <span class="text-danger">*</span>
               </label>
-              <select class="productSelect form-control bg-sec" name="product_name">
+              <select class="productSelect form-control bg-sec" name="product_name" required>
                 <option value="">محصول را انتخاب کنید</option>
               </select>
             </div>
@@ -452,19 +452,19 @@ $(document).ready(function(){
               <label for="count">تعداد
                 <span class="text-danger">*</span>
               </label>
-              <input class="countField form-control bg-sec" type="number" name="count" value="1" >
+              <input class="countField form-control bg-sec" type="number" name="count" value="1" required>
             </div>
             <div class="col-sm-2">
               <label for="price">قیمت-تومان
                 <span class="text-danger">*</span>
               </label>
-              <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled>
+              <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled required>
             </div>
             <div class="col-sm-2">
               <label for="off">تخفیف
                 <span class="text-danger">*</span>
               </label>
-              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" >
+              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" required>
             </div>
             <div class="col-sm-3 mt-1">
               <label for="productType">مدل محصول
@@ -535,6 +535,7 @@ $(document).ready(function(){
         addOrderTable();
     });
     $('#orderForm').submit(function(event){
+        // var x = false;
         event.preventDefault();
         var form = $(this);
         form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
@@ -542,12 +543,20 @@ $(document).ready(function(){
         form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
+            // if(!value.querySelector('.productSelect').value){
+            //     x = true;
+            //     return;
+            // }
             orderObject.product_id = value.querySelector('.productSelect').value;
             orderObject.count = value.querySelector('input[name="count"]').value;
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
             orderArray.push(orderObject);
         });
+        // if(x == true){
+        //     alert('لطفا محصول را انتخاب فرمایید');
+        //     return;
+        // }
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var mobile = form.find('input[name="mobile"]').val();
@@ -632,13 +641,11 @@ $(document).ready(function(){
         $('#orderForm input[name="cashPrice"]').val(overallPrice);
     });
     //Checking if city has agent exist when seller gives order
-    $('#orderForm #city').on('change',function(event){
-        event.preventDefault();
+    $('#orderForm #city').on('click',function(){
         $('#cityAgent').html('');
         var city = document.querySelector('#city');
         if(city.value){
             var cityName = city.selectedOptions[0].innerText;
-            console.log(cityName);
             $.ajax({
                 url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
                 type:'Get',
@@ -825,49 +832,60 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
     });
-    var statCityArrya = [
-        {
-            state_id: 1,
-            state_name:'تهران',
-            state_cities:[
-                {
-                    city_id: 1,
-                    city_name:'تهران'
-                },
-                {
-                    city_id: 2,
-                    city_name:'ری'
+    
+    //Get State and cities array via ajax for user_create and user_edit 
+    var statesCityArray;
+    if($('#createUserForm').length || $('#editUserForm').length){
+        $.ajax({
+            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            type:'Get',
+            success:function(response){
+                statesCityArray = response;
+            }
+        });
+        //City dependency to states in forms
+        $('#state').on('change',function(){
+            var form = $(this).parents('form');
+            var city = form.find('#city')[0];
+            city.innerHTML = '';
+            city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
+            var stateName = form.find('#state option:selected').html();
+            $.each(statesCityArray,function(index,value){
+                if(value.name == stateName){
+                    $.each(value.cities,function(index,value){
+                        city.innerHTML += `<option value="${value.name}">${value.name}</option>`;
+                    });
                 }
-            ]
-        },
-        {
-            state_id: 2,
-            state_name:'قم',
-            state_cities:[
-                {
-                    city_id: 2,
-                    city_name:'قم'
-                },
-                {
-                    city_id: 2,
-                    city_name:'جعفریه'
+            });
+        });
+    }
+    if($('#orderForm').length){
+        $.ajax({
+            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            type:'Get',
+            success:function(response){
+                console.log(response);
+                statesCityArray = response;
+            }
+        });
+        //City dependency to states in forms
+        $('#state').on('change click',function(){
+            $('#cityAgent').html('');
+            var form = $(this).parents('form');
+            var city = form.find('#city')[0];
+            city.innerHTML = '';
+            city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
+            var stateName = form.find('#state option:selected').html();
+            $.each(statesCityArray,function(index,value){
+                if(value.name == stateName){
+                    $.each(value.cities,function(index,value){
+                        city.innerHTML += `<option value="${value.name}">${value.name}</option>`;
+                    });
                 }
-            ]
-        }
-    ];
-    //City dependency to states in forms
-    // $('#state,#city').on('change click',function(){
-    //     var form = $(this).parents('form');
-    //     var city = form.find('#city')[0];
-    //     city.innerHTML = '';
-    //     var stateName = form.find('#state option:selected').html();
-    //     $.each(statCityArrya,function(index,value){
-    //         if(value.state_name == stateName){
-    //             $.each(value.state_cities,function(index,value){
-    //                 city.innerHTML += `<option value="${value.city_id}">${value.city_name}</option>`;
-    //             });
-    //         }
-    //     });
-    // });
+            });
+        });
+    }
+    
+    
 });
 

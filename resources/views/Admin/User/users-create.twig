@@ -30,7 +30,7 @@
 
 {% block content %}
 
-<form action="{{route('users.store')}}" method="post">
+<form id="createUserForm" action="{{route('users.store')}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <div class="row bg-white pt-3 pb-3">
     <h4 class="col-12 pt-2 pb-3">

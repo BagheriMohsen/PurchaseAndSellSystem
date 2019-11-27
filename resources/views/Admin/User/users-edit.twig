@@ -36,7 +36,7 @@
   {% include 'Messages/errors' %}
 
 
-<form action="{{route('users.update',user.id)}}" method="post">
+<form id="editUserForm" action="{{route('users.update',user.id)}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input type="hidden" name="_method" value="put" />
   <div class="row bg-white pt-3 pb-3">
