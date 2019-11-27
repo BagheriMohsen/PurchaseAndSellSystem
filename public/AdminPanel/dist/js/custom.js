@@ -853,7 +853,7 @@ $(document).ready(function(){
             $.each(statesCityArray,function(index,value){
                 if(value.name == stateName){
                     $.each(value.cities,function(index,value){
-                        city.innerHTML += `<option value="${value.name}">${value.name}</option>`;
+                        city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
                     });
                 }
             });
@@ -879,7 +879,7 @@ $(document).ready(function(){
             $.each(statesCityArray,function(index,value){
                 if(value.name == stateName){
                     $.each(value.cities,function(index,value){
-                        city.innerHTML += `<option value="${value.name}">${value.name}</option>`;
+                        city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
                     });
                 }
             });
