@@ -59,7 +59,26 @@ $(document).ready(function(){
 
     // Order and Product section tables
     $('#productTable').DataTable();
-    // $('#orderTable').DataTable();
+    var orderTable = $('#orderTable').DataTable({
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]]
+    });
+    // console.log(orderTable.rows({ selected: true } ).data());
+    orderTable.on( 'select', function ( e, dt, type, indexes ) {
+        if ( type === 'row' ) {
+            var data = orderTable.rows( indexes ).data();
+            console.log(data);
+            // do something with the ID of the selected items
+        }
+    } );
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
     //Dashboard tables
@@ -716,6 +735,28 @@ $(document).ready(function(){
         }
 
     });
+    $(".persianDateTimepicker").pDatepicker({
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
+        format:'YYYY-MM-DDTHH:mm:ss',
+        initialValue : false,
+        onSelect: function(unix){
+            var date = new Date(unix);
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+            isoDate = year + '-' + month + '-' + day;
+        },
+        timePicker: {
+            enabled: true,
+            meridiem: {
+                enabled: true
+            }
+        }
+    });
     //Add zero to hours,minutes and seconds for clock
     function addZero(i) {
         if (i < 10) {
@@ -885,7 +926,51 @@ $(document).ready(function(){
             });
         });
     }
+    //Change order condition fields depending on radio button in AgentOrderLists page
+    $('.conditionForm input[name="condition"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var waitingDelivery = form.find('.waitingDeliveryField');
+        var suspend = form.find('.suspendField');
+        var cancelField = form.find('.cancelField');
+        waitingDelivery.addClass('d-none');
+        suspend.addClass('d-none');
+        cancelField.addClass('d-none');
+     
     
-    
+        switch (value) {
+          case '1':
+            waitingDelivery.removeClass('d-none');
+            break;
+          case '2':
+            suspend.removeClass('d-none');
+            break;
+          case '3':
+            cancelField.removeClass('d-none');
+            break;
+          default:
+            break;
+        }
+    });
+    $('.conditionForm input[name="cancel"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var cancelDescField = form.find('.cancelDescField');
+        if(value == '9'){
+            cancelDescField.removeClass('d-none');
+        }else{
+            cancelDescField.addClass('d-none');
+        }
+    });
+    $('.conditionForm input[name="suspend"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var dueDateFuild = form.find('.dueDateFuild');
+        if(value == '3'){
+            dueDateFuild.removeClass('d-none');
+        }else{
+            dueDateFuild.addClass('d-none');
+        }
+    })
 });
 

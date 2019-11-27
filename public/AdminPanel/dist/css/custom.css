@@ -61,3 +61,12 @@
 .toolbox{
     display: none!important;
 }
+.orderDetail td{
+   border: 0;
+   padding: .3rem!important;
+}
+.orderDetail th{
+    border: 0;
+    font-weight: bold;
+    padding: .3rem!important;
+ }
