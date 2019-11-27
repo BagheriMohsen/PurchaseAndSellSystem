@@ -99,7 +99,7 @@
                 <label for="HBD_Date">تاریخ تولد
                   <span class="text-danger">*</span>
                 </label>
-                <input class="form-control bg-sec persianDatePicker" type="text" name="HBD_Date" value="" >
+                <input class="form-control bg-sec persianDatePicker" type="text" name="HBD_Date" value="" autocomplete="off">
               </div>
               {# end #}
             </div>
@@ -110,7 +110,7 @@
           <label for="address">آدرس
             <span class="text-danger">*</span>
           </label>
-          <textarea rows="5" cols="50" class="form-control bg-sec" type="text"  name="address" value=""></textarea>
+          <textarea rows="5" cols="50" class="form-control bg-sec" type="text"  name="address" value="" required></textarea>
         </div>
       </div>
       <div class="row mt-5 bg-white pt-3 pb-3">
@@ -128,7 +128,7 @@
           افزودن محصول
         </a>
         <div class="col-12 mt-4 text-center">مبلغ کل:
-          <span id="overallPrice"></span>
+          <span id="overallPrice">0</span>
           تومان
         </div>
       </div>
@@ -139,45 +139,45 @@
           <hr width="150px" style="border-bottom:5px solid red;" />
         </h4>
 
-        <div class="col-sm-2">
+        <div class="col-sm-6">
           <input class=" bg-sec" type="radio"  name="paymentMethod" value="cash" checked>
           <label for="paymentMethod">نقدی
           </label>
 
           <br />
           <input class=" bg-sec" type="radio" name="paymentMethod" value="nocash" >
-          <label for="paymentMethod">غیر نقدی
+          <label for="paymentMethod">نقدی + چک
           </label>
 
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
           <label for="sendCost">هزینه ارسال
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text"  name="shippingCost" value="">
+          <input class="form-control bg-sec" type="text"  name="shippingCost" value="0" required>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-6">
           <label for="cashAmount">مبلغ پرداخت نقدی
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text"  name="cashPrice" value="" >
+          <input class="form-control bg-sec" type="text"  name="cashPrice" value="0" required>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-6">
           <label for="prePrice">مبلغ پیش واریزی
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text"  name="prePayment" value="" >
+          <input class="form-control bg-sec" type="text"  name="prePayment" value="0" required>
         </div>
 
-        <div class="col-sm-4 mt-4 ">
+        <div class="col-sm-6 mt-4 ">
           <label for="checkPrice">مبلغ پرداخت بصورت چک
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec" type="text"  name="chequePrice" value="" >
+          <input class="form-control bg-sec" type="text"  name="chequePrice" value="0" required>
         </div>
-        <div class="col-sm-4 mt-4 mx-auto">
+        <div class="col-sm-6 mt-4 mx-auto">
           <input class=" bg-sec" type="radio"  name="instant" value="IsNot" checked>
           <label for="instant">عادی
           </label>
