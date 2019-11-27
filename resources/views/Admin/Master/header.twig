@@ -32,7 +32,7 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell crud-icon"></i>
           <span class="badge badge-secondary navbar-badge" style="font-size:12px;">
-            {{notifs}}
+            {{notifs + orderNotif}}
           </span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -40,26 +40,30 @@
           {# 15  #}
           نوتیفیکیشن</span>
           <div class="dropdown-divider"></div>
-          {% if notifs > 0 %}
-              <a 
-              {% if role.name == "agent" or role.name == "agentChief" %}
-                href="{{route('storeRooms.AgentReceive')}}"
+          
+              {#
+              --------------------------------------------------------------------------
+               Notification
+              --------------------------------------------------------------------------
+              #}
+              {% if role.name == "agent" %}
+                {% include 'Admin.Master.HeaderNotif.Agent' %}
               {% elseif role.name == "fundWarehouser" %}
-                href="{{route('storeRooms.mainReceive')}}"
-              {% else %}
-                href="#"
+                {% include 'Admin.Master.HeaderNotif.FundWareHouser' %}
               {% endif %}
-               class="dropdown-item">
-                <i class="fa fa-envelope ml-2"></i> 
-                {{notifs}}
-                ورودی تایید نشده
-                {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
-              </a>
-          {% else %}
-              <div class="text-center text-muted">
-                چیزی برای نمایش وجود ندارد
-              </div>
-          {% endif %}
+              {#
+              --------------------------------------------------------------------------
+               Notification Count
+              --------------------------------------------------------------------------
+              #}
+              {% set notifCount = orderNotif + notifs  %}
+              {% if  notifCount <= 0 %}
+                  <div class="text-center text-muted">
+                    چیزی برای نمایش وجود ندارد
+                  </div>
+              {% endif %}
+
+
           <div class="dropdown-divider"></div>
           {# <a href="#" class="dropdown-item dropdown-footer">مشاهده همه نوتیفیکیشن</a> #}
         </div>
