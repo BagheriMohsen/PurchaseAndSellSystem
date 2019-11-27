@@ -39,12 +39,12 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         /*###################IF###################*/
-            $city = 'App\City'::where('name',$name)->first();
+            $city = 'App\City'::where('id',$request->city_id)->first();
             
             // Find Agent In This City if agent send auto is not null
             $userSendAuto = 'App\User'::where([
-            ['city_id','=',$city->id],
-            ['sendAuto','!=',Null]
+                ['city_id','=',$city->id],
+                ['sendAuto','!=',Null]
             ])->first();
             // if find agent send auto not null
             if($userSendAuto != null){
