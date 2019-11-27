@@ -1,5 +1,14 @@
 $(document).ready(function(){
-   
+    // Toaster setup
+    // toastr.options = {
+    //     "debug": false,
+    //     "positionClass": "toast-top-full-width",
+    //     "onclick": null,
+    //     "fadeIn": 300,
+    //     "fadeOut": 1000,
+    //     "timeOut": 5000,
+    //     "extendedTimeOut": 1000
+    // }
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
 
@@ -49,15 +58,16 @@ $(document).ready(function(){
     $('#user_role').on('change', checkUserRole);
 
     // Order and Product section tables
-    $('#productTable,#orderTable').DataTable();
+    $('#productTable').DataTable();
+    // $('#orderTable').DataTable();
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
     //Dashboard tables
     $('#sellerInfoTable').DataTable();
     //Store room tables
-    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
+    // $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
     //Warehouse tables
-    $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
+    // $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
         var CSRF_TOKEN = CSRF_TOKEN;
@@ -190,6 +200,7 @@ $(document).ready(function(){
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var product_id = $(this).find('input[name="product"]').val();
         var name = $(this).find('input[name="name"]').val();
+        $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
             type:'post',
@@ -350,9 +361,9 @@ $(document).ready(function(){
         var user_id = $(this).find('input[name="user_id"]').val();
         var product_id = $(this).find('select[name="product_id"]').val();
         var product_name = $(this).find('select[name="product_id"] option:selected').html();
-        console.log(product_name);
         var tariff_place = $(this).find('select[name="tariff_place"]').val();
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
+        $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
             type:'post',
@@ -441,7 +452,7 @@ $(document).ready(function(){
               <label for="count">تعداد
                 <span class="text-danger">*</span>
               </label>
-              <input class="countField form-control bg-sec" type="number" name="count" value="" >
+              <input class="countField form-control bg-sec" type="number" name="count" value="1" >
             </div>
             <div class="col-sm-2">
               <label for="price">قیمت-تومان
@@ -453,7 +464,7 @@ $(document).ready(function(){
               <label for="off">تخفیف
                 <span class="text-danger">*</span>
               </label>
-              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="" >
+              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" >
             </div>
             <div class="col-sm-3 mt-1">
               <label for="productType">مدل محصول
@@ -525,7 +536,9 @@ $(document).ready(function(){
     $('#orderForm').submit(function(event){
         event.preventDefault();
         var form = $(this);
+        form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
         var orderArray = [];
+        form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
             orderObject.product_id = value.querySelector('.productSelect').value;
@@ -578,13 +591,32 @@ $(document).ready(function(){
             type:'POST',
             data:formData,
             success:function(response){
-                console.log(response);
+                form.find('button[type="submit"]').html('ثبت سفارش');
+                
+                toastr["success"](response,{
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-bottom-center",
+                    "preventDuplicates": false,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                    });
+                $('#orderForm').trigger('reset');
+                $('#cityAgent').html('');
             }
         });
 
     });
     // Calculating order overall price
-    $('#orderForm').on('change click',function(){
+    $('#orderForm').on('change click keyup',function(){
         var overallPrice = null;
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
@@ -595,6 +627,8 @@ $(document).ready(function(){
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(overallPrice);
+        // Cash price field updated after overallprice update
+        $('#orderForm input[name="cashPrice"]').val(overallPrice);
     });
     //Checking if city has agent exist when seller gives order
     $('#orderForm #city').on('change',function(event){
@@ -790,5 +824,49 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
     });
+    var statCityArrya = [
+        {
+            state_id: 1,
+            state_name:'تهران',
+            state_cities:[
+                {
+                    city_id: 1,
+                    city_name:'تهران'
+                },
+                {
+                    city_id: 2,
+                    city_name:'ری'
+                }
+            ]
+        },
+        {
+            state_id: 2,
+            state_name:'قم',
+            state_cities:[
+                {
+                    city_id: 2,
+                    city_name:'قم'
+                },
+                {
+                    city_id: 2,
+                    city_name:'جعفریه'
+                }
+            ]
+        }
+    ];
+    //City dependency to states in forms
+    // $('#state,#city').on('change click',function(){
+    //     var form = $(this).parents('form');
+    //     var city = form.find('#city')[0];
+    //     city.innerHTML = '';
+    //     var stateName = form.find('#state option:selected').html();
+    //     $.each(statCityArrya,function(index,value){
+    //         if(value.state_name == stateName){
+    //             $.each(value.state_cities,function(index,value){
+    //                 city.innerHTML += `<option value="${value.city_id}">${value.city_name}</option>`;
+    //             });
+    //         }
+    //     });
+    // });
 });
 
