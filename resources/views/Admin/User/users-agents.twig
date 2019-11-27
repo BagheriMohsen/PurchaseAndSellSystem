@@ -24,7 +24,7 @@
         <tr>
           <th>نام</th>
           <th>ارسال خودکار</th>
-          <th>استان</th>
+          <th>ستان-شهر</th>
           <th>نام کاربری</th>
           <th>مدیر نماینده</th>
           <th>تعرفه پیش فرض داخلی</th>
@@ -45,7 +45,7 @@
               <td class="text-danger">{{'غیر فعال'}}</td>
           {% endif %}
 
-          <td>{{user.state.name}}</td>
+          <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
 
           <td>{{user.username}}</td>
 
