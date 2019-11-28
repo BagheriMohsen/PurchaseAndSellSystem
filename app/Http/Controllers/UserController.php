@@ -21,6 +21,7 @@ class UserController extends Controller
         $users = User::Role([
             'normalUser',
             'admin',
+            'agentChief',
             'followUpManager',
             'mainWarehouser',
             'fundWarehouser'
@@ -99,6 +100,9 @@ class UserController extends Controller
             'porsantType'           =>  $request->porsantType,
             'forceOrder'            =>  $request->forceOrder
         ]);
+        
+        
+
         $user->assignRole($request->role);
         return redirect()->route('users.index');
     }
@@ -190,6 +194,8 @@ class UserController extends Controller
        'porsantType'        =>  $request->porsantType,
        'forceOrder'         =>  $request->forceOrder
      ]);
+       
+     
      $user->assignRole($request->role);
      return redirect()->route('users.index');
     }
@@ -216,7 +222,7 @@ class UserController extends Controller
     public function agents()
     {
         $products = 'App\Product'::all();
-        $users = User::Role(['agent', 'agentChief'])->get();
+        $users = User::Role('agent')->get();
         return view('Admin.User.users-agents',compact('users','products'));
     }
     /*

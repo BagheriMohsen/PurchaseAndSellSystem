@@ -50,7 +50,7 @@
           <td>{{user.username}}</td>
 
           {% if user.chief.name != null %}
-            <td>{{user.chief.username}}</td>
+            <td>{{user.chief.name}}{{' '}}{{user.chief.family}}</td>
           {% else %}
             <td class="text-info">{{'ندارد'}}</td>
           {% endif %}

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cog\Contracts\Ban\Bannable as BannableContract;
 use Cog\Laravel\Ban\Traits\Bannable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\Models\Media;
@@ -11,7 +12,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia,BannableContract
 {
     use Notifiable;
     use HasRoles;

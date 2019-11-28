@@ -189,13 +189,22 @@ class StoreRoomController extends Controller
                 ['product_id','=',$request->product],
                 ['warehouse_id','=',1]
             ])->exists();
+
+            
+
             /*(OUT) IF product is exist in storage table */
             if($status == true){
-                
                 $storage = 'App\Storage'::where([
                     ['product_id','=',$request->product],
                     ['warehouse_id','=',1]
                 ])->firstOrFail();
+
+                if($storage->number < $request->number){
+                    $message = " این تعداد ".$storage->product->name." در انبار موجود نیست"." از این کالا در انبار".$storage->number." عدد وجود دارد";
+                    return back()->with('info',$message);
+                }
+
+                
 
                 StoreRoom::create([
                     'user_id'       =>  auth()->user()->id,
@@ -210,9 +219,6 @@ class StoreRoomController extends Controller
             if($storage->number >= $request->number){
                 $number = $storage->number - $request->number;
                 $storage->update(['number'=>$number]);
-            }else{
-                $message = " این تعداد ".$storage->product->name." در انبار موجود نیست"." از این کالا در انبار".$storage->number." عدد وجود دارد";
-                return back()->with('info',$message);
             }
         }else{
             return back()->with('info','این کالا در انبار موجود نیست');
