@@ -41,6 +41,7 @@
                     <thead>
                     <tr>
                       <th></th>
+                      <th>شماره<br> سفارش</th>
                       <th>تاریخ ثبت</th>
                       {# <th>تاریخ تخصیص</th> #}
                       <th>استان-شهر</th>
@@ -56,6 +57,7 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
+                        <td>{{order.id}}</td>
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         {# <td>{{'-'}}</td> #}
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
@@ -96,36 +98,51 @@
               </div>
           </div>
 
-
-      <from class="row">
-            <div class="col-sm-6">
-              <label for="status">
-                تعیین وضعیت
-                <span class="text-danger">*</span>
-              </label>
-              <select class="p-2 pb-2 form-control col-sm-6" name="status">
-                <option value="">گزینه ای انتخاب نشده</option>
-                <option value="">تحویل به مشتری(داخل شهری)</option>
-                <option value="">تحویل به مشتری(بیرون شهری)</option>
-                <option value="">تحویل به مشتری(روستا)</option>
-                <option value="">معلق</option>
-                <option value="">انصراف مشتری</option>
-              </select>
-              <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="button" name="button">
-                <strong class="h6 text-dark">
-                  ذخیره
+      <div class="row">
+        <div class="col-6">
+          <form class="" action="" method="post" id="conditionForm">
+            <label for="status">
+              تعیین وضعیت
+              <span class="text-danger">*</span>
+            </label>
+            <select class="p-2 pb-2 form-control col-sm-6" name="status">
+              <option value="">گزینه ای انتخاب نشده</option>
+              <option value="1">تحویل به مشتری(داخل شهری)</option>
+              <option value="2">تحویل به مشتری(بیرون شهری)</option>
+              <option value="3">تحویل به مشتری(روستا)</option>
+              <option value="4">معلق</option>
+              <option value="5">انصراف مشتری</option>
+            </select>
+            <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
+              <strong class="h6">
+                ذخیره
+              </strong>
+            </button>
+          </form>
+          <hr>
+          <form class="" action="" method="post" id="toFollowManagerForm">
+              <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  برگشت به مدیر پیگیری
                 </strong>
               </button>
-
-              <div class="mt-5 text-center">
-
-              </div>
-
-
-            </div>
-
-            
-          </from>
+          </form>
+        </div>
+         <div class="col-6">
+            <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+                <strong class="h6">
+                  چاپ
+                </strong>
+            </button>
+            <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
+                <strong class="h6">
+                  اکسل
+                </strong>
+            </button>
+         </div>
+        
+      </div>
+     
 
           
 {# Order Product #}

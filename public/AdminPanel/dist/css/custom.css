@@ -70,3 +70,24 @@
     font-weight: bold;
     padding: .3rem!important;
  }
+/* Datatable customize */
+table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkbox{
+    padding: 15px;
+}
+.select-info{
+    display: none!important;
+}
+
+/* .dataTables_wrapper .dataTables_length{
+    float:right;
+}
+.dataTables_wrapper .dataTables_filter{
+    float: left;
+}
+.dataTables_wrapper .dataTables_info{
+    float: right;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    background: white!important;
+    border:0 !important;
+} */
