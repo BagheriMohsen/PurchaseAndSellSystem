@@ -82,8 +82,8 @@ class User extends Authenticatable implements HasMedia
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
-    public function citiesUnderControl(){
-        return $this->hasMany('App\City','followUpManager','id');
+    public function statesUnderControl(){
+        return $this->hasMany('App\State','followUpManager','id');
     }
     /*
     |--------------------------------------------------------------------------

@@ -22,7 +22,7 @@
   width="100%">
       <thead>
         <tr>
-          <th>نام</th>
+          <th>نام-نام خانوادگی</th>
           <th>ارسال خودکار</th>
           <th>ستان-شهر</th>
           <th>نام کاربری</th>
@@ -37,7 +37,7 @@
       <tbody>
       {% for user in users %}
         <tr>
-          <td>{{user.name}}</td>
+          <td>{{user.name}}{{' '}}{{user.family}}</td>
 
           {% if user.sendAuto != null %}
               <td class="text-success">{{'فعال'}}</td>

@@ -47,7 +47,9 @@
                   {% for product in products %}
                     <tr class="text-center">
                       <td class="d-flex justify-content-center">
-                        <img src="{{ product.thumbUrl }}" alt="">
+                        {% if product.image_id is not null %}
+                          <img src="{{ product.thumbUrl }}" alt="">
+                        {% endif %}
                       </td>
                       <td>{{product.name}}</td>
                       <td>{{product.code}}</td>

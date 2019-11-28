@@ -59,7 +59,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $request->validate([
+            'username'  =>  'unique:users'
+        ],[
+            'username.unique'  =>  'این نام کاربری قبلا استفاده شده'
+        ]);
          $user = User::create([
             'name'                  =>  $request->name,
             'family'                =>  $request->family,
@@ -358,30 +362,30 @@ class UserController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
-    | Follow Up Manager City Store
+    | Follow Up Manager State Store
     |--------------------------------------------------------------------------
     |*/
-    public function followUpManagerCityStore(Request $request){
+    public function followUpManagerStateStore(Request $request){
         $id = $request->user_id;
         
-        $cityExists = 'App\City'::where('name',$request->CityName)->exists();
+        $stateExists = 'App\State'::where('name',$request->StateName)->exists();
        
-        if($cityExists == false){
-            return redirect()->route('users.edit',[$id])->with('info','ابتدا این شهر را در سیستم ذخیره کنید');
+        if($stateExists == false){
+            return redirect()->route('users.edit',[$id])->with('info','ابتدا این استان را در سیستم ذخیره کنید');
         }
 
-        $status = 'App\City'::where([
-            ['name','=',$request->CityName],
+        $status = 'App\State'::where([
+            ['name','=',$request->StateName],
             ['followUpManager','!=',null]
         ])->exists();
 
         if($status == True){
-            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','شهر انتخاب شده قبلا در سیستم ثبت شده');
+            return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','استان انتخاب شده قبلا در سیستم ثبت شده');
         }else{
            
-            $city = 'App\City'::where('name',$request->CityName)->firstOrFail();
+            $city = 'App\State'::where('name',$request->StateName)->firstOrFail();
             $city->update(['followUpManager'=>$id]);
-            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر به این مدیر پیگیری اختصاص پیدا کرد');
+            return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان به این مدیر پیگیری اختصاص پیدا کرد');
         }
 
     }
@@ -390,11 +394,11 @@ class UserController extends Controller
     | Follow Up Manager City Clear
     |--------------------------------------------------------------------------
     |*/
-    public function followUpManagerCityClear($CityName){
-        $city = 'App\City'::where('name',$CityName)->firstOrFail();
-        $id = $city->followUpManager;
-        $city->update(['followUpManager'=>null]);
-        return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر از لیست این مدیر پیگیری خارج شد');
+    public function followUpManagerStateClear($StateName){
+        $state = 'App\State'::where('name',$StateName)->firstOrFail();
+        $id = $state->followUpManager;
+        $state->update(['followUpManager'=>null]);
+        return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان از لیست این مدیر پیگیری خارج شد');
     }
 
 

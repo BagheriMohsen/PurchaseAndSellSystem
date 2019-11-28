@@ -52,7 +52,8 @@ class OrderController extends Controller
                 $followUpManager_id = null;
             }else{
                 $agent_id = null;
-                $followUpManager_id = $city->followUpManager;
+                $state = 'App\State'::where('id',$city->state->id)->first();
+                $followUpManager_id = $state->followUpManager;
 
                 if($followUpManager_id == null){
                     $user = 'App\User'::role('followUpManager')->first();

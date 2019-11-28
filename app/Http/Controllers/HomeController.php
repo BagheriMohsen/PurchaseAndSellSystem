@@ -49,11 +49,11 @@ class HomeController extends Controller
         $status = User::where('username',$request->username)->exists();
 
         if($status == true){
-          $user = User::where('username',$request->username)->get();
+          $user = User::where('username',$request->username)->firstOrFail();
 
-          if (Hash::check($request->password, $user[0]->password)){
-            Auth::login($user[0]);
-            return redirect('/home');
+          if (Hash::check($request->password, $user->password)){
+            Auth::login($user);
+            return redirect()->route('admin.index');
           }else{
             return back();
           }
