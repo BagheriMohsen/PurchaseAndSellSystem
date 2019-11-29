@@ -22,9 +22,9 @@
   width="100%">
       <thead>
         <tr>
-          <th>نام</th>
+          <th>نام-نام خانوادگی</th>
           <th>ارسال خودکار</th>
-          <th>استان</th>
+          <th>ستان-شهر</th>
           <th>نام کاربری</th>
           <th>مدیر نماینده</th>
           <th>تعرفه پیش فرض داخلی</th>
@@ -37,7 +37,7 @@
       <tbody>
       {% for user in users %}
         <tr>
-          <td>{{user.name}}</td>
+          <td>{{user.name}}{{' '}}{{user.family}}</td>
 
           {% if user.sendAuto != null %}
               <td class="text-success">{{'فعال'}}</td>
@@ -45,12 +45,12 @@
               <td class="text-danger">{{'غیر فعال'}}</td>
           {% endif %}
 
-          <td>{{user.state.name}}</td>
+          <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
 
           <td>{{user.username}}</td>
 
           {% if user.chief.name != null %}
-            <td>{{user.chief.username}}</td>
+            <td>{{user.chief.name}}{{' '}}{{user.chief.family}}</td>
           {% else %}
             <td class="text-info">{{'ندارد'}}</td>
           {% endif %}

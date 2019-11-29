@@ -41,7 +41,7 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
-  Route::get('/home','AdminController@index')->name('index');
+  Route::get('/','AdminController@index')->name('index');
 });
 /*
 |--------------------------------------------------------------------------
@@ -57,8 +57,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('{id}/Myedit','UserController@userPublicEdit')->name('public.edit');
     Route::put('{id}/Myupdate','UserController@userPublicUpdate')->name('public.update');
     Route::get('uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
-    Route::get('followUpManagerCityStore','UserController@followUpManagerCityStore')->name('followUpManager.cityStore');
-    Route::get('followUpManagerCityClear/{CityName}','UserController@followUpManagerCityClear')->name('followUpManagerCityClear');
+    Route::get('followUpManagerStateStore','UserController@followUpManagerStateStore')->name('followUpManager.stateStore');
+    Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
     /* Agent Chief Dashboard */

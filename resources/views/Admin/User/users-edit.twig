@@ -387,7 +387,7 @@
 </form>
 {# cities Under Control #}
 {% if userRole == "followUpManager" %}
-<div id="citiesUnderControl" class="row bg-white pt-2 pb-3 mt-5 ">
+<div id="statesUnderControl" class="row bg-white pt-2 pb-3 mt-5 ">
  <div class="mx-auto col-sm-8">
   {% include 'Messages/info' %}
  </div>
@@ -397,18 +397,14 @@
   <div class="col-sm-4 mb-4 mx-auto">
     <table class="table table-bordered table-striped">
       <div>
-        <form action="{{route('users.followUpManager.cityStore')}}" >
+        <form action="{{route('users.followUpManager.stateStore')}}" >
           <input type="hidden" name="_token" value="{{csrf_token()}}" />
           <input type="hidden" name="user_id" value="{{user.id}}" />
           <div class="input-group mb-3 md-form">
             {# <input name="CityName" placeholder="نام شهر را وارد کنید" id="inputValidationEx" type="text" class="form-control text-light"  required> #}
-            <select name="CityName" class="form-control" required>
+            <select name="StateName" class="form-control" required>
               {% for state in states %}
-                <optgroup label="{{state.name}}">
-                    {% for city in state.cities %}
-                      <option  value="{{city.name}}">{{city.name}}</option>
-                    {% endfor %}
-                </optgroup>
+                <option  value="{{state.name}}">{{state.name}}</option>
               {% endfor %}
             </select>
             <div class="input-group-append">
@@ -425,13 +421,13 @@
           <td>شهر</td>
           <td>عملیات</td>
         </tr>
-      {% for cityControl in user.citiesUnderControl %}
+      {% for stateControl in user.statesUnderControl %}
         <tr>
           <td>#</td>
-          <td>{{cityControl.name}}</td>
+          <td>{{stateControl.name}}</td>
           <td>
             {# Form Delete #}
-              <a title="حذف" href="{{route('users.followUpManagerCityClear',cityControl.name)}}">
+              <a title="حذف" href="{{route('users.followUpManagerStateClear',stateControl.name)}}">
                 <i class="far fa-trash-alt text-danger crud-icon"></i>
               </a>
             {# Form Delete #}

@@ -13,7 +13,7 @@ class AddFollowUpManagerColumnToCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('cities', function (Blueprint $table) {
+        Schema::table('states', function (Blueprint $table) {
             $table->bigInteger('followUpManager')->unsigned()->nullable();
 
             $table->foreign('followUpManager')->references('id')->on('users')
@@ -28,7 +28,7 @@ class AddFollowUpManagerColumnToCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('cities', function (Blueprint $table) {
+        Schema::table('states', function (Blueprint $table) {
             $table->dropColumn('followUpManager');
         });
     }

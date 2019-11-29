@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     protected $fillable = [
-      'name'
+      'name',
+      'followUpManager'
     ];
     /*
     |--------------------------------------------------------------------------
@@ -24,6 +25,14 @@ class State extends Model
     */
     public function users(){
       return $this->hasMany('App\User');
+    }
+     /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function followUpManager(){
+      return $this->belongsTo('App\User','followUpManager','id');
     }
     /*
     |--------------------------------------------------------------------------

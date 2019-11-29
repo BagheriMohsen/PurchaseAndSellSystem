@@ -9,7 +9,7 @@ class City extends Model
     protected $fillable = [
       'name',
       'state_id',
-      'followUpManager'
+     
     ];
     /*
     |--------------------------------------------------------------------------
@@ -35,14 +35,7 @@ class City extends Model
     public function warehouses(){
       return $this->hasMany('App\Warehouse');
     }
-    /*
-    |--------------------------------------------------------------------------
-    | Releation with User Model
-    |--------------------------------------------------------------------------
-    */
-    public function followUpManager(){
-      return $this->belongsTo('App\User','followUpManager','id');
-    }
+   
     /*
     |--------------------------------------------------------------------------
     | Releation with Order Model
