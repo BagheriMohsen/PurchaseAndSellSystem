@@ -1,14 +1,11 @@
 $(document).ready(function(){
-    // Toaster setup
-    // toastr.options = {
-    //     "debug": false,
-    //     "positionClass": "toast-top-full-width",
-    //     "onclick": null,
-    //     "fadeIn": 300,
-    //     "fadeOut": 1000,
-    //     "timeOut": 5000,
-    //     "extendedTimeOut": 1000
-    // }
+    $('#productCreateForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
 
@@ -625,13 +622,13 @@ $(document).ready(function(){
                     "positionClass": "toast-bottom-center",
                     "preventDuplicates": false,
                     "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
+                    "hideDuration": "500",
+                    "timeOut": "3000",
                     "extendedTimeOut": "1000",
                     "showEasing": "swing",
                     "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
+                    "showMethod": "slideIn",
+                    "hideMethod": "SlideOout"
                     });
                 $('#orderForm').trigger('reset');
                 $('#cityAgent').html('');
@@ -700,7 +697,7 @@ $(document).ready(function(){
         $('#overAllSum').html(numberWithCommas(overallSum));
     }
     // Add comma to numeric inputs
-    $('input.number').keyup(function(event) {
+    $('input.comma').keyup(function(event) {
 
         // skip for arrow keys
         if(event.which >= 37 && event.which <= 40) return;
@@ -975,6 +972,22 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
+        toastr["success"]('test',{
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-left",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "500",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "slideIn",
+            "hideMethod": "SlideOut"
+            });
         $.each(tableData,function(index,value){
             orderNumbers.push(parseInt(value[1]));
         });
@@ -995,6 +1008,23 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     form.find('button').html('ذخیره');
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "500",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "slideIn",
+                        "hideMethod": "SlideOout"
+                        });
                     console.log(response);
                 }
             });
@@ -1024,6 +1054,24 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     form.find('button').html('ذخیره');
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                      });
                     console.log(response);
                 }
             });
