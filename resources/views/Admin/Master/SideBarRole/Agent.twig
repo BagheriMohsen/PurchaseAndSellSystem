@@ -74,13 +74,25 @@
     <li class="nav-item">
         <a href="{{route('orders.AgentOrderLists')}}" class="nav-link">
         <i class="fas fa-chevron-circle-left"></i>
-        <p>در انتظار تحویل</p>
+        <p>لیست سفارشات در انتظار تحویل</p>
         </a>
     </li>
     <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="{{route('orders.AgentOrderCollectedlist')}}" class="nav-link">
         <i class="fas fa-chevron-circle-left"></i>
-        <p>وصول شده</p>
+        <p>لیست سفارشات وصولی</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('orders.AgentOrderCanceledList')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p>لیست سفارشات کنسلی</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('orders.AgentOrderSuspendedList')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p>لیست سفارشات معلق</p>
         </a>
     </li>
     </ul>

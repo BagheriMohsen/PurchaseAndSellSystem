@@ -317,7 +317,6 @@ class UserController extends Controller
             $user->update(['uploadCS'=>$user->uploadCS]);
         }
         $user->update([
-            'status'             =>  $request->status,
             'password'  =>  Hash::make($request->password)
         ]);
         if($user->id == auth()->user()->id){

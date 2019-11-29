@@ -152,6 +152,36 @@ class OrderController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
+    | Agent Order Collected list
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentOrderCollectedlist(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
+        return view('Admin.Order.Agent.agent-orders-collected',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Order Canceled List
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentOrderCanceledList(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
+        return view('Admin.Order.Agent.agent-orders-canceled',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Order Suspended List
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentOrderSuspendedList(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
+        return view('Admin.Order.Agent.agent-orders-suspended',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Product List 
     |--------------------------------------------------------------------------
     |*/
