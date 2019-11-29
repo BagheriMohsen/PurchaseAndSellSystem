@@ -42,7 +42,7 @@
                     <tr>
                       <th></th>
                       <th>شماره<br> سفارش</th>
-                      <th>تاریخ ثبت</th>
+                      <th>تاریخ اقدام</th>
                       {# <th>تاریخ تخصیص</th> #}
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
@@ -50,6 +50,8 @@
                       <th>همراه-ثابت</th>
                       <th>نوع پرداخت</th>
                       <th>کالسنتر</th>
+                      <th>زمان سررسید</th>
+                      <th>حالت</th>
                       <th>عملیات</th>
                     </tr>
                     </thead>
@@ -58,7 +60,7 @@
                       <tr>
                         <td></td>
                         <td>{{order.id}}</td>
-                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+                        <td>{{'-'}}</td>
                         {# <td>{{'-'}}</td> #}
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
@@ -70,6 +72,8 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td>{{''}}</td>
+                        <td>{{'-'}}</td>
+                        <td>{{'-'}}</td>
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
@@ -77,16 +81,12 @@
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>
-                          <a title="فاکتور" class="text-secondary" href="#">
+                          {# <a title="فاکتور" class="text-secondary" href="#">
                             <i class="fa fa-book crud-icon"></i>
-                          </a>
+                          </a> #}
                           <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
                               <i class="fa fa-cogs crud-icon"></i>
                           </a>
-                          {# <a  title="ویرایش" class="text-warning mx-auto"
-                            href="#">
-                            <i class="far fa-edit crud-icon"></i>
-                          </a> #}
                         </td>
                       </tr>
                     {% endfor %}
