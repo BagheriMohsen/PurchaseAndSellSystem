@@ -33,7 +33,7 @@
 				
 				<div class="login100-pic js-tilt text-center" data-tilt>
 					<div class="text-center dana-bold">
-							سامانه خرید و فروش پیامکی
+							سامانه ی مدیریت فروش از راه دور
 					</div>
 					<img src="{{asset('Auth/images/img-01.png')}}" alt="IMG">
 				</div>

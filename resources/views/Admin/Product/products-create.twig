@@ -27,7 +27,7 @@
   {% include 'Messages/errors' %}
 
 
-  <form action="{{route('products.store')}}" method="post" class="row bg-white pt-2 pb-3" enctype="multipart/form-data">
+  <form id="productCreateForm" action="{{route('products.store')}}" method="post" class="row bg-white pt-2 pb-3" enctype="multipart/form-data">
     <div class="row mx-5">
       <input name="_token" type="hidden" value="{{ csrf_token() }}" />
 
@@ -52,7 +52,7 @@
         <label for="price"> قیمت محصول - تومان
           <span class="text-danger">*</span>
         </label>
-        <input value="{{old("price")}}" class="form-control" type="number" placeholder=""name="price" required>
+        <input value="{{old("price")}}" class="form-control comma" type="text" placeholder=""name="price" required>
       </div>
       {# قیمت محصول #}
 
@@ -61,7 +61,7 @@
         <label for="phone-number"> قیمت خرید - تومان
           <span class="text-danger">*</span>
         </label>
-        <input value="{{old("buyPrice")}}" class="form-control" type="number" placeholder=""name="buyPrice" required>
+        <input value="{{old("buyPrice")}}" class="form-control comma" type="text" placeholder=""name="buyPrice" required>
       </div>
       {# قیمت خرید #}
 
