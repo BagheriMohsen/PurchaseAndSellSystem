@@ -68,7 +68,9 @@
       {# تصویر محصول #}
       <div class="col-sm-6 mt-4 px-5">
         <label for="image">تصویر محصول</label>
-        <img  class="col-sm-12" src="{{product.cardUrl}}" alt="">
+        {% if product.image_id is not null %}
+          <img  class="col-sm-12" src="{{product.cardUrl}}" alt="">
+        {% endif %}
         <input value="{{old("image")}}" class="form-control border-0" type="file" placeholder="" name="image">
       </div>
       {# تصویر محصول #}

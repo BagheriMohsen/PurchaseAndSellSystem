@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  لیست سفارشات در انتظار تحویل
+  لیست سفارشات کنسلی
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'لیست سفارشات در انتظار تحویل'} %}
+  {% include 'Admin/Master/path' with {'title':'لیست سفارشات کنسلی'} %}
 {% endblock %}
 
 {% block content %}
@@ -43,7 +43,7 @@
                       <th></th>
                       <th>شماره<br> سفارش</th>
                       <th>تاریخ ثبت</th>
-                      <th>تاریخ تخصیص</th>
+                      {# <th>تاریخ تخصیص</th> #}
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
                       <th>نام خریدار</th>
@@ -59,7 +59,7 @@
                         <td></td>
                         <td>{{order.id}}</td>
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        <td>{{'-'}}</td>
+                        {# <td>{{'-'}}</td> #}
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
                         <td>{{order.fullName}}</td>
@@ -208,7 +208,7 @@
               <th>تعداد</th>
               <th>تخفیف</th>
               <th>مبلغ مشارکت ویژه</th>
-              <th>جمع</th>
+              <th>مبلغ کل</th>
             </tr>
             {% for item in order.products %}
               <tr class="text-center">
@@ -223,7 +223,7 @@
                 <td>{{ item.count }}</td>
                 <td>{{ item.off }}</td>
                 <td>-</td>
-                <td class="priceSum">{{ (item.product.price * item.count) - item.off }}</td>
+                <td>{{ (item.product.price * item.count) - item.off }}</td>
                   {# <td>
                   <form  action="#" method="post" >
                       <input type="hidden" name="_token" value="{{csrf_token()}}" />
