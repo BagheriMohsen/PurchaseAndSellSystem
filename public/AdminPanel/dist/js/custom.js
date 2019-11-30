@@ -1037,42 +1037,42 @@ $(document).ready(function(){
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
             form.find('button').attr('disabled','disabled');
             var formData = [];
-            formData[0] = condition;
-            formData[1] = orderNumbers;
+            formData.status = condition;
+            formData.orders = orderNumbers;
             console.log(formData);
-            // $.ajax({
-            //     url:actionUrl,
-            //     type:'get',
-            //     data:{
-            //         _token:CSRF_TOKEN,
-            //         condition:condition,
-            //         orderNumbers:orderNumbers
-            //     },
-            //     success:function(response){
-            //         form.find('button').html('<strong class="h6">ذخیره</strong>');
-            //         form.find('button').attr('disabled',false);
-            //         console.log(response);
-            //         console.log('test');
-            //         orderTable.rows('.selected').remove().draw( false );
-            //         toastr["success"](response,{
-            //             "closeButton": true,
-            //             "debug": false,
-            //             "newestOnTop": false,
-            //             "progressBar": true,
-            //             "positionClass": "toast-bottom-center",
-            //             "preventDuplicates": false,
-            //             "showDuration": "300",
-            //             "hideDuration": "500",
-            //             "timeOut": "3000",
-            //             "extendedTimeOut": "1000",
-            //             "showEasing": "swing",
-            //             "hideEasing": "linear",
-            //             "showMethod": "slideIn",
-            //             "hideMethod": "SlideOout"
-            //             });
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    condition:condition,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    console.log(response);
+                    console.log('test');
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "500",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "slideIn",
+                        "hideMethod": "SlideOout"
+                        });
                    
-            //     }
-            // });
+                }
+            });
         }
         
     });
@@ -1142,7 +1142,7 @@ $(document).ready(function(){
     };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
-        console.log('test');
+        
     });
    
 });
