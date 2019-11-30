@@ -65,6 +65,10 @@ class AppServiceProvider extends ServiceProvider
                     $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>5])
                     ->count();
                     $orderNotif = 0;
+                }elseif($roleName == "followUpManager"){
+                    $notifs = 0;
+                    $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>1,'agent_id'=>null])
+                    ->count();
                 }else{
                     $notifs = 0;
                     $orderNotif = 0;

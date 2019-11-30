@@ -246,11 +246,29 @@ class OrderController extends Controller
         $pdf = PDF::loadView('Admin.Order.Factor');
         return $pdf->download('invoice.pdf');
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Seller No Action Orders
+    |--------------------------------------------------------------------------
+    |*/
     public function sellerNoActionOrders(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $orders = Order::where(['seller_id'=>$user->id,'status'=>1,'agent_id'=>null])->latest()->get();
         return view('Admin.Order.Seller.seller-noAction-orders',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Unverified Order List
+    |--------------------------------------------------------------------------
+    |*/
+    public function UnverifiedOrderList(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            'followUpManager_id'=>$user->id,
+            'status'=>1,
+            'agent_id'=>null
+            ])->latest()->get();
+        return view('Admin.Order.FollowUpManager.unverified-orders',compact('orders'));
     }
     
 }

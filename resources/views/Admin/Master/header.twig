@@ -50,6 +50,8 @@
                 {% include 'Admin.Master.HeaderNotif.Agent' %}
               {% elseif role.name == "fundWarehouser" %}
                 {% include 'Admin.Master.HeaderNotif.FundWareHouser' %}
+              {% elseif role.name == "followUpManager" %}
+                {% include 'Admin.Master.HeaderNotif.FollowUpManager' %}
               {% endif %}
               {#
               --------------------------------------------------------------------------

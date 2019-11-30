@@ -263,6 +263,8 @@ class UserController extends Controller
             return redirect()->route('users.AgentChiefDashboard')->with('switchSuccess','true');
         }elseif($role == "seller"){
             return redirect()->route('users.SellerDashboard')->with('switchSuccess','true');
+        }elseif($role == "followUpManager"){
+            return redirect()->route('orders.UnverifiedOrderList')->with('switchSuccess','true');
         }else{
             return redirect('/')->with('switchSuccess','true');
         }
