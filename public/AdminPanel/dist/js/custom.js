@@ -1,4 +1,27 @@
 $(document).ready(function(){
+    var persianDataTable = {
+        "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
+        "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
+        "sInfoEmpty":      "نمایش 0 تا 0 از 0 ردیف",
+        "sInfoFiltered":   "(فیلتر شده از _MAX_ ردیف)",
+        "sInfoPostFix":    "",
+        "sInfoThousands":  ",",
+        "sLengthMenu":     "نمایش _MENU_ ردیف",
+        "sLoadingRecords": "در حال بارگزاری...",
+        "sProcessing":     "در حال پردازش...",
+        "sSearch":         "جستجو:",
+        "sZeroRecords":    "رکوردی با این مشخصات پیدا نشد",
+        "oPaginate": {
+            "sFirst":    "برگه‌ی نخست",
+            "sLast":     "برگه‌ی آخر",
+            "sNext":     "بعدی",
+            "sPrevious": "قبلی"
+        },
+        "oAria": {
+            "sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+            "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
+        }
+    };
     //Remove comma from number inputs for product Create Form
     $('#productCreateForm').submit(function(event){
         event.preventDefault();
@@ -64,7 +87,11 @@ $(document).ready(function(){
     $('#user_role').on('change', checkUserRole);
 
     // Order and Product section tables
-    $('#productTable').DataTable();
+    // $('#productTable').DataTable({
+    //     buttons: [
+    //        'print'
+    //     ]
+    // });
     var orderTable = $('#orderTable').DataTable({
         columnDefs: [ {
             orderable: false,
@@ -76,9 +103,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        buttons: {
+            buttons: [
+              { extend: 'print', text: 'Print List' },
+              { extend: 'pdf', text: 'PDF' },
+              { extend: 'copy', text: 'Copy to clipboard' }
+            ]
+          }
     });
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
@@ -137,6 +168,7 @@ $(document).ready(function(){
         $('.deleteTypeButton').on('click',function(event){
             event.preventDefault();
             $(this).html('<i class="fas fa-spinner"></i>');
+            $(this).attr('disabled','disabled');
             var form = $(this).parent('form');
             var actionUrl = form.attr('action');
             var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -151,6 +183,7 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     getProductTypes(product_id,CSRF_TOKEN);
+                    $(this).attr('disabled',false);
                 }
             });
         });
@@ -216,6 +249,7 @@ $(document).ready(function(){
         event.preventDefault();
         var self = $(this);
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
+        $(this).find('button[type="submit"]').attr('disabled','disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var product_id = $(this).find('input[name="product"]').val();
@@ -231,6 +265,7 @@ $(document).ready(function(){
             },
             success:function(response){
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
+                self.find('button[type="submit"]').attr('disabled',false);
                 getProductTypes(product_id,CSRF_TOKEN);
             }
         });
@@ -239,6 +274,7 @@ $(document).ready(function(){
     $('.deleteTypeButton').on('click',function(event){
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
+        $(this).attr('disabled','disabled');
         var form = $(this).parent('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -253,6 +289,7 @@ $(document).ready(function(){
             },
             success:function(response){
                 getProductTypes(product_id,CSRF_TOKEN);
+                $(this).attr('disabled',false);
             }
         });
     });
@@ -342,6 +379,7 @@ $(document).ready(function(){
         $('.deleteSpecialTariff').on('click',function(event){
             event.preventDefault();
             $(this).html('<i class="fas fa-spinner"></i>');
+            $(this).attr('disabled','disabled');
             var form = $(this).parent('form');
             var actionUrl = form.attr('action');
             var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -357,6 +395,7 @@ $(document).ready(function(){
                 success:function(response){
                     // getSpecialTariff(user_id,CSRF_TOKEN);
                     form.parents('tr').remove();
+                    $(this).attr('disabled',false);
                 }
             });
         });
@@ -379,6 +418,7 @@ $(document).ready(function(){
             item.value = parseInt(item.value.replace(/\,/g,'',10));
         });
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
+        $(this).find('button[type="submit"]').attr('disabled','disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var user_id = $(this).find('input[name="user_id"]').val();
@@ -400,6 +440,7 @@ $(document).ready(function(){
             success:function(response){
                 getSpecialTariff(user_id,CSRF_TOKEN,product_name);
                 self.find('button[type="submit"]').html('ذخیره');
+                self.find('button[type="submit"]').attr('disabled',false);
             }
         });
     });
@@ -993,38 +1034,45 @@ $(document).ready(function(){
         }else if(!condition){
             alert('گزینه ای انتخاب نشده است');
         }else{
-            form.find('button').html('<i class="fas fa-spinner"></i>');
-            console.log(condition,orderNumbers);
-            $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    condition:condition,
-                    orderNumbers:orderNumbers
-                },
-                success:function(response){
-                    form.find('button').html('ذخیره');
-                    orderTable.rows('.selected').remove().draw( false );
-                    toastr["success"](response,{
-                        "closeButton": true,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": true,
-                        "positionClass": "toast-bottom-center",
-                        "preventDuplicates": false,
-                        "showDuration": "300",
-                        "hideDuration": "500",
-                        "timeOut": "3000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "slideIn",
-                        "hideMethod": "SlideOout"
-                        });
-                    console.log(response);
-                }
-            });
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            var formData = [];
+            formData[0] = condition;
+            formData[1] = orderNumbers;
+            console.log(formData);
+            // $.ajax({
+            //     url:actionUrl,
+            //     type:'get',
+            //     data:{
+            //         _token:CSRF_TOKEN,
+            //         condition:condition,
+            //         orderNumbers:orderNumbers
+            //     },
+            //     success:function(response){
+            //         form.find('button').html('<strong class="h6">ذخیره</strong>');
+            //         form.find('button').attr('disabled',false);
+            //         console.log(response);
+            //         console.log('test');
+            //         orderTable.rows('.selected').remove().draw( false );
+            //         toastr["success"](response,{
+            //             "closeButton": true,
+            //             "debug": false,
+            //             "newestOnTop": false,
+            //             "progressBar": true,
+            //             "positionClass": "toast-bottom-center",
+            //             "preventDuplicates": false,
+            //             "showDuration": "300",
+            //             "hideDuration": "500",
+            //             "timeOut": "3000",
+            //             "extendedTimeOut": "1000",
+            //             "showEasing": "swing",
+            //             "hideEasing": "linear",
+            //             "showMethod": "slideIn",
+            //             "hideMethod": "SlideOout"
+            //             });
+                   
+            //     }
+            // });
         }
         
     });
@@ -1041,7 +1089,8 @@ $(document).ready(function(){
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
         }else{
-            form.find('button').html('<i class="fas fa-spinner"></i>');
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
             $.ajax({
                 url:actionUrl,
                 type:'get',
@@ -1050,7 +1099,8 @@ $(document).ready(function(){
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
-                    form.find('button').html('ذخیره');
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
                     orderTable.rows('.selected').remove().draw( false );
                     toastr["success"](response,{
                         "closeButton": false,
@@ -1075,6 +1125,25 @@ $(document).ready(function(){
         }
         
     });
-  
+    $('#productTable').DataTable( {
+        "language": persianDataTable,
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+    } );
+    pdfMake.fonts = {
+        Arial: {
+                normal: 'arial.ttf',
+                bold: 'arialbd.ttf',
+                italics: 'ariali.ttf',
+                bolditalics: 'arialbi.ttf'
+        }
+    };
+    //Handling cash and cheque in order_create page
+    $('#orderForm input[name="paymentMethod"]').on('change',function(){
+        console.log('test');
+    });
+   
 });
 
