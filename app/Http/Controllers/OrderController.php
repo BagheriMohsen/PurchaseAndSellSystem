@@ -234,7 +234,15 @@ class OrderController extends Controller
     |*/
     public function AgentChangeOrderStatus(){
 
-        //
+        return response('ok');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Factor
+    |--------------------------------------------------------------------------
+    |*/
+    public function Factor(){
+        return view('Admin.Order.Factor');
     }
 
     

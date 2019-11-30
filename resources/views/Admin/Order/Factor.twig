@@ -1,0 +1,128 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+   سفارشات در انتظار تحویل
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':' سفارشات در انتظار تحویل'} %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container invoiceWrapper">
+        <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td class="text-center" rowspan="3"><p class="mt-4">فروشگاه:</p></td>
+                    <td class="text-center" rowspan="3"> <h5 class="mt-3">فاکتور فروش</h5></td>
+                    <td >مرکز فروش:</td>
+                  </tr>
+                  <tr>
+                    <td>فروشنده:</td>
+                  </tr>
+                    <tr>
+                    <td>پیک:</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <div class="col-12">
+              <table class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>به نام:</td>
+                      <td> تلفن:</td>
+                      <td>موبایل:</td>
+                      <td>کد فاکتور:</td>
+                      <td> تخفیف:</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3">آدرس:</td>
+                      <td>مبلغ پیش واریزی :</td>
+                      <td> هزینه ارسال:</td>
+                    </tr>
+                      <tr>
+                      <td colspan="2">کد پستی:</td>
+                      <td colspan="2">توضیحات:</td>
+                      <td>نوع فاکتور:</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">تاریخ ارسال :</td>
+                      <td colspan="2">تاریخ حواله:</td>
+                      <td> تاریخ واریزی:</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                {# <h3 class="panel-title"><strong>Order summary</strong></h3> #}
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                          <td><strong>ردیف</strong></td>
+                          <td class="text-center"><strong>کالا</strong></td>
+                          <td class="text-center"><strong>تعداد</strong></td>
+                          <td class="text-right"><strong>قیمت واحد</strong></td>
+                          <td class="text-right"><strong>تخفیف</strong></td>
+                          <td class="text-right"><strong>جمع</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                      <tr>
+                        <td>2</td>
+                        <td class="text-center">صابون</td>
+                        <td class="text-center">2</td>
+                        <td class="text-right">25000</td>
+                        <td class="text-right">500</td>
+                        <td class="text-right">20000</td>
+                      </tr>
+                      <tr>
+                        <td class="no-line"></td>
+                        <td class="no-line"></td>
+                        <td class="no-line text-center"><strong>جمع کل</strong></td>
+                        <td class="no-line text-right">200000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <ul>
+              <li>لطفا در هنگام تحویل کالا از سالم بودن آن اطمینان حاصل فرمایید</li>
+              <li>بدیهی است ضمانت کالا طبق ضوابط قانونی گارانتی مورد نظر خواهد بود <br> (شکستگی،پارگی،سوختگی و ذوب فیزیکی،خرابی در اثر جریانات برق و بی احتیاطی در استفاده شامل گارانتی نخواهد بود)</li>
+              <li>جهت پشتیبانی با این شماره تماس حاصل فرمایید: 09123334455</li>
+            </ul>
+          </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+

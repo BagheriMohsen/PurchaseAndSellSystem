@@ -115,6 +115,8 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('AgentOrderCanceledList','OrderController@AgentOrderCanceledList')->name('AgentOrderCanceledList');
     Route::get('AgentOrderSuspendedList','OrderController@AgentOrderSuspendedList')->name('AgentOrderSuspendedList');
     Route::get('AgentChangeOrderStatus','OrderController@AgentChangeOrderStatus')->name('AgentChangeOrderStatus');
+    //Factor
+    Route::get('Factor','OrderController@Factor')->name('Factor');
   });
 Route::middleware('auth')->resource('orders','OrderController');
 /*
