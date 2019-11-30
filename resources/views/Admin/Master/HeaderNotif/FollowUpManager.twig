@@ -1,0 +1,9 @@
+{% if orderNotif > 0 %}
+<a 
+    href="{{route('orders.UnverifiedOrderList')}}" class="dropdown-item">
+    <i class="fa fa-envelope ml-2"></i> 
+    {{orderNotif}}
+    سفارش تایید نشده
+    {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+</a>
+{% endif %}
