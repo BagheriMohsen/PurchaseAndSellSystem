@@ -78,3 +78,6 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
     display: none!important;
 }
 /*End datatable customize */
+.invoiceWrapper td{
+    padding: 5px 5px 5px 0px!important;
+  }

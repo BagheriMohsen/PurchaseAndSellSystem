@@ -44,17 +44,17 @@
 			
 					
 						@if(session('message'))
-						<div class="alert alert-primary" role="alert">
+						<div class="alert alert-primary text-right" role="alert">
 								<a style="float:left" type="button" class="btn btn-dark btn-sm" data-dismiss="alert" aria-label="Close">
 								  <strong class="h6 text-light">
 									فهمیدم
 								  </strong>
 							   </a>
-							  <h4 class="alert-heading">
+							  <h6 class="alert-heading text-right">
 								راهنمایی
-							  </h4>
+							  </h6>
 							<hr>
-								<p class="mb-0">{{ session('message') }}</p>
+								<p class="mb-0 text-right">{{ session('message') }}</p>
 							</div>
 						@endif
 				

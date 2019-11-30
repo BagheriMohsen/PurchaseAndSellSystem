@@ -1,5 +1,14 @@
 $(document).ready(function(){
+    //Remove comma from number inputs for product Create Form
     $('#productCreateForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
+    //Remove comma from number inputs for product Edit Form
+    $('#productEditForm').submit(function(event){
         event.preventDefault();
         $('input.comma').each(function(index,item){
             item.value = parseInt(item.value.replace(/\,/g,'',10));
@@ -314,7 +323,7 @@ $(document).ready(function(){
         <tr class="text-center">
             
         <td>${product_name}</td>
-        <th>${newSpecial.price}</th>
+        <th>${numberWithCommas(newSpecial.price)}</th>
         <th>${newSpecial.place}</th>
         <td>
           <form  action="http://localhost:8000/special-tariffs/${newSpecial.id}" method="post" >
@@ -366,6 +375,9 @@ $(document).ready(function(){
     $('.storeSTariffForm').submit(function(event){
         event.preventDefault();
         var self = $(this);
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
@@ -533,7 +545,7 @@ $(document).ready(function(){
                     });
                 }
             });
-            productPriceInput.value = productPrice;
+            productPriceInput.value = numberWithCommas(productPrice);
 
         }else if(event.target.classList.contains('fa-trash-alt')){
             // event.target.parentElement.parentElement.parentElement.parentElement.remove();
@@ -579,9 +591,9 @@ $(document).ready(function(){
         var HBD_Date = form.find('input[name="HBD_Date"]').val();
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
-        var shippingCost = form.find('input[name="shippingCost"]').val();
-        var cashPrice = form.find('input[name="cashPrice"]').val();
-        var prePayment = form.find('input[name="prePayment"]').val();
+        var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
+        var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g,'',10);
+        var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g,'',10);
         var chequePrice = form.find('input[name="chequePrice"]').val();
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
@@ -643,13 +655,13 @@ $(document).ready(function(){
             var rowPrice = null;
             var count = value.querySelector('input[name="count"]').value;
             var off = value.querySelector('input[name="off"]').value;
-            var price = value.querySelector('input[name="price"]').value;
+            var price = value.querySelector('input[name="price"]').value.replace(/\,/g,'',10);
             rowPrice = (count*price) - off;
             overallPrice += rowPrice;
         });
-        $('#overallPrice').html(overallPrice);
+        $('#overallPrice').html(numberWithCommas(overallPrice));
         // Cash price field updated after overallprice update
-        $('#orderForm input[name="cashPrice"]').val(overallPrice);
+        $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
     });
     //Checking if city has agent exist when seller gives order
     $('#orderForm #city').on('click',function(){
@@ -708,6 +720,7 @@ $(document).ready(function(){
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+   
     var isoDate;
     // Setup persian datepicker for date inputs
     $(".persianDatePicker").pDatepicker({
@@ -972,22 +985,6 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
-        toastr["success"]('test',{
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-left",
-            "preventDuplicates": false,
-            "showDuration": "300",
-            "hideDuration": "500",
-            "timeOut": "3000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "slideIn",
-            "hideMethod": "SlideOut"
-            });
         $.each(tableData,function(index,value){
             orderNumbers.push(parseInt(value[1]));
         });
@@ -1077,6 +1074,7 @@ $(document).ready(function(){
             });
         }
         
-    })
+    });
+  
 });
 
