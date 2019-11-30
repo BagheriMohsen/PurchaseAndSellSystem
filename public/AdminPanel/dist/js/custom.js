@@ -845,7 +845,7 @@ $(document).ready(function(){
                 type:'GET',
                 success:function(response){
                     var price = parseInt(getProductPrice(response,product_id));
-                    var number = parseInt(self.find('input[name="number"]').val().replace(/\,/g,'',10));
+                    var number = parseInt(self.find('input[name="number"]').val());
                     number = number || 0;
                     self.find('.cargoValue').html(numberWithCommas(price*number));
                 }
@@ -985,22 +985,6 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
-        toastr["success"]('test',{
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-left",
-            "preventDuplicates": false,
-            "showDuration": "300",
-            "hideDuration": "500",
-            "timeOut": "3000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "slideIn",
-            "hideMethod": "SlideOut"
-            });
         $.each(tableData,function(index,value){
             orderNumbers.push(parseInt(value[1]));
         });
