@@ -61,6 +61,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
+    Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
     /* Agent Chief Dashboard */
     Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
@@ -109,6 +110,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('ProductList','OrderController@ProductList')->name('ProductList');
     Route::get('AgentExistInState/{CityName}','OrderController@AgentExistInState')->name('AgentExistInState');
     Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
+    Route::get('sellerNoActionOrders','OrderController@sellerNoActionOrders')->name('sellerNoActionOrders');
     /* Agents */
     Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
     Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');

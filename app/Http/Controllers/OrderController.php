@@ -247,5 +247,10 @@ class OrderController extends Controller
         return $pdf->download('invoice.pdf');
     }
 
+    public function sellerNoActionOrders(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where(['seller_id'=>$user->id,'status'=>1,'agent_id'=>null])->latest()->get();
+        return view('Admin.Order.Seller.seller-noAction-orders',compact('orders'));
+    }
     
 }
