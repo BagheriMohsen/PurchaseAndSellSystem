@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Order;
+use PDF;
 class OrderController extends Controller
 {
     /**
@@ -242,7 +243,8 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Factor(){
-        return view('Admin.Order.Factor');
+        $pdf = PDF::loadView('Admin.Order.Factor');
+        return $pdf->download('invoice.pdf');
     }
 
     
