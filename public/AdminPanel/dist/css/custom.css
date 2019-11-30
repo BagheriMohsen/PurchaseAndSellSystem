@@ -1,3 +1,6 @@
+body{
+    padding-right: 0!important;
+}
 .btn.disabled, .btn:disabled {
     opacity: 0.45;
 }
@@ -80,4 +83,7 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 /*End datatable customize */
 .invoiceWrapper td{
     padding: 5px 5px 5px 0px!important;
-  }
+}
+.modal{
+    z-index: 3100;
+}

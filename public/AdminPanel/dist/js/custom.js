@@ -93,6 +93,7 @@ $(document).ready(function(){
     //     ]
     // });
     var orderTable = $('#orderTable').DataTable({
+        "language": persianDataTable,
         columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -112,9 +113,13 @@ $(document).ready(function(){
           }
     });
     //User sections tables
-    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
+    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
+        "language": persianDataTable
+    });
     //Dashboard tables
-    $('#sellerInfoTable').DataTable();
+    $('#sellerInfoTable').DataTable({
+        "language": persianDataTable,
+    });
     //Store room tables
     // $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
     //Warehouse tables
@@ -1181,5 +1186,16 @@ $(document).ready(function(){
             form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
         }
     });
+    //Agents Charts
+    if($('#visitors-chart').length){
+        var userId = $('#userId').val();
+        $.ajax({
+            url:'http://localhost:8000/types/'+ product_id,
+            type:'Get',
+            success:function(response){
+                updateProductTypes(response,product_id,CSRF_TOKEN);
+            }
+        });
+    }
 });
 
