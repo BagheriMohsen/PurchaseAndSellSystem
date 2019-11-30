@@ -168,6 +168,7 @@ return [
          */
         TwigBridge\ServiceProvider::class,
         Cog\Laravel\Ban\Providers\BanServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -231,7 +232,7 @@ return [
          * My Append Aliases
          */
         'Twig' => TwigBridge\Facade\Twig::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
