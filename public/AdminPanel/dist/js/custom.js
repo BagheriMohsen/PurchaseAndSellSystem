@@ -690,7 +690,7 @@ $(document).ready(function(){
 
     });
     // Calculating order overall price
-    $('#orderForm').on('change click keyup',function(){
+    $('#orderForm .orderList').on('change click keyup',function(){
         var overallPrice = null;
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
@@ -701,8 +701,14 @@ $(document).ready(function(){
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(numberWithCommas(overallPrice));
-        // Cash price field updated after overallprice update
-        $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
+        // Cash price or cheque price field updated after overallprice update
+        var paymentMethod = $('#orderForm input[name="paymentMethod"]:checked').val();
+        if(paymentMethod === 'cash'){
+            $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
+        }else{
+            $('#orderForm input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+            $('#orderForm input[name="prePayment"]').val(0);
+        }
     });
     //Checking if city has agent exist when seller gives order
     $('#orderForm #city').on('click',function(){
@@ -1142,8 +1148,38 @@ $(document).ready(function(){
     };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
-        
+        var form = $(this).parents('form');
+        var cashPrice = form.find('input[name="cashPrice"]');
+        var prePayment = form.find('input[name="prePayment"]')
+        var chequePrice = form.find('input[name="chequePrice"]');
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        var paymentMethod = $(this).val();
+        if(paymentMethod === 'cash'){
+            cashPrice.attr('disabled',false);
+            prePayment.attr('disabled','disabled');
+            chequePrice.attr('disabled','disabled');
+            cashPrice.val(numberWithCommas(overallPrice));
+            chequePrice.val(0);
+            prePayment.val(0);
+           
+        }else{
+            cashPrice.attr('disabled','disabled');
+            prePayment.attr('disabled', false);
+            chequePrice.attr('disabled', false);
+            chequePrice.val(numberWithCommas(overallPrice));
+            prePayment.val(0);
+            cashPrice.val(0);
+        }
     });
-   
+    $('input[name="prePayment"]').on('keyup',function(){
+        var form = $(this).parents('form');
+        var prePayment = parseInt($(this).val().replace(/\,/g,'',10))
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        if(prePayment){
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice - prePayment) );
+        }else{
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+        }
+    });
 });
 
