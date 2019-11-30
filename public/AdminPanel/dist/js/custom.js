@@ -997,7 +997,7 @@ $(document).ready(function(){
             console.log(condition,orderNumbers);
             $.ajax({
                 url:actionUrl,
-                type:'post',
+                type:'get',
                 data:{
                     _token:CSRF_TOKEN,
                     condition:condition,
@@ -1044,7 +1044,7 @@ $(document).ready(function(){
             form.find('button').html('<i class="fas fa-spinner"></i>');
             $.ajax({
                 url:actionUrl,
-                type:'post',
+                type:'get',
                 data:{
                     _token:CSRF_TOKEN,
                     orderNumbers:orderNumbers
