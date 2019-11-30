@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' %}
+  {% include 'Admin/Master/path' with {'title':'پنل شما'}%}
 {% endblock %}
 
 {% block content %}
@@ -29,8 +29,7 @@
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات در انتظار تحویل</span>
                   <span class="info-box-number">
-                    10
-                    <small>%</small>
+                    {{ WaitingForDelivery.count() }}
                   </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -45,7 +44,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات معلق</span>
-                  <span class="info-box-number">2</span>
+                  <span class="info-box-number">{{ subsended.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -63,7 +62,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات تحویل داده شده</span>
-                  <span class="info-box-number">5</span>
+                  <span class="info-box-number">{{ collected.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -77,7 +76,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات برگشت خورده</span>
-                  <span class="info-box-number">6</span>
+                  <span class="info-box-number">{{ Returned.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -91,7 +90,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سطح</span>
-                  <span class="info-box-number">A</span>
+                  <span class="info-box-number">{{user.level}}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -105,7 +104,10 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">درصد وصول</span>
-                  <span class="info-box-number">60%</span>
+                  <span class="info-box-number">
+                      {{collectedPercent}}
+                      ٪
+                    </span>
                 </div>
                 <!-- /.info-box-content -->
               </div>

@@ -55,11 +55,11 @@
             <td class="text-info">{{'ندارد'}}</td>
           {% endif %}
 
-          <td>{{user.internalPrice}}</td>
+          <td>{{user.internalPrice | number_format }}</td>
 
-          <td>{{user.locallyPrice}}</td>
+          <td>{{user.locallyPrice | number_format }}</td>
 
-          <td>{{user.villagePrice}}</td>
+          <td>{{user.villagePrice | number_format }}</td>
 
           {% if user.calType != null %}
             <td>{{'مبلغ فاکتور'}}</td>
@@ -130,7 +130,7 @@
               <tr class="text-center">
 
                 <td>{{ tariff.product.name }}</td>
-                <th>{{ tariff.price }}</th>
+                <th>{{ tariff.price | number_format}}</th>
               {% if tariff.place == "suburb" %}
                   <th>{{ "حومه شهر" }}</th>
               {% elseif  tariff.place == "internal" %}

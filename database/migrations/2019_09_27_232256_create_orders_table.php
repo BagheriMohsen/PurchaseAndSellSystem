@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('followUpManager_id')->unsigned()->nullable();
             $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
+            $table->char('trackingCode',100);
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
@@ -38,6 +39,7 @@ class CreateOrdersTable extends Migration
             $table->integer('chequePrice')->nullable();
             $table->text('sellerDescription')->nullable();
             $table->text('sendDescription')->nullable();
+            $table->text('statusDescription')->nullable();
             $table->string('postalCode')->nullable();
             $table->Date('HBD_Date')->nullable();
             $table->Date('returnDate')->nullable();

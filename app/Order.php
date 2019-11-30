@@ -31,6 +31,7 @@ class Order extends Model
     'address',
     'addressConfirm',
     'HBD_Date',
+    'trackingCode'
    
    ];
     /*

@@ -139,11 +139,12 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
             'level'         =>  'S',
-            'sendAuto'      =>  0,
+            'sendAuto'      =>  'on',
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
@@ -162,6 +163,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -185,6 +187,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -208,6 +211,7 @@ class StartingSeeder extends Seeder
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
             'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -275,16 +279,20 @@ class StartingSeeder extends Seeder
       |*/
       'App\OrderStatus'::create(['name'=>'ثبت سفارش']);
       'App\OrderStatus'::create(['name'=>'ارسال به کالسنتر']);
+      'App\OrderStatus'::create(['name'=>'ارسال به مدیر پیگیری']);
       'App\OrderStatus'::create(['name'=>'ارسال به فروشنده']);
       'App\OrderStatus'::create(['name'=>'تماس مجدد']);
-      'App\OrderStatus'::create(['name'=>'انصراف']);
       'App\OrderStatus'::create(['name'=>'برگشت به فروشنده']);
       'App\OrderStatus'::create(['name'=>'در انتظار تحویل']);
       'App\OrderStatus'::create(['name'=>'برگشت به مدیر پیگیری']);
       'App\OrderStatus'::create(['name'=>'غیر قابل ارسال']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-داخل شهر']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-حومه شهر']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-روستا']);
+      'App\OrderStatus'::create(['name'=>'انصراف مشتری']);
+      'App\OrderStatus'::create(['name'=>'معلق']);
       'App\OrderStatus'::create(['name'=>'وصولی']);
       'App\OrderStatus'::create(['name'=>'کنسلی']);
-      'App\OrderStatus'::create(['name'=>'معلق']);
       'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
       'App\OrderStatus'::create(['name'=>'خام']);
       /*

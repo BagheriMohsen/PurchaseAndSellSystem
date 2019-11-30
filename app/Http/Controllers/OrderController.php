@@ -61,6 +61,7 @@ class OrderController extends Controller
                 }
             }
         /*##################ENDIF##################*/
+        $trackingCode = uniqid();
         $order = Order::create([
             'city_id'           =>      $request->city_id,
             'state_id'          =>      $request->state_id,
@@ -69,6 +70,7 @@ class OrderController extends Controller
             'seller_id'         =>      auth()->user()->id,
             'status'            =>      1,
             'lastStatus'        =>      1,
+            'trackingCode'      =>      $trackingCode,
             'mobile'            =>      $request->mobile,
             'telephone'         =>      $request->telephone,
             'fullName'          =>      $request->fullName,
@@ -146,9 +148,10 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderLists(){
+        $bottom_statuses = 'App\OrderStatus'::skip(10)->take(4)->get();
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
-        return view('Admin.Order.Agent.agent-orders',compact('orders'));
+        return view('Admin.Order.Agent.agent-orders',compact('orders','bottom_statuses'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -215,7 +218,6 @@ class OrderController extends Controller
             return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE,$city);
         }
     }
-
     /*
     |--------------------------------------------------------------------------
     | Seller Orders Lists
@@ -224,6 +226,15 @@ class OrderController extends Controller
     public function sellerOrdersLists(){
         $orders = Order::latest()->paginate(10);
         return view('Admin.Order.Seller.seller-orders',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Change Order Status
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentChangeOrderStatus(){
+
+        //
     }
 
     
