@@ -36,18 +36,18 @@
                 <!-- /.card-header -->
                 <div class="card-body col-12 mx-auto">
                 
-                  <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
+                  <table  id="unverifiedOrdersForm" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
                 width="100%">
                     <thead>
                     <tr>
                       <th></th>
                       <th>نام خریدار</th>
                       <th>استان-شهر</th>
-                      <th>کد پستی</th>
                       <th>همراه-ثابت</th>
                       <th>کد پیگیری</th>
                       <th>نوع پرداخت</th>
                       <th>تاریخ ثبت</th>
+                      <th>فروشنده</th>
                       <th>عملیات</th>
                     </tr>
                     </thead>
@@ -57,7 +57,6 @@
                        <td> </td>
                         <td>{{order.fullName}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
-                        <td>{{order.postalCode}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
                         <td>{{order.trackingCode}}</td>
                         {% if order.paymentMethod == 'cash' %}
@@ -66,16 +65,8 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+                        <td> فروشنده اول</td>
                         <td>
-                          {% if order.paymentMethod != 'cash' %}
-                            <a title="جزئیات چک" class="text-secondary" >
-                                <i class="fas fa-money-bill crud-icon"></i>
-                            </a>
-                          {% else %}
-                            <a title="پرداخت بصورت نقدی ست" class="text-primary" >
-                                <i class="fas fa-money-bill crud-icon"></i>
-                            </a>
-                          {% endif %}
                           <a title="ویرایش سفارش" class="text-secondary" >
                               <i class="far fa-edit crud-icon"></i>
                           </a>
@@ -98,18 +89,94 @@
           </div>
 
       <div class="row">
+      <div class="col-6">
+            <form class="" action="" method="post" id="backToSellerForm">
+              <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  برگشت به فروشنده 
+                </strong>
+              </button>
+          </form>
+           <form class="mt-4" action="" method="post" id="">
+              <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  غیر قابل ارسال 
+                </strong>
+              </button>
+          </form>
+          <form class="" action="" method="post" id="">
+              <button class="col-sm-6  btn btn-mdb-color btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  اختصاص   
+                </strong>
+              </button>
+          </form>
+         </div>
         <div class="col-6">
-          <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+          <form class="" action="" id="chooseAgentForm">
+            <input type="hidden" name="_token" value="{{csrf_token()}}" />
+            <h6>نوع ارسال:</h6>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input"  value="2" name="postType" >
+                <label class="form-check-label" for="suspend">پیک</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input"  value="3" name="postType">
+                <label class="form-check-label" for="cancel">شکوه مهر</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">چابک</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">فارس پست</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">فلوکس</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">فروتل</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">سپیده ماهان</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">گیتوی پست</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" value="3" name="postType">
+                <label class="form-check-label" for="cancel">لجیتو</label>
+              </div>
+              <div class="mt-4">
+                <label for="status">
+                  ارسال سفارش برای نماینده:
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="p-2 pb-2 form-control col-sm-6" name="status">
+                  <option value="">گزینه ای انتخاب نشده</option>
+                </select>
+              </div>
+            
+            <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
               <strong class="h6">
-                چاپ
+                ارسال
               </strong>
-          </button>
-          <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
-              <strong class="h6">
-                اکسل
-              </strong>
-          </button>
+            </button>
+          </form>
+          <hr>
+          
         </div>
+         
+        
       </div>
      
 
@@ -189,16 +256,6 @@
                 <td>{{ item.count }}</td>
                 <td>{{ item.off }}</td>
                 <td class="priceSum">{{ (item.product.price * item.count) - item.off }}</td>
-                  {# <td>
-                  <form  action="#" method="post" >
-                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
-                      <input type="hidden" name="_method" value="DELETE" />
-                      <input type="hidden" name="user_id" value="{{item.id}}">
-                      <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
-                      <i class="far fa-trash-alt crud-icon"></i>
-                    </a>
-                  </form>
-                </td> #}
               </tr>
 
             {% endfor %}
