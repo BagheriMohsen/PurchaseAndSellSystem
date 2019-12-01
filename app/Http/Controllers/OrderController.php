@@ -234,12 +234,14 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentChangeOrderStatus(Request $request){
-        //     $data =array();
-        // foreach($request->orders as $item){
-        //     $data[]=$item;
-        // }
-        $status = Input::get('status');;
-        return response()->json($status);
+
+        $items = $request->orderNumbers;
+        foreach($items as $item){
+            $order = 'App\Order'::findOrFail($item['id']);
+            $order->update(['status'=>$item['statue']]);
+        }
+        
+        return response()->json('موفقیت آمیز بود');
     }
     /*
     |--------------------------------------------------------------------------
