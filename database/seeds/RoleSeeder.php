@@ -34,16 +34,16 @@ class RoleSeeder extends Seeder
         $user = 'App\User'::findOrFail(4);
         $user->assignRole($fundwarehouser->name);
         #5.agentChief
-        // $user = 'App\User'::findOrFail(5);
-        // $user->assignRole($agentChief->name);
+        $user = 'App\User'::findOrFail(5);
+        $user->assignRole($agentChief->name);
         #6.agent
-        // $user = 'App\User'::findOrFail(6);
-        // $user->assignRole($agent->name);
+        $user = 'App\User'::findOrFail(6);
+        $user->assignRole($agent->name);
         #7.seller
-        // $user = 'App\User'::findOrFail(7);
-        // $user->assignRole($seller->name);
+        $user = 'App\User'::findOrFail(7);
+        $user->assignRole($seller->name);
         #8.callCenter
-        // $user = 'App\User'::findOrFail(8);
-        // $user->assignRole($callCenter->name);
+        $user = 'App\User'::findOrFail(8);
+        $user->assignRole($callCenter->name);
     }
 }

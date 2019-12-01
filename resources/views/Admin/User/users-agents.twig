@@ -22,9 +22,9 @@
   width="100%">
       <thead>
         <tr>
-          <th>نام</th>
+          <th>نام-نام خانوادگی</th>
           <th>ارسال خودکار</th>
-          <th>استان</th>
+          <th>ستان-شهر</th>
           <th>نام کاربری</th>
           <th>مدیر نماینده</th>
           <th>تعرفه پیش فرض داخلی</th>
@@ -37,7 +37,7 @@
       <tbody>
       {% for user in users %}
         <tr>
-          <td>{{user.name}}</td>
+          <td>{{user.name}}{{' '}}{{user.family}}</td>
 
           {% if user.sendAuto != null %}
               <td class="text-success">{{'فعال'}}</td>
@@ -45,21 +45,21 @@
               <td class="text-danger">{{'غیر فعال'}}</td>
           {% endif %}
 
-          <td>{{user.state.name}}</td>
+          <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
 
           <td>{{user.username}}</td>
 
           {% if user.chief.name != null %}
-            <td>{{user.chief.username}}</td>
+            <td>{{user.chief.name}}{{' '}}{{user.chief.family}}</td>
           {% else %}
             <td class="text-info">{{'ندارد'}}</td>
           {% endif %}
 
-          <td>{{user.internalPrice}}</td>
+          <td>{{user.internalPrice | number_format }}</td>
 
-          <td>{{user.locallyPrice}}</td>
+          <td>{{user.locallyPrice | number_format }}</td>
 
-          <td>{{user.villagePrice}}</td>
+          <td>{{user.villagePrice | number_format }}</td>
 
           {% if user.calType != null %}
             <td>{{'مبلغ فاکتور'}}</td>
@@ -130,7 +130,7 @@
               <tr class="text-center">
 
                 <td>{{ tariff.product.name }}</td>
-                <th>{{ tariff.price }}</th>
+                <th>{{ tariff.price | number_format}}</th>
               {% if tariff.place == "suburb" %}
                   <th>{{ "حومه شهر" }}</th>
               {% elseif  tariff.place == "internal" %}
@@ -177,7 +177,7 @@
               </div>
               <div class="form-group col-sm-6">
                 <label for="tariff_price">مبلغ:</label>
-                <input type="number" class="form-control" name="tariff_price" required>
+                <input type="text" class="form-control comma" name="tariff_price" required>
               </div>
             </div>
             <button type="submit" class="btn btn-success">ذخیره</button>

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cog\Contracts\Ban\Bannable as BannableContract;
 use Cog\Laravel\Ban\Traits\Bannable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\Models\Media;
@@ -11,7 +12,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia,BannableContract
 {
     use Notifiable;
     use HasRoles;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements HasMedia
         'mobile',
         'status',
         'state_id',
+        'city_id',
         'address',
         'uploadCS',
         'level',
@@ -78,11 +80,27 @@ class User extends Authenticatable implements HasMedia
     ];
     /*
     |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderSeller(){
+        return $this->hasMany('App\Order');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderAgent(){
+        return $this->hasMany('App\Order');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
-    public function citiesUnderControl(){
-        return $this->hasMany('App\City','followUpManager','id');
+    public function statesUnderControl(){
+        return $this->hasMany('App\State','followUpManager','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -107,6 +125,14 @@ class User extends Authenticatable implements HasMedia
     */
     public function state(){
       return $this->belongsTo('App\State');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with City Model
+    |--------------------------------------------------------------------------
+    */
+    public function city(){
+        return $this->belongsTo('App\City');
     }
     /*
     |--------------------------------------------------------------------------

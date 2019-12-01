@@ -21,6 +21,7 @@ class UserController extends Controller
         $users = User::Role([
             'normalUser',
             'admin',
+            'agentChief',
             'followUpManager',
             'mainWarehouser',
             'fundWarehouser'
@@ -39,9 +40,16 @@ class UserController extends Controller
 
         $roles          =   Role::latest()->get();
         $cities         =   'App\City'::latest()->get();
+        $states         =   'App\State'::latest()->get();
         $agentChiefs    =   User::Role('agentChief')->get();
         $callCenters    =   User::Role('callCenter')->get();
-        return view('Admin.User.users-create',compact('cities','roles','agentChiefs','callCenters'));
+        return view('Admin.User.users-create',compact(
+            'cities',
+            'states',
+            'roles',
+            'agentChiefs',
+            'callCenters'
+        ));
     }
 
     /**
@@ -52,7 +60,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $request->validate([
+            'username'  =>  'unique:users'
+        ],[
+            'username.unique'  =>  'این نام کاربری قبلا استفاده شده'
+        ]);
          $user = User::create([
             'name'                  =>  $request->name,
             'family'                =>  $request->family,
@@ -62,6 +74,7 @@ class UserController extends Controller
             'mobile'                =>  $request->mobile,
             'status'                =>  $request->status,
             'state_id'              =>  $request->state,
+            'city_id'               =>  $request->city,
             'address'               =>  $request->address,
             'uploadCS'              =>  $request->uploadCS,
             'level'                 =>  $request->level,
@@ -87,6 +100,9 @@ class UserController extends Controller
             'porsantType'           =>  $request->porsantType,
             'forceOrder'            =>  $request->forceOrder
         ]);
+        
+        
+
         $user->assignRole($request->role);
         return redirect()->route('users.index');
     }
@@ -111,11 +127,18 @@ class UserController extends Controller
     public function edit($id)
     {
       $roles  = Role::latest()->get();
-      $cities = 'App\City'::latest()->get();
+      $cities         =   'App\City'::latest()->get();
+      $states         =   'App\State'::latest()->get();
       $user = User::findOrFail($id);
       $agentChiefs    =   User::Role('agentChief')->get();
       $callCenters    =   User::Role('callCenter')->get();
-      return view('Admin.User.users-edit',compact('user','roles','cities','callCenters','agentChiefs'));
+      return view('Admin.User.users-edit',compact(
+          'user',
+          'roles',
+          'cities',
+          'states',
+          'callCenters',
+          'agentChiefs'));
     }
 
     /**
@@ -145,6 +168,7 @@ class UserController extends Controller
        'mobile'             =>  $request->mobile,
        'status'             =>  $request->status,
        'state_id'           =>  $request->state,
+       'city_id'            =>  $request->city,
        'address'            =>  $request->address,
        'uploadCS'           =>  $user->uploadCS,
        'level'              =>  $request->level,
@@ -170,6 +194,8 @@ class UserController extends Controller
        'porsantType'        =>  $request->porsantType,
        'forceOrder'         =>  $request->forceOrder
      ]);
+       
+     
      $user->assignRole($request->role);
      return redirect()->route('users.index');
     }
@@ -186,7 +212,55 @@ class UserController extends Controller
         User::destroy($id);
         return redirect()->route('users.index');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Dashboard
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminDashboard(){
+        $today = 'Carbon\Carbon'::now();
+        
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        //Order Waiting For Delivery  
+        $OrderWaitingForDeliveryToday = 'App\Order'::where([
+            ['status','=',7],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderWaitingForDeliveryInMonth = 'App\Order'::where([
+            ['status','=',7],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        //Returned Collected  
+        $OrderReturnedToday = 'App\Order'::where([
+            ['status','=',14],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderReturnedInMonth = 'App\Order'::where([
+            ['status','=',14],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        //Order Collected 
+        $OrderCollectedToday = 'App\Order'::where([
+            ['status','=',13],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderCollectedInMonth = 'App\Order'::where([
+            ['status','=',13],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        return view('Admin/index',compact(
+            'OrderWaitingForDeliveryToday',
+            'OrderWaitingForDeliveryInMonth',
+            'OrderCollectedToday',
+            'OrderCollectedInMonth',
+            'OrderReturnedToday',
+            'OrderReturnedInMonth'
 
+        ));
+    }
     /*
     |--------------------------------------------------------------------------
     | Agent Details
@@ -196,7 +270,7 @@ class UserController extends Controller
     public function agents()
     {
         $products = 'App\Product'::all();
-        $users = User::Role(['agent', 'agentChief'])->get();
+        $users = User::Role('agent')->get();
         return view('Admin.User.users-agents',compact('users','products'));
     }
     /*
@@ -237,6 +311,8 @@ class UserController extends Controller
             return redirect()->route('users.AgentChiefDashboard')->with('switchSuccess','true');
         }elseif($role == "seller"){
             return redirect()->route('users.SellerDashboard')->with('switchSuccess','true');
+        }elseif($role == "followUpManager"){
+            return redirect()->route('orders.UnverifiedOrderList')->with('switchSuccess','true');
         }else{
             return redirect('/')->with('switchSuccess','true');
         }
@@ -291,7 +367,6 @@ class UserController extends Controller
             $user->update(['uploadCS'=>$user->uploadCS]);
         }
         $user->update([
-            'status'             =>  $request->status,
             'password'  =>  Hash::make($request->password)
         ]);
         if($user->id == auth()->user()->id){
@@ -306,8 +381,75 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentDashboard(Request $request){
+        $user = User::findOrFail(auth()->user()->id);
         
-        return view('Admin.agent-index');
+        $WaitingForDelivery = 'App\Order'::where(['status'=>7,'agent_id'=>$user->id])->get();
+        $subsended  =   'App\Order'::where(['status'=>15,'agent_id'=>$user->id])->get();
+        $Returned   =   'App\Order'::where(['status'=>14,'agent_id'=>$user->id])->get();
+        
+        $userAllOrders  =   'App\Order'::where('agent_id',$user->id)->firstOrFail()->count();
+        $collected      =   'App\Order'::where(['status'=>13,'agent_id'=>$user->id])->get();
+        
+        $collectedPercent = ($collected->count() * 100 ) / $userAllOrders ;
+        
+    
+        return view('Admin.agent-index',compact(
+            'WaitingForDelivery',
+            'collected',
+            'Returned',
+            'collectedPercent',
+            'subsended',
+            'user',
+         
+        
+        ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Dashboard Chart Api
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentDashboardChartApi($userID){
+        /* ############ Charts ############## */
+        $today = 'Carbon\Carbon'::now();
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        //Collected Charts  
+        $collectedCharts = 'App\Order'::where([
+            ['status','=',13],
+            ['agent_id','=',$userID],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->get('updated_at');
+        $collectedCharts = $collectedCharts->toArray();
+        // Cancelled Charts
+        $cancelledCharts = 'App\Order'::where([
+            ['status','=',14],
+            ['agent_id','=',$userID],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->get('updated_at');
+        $cancelledCharts = $cancelledCharts->toArray();
+        // Subsended Charts
+        $subsendedCharts = 'App\Order'::where([
+            ['status','=',1],
+            ['agent_id','=',$userID],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])
+        ->orWhere([
+            ['status','=',15],
+            ['agent_id','=',$userID],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo]
+            ])
+        ->get('updated_at');
+        $subsendedCharts = $subsendedCharts->toArray();
+        
+        return Response()->json(array(
+            'subsendedCharts'=>$subsendedCharts,
+            'cancelledCharts'=>$cancelledCharts,
+            'collectedCharts'=>$collectedCharts
+        ),200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
@@ -342,30 +484,30 @@ class UserController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
-    | Follow Up Manager City Store
+    | Follow Up Manager State Store
     |--------------------------------------------------------------------------
     |*/
-    public function followUpManagerCityStore(Request $request){
+    public function followUpManagerStateStore(Request $request){
         $id = $request->user_id;
         
-        $cityExists = 'App\City'::where('name',$request->CityName)->exists();
+        $stateExists = 'App\State'::where('name',$request->StateName)->exists();
        
-        if($cityExists == false){
-            return redirect()->route('users.edit',[$id])->with('info','ابتدا این شهر را در سیستم ذخیره کنید');
+        if($stateExists == false){
+            return redirect()->route('users.edit',[$id])->with('info','ابتدا این استان را در سیستم ذخیره کنید');
         }
 
-        $status = 'App\City'::where([
-            ['name','=',$request->CityName],
+        $status = 'App\State'::where([
+            ['name','=',$request->StateName],
             ['followUpManager','!=',null]
         ])->exists();
 
         if($status == True){
-            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','شهر انتخاب شده قبلا در سیستم ثبت شده');
+            return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','استان انتخاب شده قبلا در سیستم ثبت شده');
         }else{
            
-            $city = 'App\City'::where('name',$request->CityName)->firstOrFail();
+            $city = 'App\State'::where('name',$request->StateName)->firstOrFail();
             $city->update(['followUpManager'=>$id]);
-            return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر به این مدیر پیگیری اختصاص پیدا کرد');
+            return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان به این مدیر پیگیری اختصاص پیدا کرد');
         }
 
     }
@@ -374,11 +516,11 @@ class UserController extends Controller
     | Follow Up Manager City Clear
     |--------------------------------------------------------------------------
     |*/
-    public function followUpManagerCityClear($CityName){
-        $city = 'App\City'::where('name',$CityName)->firstOrFail();
-        $id = $city->followUpManager;
-        $city->update(['followUpManager'=>null]);
-        return redirect('/users/'.$id.'/edit#citiesUnderControl')->with('info','این شهر از لیست این مدیر پیگیری خارج شد');
+    public function followUpManagerStateClear($StateName){
+        $state = 'App\State'::where('name',$StateName)->firstOrFail();
+        $id = $state->followUpManager;
+        $state->update(['followUpManager'=>null]);
+        return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان از لیست این مدیر پیگیری خارج شد');
     }
 
 

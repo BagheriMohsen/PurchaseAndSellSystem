@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' %}
+  {% include 'Admin/Master/path' with {'title':'پنل شما'}%}
 {% endblock %}
 
 {% block content %}
@@ -23,13 +23,13 @@
   <div class="row">
             <div class="col-12 col-sm-6 col-md-4">
               <div class="info-box">
-                <span class="info-box-icon bg-info elevation-1"><i class="fa fa-gear"></i></span>
-
+                <span class="info-box-icon bg-info elevation-1">
+                  <i class="far fa-calendar-alt"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات در انتظار تحویل</span>
                   <span class="info-box-number">
-                    10
-                    <small>%</small>
+                    {{ WaitingForDelivery.count() }}
                   </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -39,11 +39,12 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-4 ">
               <div class="info-box mb-3">
-                <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-google-plus"></i></span>
-
+                <span class="info-box-icon bg-secondary elevation-1">
+                  <i class="far fa-calendar-times"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات معلق</span>
-                  <span class="info-box-number">2</span>
+                  <span class="info-box-number">{{ subsended.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -56,11 +57,12 @@
 
             <div class="col-12 col-sm-6 col-md-4 ">
               <div class="info-box mb-3">
-                <span class="info-box-icon bg-success elevation-1"><i class="fa fa-shopping-cart"></i></span>
-
+                <span class="info-box-icon bg-success elevation-1">
+                  <i class="far fa-calendar-check"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات تحویل داده شده</span>
-                  <span class="info-box-number">5</span>
+                  <span class="info-box-number">{{ collected.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -69,11 +71,12 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-4 ">
               <div class="info-box mb-3">
-                <span class="info-box-icon bg-secondary elevation-1"><i class="fa fa-users"></i></span>
-
+                <span class="info-box-icon bg-danger elevation-1">
+                  <i class="far fa-calendar-minus"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سفارشات برگشت خورده</span>
-                  <span class="info-box-number">6</span>
+                  <span class="info-box-number">{{ Returned.count() }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -82,11 +85,13 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-4 ">
               <div class="info-box mb-3">
-                <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users"></i></span>
-
+                <span class="info-box-icon bg-warning elevation-1">
+                  <i class="fas fa-level-up-alt"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">سطح</span>
-                  <span class="info-box-number">A</span>
+                  <span class="info-box-number">{{user.level}}</span>
+                  <input type="hidden" id="userId" value="{{user.id}}"></input>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -95,11 +100,15 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-4 ">
               <div class="info-box mb-3">
-                <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"></i></span>
-
+                <span class="info-box-icon bg-primary elevation-1">
+                  <i class="fas fa-calculator"></i>
+                </span>
                 <div class="info-box-content">
                   <span class="info-box-text">درصد وصول</span>
-                  <span class="info-box-number">60%</span>
+                  <span class="info-box-number">
+                      {{collectedPercent}}
+                      ٪
+                    </span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -112,50 +121,110 @@
           <div class="row mt-5 mb-5">
             {# item #}
             <div class="col-sm-6 mx-auto">
-              <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th class="bg-primary text-center dana-bold">صورت حساب جاری شما</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
+          <table class="table table-borderless table-striped">
+            <thead>
+              <tr>
+                <th class="bg-primary text-center dana-bold">صورت حساب جاری شما</th>
+              </tr>
+            </thead>
+          <tbody>
+              <tr>
+                <td class="d-flex">
+                    <div class="col-10 mx-auto">
+                    مجموع فروش
+                    </div>
+                    <div class="col-2 mx-auto">
+                       -
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="d-flex">
+                    <div class="col-10 mx-auto">
+                      مجموع پیش واریزی
+                    </div>
+                    <div class="col-2 mx-auto">
+                        -
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="d-flex">
+                    <div class="col-10 mx-auto">
+                      هزینه حمل
+                    </div>
+                    <div class="col-2 mx-auto">
+                        -
+                    </div>
+                </td>
+              </tr>
+              <tr>
                   <td class="d-flex">
                       <div class="col-10 mx-auto">
-                      مجموع فروش
+                        مجوع چک ها
                       </div>
                       <div class="col-2 mx-auto">
-                          1,500,000
+                          -
                       </div>
                   </td>
                 </tr>
                 <tr>
-                  <td class="d-flex">
-                      <div class="col-10 mx-auto">
-                        مجموع پیش واریزی
-                      </div>
-                      <div class="col-2 mx-auto">
-                          500,000
-                      </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="d-flex">
-                      <div class="col-10 mx-auto">
-                        هزینه حمل
-                      </div>
-                      <div class="col-2 mx-auto">
-                          50,000
-                      </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    <td class="d-flex">
+                        <div class="col-10 mx-auto">
+                          مجموع چکهای تایید شده
+                        </div>
+                        <div class="col-2 mx-auto">
+                            -
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                      <td class="d-flex">
+                          <div class="col-10 mx-auto">
+                            مجموع پرداختی
+                          </div>
+                          <div class="col-2 mx-auto">
+                              -
+                          </div>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td class="d-flex">
+                            <div class="col-10 mx-auto">
+                                مجموع مبلغ مشارکت
+                            </div>
+                            <div class="col-2 mx-auto">
+                                -
+                            </div>
+                        </td>
+                      </tr>
+                      <tr>
+                          <td class="d-flex">
+                              <div class="col-10 mx-auto">
+                                  مجموع مبلغ عودت وجه
+                              </div>
+                              <div class="col-2 mx-auto">
+                                  -
+                              </div>
+                          </td>
+                        </tr>
+                        <tr>
+                            <td class="d-flex">
+                                <div class="col-10 mx-auto">
+                                    مجموع مبلغ هزینه ها
+                                </div>
+                                <div class="col-2 mx-auto">
+                                    -
+                                </div>
+                            </td>
+                          </tr>
+                    </tbody>
+                  </table>
             </div>
             {# end item #}
             {# item #}
             <div class="col-sm-6  mx-auto">
-              <table class="table table-bordered table-striped">
+              <table class="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th class="bg-warning text-center dana-bold">مبلغ بدهی شما</th>
@@ -168,30 +237,70 @@
                       تخفیف
                       </div>
                       <div class="col-2 mx-auto">
-                          100,000
+                          -
                       </div>
                   </td>
                 </tr>
                 <tr>
                   <td class="d-flex">
-                      <div class="col-10 mx-auto">
-                        جایزه
-                      </div>
-                      <div class="col-2 mx-auto">
-                          5
-                      </div>
-                  </td>
+                    <div class="col-10 mx-auto">
+                      جایزه
+                    </div>
+                    <div class="col-2 mx-auto">
+                        -
+                    </div>
+                </td>
+                </tr>
+                <tr>
+                  <td class="d-flex">
+                    <div class="col-10 mx-auto">
+                      امتیاز
+                    </div>
+                    <div class="col-2 mx-auto">
+                        -
+                    </div>
+                </td>
                 </tr>
                 <tr>
                   <td class="d-flex">
                       <div class="col-10 mx-auto">
-                        امتیاز
+                        مبلغ بدهی شما
                       </div>
                       <div class="col-2 mx-auto">
-                          5
+                          -
                       </div>
                   </td>
-                </tr>
+                  </tr>
+                  <tr>
+                    <td class="d-flex">
+                        <div class="col-10 mx-auto">
+                          بدهی چکی شما
+                        </div>
+                        <div class="col-2 mx-auto">
+                            -
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="d-flex">
+                        <div class="col-10 mx-auto">
+                          بدهی نقدی شما
+                        </div>
+                        <div class="col-2 mx-auto">
+                            -
+                        </div>
+                  </td>
+                  </tr>
+                  <tr>
+                      <td class="d-flex">
+                          <div class="col-10 mx-auto">
+                            مانده حساب
+                          </div>
+                          <div class="col-2 mx-auto">
+                              -
+                          </div>
+                      </td>
+                    </tr>
               </tbody>
             </table>
             </div>
@@ -202,7 +311,7 @@
 
          {# chart #}
           <div class="row text-center d-block mt-5">
-            <h4 >نمودار وضعیت سفارش ها در 30 روز گذشته</h4>
+            <h4 ></h4>
             <hr width="300px" style="border-bottom:5px solid red;" />
           {# chart #}
             <div class="card mt-3">

@@ -25,7 +25,7 @@
 
   {% include 'Messages/message' %}
   {% include 'Messages/errors' %}
-  <form action="{{route('products.update',product.id)}}" method="post" class="row bg-white pt-2 pb-3" enctype="multipart/form-data">
+  <form id="productEditForm" action="{{route('products.update',product.id)}}" method="post" class="row bg-white pt-2 pb-3" enctype="multipart/form-data">
     <div class="row mx-5">
       <input name="_token" type="hidden" value="{{ csrf_token() }}" />
       <input type="hidden" name="_method" value="put" />
@@ -52,7 +52,7 @@
         <label for="price"> قیمت محصول - تومان
           <span class="text-danger">*</span>
         </label>
-        <input value="{{product.price}}" class="form-control" type="number" placeholder=""name="price" required>
+        <input value="{{product.price}}" class="form-control comma" type="text" placeholder=""name="price" required>
       </div>
       {# قیمت محصول #}
 
@@ -61,14 +61,16 @@
         <label for="phone-number"> قیمت خرید - تومان
           <span class="text-danger">*</span>
         </label>
-        <input value="{{product.buyPrice}}" class="form-control" type="number" placeholder=""name="buyPrice" required>
+        <input value="{{product.buyPrice}}" class="form-control comma" type="text" placeholder=""name="buyPrice" required>
       </div>
       {# قیمت خرید #}
 
       {# تصویر محصول #}
       <div class="col-sm-6 mt-4 px-5">
         <label for="image">تصویر محصول</label>
-        <img  class="col-sm-12" src="{{product.cardUrl}}" alt="">
+        {% if product.image_id is not null %}
+          <img  class="col-sm-12" src="{{product.cardUrl}}" alt="">
+        {% endif %}
         <input value="{{old("image")}}" class="form-control border-0" type="file" placeholder="" name="image">
       </div>
       {# تصویر محصول #}
@@ -98,7 +100,7 @@
       {# توضیحات #}
       <div class="col-sm-6 mt-4 px-5">
         <label for="description">توضیحات محصول</label>
-        <textarea class="col-12" name="description" placeholder="توضیحات این محصول را وارد کنید" rows="8" cols="80">{{product.descriptsion}}</textarea>
+        <textarea class="col-12" name="description" placeholder="توضیحات این محصول را وارد کنید" rows="8" cols="80">{{product.description}}</textarea>
       </div>
       {# توضیحات #}
 

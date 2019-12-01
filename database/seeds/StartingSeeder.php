@@ -13,21 +13,22 @@ class StartingSeeder extends Seeder
     {
         /*
         |--------------------------------------------------------------------------
-        | Create City
-        |--------------------------------------------------------------------------
-        |*/
-        'App\City'::create([
-            'name' => 'قم'
-          ]);
-        /*
-        |--------------------------------------------------------------------------
         | Create State
         |--------------------------------------------------------------------------
         |*/
         'App\State'::create([
             'name'    =>  'قم',
-            'city_id' =>  1
+        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | Create City
+        |--------------------------------------------------------------------------
+        |*/
+        'App\City'::create([
+            'name'      => 'قم',
+            'state_id'  =>  1
           ]);
+        
         /*
         |--------------------------------------------------------------------------
         | Create Users
@@ -41,7 +42,8 @@ class StartingSeeder extends Seeder
             'username'      =>  'admin',
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
-            'status'        =>  1,
+            'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -64,7 +66,8 @@ class StartingSeeder extends Seeder
             'username'      =>  'peygiri.sh',
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
-            'status'        =>  1,
+            'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -87,7 +90,8 @@ class StartingSeeder extends Seeder
             'username'      =>  'anbar.m',
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
-            'status'        =>  1,
+            'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -110,7 +114,8 @@ class StartingSeeder extends Seeder
             'username'      =>  'anbar.t',
             'password'      =>  Hash::make('admin2020'),
             'mobile'        =>  '09106769465',
-            'status'        =>  1,
+            'status'        =>  'on',
+            'city_id'       =>  1,
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
@@ -126,97 +131,101 @@ class StartingSeeder extends Seeder
             'villagePrice'  =>  null
           ]); 
           #5.create agentChief
-          // 'App\User'::create([
-          //   'name'          =>  'حمیدرضا',
-          //   'family'        =>  'رجبی',
-          //   'sex'           =>  1,
-          //   'username'      =>  'agentChief',
-          //   'password'      =>  Hash::make('admin2020'),
-          //   'mobile'        =>  '09106769465',
-          //   'status'        =>  1,
-          //   'state_id'      =>  1,
-          //   'address'       =>  'Qom',
-          //   'uploadCS'      =>  'some file',
-          //   'level'         =>  'S',
-          //   'sendAuto'      =>  0,
-          //   'backToWareHouse'    =>  1,
-          //   'callCenter'    =>  null,
-          //   'agent_id'      =>  null,
-          //   'porsantSeller' =>  '12',
-          //   'percent'       =>  null,
-          //   'locallyPrice'  =>  null,
-          //   'internalPrice' =>  null,
-          //   'villagePrice'  =>  null
-          // ]);
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'agentChief',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  'on',
+            'city_id'       =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  'on',
+            'backToWareHouse'    =>  null,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
           #6.create agent
-          // 'App\User'::create([
-          //   'name'          =>  'حمیدرضا',
-          //   'family'        =>  'رجبی',
-          //   'sex'           =>  1,
-          //   'username'      =>  'agent',
-          //   'password'      =>  Hash::make('admin2020'),
-          //   'mobile'        =>  '09106769465',
-          //   'status'        =>  1,
-          //   'state_id'      =>  1,
-          //   'address'       =>  'Qom',
-          //   'uploadCS'      =>  'some file',
-          //   'level'         =>  'S',
-          //   'sendAuto'      =>  null,
-          //   'backToWareHouse'    =>  null,
-          //   'callCenter'    =>  null,
-          //   'agent_id'      =>  5,
-          //   'porsantSeller' =>  '12',
-          //   'percent'       =>  null,
-          //   'locallyPrice'  =>  null,
-          //   'internalPrice' =>  null,
-          //   'villagePrice'  =>  null
-          // ]);
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'agent',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  'on',
+            'city_id'       =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  null,
+            'backToWareHouse'    =>  null,
+            'callCenter'    =>  null,
+            'agent_id'      =>  5,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
           #7.create seller
-          // 'App\User'::create([
-          //   'name'          =>  'حمیدرضا',
-          //   'family'        =>  'رجبی',
-          //   'sex'           =>  1,
-          //   'username'      =>  'seller',
-          //   'password'      =>  Hash::make('admin2020'),
-          //   'mobile'        =>  '09106769465',
-          //   'status'        =>  1,
-          //   'state_id'      =>  1,
-          //   'address'       =>  'Qom',
-          //   'uploadCS'      =>  'some file',
-          //   'level'         =>  'S',
-          //   'sendAuto'      =>  null,
-          //   'backToWareHouse'    =>  null,
-          //   'callCenter'    =>  null,
-          //   'agent_id'      =>  null,
-          //   'porsantSeller' =>  '12',
-          //   'percent'       =>  null,
-          //   'locallyPrice'  =>  null,
-          //   'internalPrice' =>  null,
-          //   'villagePrice'  =>  null
-          // ]);
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'seller',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  'on',
+            'city_id'       =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  null,
+            'backToWareHouse'    =>  null,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
           #8.create seller
-          // 'App\User'::create([
-          //   'name'          =>  'حمیدرضا',
-          //   'family'        =>  'رجبی',
-          //   'sex'           =>  1,
-          //   'username'      =>  'callCenter',
-          //   'password'      =>  Hash::make('admin2020'),
-          //   'mobile'        =>  '09106769465',
-          //   'status'        =>  1,
-          //   'state_id'      =>  1,
-          //   'address'       =>  'Qom',
-          //   'uploadCS'      =>  'some file',
-          //   'level'         =>  'S',
-          //   'sendAuto'      =>  null,
-          //   'backToWareHouse'    =>  null,
-          //   'callCenter'    =>  null,
-          //   'agent_id'      =>  null,
-          //   'porsantSeller' =>  '12',
-          //   'percent'       =>  null,
-          //   'locallyPrice'  =>  null,
-          //   'internalPrice' =>  null,
-          //   'villagePrice'  =>  null
-          // ]);
+          'App\User'::create([
+            'name'          =>  'حمیدرضا',
+            'family'        =>  'رجبی',
+            'sex'           =>  1,
+            'username'      =>  'callCenter',
+            'password'      =>  Hash::make('admin2020'),
+            'mobile'        =>  '09106769465',
+            'status'        =>  'on',
+            'city_id'       =>  1,
+            'state_id'      =>  1,
+            'address'       =>  'Qom',
+            'uploadCS'      =>  'some file',
+            'level'         =>  'S',
+            'sendAuto'      =>  null,
+            'backToWareHouse'    =>  null,
+            'callCenter'    =>  null,
+            'agent_id'      =>  null,
+            'porsantSeller' =>  '12',
+            'percent'       =>  null,
+            'locallyPrice'  =>  null,
+            'internalPrice' =>  null,
+            'villagePrice'  =>  null
+          ]);
         /*
         |--------------------------------------------------------------------------
         | Create WareHouse
@@ -270,16 +279,20 @@ class StartingSeeder extends Seeder
       |*/
       'App\OrderStatus'::create(['name'=>'ثبت سفارش']);
       'App\OrderStatus'::create(['name'=>'ارسال به کالسنتر']);
+      'App\OrderStatus'::create(['name'=>'ارسال به مدیر پیگیری']);
       'App\OrderStatus'::create(['name'=>'ارسال به فروشنده']);
       'App\OrderStatus'::create(['name'=>'تماس مجدد']);
-      'App\OrderStatus'::create(['name'=>'انصراف']);
       'App\OrderStatus'::create(['name'=>'برگشت به فروشنده']);
       'App\OrderStatus'::create(['name'=>'در انتظار تحویل']);
       'App\OrderStatus'::create(['name'=>'برگشت به مدیر پیگیری']);
       'App\OrderStatus'::create(['name'=>'غیر قابل ارسال']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-داخل شهر']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-حومه شهر']);
+      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-روستا']);
+      'App\OrderStatus'::create(['name'=>'انصراف مشتری']);
+      'App\OrderStatus'::create(['name'=>'معلق']);
       'App\OrderStatus'::create(['name'=>'وصولی']);
       'App\OrderStatus'::create(['name'=>'کنسلی']);
-      'App\OrderStatus'::create(['name'=>'معلق']);
       'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
       'App\OrderStatus'::create(['name'=>'خام']);
       /*
@@ -300,7 +313,29 @@ class StartingSeeder extends Seeder
       'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
       'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار نماینده']);
       'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه']);
+   
+   
+    /*
+    |--------------------------------------------------------------------------
+    | Store Product
+    |--------------------------------------------------------------------------
+    |*/
+    'App\Product'::create([
+      'user_id'       =>  1,
+      'name'          =>  'کرم',
+      'code'          =>  2501,
+      'price'         =>  10000,
+      'buyPrice'      =>  9500,
+      'description'   =>  'یک توضیح',
+      'status'        =>  'on',
+      'messageStatus' =>  'on',
+    ]);
+   
+   
+
+
     }
+    
 
 
 }

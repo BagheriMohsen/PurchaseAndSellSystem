@@ -7,17 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     protected $fillable = [
-      'city_id',
-      'name'
+      'name',
+      'followUpManager'
     ];
-
-    //releation with City Model
-    public function city(){
-      return $this->belongsTo('App\City');
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with City Model
+    |--------------------------------------------------------------------------
+    */
+    public function cities(){
+      return $this->hasMany('App\City');
     }
-
-    //releation with User Model
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
     public function users(){
       return $this->hasMany('App\User');
+    }
+     /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function followUpManager(){
+      return $this->belongsTo('App\User','followUpManager','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orders(){
+      return $this->hasMany('App\Order');
     }
 }

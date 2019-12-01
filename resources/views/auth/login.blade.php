@@ -25,48 +25,67 @@
 </head>
 <body >
 
+		
+
 	<div class="limiter">
 			
 		<div class="container-login100">
-				
+			
 			<div class="wrap-login100">
 				
 				<div class="login100-pic js-tilt text-center" data-tilt>
 					<div class="text-center dana-bold">
-							سامانه خرید و فروش پیامکی
+							سامانه ی مدیریت فروش از راه دور
 					</div>
 					<img src="{{asset('Auth/images/img-01.png')}}" alt="IMG">
 				</div>
 				
 				<form method="POST" action="{{ route('loginToSite') }}" class="login100-form validate-form">
+			
+					
+						@if(session('message'))
+						<div class="alert alert-primary text-right" role="alert">
+								<a style="float:left" type="button" class="btn btn-dark btn-sm" data-dismiss="alert" aria-label="Close">
+								  <strong class="h6 text-light">
+									فهمیدم
+								  </strong>
+							   </a>
+							  <h6 class="alert-heading text-right">
+								راهنمایی
+							  </h6>
+							<hr>
+								<p class="mb-0 text-right">{{ session('message') }}</p>
+							</div>
+						@endif
+				
 					<span class="login100-form-title dana-bold">
 						ورود
 					</span>
 						@csrf
-						<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-							<input class="input100" type="text" name="username" placeholder="username">
+						<div class="wrap-input100 validate-input text-right" data-validate = "Valid email is required: ex@abc.xyz">
+							<input class="input100 text-right" type="text" name="username" placeholder="نام کاربری" value=""  autocomplete="off">
 							@error('username')
 									<span class="invalid-feedback" role="alert">
 											<strong>{{ $message }}</strong>
 									</span>
 							@enderror
 							<span class="focus-input100"></span>
-							<span class="symbol-input100">
+							{{-- <span class="symbol-input100">
 								<i class="far fa-user"></i>
-							</span>
+							</span> --}}
 						</div>
 
-						<div   class="wrap-input100 validate-input" data-validate = "Password is required">
-							<input class="input100" type="password" name="password" placeholder="Password">
+						<div   class="wrap-input100 validate-input text-right" data-validate = "Password is required">
+							<input class="input100 text-right" type="password" name="password" placeholder="گذرواژه"  value="" autocomplete="off">
 							@error('password')
 									<span class="invalid-feedback" role="alert">
 											<strong>{{ $message }}</strong>
 									</span>
 							@enderror
 							<span class="focus-input100"></span>
-							<span class="symbol-input100">
+							{{-- <span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
-							</span>
+							</span> --}}
 						</div>
 
 						<div class="container-login100-form-btn">

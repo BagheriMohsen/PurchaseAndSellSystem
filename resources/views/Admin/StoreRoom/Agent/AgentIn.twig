@@ -30,12 +30,8 @@
                     <th>وضعیت</th>
                     <th>توضیحات</th>
                     <th>تعداد</th>
-                    {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
-                    <th>تاریخ ورود</th>
-                    {% else %}
                     <th>تاریخ ارسال</th>
                     <th>تاریخ دریافت</th>
-                    {% endif %}
                     <th >جمع(تومان)</th>
                   </tr>
                   </thead>
@@ -52,12 +48,12 @@
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
-                      {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
-                      <td class="timestamp">{{storeRoom.created_at}}</td>
-                      {% else %}
-                        <td class="timestamp">{{storeRoom.created_at}}</td>
-                        <td class="justDate">{{storeRoom.in_date}}</td>
-                      {% endif %}
+                     {% if storeRoom.out_date is null %}
+                        <td class="timestamp">{{storeRoom.created_at | date('Y-m-d')}}</td>
+                     {% else %}
+                        <td class="timestamp">{{storeRoom.out_date | date('Y-m-d')}}</td>
+                     {% endif %}
+                        <td class="justDate">{{storeRoom.in_date | date('Y-m-d')}}</td>
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
                     </tr>

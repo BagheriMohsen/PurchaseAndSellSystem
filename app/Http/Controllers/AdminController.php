@@ -15,11 +15,12 @@ class AdminController extends Controller
       if($role == "mainWarehouser"){
         return redirect()->route('storeRooms.index');
       }else{
-        return view('Admin/index');
+        return redirect()->route('users.AdminDashboard');
       }
       
 
     }
+
 
 
 

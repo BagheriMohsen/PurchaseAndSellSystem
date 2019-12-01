@@ -4,6 +4,34 @@
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
+Route::get('/order-test/{name}',function($name){
+
+    //Find City
+    $city = 'App\City'::where('name',$name)->first();
+    
+    // Find Agent In This City if agent send auto is not null
+    $userSendAuto = 'App\User'::where([
+    ['city_id','=',$city->id],
+    ['sendAuto','!=',Null]
+    ])->first();
+
+    // if find agent send auto not null
+    if($userSendAuto != null){
+
+        $agent_id = $userSendAuto->id;
+        $followUpManager_id = null;
+    }else{
+        $agent_id = null;
+        $followUpManager_id = $city->followUpManager;
+        if($followUpManager_id == null){
+          $user = 'App\User'::role('followUpManager')->first();
+          $followUpManager_id = $user->id;
+        }
+    }
+    echo 'agent:'.$agent_id;
+    echo '<br/>';
+    echo 'followUpManager:'.$followUpManager_id;
+});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
@@ -13,7 +41,7 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
-  Route::get('/home','AdminController@index')->name('index');
+  Route::get('/','AdminController@index')->name('index');
 });
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +57,13 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('{id}/Myedit','UserController@userPublicEdit')->name('public.edit');
     Route::put('{id}/Myupdate','UserController@userPublicUpdate')->name('public.update');
     Route::get('uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
-    Route::get('followUpManagerCityStore','UserController@followUpManagerCityStore')->name('followUpManager.cityStore');
-    Route::get('followUpManagerCityClear/{CityName}','UserController@followUpManagerCityClear')->name('followUpManagerCityClear');
+    Route::get('followUpManagerStateStore','UserController@followUpManagerStateStore')->name('followUpManager.stateStore');
+    Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
+    /* Admin Dashboard */
+    Route::get('Admin-Dashboard','UserController@AdminDashboard')->name('AdminDashboard');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
+    Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
     /* Agent Chief Dashboard */
     Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
@@ -77,23 +108,38 @@ Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],function(){
-    Route::get('AgentOrderList','OrderController@AgentOrderList')->name('AgentOrderList');
+    /* Sellers */
     Route::get('ProductList','OrderController@ProductList')->name('ProductList');
-    Route::get('AgentExistInState/{StateName}','OrderController@AgentExistInState')->name('AgentExistInState');
+    Route::get('AgentExistInState/{CityName}','OrderController@AgentExistInState')->name('AgentExistInState');
+    Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
+    Route::get('sellerNoActionOrders','OrderController@sellerNoActionOrders')->name('sellerNoActionOrders');
+    /* Agents */
+    Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
+    Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');
+    Route::get('AgentOrderCanceledList','OrderController@AgentOrderCanceledList')->name('AgentOrderCanceledList');
+    Route::get('AgentOrderSuspendedList','OrderController@AgentOrderSuspendedList')->name('AgentOrderSuspendedList');
+    Route::get('AgentChangeOrderStatus','OrderController@AgentChangeOrderStatus')->name('AgentChangeOrderStatus');
+    //FollowUpManager 
+    Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
+    //Factor
+    Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
 Route::middleware('auth')->resource('orders','OrderController');
+/*
+|--------------------------------------------------------------------------
+| States Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middlware'=>['auth'],'prefix'=>'/states/','as'=>'states.'],function(){
+    Route::get('AllStatesAndCitiesName','StateController@AllStatesAndCitiesName')->name('AllStatesAndCitiesName');
+});
+Route::middleware('auth')->resource('states','StateController');
 /*
 |--------------------------------------------------------------------------
 | Cities Routes
 |--------------------------------------------------------------------------
 |*/
 Route::middleware('auth')->resource('cities','CityController');
-/*
-|--------------------------------------------------------------------------
-| States Routes
-|--------------------------------------------------------------------------
-|*/
-Route::middleware('auth')->resource('states','StateController');
 /*
 |--------------------------------------------------------------------------
 | SpecialTariff Routes

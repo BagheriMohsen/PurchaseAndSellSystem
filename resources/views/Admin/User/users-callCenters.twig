@@ -28,7 +28,7 @@
                 width="100%">
                   <thead>
                   <tr class="text-center">
-                    <th>نام</th>
+                   <th>نام-نام خانوادگی</th>
                     <th>نام کاربری</th>
                     <th>نوع کالسنتر</th>
                     <th>ثبت جدید</th>
@@ -41,7 +41,7 @@
                   <tbody>
                   {% for user in users %}
                     <tr class="text-center">
-                      <td>{{user.name}}</td>
+                      <td>{{user.name}}{{' '}}{{user.family}}</td>
                       <td>{{user.username}}</td>
                       <td>
                         {% if user.callCenterType == "channelDist" %}

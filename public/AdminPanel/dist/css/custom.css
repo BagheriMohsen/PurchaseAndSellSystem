@@ -1,3 +1,6 @@
+body{
+    padding-right: 0!important;
+}
 .btn.disabled, .btn:disabled {
     opacity: 0.45;
 }
@@ -57,4 +60,30 @@
 }
 .cursor-pointer{
     cursor: pointer;
+}
+.toolbox{
+    display: none!important;
+}
+.orderDetail td{
+   border: 0;
+   padding: .3rem!important;
+}
+.orderDetail th{
+    border: 0;
+    font-weight: bold;
+    padding: .3rem!important;
+ }
+/* Datatable customize */
+table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkbox{
+    padding: 15px;
+}
+.select-info{
+    display: none!important;
+}
+/*End datatable customize */
+.invoiceWrapper td{
+    padding: 5px 5px 5px 0px!important;
+}
+.modal{
+    z-index: 3100;
 }

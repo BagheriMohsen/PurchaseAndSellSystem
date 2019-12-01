@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  {{'اقزودن کاربر'}}
+  {{'افزودن کاربر'}}
 {% endblock %}
 
 {% block header %}
@@ -30,7 +30,9 @@
 
 {% block content %}
 
-<form action="{{route('users.store')}}" method="post">
+  {% include 'Messages/errors' %}
+
+<form id="createUserForm" action="{{route('users.store')}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <div class="row bg-white pt-3 pb-3">
     <h4 class="col-12 pt-2 pb-3">
@@ -39,28 +41,28 @@
     {# نام #}
     <div class="row mx-4">
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx1" class="form-control" name="name" value="" required>
+        <input type="text" id="inputIconEx1" class="form-control" name="name" value="{{old('name')}}" required>
         <label for="inputIconEx1">نام</label>
       </div>
       {# نام #}
       {# نام خانوادگی #}
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx2" class="form-control" name="family" value="" required>
+        <input type="text" id="inputIconEx2" class="form-control" name="family" value="{{old('family')}}" required>
         <label for="inputIconEx2">نام خانوادگی</label>
       </div>
       {# نام خانوادگی  #}
       {# شماره تماس #}
       <div class="col-sm-4 md-form mb-4">
-        <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="" required>
+        <input type="text" id="inputIconEx3" class="form-control" name="mobile" value="{{old('mobile')}}" required>
         <label for="inputIconEx3">شماره تماس</label>
       </div>
       {#شماره تماس #}
       {# جنسیت #}
       <div class="col-sm-4 mb-4">
         <select class="form-control "  name="sex" required>
-            <option  value="{{null}}" selected>جنسیت کاربر را مشخص کنید</option>
-            <option  value="1">مرد</option>
-            <option  value="0">زن</option>
+            <option  {% if old('sex') == null %} selected {% endif %} value="{{null}}" selected>جنسیت کاربر را مشخص کنید</option>
+            <option  {% if old('sex') == 1 %} selected {% endif %} value="1">مرد</option>
+            <option  {% if old('sex') == 0 %} selected {% endif %} value="0">زن</option>
         </select>
       </div>
       {# جنسیت #}
@@ -69,7 +71,7 @@
         <select id="user_role" class="form-control"  name="role" required>
             <option value="{{null}}" selected>نقش کاربر را مشخص کنید</option>
             {% for role in roles %}
-            <option value="{{role.id}}" >{{role.persianName}}</option>
+            <option {% if old('role') == role.id %} selected {% endif %} value="{{role.id}}" >{{role.persianName}}</option>
             {% endfor %}
         </select>
       </div>
@@ -81,13 +83,13 @@
       اطلاعات تخصصی
     </h4>
     <div class="col-12 mx-4 otherRolesFields">
-      <div class="row mx-4">
+      <div class="row">
         {#مدیر نماینده  #}
         <div class="col-sm-4 mb-4 d-none">
           <select id="agent_id" class="form-control"  name="agent_id">
             <option selected value="{{null}}">بدون مدیر نماینده</option>
             {% for chief in agentChiefs %}
-              <option value="{{chief.id}}">{{chief.username}}</option>
+              <option {% if old('agent_id') == chief.id %} selected {% endif %} value="{{chief.id}}">{{chief.username}}</option>
             {% else %}
                 <option Disabled >چیزی برای انتخاب وجود ندارد</option>
             {% endfor %}
@@ -99,7 +101,7 @@
           <select id="callcenter_id" class="form-control"  name="callCenter">
               <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
             {% for callCenter in callCenters %}
-              <option  value="{{callCenter.id}}">{{callCenter.username}}</option>
+              <option  {% if old('callCenter') == callCenter.id %} selected {% endif %} value="{{callCenter.id}}">{{callCenter.username}}</option>
             {% endfor %}
           </select>
         </div>
@@ -107,25 +109,25 @@
         <div class="col-12"></div>
         {#پورسانت فروشنده  #}
         <div class="col-sm-4 md-form mb-4 d-none">
-          <input type="text" id="porsantSeller" class="form-control number" name="porsantSeller" value="">
+          <input type="text" id="porsantSeller" class="form-control comma" name="porsantSeller" value="{{old('porsantSeller')}}">
           <label for="porsantSeller">پورسانت</label>
         </div>
         {#پورسانت فروشنده #}
         {# تعرفه پایه داخلی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_internal" class="form-control number" name="internal" value="">
+            <input type="text" id="tariff_internal" class="form-control comma" name="internal" value="{{old('internal')}}">
             <label for="tariff_internal">تعرفه پایه داخل</label>
         </div>
         {# تعرفه پایه داخلی #}
         {# تعرفه پایه حومه #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_locally" class="form-control number" name="locally" value="">
+            <input type="text" id="tariff_locally" class="form-control comma" name="locally" value="{{old('locally')}}">
             <label for="tariff_locally">تعرفه پایه حومه</label>
         </div>
         {# تعرفه پایه حومه #}
         {# تعرفه پایه روستای #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_village" class="form-control number" name="village" value="">
+            <input type="text" id="tariff_village" class="form-control comma" name="village" value="{{old('village')}}">
             <label for="tariff_village">تعرفه پایه روستا</label>
         </div>
         {# تعرفه پایه روستا #}
@@ -139,7 +141,9 @@
             data-onstyle="success"
             data-offstyle="danger"
             data-onlabel="خودکار"
-            data-offlabel="دستی" name="sendAuto">
+            data-offlabel="دستی" name="sendAuto"
+            {% if old('sendAuto') != null %} checked {% endif %}
+            >
         </div>
         {# end auto send #}
         {# auto send #}
@@ -152,8 +156,10 @@
             data-toggle="switchbutton"
             data-onstyle="success"
             data-offstyle="danger"
-            data-onlabel="خودکار"
-            data-offlabel="دستی" name="backToWareHouse">
+            data-onlabel="فعال"
+            data-offlabel="غیر فعال" name="backToWareHouse"
+            {% if old('backToWareHouse') != null %} checked {% endif %}
+            >
         </div>
         {# end auto send #}
         {# auto send #}
@@ -166,13 +172,15 @@
             data-onstyle="success"
             data-offstyle="info"
             data-onlabel="مبلغ فاکتور"
-            data-offlabel="تعرفه تعیین شده" name="calType">
+            data-offlabel="تعرفه تعیین شده" name="calType"
+            {% if old('calType') != null %} checked {% endif %}
+            >
         </div>
         {# end auto send #}
       </div>
     </div>
     <div class="col-12 mx-4 callcenterFields d-none">
-      <div class="row mx-4">
+      <div class="row">
             {# price calculation type #}
         <div class="col-sm-4 mb-4">
           <h6>نوع محاسبه هزینه کالا
@@ -183,7 +191,9 @@
             data-onstyle="success"
             data-offstyle="info"
             data-onlabel="مبلغ فاکتور"
-            data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter">
+            data-offlabel="تعرفه تعیین شده" name="calTypeCallCenter"
+            {% if old('calTypeCallCenter') != null %} checked {% endif %}
+            >
         </div>
         {# price calculation type #}
         <div class="col-12"></div>
@@ -193,7 +203,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="numberUpload" value="active" name="allowNumber">
+              <input type="checkbox"
+               id="numberUpload" 
+               value="active" name="allowNumber"
+               {% if old('allowNumber') != null %} checked {% endif %}
+               >
               <label for="numberUpload"></label>
           </div>
         </div>
@@ -205,7 +219,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="repeatedNumber" value="active" name="allowNumberDup">
+              <input type="checkbox" 
+              id="repeatedNumber" 
+              value="active" name="allowNumberDup"
+              {% if old('allowNumberDup') != null %} checked {% endif %}
+              >
               <label for="repeatedNumber"></label>
           </div>
         </div>
@@ -217,7 +235,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="addOrderFromNewOrder" value="active" name="allowNewOrder">
+              <input type="checkbox" 
+              id="addOrderFromNewOrder" 
+              value="active" name="allowNewOrder"
+              {% if old('allowNewOrder') != null %} checked {% endif %}
+              >
               <label for="addOrderFromNewOrder"></label>
           </div>
         </div>
@@ -229,7 +251,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="numberReturn" value="active" name="allowNumberBack">
+              <input type="checkbox" 
+              id="numberReturn" 
+              value="active" name="allowNumberBack"
+              {% if old('allowNumberBack') != null %} checked {% endif %}
+              >
               <label for="numberReturn"></label>
           </div>
         </div>
@@ -240,7 +266,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="editNumber" value="active" name="allowNumberEdit">
+              <input type="checkbox" 
+              id="editNumber" 
+              value="active" name="allowNumberEdit"
+              {% if old('allowNumberEdit') != null %} checked {% endif %}
+              >
               <label for="editNumber"></label>
           </div>
         </div>
@@ -252,7 +282,11 @@
             <span class="text-danger">*</span>
           </h6>
           <div class="ckbx-style-11">
-              <input type="checkbox" id="smsDate" value="active" name="messageStatus">
+              <input type="checkbox" 
+              id="smsDate" 
+              value="active" name="messageStatus"
+              {% if old('messageStatus') != null %} checked {% endif %}
+              >
               <label for="smsDate"></label>
           </div>
         </div>
@@ -285,9 +319,30 @@
     <h4 class="col-12 pt-2 pb-3">
     اطلاعات مکان
     </h4>
-
-    {# شهر  #}
+    {# state #}
     <div class="col-sm-5  mt-5">
+      <label for="state">استان
+      </label>
+      <select id="state" class="form-control"  name="state">
+        <option value="{{null}}">استان را انتخاب کنید</option>
+        {% for state in states %}
+          <option {% if old('state') == state.id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {# city #}
+    <div class="col-sm-5  mt-5">
+      <label for="city">شهر
+      </label>
+      <select id="city" class="form-control" name="city">
+        <option value="{{null}}">شهر را انتخاب کنید</option>
+          {% for city in cities %}
+            <option {% if old('city') == city.id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>
+          {% endfor %}
+      </select>
+    </div>
+    {# city  #}
+    {# <div class="col-sm-5  mt-5">
       <select class="cities col-12 bg-white" name="state">
         {% for city in cities %}
           <optgroup class="bg-info" label="{{city.name}}">
@@ -297,12 +352,12 @@
           </optgroup>
         {% endfor %}
       </select>
-    </div>
+    </div> #}
     {# شهر #}
     {# آدرس کامل #}
     <div class="md-form col-sm-7">
       <i class="fas fa-pencil-alt prefix text-dark"></i>
-      <textarea name="address" id="form10" class="md-textarea form-control" rows="8" cols="80"></textarea>
+      <textarea name="address" id="form10" class="md-textarea form-control" rows="8" cols="80">{{old('address')}}</textarea>
       <label for="form10">آدرس کامل</label>
     </div>
     {# آدرس کامل #}
@@ -315,36 +370,36 @@
     حساب کاربری
     </h4>
     {# نام کاربری #}
-    <div class="md-form mb-4 col-sm-5">
-        <input type="text" id="inputIconEx24" class="form-control" name="username" value=""  required>
+    <div class="col-sm-4 md-form mb-4">
+        <input type="text" id="inputIconEx24" class="form-control" name="username" value="{{old('username')}}"  required>
         <label for="inputIconEx24">نام کاربری</label>
     </div>
     {# نام کاربری #}
     {# گذرواژه #}
     
-    <div class="md-form mb-4 col-sm-5">
-        <input type="password" id="inputIconEx25" class="form-control" name="password" value="" required>
+    <div class="col-sm-4 md-form mb-4">
+        <input type="password" id="inputIconEx25" class="form-control" name="password" value="{{old('password')}}" required>
         <label for="inputIconEx25">گذرواژه</label>
     </div>
     {# گذرواژه #}
+    <div class="col-12"></div>
     {# وضعیت #}
-    <div class="col-sm-2 mt-5">
+    <div class="col-sm-4 mt-5">
       <h6>
         وضعیت کاربر
 
       </h6>
       <input type="checkbox"
-        data-size="sm"
         data-toggle="switchbutton"
         data-onstyle="success"
         data-offstyle="danger"
         data-onlabel="فعال"
-        data-offlabel="غیر فعال" name="status" >
+        data-offlabel="غیر فعال" name="status" checked>
     </div>
     {# وضعیت #}
-
+    
     <div class="col-12 text-center mt-5">
-      <button class="btn btn-success btn-sm col-2" type="submit" name="button">
+      <button class="btn btn-success" type="submit" name="button">
         <strong class="h6 text-dark">
           افزودن کاربر
         </strong>

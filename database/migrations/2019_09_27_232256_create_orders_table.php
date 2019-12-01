@@ -22,26 +22,52 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('city_id')->unsigned()->nullable();
             $table->bigInteger('state_id')->unsigned()->nullable();
+            $table->bigInteger('agent_id')->unsigned()->nullable();
+            $table->bigInteger('seller_id')->unsigned()->nullable();
+            $table->bigInteger('callCenter_id')->unsigned()->nullable();
+            $table->bigInteger('followUpManager_id')->unsigned()->nullable();
+            $table->Date('followUpManagerConfirmDate')->nullable();
+            $table->bigInteger('pay_id')->unsigned()->nullable();
+            $table->char('trackingCode',100);
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
             $table->string('paymentMethod')->nullable();
-            $table->integer('sendCost')->nullable();
-            $table->integer('prePrice')->nullable();
-            $table->integer('checkPrice')->nullable();
-            $table->string('status')->nullable();
-            $table->text('description')->nullable();
+            $table->integer('shippingCost')->nullable();
+            $table->integer('prePayment')->nullable();
+            $table->integer('cashPrice')->nullable();
+            $table->integer('chequePrice')->nullable();
+            $table->text('sellerDescription')->nullable();
+            $table->text('sendDescription')->nullable();
+            $table->text('statusDescription')->nullable();
             $table->string('postalCode')->nullable();
             $table->Date('HBD_Date')->nullable();
+            $table->Date('returnDate')->nullable();
+            $table->string('instant')->default('IsNot');
             $table->text('address')->nullable();
+            $table->string('addressConfirm')->nullable();
+            $table->string('gift')->nullable();
             $table->timestamps();
 
+            $table->foreign('agent_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('seller_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('callCenter_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('followUpManager_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('city_id')->references('id')->on('cities')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('state_id')->references('id')->on('states')
             ->onUpdate('cascade')->onDelete('cascade');
+
+            
 
 
         });
@@ -54,10 +80,10 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            $table->string('product_type')->nullable();
             $table->integer('count');
             $table->integer('off');
-
+            $table->timestamps();
+            
             $table->foreign('order_id')->references('id')->on('orders')
             ->onUpdate('cascade')->onDelete('cascade');
 
@@ -66,6 +92,49 @@ class CreateOrdersTable extends Migration
 
             
 
+            
+
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | seller Porsant order
+        |--------------------------------------------------------------------------
+        |*/
+        Schema::create('seller_porsant', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('seller_id')->unsigned();
+            $table->Integer('amount')->nullable();
+            $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('seller_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | agent paid order
+        |--------------------------------------------------------------------------
+        |*/
+        Schema::create('agent_pay', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('agent_id')->unsigned();
+            $table->string('code')->nullable();
+            $table->integer('amount')->nullable();
+            $table->string('confirm')->nullable();
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
+            $table->Date('payDate')->nullable();
+            $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('agent_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

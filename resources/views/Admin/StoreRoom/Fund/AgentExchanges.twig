@@ -35,7 +35,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link dana-bold text-dark" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-            aria-selected="false">برگشت به انبار</a>
+            aria-selected="false">برگشت به انبار مادر</a>
         </li>
     </ul>
 <div class="tab-content " id="myTabContent">
@@ -49,11 +49,12 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" name="date" class="form-control  cursor-pointer persianDatePicker">                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                        <label for="date">تاریخ</label>
                     </div>                  
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="product">محصول</label>
-                        <select class="form-control" name="product">
+                        <select class="form-control" name="product" required>
                             <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
                         {% for product in products %}
                             <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
@@ -63,7 +64,7 @@
                     </div>
                     {# number #}
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <input value="{{old('number')}}" type="text" id="inputIconEx5" class="form-control " name="number" autocomplete="off" required>
                         <label for="inputIconEx5">تعداد</label>
                         <span class="text-secondary">
                             ارزش به تومان:
@@ -74,38 +75,19 @@
                     {# receiver #}
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="receiver">تحویل گیرنده</label>
-                        <select class="form-control" name="receiver">
+                        <select class="form-control" name="receiver" required>
                             <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">گیرنده را انتخاب کنید</option>
                         {% for agent in agents %}
                             <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
-                            {{'نام:'}}
-                            {{agent.name}}
-                            {{'-'}}
-                            {{'نام کاربری:'}}
-                            {{agent.username}}
+                            {{agent.name}}{{' '}}{{agent.family}}
+                            {{'/'}}
+                            {{agent.city.name}}
                             </option>
                         {% endfor %}
                         </select>
                     </div>
                     {# receiver #}
-                    {# description #}
-                    <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <i class="fas fa-pencil-alt prefix text-dark"></i>
-                        <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80">{{old('description')}}</textarea>
-                        <label for="form10">توضیحات</label>
-                    </div>
-                    {# description #}
-                    {# transports #}
-                    <div class="col-sm-8 mt-5 mx-auto">
-                        <label for="transport">وسیله ارسال</label>
-                        <select class="form-control" name="transport">
-                            <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
-                        {% for transport in transports %}
-                            <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
-                        {% endfor %}
-                        </select>
-                    </div>
-                    {# transports #}
+                    
                 </div>
             </div>
 
@@ -114,29 +96,43 @@
                 <div class="row">
                     {# pejak #}
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input  name="pejak" value="{{old('pejak')}}" type="number" id="inputIconEx5" class="form-control" >
-                        <label for="inputIconEx5">بیجک</label>
+                        <input  name="pejak" value="{{old('pejak')}}" type="number" id="pejak" class="form-control" autocomplete="off" required>
+                        <label for="pejak">بیجک</label>
                     </div>
                     {# end pejak #}
                     {# image #}
-                    <div class=" col-sm-8 mt-5 mx-auto">
-                        <label for="inputIconEx5">تصویر بارنامه</label>
+                    <div class=" col-sm-8 mt-5 mx-auto ">
+                        <label for="image">تصویر بارنامه</label>
                         <br />
-                        <input type="file" id="inputIconEx5" class="form-control" name="image" value="">
+                        <input type="file" id="image" class="form-control border-0" name="image" value="" required>
                     </div>
                     {# end image #}
                     {# receiver #}
                         <input type="hidden" name="status" value="انتقال به انبار نماینده" />
                     {# receiver #}
-                    
+                    {# transports #}
+                    <div class="col-sm-8 mt-5 mx-auto">
+                        <label for="transport">وسیله ارسال</label>
+                        <select class="form-control" name="transport" required>
+                            <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
+                        {% for transport in transports %}
+                            <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {# transports #}
+                    {# description #}
+                    <div class="md-form col-sm-8 mt-5 mx-auto">
+                        <i class="fas fa-pencil-alt prefix text-dark"></i>
+                        <textarea name="description" id="form10" class="md-textarea form-control" rows="2" cols="80">{{old('description')}}</textarea>
+                        <label for="form10">توضیحات</label>
+                    </div>
+                    {# description #}
                 </div>
             </div>
-
-
-            
-            <div class="col-sm-6 mt-5 mx-auto">
-                <button class="btn btn-sm btn-success">
-                    <strong class="h6 text-dark">
+            <div class="col-sm-6 mt-5 mx-auto text-center">
+                <button class="btn btn-success">
+                    <strong class="h6">
                         ذخیره
                     </strong>
                 </button>
@@ -156,12 +152,13 @@
                 <div class="row">
                     
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" name="date" class="form-control  cursor-pointer persianDatePicker">                        {# <label for="date-picker-example">تاریخ</label> #}
+                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>                        {# <label for="date-picker-example">تاریخ</label> #}
+                        <label id="date">تاریخ</label>
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="product">محصول</label>
-                        <select class="form-control" name="product">
+                        <select class="form-control" name="product" required>
                             <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
                         {% for product in products %}
                             <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
@@ -171,7 +168,7 @@
                     </div>
                     {# number #}
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <input value="{{old('number')}}" type="text" id="inputIconEx5" class="form-control " name="number" autocomplete="off" required>
                         <label for="inputIconEx5">تعداد</label>
                         <span class="text-secondary">
                             ارزش به تومان:
@@ -198,15 +195,13 @@
                      {# sender #}
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="receiver">تحویل دهنده</label>
-                        <select class="form-control" name="sender">
+                        <select class="form-control" name="sender" required>
                             <option {% if old('sender') != null %} style="display:none" {% endif %} value="{{null}}">ارسال کننده را انتخاب کنید</option>
                         {% for agent in agents %}
                             <option {% if old('sender') == agent.id %} selected {% endif %} value="{{agent.id}}">
-                            {{'نام:'}}
-                            {{agent.name}}
-                            {{'-'}}
-                            {{'نام کاربری:'}}
-                            {{agent.username}}
+                                {{agent.name}}{{' '}}{{agent.family}}
+                                {{'/'}}
+                                {{agent.city.name}}
                             </option>
                         {% endfor %}
                         </select>
@@ -215,15 +210,13 @@
                     {# receiver #}
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="receiver">تحویل گیرنده</label>
-                        <select class="form-control" name="receiver">
+                        <select class="form-control" name="receiver" required>
                             <option {% if old('receiver') != null %} style="display:none" {% endif %} value="{{null}}">گیرنده را انتخاب کنید</option>
                         {% for agent in agents %}
                             <option {% if old('receiver') == agent.id %} selected {% endif %} value="{{agent.id}}">
-                            {{'نام:'}}
-                            {{agent.name}}
-                            {{'-'}}
-                            {{'نام کاربری:'}}
-                            {{agent.username}}
+                                {{agent.name}}{{' '}}{{agent.family}}
+                                {{'/'}}
+                                {{agent.city.name}}
                             </option>
                         {% endfor %}
                         </select>
@@ -232,7 +225,7 @@
                     {# transports #}
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="transport">وسیله ارسال</label>
-                        <select class="form-control" name="transport">
+                        <select class="form-control" name="transport" required>
                             <option {% if old('transport') != null %} style="display:none" {% endif %} value="{{null}}">وسیله ارسال را انتخاب کنید</option>
                         {% for transport in transports %}
                             <option {% if old('transport') == transport.id %} selected {% endif %} value="{{transport.id}}">{{transport.name}}</option>
@@ -269,13 +262,13 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" name="date" class="form-control  cursor-pointer persianDatePicker">
-                        {# <label for="date-picker-example">تاریخ</label> #}
+                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>
+                        <label for="date">تاریخ</label>
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
                         <label for="product">محصول</label>
-                        <select class="form-control" name="product">
+                        <select class="form-control" name="product" required>
                             <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
                         {% for product in products %}
                             <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
@@ -285,11 +278,11 @@
                     </div>
                     {# number #}
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <input value="{{old('number')}}" type="text" id="inputIconEx5" class="form-control" name="number" autocomplete="off" required>
                         <label for="inputIconEx5">تعداد</label>
                         <span class="text-secondary">
-                            ارزش ریالی:
-                            0
+                            ارزش به تومان:
+                            <span class="cargoValue">0</span>
                         </span>
                     </div>
                     {# end number #}

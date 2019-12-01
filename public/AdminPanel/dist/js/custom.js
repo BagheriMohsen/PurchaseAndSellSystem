@@ -1,5 +1,43 @@
 $(document).ready(function(){
-   
+    var persianDataTable = {
+        "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
+        "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
+        "sInfoEmpty":      "نمایش 0 تا 0 از 0 ردیف",
+        "sInfoFiltered":   "(فیلتر شده از _MAX_ ردیف)",
+        "sInfoPostFix":    "",
+        "sInfoThousands":  ",",
+        "sLengthMenu":     "نمایش _MENU_ ",
+        "sLoadingRecords": "در حال بارگزاری...",
+        "sProcessing":     "در حال پردازش...",
+        "sSearch":         "جستجو:",
+        "sZeroRecords":    "رکوردی با این مشخصات پیدا نشد",
+        "oPaginate": {
+            "sFirst":    "برگه‌ی نخست",
+            "sLast":     "برگه‌ی آخر",
+            "sNext":     "بعدی",
+            "sPrevious": "قبلی"
+        },
+        "oAria": {
+            "sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+            "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
+        }
+    };
+    //Remove comma from number inputs for product Create Form
+    $('#productCreateForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
+    //Remove comma from number inputs for product Edit Form
+    $('#productEditForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
 
@@ -49,15 +87,66 @@ $(document).ready(function(){
     $('#user_role').on('change', checkUserRole);
 
     // Order and Product section tables
-    $('#productTable,#orderTable').DataTable();
+    // $('#productTable').DataTable({
+    //     buttons: [
+    //        'print'
+    //     ]
+    // });
+    $('#sellerNoActionTable').DataTable({
+        "language": persianDataTable
+    });
+    var orderTable = $('#orderTable').DataTable({
+        "language": persianDataTable,
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        buttons: {
+            buttons: [
+              { extend: 'print', text: 'Print List' },
+              { extend: 'pdf', text: 'PDF' },
+              { extend: 'copy', text: 'Copy to clipboard' }
+            ]
+          }
+    });
+    var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
+        "language": persianDataTable,
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        buttons: {
+            buttons: [
+              { extend: 'print', text: 'Print List' },
+              { extend: 'pdf', text: 'PDF' },
+              { extend: 'copy', text: 'Copy to clipboard' }
+            ]
+          }
+    });
     //User sections tables
-    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
+    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
+        "language": persianDataTable
+    });
     //Dashboard tables
-    $('#sellerInfoTable').DataTable();
+    $('#sellerInfoTable').DataTable({
+        "language": persianDataTable,
+    });
     //Store room tables
-    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
+    // $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
     //Warehouse tables
-    $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
+    // $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
         var CSRF_TOKEN = CSRF_TOKEN;
@@ -107,6 +196,7 @@ $(document).ready(function(){
         $('.deleteTypeButton').on('click',function(event){
             event.preventDefault();
             $(this).html('<i class="fas fa-spinner"></i>');
+            $(this).attr('disabled','disabled');
             var form = $(this).parent('form');
             var actionUrl = form.attr('action');
             var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -121,6 +211,7 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     getProductTypes(product_id,CSRF_TOKEN);
+                    $(this).attr('disabled',false);
                 }
             });
         });
@@ -186,10 +277,12 @@ $(document).ready(function(){
         event.preventDefault();
         var self = $(this);
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
+        $(this).find('button[type="submit"]').attr('disabled','disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var product_id = $(this).find('input[name="product"]').val();
         var name = $(this).find('input[name="name"]').val();
+        $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
             type:'post',
@@ -200,6 +293,7 @@ $(document).ready(function(){
             },
             success:function(response){
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
+                self.find('button[type="submit"]').attr('disabled',false);
                 getProductTypes(product_id,CSRF_TOKEN);
             }
         });
@@ -208,6 +302,7 @@ $(document).ready(function(){
     $('.deleteTypeButton').on('click',function(event){
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
+        $(this).attr('disabled','disabled');
         var form = $(this).parent('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -222,6 +317,7 @@ $(document).ready(function(){
             },
             success:function(response){
                 getProductTypes(product_id,CSRF_TOKEN);
+                $(this).attr('disabled',false);
             }
         });
     });
@@ -292,7 +388,7 @@ $(document).ready(function(){
         <tr class="text-center">
             
         <td>${product_name}</td>
-        <th>${newSpecial.price}</th>
+        <th>${numberWithCommas(newSpecial.price)}</th>
         <th>${newSpecial.place}</th>
         <td>
           <form  action="http://localhost:8000/special-tariffs/${newSpecial.id}" method="post" >
@@ -311,6 +407,7 @@ $(document).ready(function(){
         $('.deleteSpecialTariff').on('click',function(event){
             event.preventDefault();
             $(this).html('<i class="fas fa-spinner"></i>');
+            $(this).attr('disabled','disabled');
             var form = $(this).parent('form');
             var actionUrl = form.attr('action');
             var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -326,6 +423,7 @@ $(document).ready(function(){
                 success:function(response){
                     // getSpecialTariff(user_id,CSRF_TOKEN);
                     form.parents('tr').remove();
+                    $(this).attr('disabled',false);
                 }
             });
         });
@@ -344,15 +442,19 @@ $(document).ready(function(){
     $('.storeSTariffForm').submit(function(event){
         event.preventDefault();
         var self = $(this);
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
+        $(this).find('button[type="submit"]').attr('disabled','disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var user_id = $(this).find('input[name="user_id"]').val();
         var product_id = $(this).find('select[name="product_id"]').val();
         var product_name = $(this).find('select[name="product_id"] option:selected').html();
-        console.log(product_name);
         var tariff_place = $(this).find('select[name="tariff_place"]').val();
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
+        $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
             type:'post',
@@ -366,6 +468,7 @@ $(document).ready(function(){
             success:function(response){
                 getSpecialTariff(user_id,CSRF_TOKEN,product_name);
                 self.find('button[type="submit"]').html('ذخیره');
+                self.find('button[type="submit"]').attr('disabled',false);
             }
         });
     });
@@ -433,7 +536,7 @@ $(document).ready(function(){
               <label for="product_name">انتخاب محصول
                 <span class="text-danger">*</span>
               </label>
-              <select class="productSelect form-control bg-sec" name="product_name">
+              <select class="productSelect form-control bg-sec" name="product_name" required>
                 <option value="">محصول را انتخاب کنید</option>
               </select>
             </div>
@@ -441,19 +544,19 @@ $(document).ready(function(){
               <label for="count">تعداد
                 <span class="text-danger">*</span>
               </label>
-              <input class="countField form-control bg-sec" type="number" name="count" value="" >
+              <input class="countField form-control bg-sec" type="number" name="count" value="1" required>
             </div>
             <div class="col-sm-2">
               <label for="price">قیمت-تومان
                 <span class="text-danger">*</span>
               </label>
-              <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled>
+              <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled required>
             </div>
             <div class="col-sm-2">
               <label for="off">تخفیف
                 <span class="text-danger">*</span>
               </label>
-              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="" >
+              <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" required>
             </div>
             <div class="col-sm-3 mt-1">
               <label for="productType">مدل محصول
@@ -487,6 +590,7 @@ $(document).ready(function(){
             type:'GET',
             success:function(response){
                 productList = response;
+                console.log(response);
                 addOrderTable();
             }
         });
@@ -505,12 +609,12 @@ $(document).ready(function(){
                     typeSelect.innerHTML = '';
                     item.types.forEach(function(value){
                         typeSelect.innerHTML +=`
-                            <option value="${value.name}">${value.name}</option>
+                            <option value="${value.id}">${value.name}</option>
                         `;
                     });
                 }
             });
-            productPriceInput.value = productPrice;
+            productPriceInput.value = numberWithCommas(productPrice);
 
         }else if(event.target.classList.contains('fa-trash-alt')){
             // event.target.parentElement.parentElement.parentElement.parentElement.remove();
@@ -523,51 +627,64 @@ $(document).ready(function(){
         addOrderTable();
     });
     $('#orderForm').submit(function(event){
+        // var x = false;
         event.preventDefault();
         var form = $(this);
+        form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
         var orderArray = [];
+        form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
-            orderObject.name = value.querySelector('.productSelect').value;
+            // if(!value.querySelector('.productSelect').value){
+            //     x = true;
+            //     return;
+            // }
+            orderObject.product_id = value.querySelector('.productSelect').value;
             orderObject.count = value.querySelector('input[name="count"]').value;
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
             orderArray.push(orderObject);
         });
+        // if(x == true){
+        //     alert('لطفا محصول را انتخاب فرمایید');
+        //     return;
+        // }
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var mobile = form.find('input[name="mobile"]').val();
         var telephone = form.find('input[name="telephone"]').val();
-        var state = form.find('input[name="state"]').val();
-        var city = form.find('input[name="city"]').val();
+        var state_id = form.find('select[name="state"]').val();
+        var city_id = form.find('select[name="city"]').val();
         var fullName = form.find('input[name="fullName"]').val();
         var postalCode = form.find('input[name="postalCode"]').val();
         var HBD_Date = form.find('input[name="HBD_Date"]').val();
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
-        var sendCost = form.find('input[name="sendCost"]').val();
-        var cashAmount = form.find('input[name="cashAmount"]').val();
-        var prePrice = form.find('input[name="prePrice"]').val();
-        var checkPrice = form.find('input[name="checkPrice"]').val();
-        var status = form.find('input[name="status"]').val();
-        var description = form.find('textarea[name="description"]').val();
+        var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
+        var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g,'',10);
+        var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g,'',10);
+        var chequePrice = form.find('input[name="chequePrice"]').val();
+        var instant = form.find('input[name="instant"]').val();
+        var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
+        var agentStatue = form.find('#agentStatue').val();
         var formData = {
-            CSRF_TOKEN:CSRF_TOKEN,
+            _token:CSRF_TOKEN,
             mobile:mobile,
             telephone:telephone,
-            state:state,
-            city:city,
+            state_id:state_id,
+            city_id:city_id,
+            agentStatue:agentStatue,
             fullName:fullName,
             postalCode:postalCode,
             HBD_Date:HBD_Date,
             address:address,
             paymentMethod:paymentMethod,
-            sendCost:sendCost,
-            cashAmount:cashAmount,
-            prePrice:prePrice,
-            checkPrice:checkPrice,
-            state:status,
-            description:description,
+            shippingCost:shippingCost,
+            cashPrice:cashPrice,
+            prePayment:prePayment,
+            chequePrice:chequePrice,
+            instant:instant,
+            sellerDescription:sellerDescription,
             orderArray:orderArray
         }
         console.log(formData);
@@ -576,42 +693,72 @@ $(document).ready(function(){
             type:'POST',
             data:formData,
             success:function(response){
-                console.log(response);
+                form.find('button[type="submit"]').html('ثبت سفارش');
+                
+                toastr["success"](response,{
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-bottom-center",
+                    "preventDuplicates": false,
+                    "showDuration": "300",
+                    "hideDuration": "500",
+                    "timeOut": "3000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "slideIn",
+                    "hideMethod": "SlideOout"
+                    });
+                $('#orderForm').trigger('reset');
+                $('#cityAgent').html('');
             }
         });
 
     });
     // Calculating order overall price
-    $('#orderForm').on('change click',function(){
+    $('#orderForm .orderList').on('change click keyup',function(){
         var overallPrice = null;
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
             var count = value.querySelector('input[name="count"]').value;
             var off = value.querySelector('input[name="off"]').value;
-            var price = value.querySelector('input[name="price"]').value;
+            var price = value.querySelector('input[name="price"]').value.replace(/\,/g,'',10);
             rowPrice = (count*price) - off;
             overallPrice += rowPrice;
         });
-        $('#overallPrice').html(overallPrice);
+        $('#overallPrice').html(numberWithCommas(overallPrice));
+        // Cash price or cheque price field updated after overallprice update
+        var paymentMethod = $('#orderForm input[name="paymentMethod"]:checked').val();
+        if(paymentMethod === 'cash'){
+            $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
+        }else{
+            $('#orderForm input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+            $('#orderForm input[name="prePayment"]').val(0);
+        }
     });
     //Checking if city has agent exist when seller gives order
-    $('#orderForm #city').on('click',function(event){
-        event.preventDefault();
+    $('#orderForm #city').on('click',function(){
         $('#cityAgent').html('');
-        var cityName = document.querySelector('#city').selectedOptions[0].innerText;
-        $.ajax({
-            url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
-            type:'Get',
-            success:function(response){
-                if(response.state == 2){
-                    $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
-                }else if(response.state == 1){
-                    $('#cityAgent').html('<span class="text-secondary">'+ response.message +'</span>');
-                }else{
-                    $('#cityAgent').html('<span class="text-danger">'+ response.message +'</span>');
+        var city = document.querySelector('#city');
+        if(city.value){
+            var cityName = city.selectedOptions[0].innerText;
+            $.ajax({
+                url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
+                type:'Get',
+                success:function(response){
+                    $('#agentStatue').val(response.state);
+                    if(response.state == 2){
+                        $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
+                    }else if(response.state == 1){
+                        $('#cityAgent').html('<span class="text-secondary">'+ response.message +'</span>');
+                    }else{
+                        $('#cityAgent').html('<span class="text-danger">'+ response.message +'</span>');
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 
     // Confirm before delete for all delete buttons in all pages
@@ -637,7 +784,7 @@ $(document).ready(function(){
         $('#overAllSum').html(numberWithCommas(overallSum));
     }
     // Add comma to numeric inputs
-    $('input.number').keyup(function(event) {
+    $('input.comma').keyup(function(event) {
 
         // skip for arrow keys
         if(event.which >= 37 && event.which <= 40) return;
@@ -648,9 +795,15 @@ $(document).ready(function(){
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+   
     var isoDate;
     // Setup persian datepicker for date inputs
     $(".persianDatePicker").pDatepicker({
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
         format : 'YYYY-MM-DD',
         initialValue : false,
         onSelect: function(unix){
@@ -661,6 +814,28 @@ $(document).ready(function(){
             isoDate = year + '-' + month + '-' + day;
         }
 
+    });
+    $(".persianDateTimepicker").pDatepicker({
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
+        format:'YYYY-MM-DDTHH:mm:ss',
+        initialValue : false,
+        onSelect: function(unix){
+            var date = new Date(unix);
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+            isoDate = year + '-' + month + '-' + day;
+        },
+        timePicker: {
+            enabled: true,
+            meridiem: {
+                enabled: true
+            }
+        }
     });
     //Add zero to hours,minutes and seconds for clock
     function addZero(i) {
@@ -757,6 +932,7 @@ $(document).ready(function(){
     $('#productReceive').on('change', calculateCargoValue);
     $('#productExit').on('change', calculateCargoValue);
     $('#warehouseToTankhah').on('change', calculateCargoValue);
+    $('#tankhahExit').on('change', calculateCargoValue);
     // $('#sendToAgentForm').on('click',function(){
     //     // $(this).val() = isoDate;
     //     console.log(isoDate);
@@ -764,6 +940,7 @@ $(document).ready(function(){
     $('#sendToAgentForm').submit(function(event){
        event.preventDefault();
        $(this).find('input[name="date"]').val(isoDate);
+       console.log($(this).find('input[name="date"]').val());
        $(this)[0].submit();
     });
     $('#storeToStoreAgents').submit(function(event){
@@ -776,5 +953,272 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
     });
+    
+    //Get State and cities array via ajax for user_create and user_edit 
+    var statesCityArray;
+    if($('#createUserForm').length || $('#editUserForm').length){
+        $.ajax({
+            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            type:'Get',
+            success:function(response){
+                statesCityArray = response;
+            }
+        });
+        //City dependency to states in forms
+        $('#state').on('change',function(){
+            var form = $(this).parents('form');
+            var city = form.find('#city')[0];
+            city.innerHTML = '';
+            city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
+            var stateName = form.find('#state option:selected').html();
+            $.each(statesCityArray,function(index,value){
+                if(value.name == stateName){
+                    $.each(value.cities,function(index,value){
+                        city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
+                    });
+                }
+            });
+        });
+    }
+    if($('#orderForm').length){
+        $.ajax({
+            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            type:'Get',
+            success:function(response){
+                console.log(response);
+                statesCityArray = response;
+            }
+        });
+        //City dependency to states in forms
+        $('#state').on('change click',function(){
+            $('#cityAgent').html('');
+            var form = $(this).parents('form');
+            var city = form.find('#city')[0];
+            city.innerHTML = '';
+            city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
+            var stateName = form.find('#state option:selected').html();
+            $.each(statesCityArray,function(index,value){
+                if(value.name == stateName){
+                    $.each(value.cities,function(index,value){
+                        city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
+                    });
+                }
+            });
+        });
+    }
+    //Change order condition fields depending on radio button in AgentOrderLists page
+    $('.conditionForm input[name="condition"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var waitingDelivery = form.find('.waitingDeliveryField');
+        var suspend = form.find('.suspendField');
+        var cancelField = form.find('.cancelField');
+        waitingDelivery.addClass('d-none');
+        suspend.addClass('d-none');
+        cancelField.addClass('d-none');
+     
+    
+        switch (value) {
+          case '1':
+            waitingDelivery.removeClass('d-none');
+            break;
+          case '2':
+            suspend.removeClass('d-none');
+            break;
+          case '3':
+            cancelField.removeClass('d-none');
+            break;
+          default:
+            break;
+        }
+    });
+    $('.conditionForm input[name="cancel"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var cancelDescField = form.find('.cancelDescField');
+        if(value == '9'){
+            cancelDescField.removeClass('d-none');
+        }else{
+            cancelDescField.addClass('d-none');
+        }
+    });
+    $('.conditionForm input[name="suspend"]:radio').change(function(e) {
+        var value = e.target.value.trim()
+        var form = $(this).parents('form');
+        var dueDateFuild = form.find('.dueDateFuild');
+        if(value == '3'){
+            dueDateFuild.removeClass('d-none');
+        }else{
+            dueDateFuild.addClass('d-none');
+        }
+    });
+    $('#conditionForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = orderTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var condition = form.find('select').val();
+        $.each(tableData,function(index,value){
+            orderNumbers.push(parseInt(value[1]));
+        });
+        if(!orderNumbers.length){
+            alert('سفارشی انتخاب نشده است');
+        }else if(!condition){
+            alert('گزینه ای انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            var formData = [];
+            formData.status = condition;
+            formData.orders = orderNumbers;
+            console.log(formData);
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    condition:condition,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    console.log(response);
+                    console.log('test');
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "500",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "slideIn",
+                        "hideMethod": "SlideOout"
+                        });
+                   
+                }
+            });
+        }
+        
+    });
+    $('#toFollowManagerForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = orderTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        $.each(tableData,function(index,value){
+            orderNumbers.push(parseInt(value[1]));
+        });
+        if(!orderNumbers.length){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                      });
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    $('#productTable').DataTable( {
+        "language": persianDataTable,
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+    } );
+    pdfMake.fonts = {
+        Arial: {
+                normal: 'arial.ttf',
+                bold: 'arialbd.ttf',
+                italics: 'ariali.ttf',
+                bolditalics: 'arialbi.ttf'
+        }
+    };
+    //Handling cash and cheque in order_create page
+    $('#orderForm input[name="paymentMethod"]').on('change',function(){
+        var form = $(this).parents('form');
+        var cashPrice = form.find('input[name="cashPrice"]');
+        var prePayment = form.find('input[name="prePayment"]')
+        var chequePrice = form.find('input[name="chequePrice"]');
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        var paymentMethod = $(this).val();
+        if(paymentMethod === 'cash'){
+            cashPrice.attr('disabled',false);
+            prePayment.attr('disabled','disabled');
+            chequePrice.attr('disabled','disabled');
+            cashPrice.val(numberWithCommas(overallPrice));
+            chequePrice.val(0);
+            prePayment.val(0);
+           
+        }else{
+            cashPrice.attr('disabled','disabled');
+            prePayment.attr('disabled', false);
+            chequePrice.attr('disabled', false);
+            chequePrice.val(numberWithCommas(overallPrice));
+            prePayment.val(0);
+            cashPrice.val(0);
+        }
+    });
+    $('input[name="prePayment"]').on('keyup',function(){
+        var form = $(this).parents('form');
+        var prePayment = parseInt($(this).val().replace(/\,/g,'',10))
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        if(prePayment){
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice - prePayment) );
+        }else{
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+        }
+    });
+    //Agents Charts
+    if($('#visitors-chart').length){
+        var userId = $('#userId').val();
+        $.ajax({
+            url:'http://localhost:8000/types/'+ product_id,
+            type:'Get',
+            success:function(response){
+                updateProductTypes(response,product_id,CSRF_TOKEN);
+            }
+        });
+    }
 });
 

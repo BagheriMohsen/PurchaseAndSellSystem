@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Tehran',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +168,8 @@ return [
          */
         TwigBridge\ServiceProvider::class,
         Cog\Laravel\Ban\Providers\BanServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -231,7 +233,8 @@ return [
          * My Append Aliases
          */
         'Twig' => TwigBridge\Facade\Twig::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

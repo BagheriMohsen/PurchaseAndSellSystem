@@ -8,16 +8,24 @@ class City extends Model
 {
     protected $fillable = [
       'name',
-      'followUpManager'
+      'state_id',
+     
     ];
-
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function users(){
+      return $this->hasMany('App\User');
+    }
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model
     |--------------------------------------------------------------------------
     */
-    public function states(){
-      return $this->hasMany('App\State');
+    public function state(){
+      return $this->belongsTo('App\State');
     }
     /*
     |--------------------------------------------------------------------------
@@ -27,12 +35,13 @@ class City extends Model
     public function warehouses(){
       return $this->hasMany('App\Warehouse');
     }
+   
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Releation with Order Model
     |--------------------------------------------------------------------------
     */
-    public function followUpManager(){
-      return $this->belongsTo('App\User','followUpManager','id');
+    public function orders(){
+      return $this->hasMany('App\Order');
     }
 }

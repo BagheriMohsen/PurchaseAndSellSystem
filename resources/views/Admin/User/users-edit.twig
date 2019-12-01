@@ -36,7 +36,7 @@
   {% include 'Messages/errors' %}
 
 
-<form action="{{route('users.update',user.id)}}" method="post">
+<form id="editUserForm" action="{{route('users.update',user.id)}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input type="hidden" name="_method" value="put" />
   <div class="row bg-white pt-3 pb-3">
@@ -99,7 +99,7 @@
       اطلاعات تخصصی
     </h4>
     <div class="col-12 mx-4 otherRolesFields">
-      <div class="row mx-4">
+      <div class="row">
         {#مدیر نماینده  #}
         <div class="col-sm-4 mb-4 d-none">
           <select id="agent_id" class="form-control "  name="agent_id">
@@ -126,25 +126,25 @@
         <div class="col-12"></div>
         {#پورسانت فروشنده  #}
         <div class="col-sm-4 md-form mb-4 d-none">
-          <input type="text" id="porsantSeller" class="form-control number" name="porsantSeller" value="{{user.porsantSeller | number_format }}">
+          <input type="text" id="porsantSeller" class="form-control comma" name="porsantSeller" onkeypress='validate(event)' value="{{user.porsantSeller | number_format }}">
           <label for="porsantSeller">پورسانت</label>
         </div>
         {#پورسانت فروشنده #}
         {# تعرفه پایه داخلی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_internal" class="form-control number" name="internal" value="{{user.internalPrice | number_format }}">
+            <input type="text" id="tariff_internal" class="form-control comma" name="internal" value="{{user.internalPrice | number_format }}">
             <label for="tariff_internal">تعرفه پایه داخل</label>
         </div>
         {# تعرفه پایه داخلی #}
         {# تعرفه پایه حومهی #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_locally" class="form-control number" name="locally" value="{{user.locallyPrice | number_format }}">
+            <input type="text" id="tariff_locally" class="form-control comma" name="locally" value="{{user.locallyPrice | number_format }}">
             <label for="tariff_locally">تعرفه پایه حومه</label>
         </div>
         {# تعرفه پایه حومه #}
         {# تعرفه پایه روستای #}
         <div class="col-sm-4 md-form mb-4 d-none">
-            <input type="text" id="tariff_village" class="form-control number" name="village" value="{{user.villagePrice | number_format }}">
+            <input type="text" id="tariff_village" class="form-control comma" name="village" value="{{user.villagePrice | number_format }}">
             <label for="tariff_village">تعرفه پایه روستا</label>
         </div>
         {# تعرفه پایه روستا #}
@@ -172,8 +172,8 @@
             data-toggle="switchbutton"
             data-onstyle="success"
             data-offstyle="danger"
-            data-onlabel="خودکار"
-            data-offlabel="دستی" name="backToWareHouse" {% if user.backToWareHouse != null %} checked {% endif %}>
+            data-onlabel="فعال"
+            data-offlabel="غیر فعال" name="backToWareHouse" {% if user.backToWareHouse != null %} checked {% endif %}>
         </div>
         {# end auto send #}
         {# auto send #}
@@ -192,7 +192,7 @@
       </div>
     </div>
     <div class="col-12 mx-4 callcenterFields d-none">
-      <div class="row mx-4">
+      <div class="row">
         {# price calculation type #}
         <div class="col-sm-4 mb-4">
           <h6>نوع محاسبه هزینه کالا
@@ -304,9 +304,43 @@
     <h4 class="col-12 pt-2 pb-3">
     اطلاعات مکان
     </h4>
-
-    {# شهر  #}
+   
+    {# state #}
     <div class="col-sm-5  mt-5">
+      <label for="state">استان
+      </label>
+      <select id="state" class="form-control"  name="state">
+        <option value="{{null}}">استان را انتخاب کنید</option>
+        {% for state in states %}
+        <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {# city #}
+    {# <div class="col-sm-5  mt-5">
+      <label for="city">شهر
+      </label>
+      <select id="city" class="form-control" name="city">
+        <option value="{{null}}">شهر را انتخاب کنید</option>
+          {% for city in cities %}
+            <option {% if city.id == user.city_id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>
+          {% endfor %}
+      </select>
+    </div> #}
+    {# city  #}
+    <div class="col-sm-5  mt-5">
+      <label for="city">شهر
+      </label>
+      <select id="city" class="form-control" name="city">
+        <option value="{{null}}">شهر را انتخاب کنید</option>
+        {% for city in cities %}
+        <option {% if city.id == user.city_id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>
+        {# <option value="{{city.id}}">{{city.name}}</option> #}
+        {% endfor %}
+      </select>
+    </div>
+    {# شهر  #}
+    {# <div class="col-sm-5  mt-5">
       <select class="cities col-12 bg-white" name="state">
         {% for city in cities %}
           <optgroup class="bg-info" label="{{city.name}}">
@@ -316,7 +350,7 @@
           </optgroup>
         {% endfor %}
       </select>
-    </div>
+    </div> #}
     {# شهر #}
     {# آدرس کامل #}
     <div class="md-form col-sm-7">
@@ -325,13 +359,13 @@
       <label for="form10">آدرس کامل</label>
     </div>
     {# آدرس کامل #}
+    <div class="col-12"></div>
       {#   status #}
-      <div class="col-sm-2 mt-5">
+      <div class="col-sm-4 mt-5">
           <h6>
               وضعیت کاربر
           </h6>
           <input type="checkbox"
-                 data-size="sm"
                  data-toggle="switchbutton"
                  data-onstyle="success"
                  data-offstyle="danger"
@@ -340,13 +374,12 @@
       </div>
       {#   status #}
 
-
-      <div class="col-12 mt-4">
-          <button class="btn btn-success btn-sm " type="submit" name="button">
-              <strong class="h6 text-dark">
-                  ویرایش کاربر
-              </strong>
-          </button>
+      <div class="col-12 text-center mt-5">
+        <button class="btn btn-success" type="submit" name="button">
+          <strong class="h6 text-dark">
+            ویرایش کاربر
+          </strong>
+        </button>
       </div>
   </div>
 
@@ -354,7 +387,7 @@
 </form>
 {# cities Under Control #}
 {% if userRole == "followUpManager" %}
-<div id="citiesUnderControl" class="row bg-white pt-2 pb-3 mt-5 ">
+<div id="statesUnderControl" class="row bg-white pt-2 pb-3 mt-5 ">
  <div class="mx-auto col-sm-8">
   {% include 'Messages/info' %}
  </div>
@@ -364,18 +397,14 @@
   <div class="col-sm-4 mb-4 mx-auto">
     <table class="table table-bordered table-striped">
       <div>
-        <form action="{{route('users.followUpManager.cityStore')}}" >
+        <form action="{{route('users.followUpManager.stateStore')}}" >
           <input type="hidden" name="_token" value="{{csrf_token()}}" />
           <input type="hidden" name="user_id" value="{{user.id}}" />
           <div class="input-group mb-3 md-form">
             {# <input name="CityName" placeholder="نام شهر را وارد کنید" id="inputValidationEx" type="text" class="form-control text-light"  required> #}
-            <select name="CityName" class="form-control" required>
-              {% for city in cities %}
-                <optgroup label="{{city.name}}">
-                    {% for state in city.states %}
-                      <option  value="{{state.name}}">{{state.name}}</option>
-                    {% endfor %}
-                </optgroup>
+            <select name="StateName" class="form-control" required>
+              {% for state in states %}
+                <option  value="{{state.name}}">{{state.name}}</option>
               {% endfor %}
             </select>
             <div class="input-group-append">
@@ -392,13 +421,13 @@
           <td>شهر</td>
           <td>عملیات</td>
         </tr>
-      {% for cityControl in user.citiesUnderControl %}
+      {% for stateControl in user.statesUnderControl %}
         <tr>
           <td>#</td>
-          <td>{{cityControl.name}}</td>
+          <td>{{stateControl.name}}</td>
           <td>
             {# Form Delete #}
-              <a title="حذف" href="{{route('users.followUpManagerCityClear',cityControl.name)}}">
+              <a title="حذف" href="{{route('users.followUpManagerStateClear',stateControl.name)}}">
                 <i class="far fa-trash-alt text-danger crud-icon"></i>
               </a>
             {# Form Delete #}
@@ -412,9 +441,6 @@
 
 {% endif %}
 {# cities Under Control #}
-
-
-
 {% endblock %}
 
 {% block footer %}

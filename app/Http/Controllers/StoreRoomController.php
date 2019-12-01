@@ -189,13 +189,22 @@ class StoreRoomController extends Controller
                 ['product_id','=',$request->product],
                 ['warehouse_id','=',1]
             ])->exists();
+
+            
+
             /*(OUT) IF product is exist in storage table */
             if($status == true){
-                
                 $storage = 'App\Storage'::where([
                     ['product_id','=',$request->product],
                     ['warehouse_id','=',1]
                 ])->firstOrFail();
+
+                if($storage->number < $request->number){
+                    $message = " این تعداد ".$storage->product->name." در انبار موجود نیست"." از این کالا در انبار".$storage->number." عدد وجود دارد";
+                    return back()->with('info',$message);
+                }
+
+                
 
                 StoreRoom::create([
                     'user_id'       =>  auth()->user()->id,
@@ -210,9 +219,6 @@ class StoreRoomController extends Controller
             if($storage->number >= $request->number){
                 $number = $storage->number - $request->number;
                 $storage->update(['number'=>$number]);
-            }else{
-                $message = " این تعداد ".$storage->product->name." در انبار موجود نیست"." از این کالا در انبار".$storage->number." عدد وجود دارد";
-                return back()->with('info',$message);
             }
         }else{
             return back()->with('info','این کالا در انبار موجود نیست');
@@ -441,6 +447,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function sendToAgent(Request $request){
+       
         $request->validate([
             'date'          =>  'required',
             'number'        =>  'required',
@@ -542,7 +549,8 @@ class StoreRoomController extends Controller
                 'description'   =>  $request->description,
                 'status'        =>  $request->status,
                 'image'         =>  $image,
-                'out_date'      =>  7
+                'in_out'        =>  7,
+                'out_date'      =>  $request->date
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -691,7 +699,7 @@ class StoreRoomController extends Controller
         ])->exists();
 
         if($status == false){
-            return back()->with('message','این کالا در انبار موجود نیست');
+            return back()->with('info','این کالا در انبار موجود نیست');
         }
        
         $fundWarestorage = 'App\Storage'::where([
@@ -766,7 +774,7 @@ class StoreRoomController extends Controller
         $user = 'App\User'::findOrFail($id);
 
         if($user->backToWareHouse == null){
-            return back()->with('message','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
+            return back()->with('info','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
         }
         $status = 'App\Storage'::where([
             ['product_id','=',$request->product],
@@ -774,7 +782,7 @@ class StoreRoomController extends Controller
         ])->exists();
 
         if($status == false){
-            return back()->with('message','این کالا در انبار شما موجود نیست');
+            return back()->with('info','این کالا در انبار شما موجود نیست');
         }
        
         $AgentStorage = 'App\Storage'::where([
@@ -897,7 +905,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update in_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update out_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد به موجودی انبار افزوده شد'; 
             return back()->with('message',$message);
         }else{
@@ -914,7 +922,7 @@ class StoreRoomController extends Controller
                 'in_out'=>11,
                 'in_date'=> Carbon::now()
                 ]);//update in_date and apply this product fot funWarehouse
-            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update in_date for previous storeRoom
+            $pre_storeRoom->update(['in_date'=>Carbon::now()]);// update out_date for previous storeRoom
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد برای اولین بار به انبار اضافه شد'; 
             return back()->with('message',$message);
         }

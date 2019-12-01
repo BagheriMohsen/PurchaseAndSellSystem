@@ -24,10 +24,9 @@
                 width="100%">
                   <thead>
                   <tr class="text-center">
-                    <th>نام</th>
-                    <th>نام خانوادگی</th>
+                    <th>نام-نام خانوادگی</th>
                     <th>نقش</th>
-                    <th>شهر-استان</th>
+                    <th>استان-شهر</th>
                     <th >وضعیت</th>
                     <th >تایید مدارک</th>
                     <th >عملیات</th>
@@ -36,8 +35,8 @@
                   <tbody>
                   {% for user in users %}
                     <tr class="text-center">
-                      <td>{{user.name}}</td>
-                      <td>{{user.family}}</td>
+                      <td>{{user.name}}{{' '}}{{user.family}}</td>
+                     
                       <td>
                       {% set role = user.getRoleNames().first() %}
                       {% if role == 'admin' %}
@@ -82,7 +81,7 @@
                           
                       {% endif %}
                       </td>
-                      <td>{{user.state.name}}</td>
+                      <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
                       {% if user.status != null %}
                       <td class="text-success">  {{'فعال'}} </td>
                       {% else %}
