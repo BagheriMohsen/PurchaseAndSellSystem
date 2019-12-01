@@ -1080,7 +1080,6 @@ $(document).ready(function(){
                 type:'get',
                 data:{
                     _token:CSRF_TOKEN,
-                    condition:condition,
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
