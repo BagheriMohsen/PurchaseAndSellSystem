@@ -6,7 +6,7 @@ $(document).ready(function(){
         "sInfoFiltered":   "(فیلتر شده از _MAX_ ردیف)",
         "sInfoPostFix":    "",
         "sInfoThousands":  ",",
-        "sLengthMenu":     "نمایش _MENU_ ردیف",
+        "sLengthMenu":     "نمایش _MENU_ ",
         "sLoadingRecords": "در حال بارگزاری...",
         "sProcessing":     "در حال پردازش...",
         "sSearch":         "جستجو:",
@@ -92,7 +92,30 @@ $(document).ready(function(){
     //        'print'
     //     ]
     // });
+    $('#sellerNoActionTable').DataTable({
+        "language": persianDataTable
+    });
     var orderTable = $('#orderTable').DataTable({
+        "language": persianDataTable,
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        buttons: {
+            buttons: [
+              { extend: 'print', text: 'Print List' },
+              { extend: 'pdf', text: 'PDF' },
+              { extend: 'copy', text: 'Copy to clipboard' }
+            ]
+          }
+    });
+    var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
         "language": persianDataTable,
         columnDefs: [ {
             orderable: false,
