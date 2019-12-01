@@ -188,30 +188,30 @@
               <th>کد پستی</th>
               <th>کد پیگیری</th>
               <th>مبلغ مشارکت پایه</th>
-              <th colspan="3">آدرس</th>
             </tr>
             <tr>
               <td>{{ order.postalCode }}</td>
               <td>{{ order.trackingCode }}</td>
               <td>
-                    <p>
+                    <span>
                       {{'داخل شهر:'}}
                       {{user.internalPrice}}
-                    </p>
-                    <p>
+                    </span>/
+                    <span>
                       {{'حومه شهر:'}}
                       {{user.locallyPrice}}
-                      </p>
-                    <p>
+                      </span>/
+                    <span>
                       {{'روستا:'}}
                       {{user.villagePrice}}
-                    </p>
+                    </span>
 
               </td>
-              <td colspan="3">{{order.address}}</td>
             </tr>
           </tbody>
         </table>
+        <strong>آدرس:</strong>
+        {{order.address}}
         <hr>
         <table  class="table pt-2 pb-2 text-center">
           <tbody>

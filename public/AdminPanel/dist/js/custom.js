@@ -93,6 +93,7 @@ $(document).ready(function(){
     //     ]
     // });
     var orderTable = $('#orderTable').DataTable({
+        "language": persianDataTable,
         columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -112,9 +113,13 @@ $(document).ready(function(){
           }
     });
     //User sections tables
-    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable();
+    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
+        "language": persianDataTable
+    });
     //Dashboard tables
-    $('#sellerInfoTable').DataTable();
+    $('#sellerInfoTable').DataTable({
+        "language": persianDataTable,
+    });
     //Store room tables
     // $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
     //Warehouse tables
@@ -690,7 +695,7 @@ $(document).ready(function(){
 
     });
     // Calculating order overall price
-    $('#orderForm').on('change click keyup',function(){
+    $('#orderForm .orderList').on('change click keyup',function(){
         var overallPrice = null;
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
@@ -701,8 +706,14 @@ $(document).ready(function(){
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(numberWithCommas(overallPrice));
-        // Cash price field updated after overallprice update
-        $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
+        // Cash price or cheque price field updated after overallprice update
+        var paymentMethod = $('#orderForm input[name="paymentMethod"]:checked').val();
+        if(paymentMethod === 'cash'){
+            $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
+        }else{
+            $('#orderForm input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+            $('#orderForm input[name="prePayment"]').val(0);
+        }
     });
     //Checking if city has agent exist when seller gives order
     $('#orderForm #city').on('click',function(){
@@ -1037,42 +1048,42 @@ $(document).ready(function(){
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
             form.find('button').attr('disabled','disabled');
             var formData = [];
-            formData[0] = condition;
-            formData[1] = orderNumbers;
+            formData.status = condition;
+            formData.orders = orderNumbers;
             console.log(formData);
-            // $.ajax({
-            //     url:actionUrl,
-            //     type:'get',
-            //     data:{
-            //         _token:CSRF_TOKEN,
-            //         condition:condition,
-            //         orderNumbers:orderNumbers
-            //     },
-            //     success:function(response){
-            //         form.find('button').html('<strong class="h6">ذخیره</strong>');
-            //         form.find('button').attr('disabled',false);
-            //         console.log(response);
-            //         console.log('test');
-            //         orderTable.rows('.selected').remove().draw( false );
-            //         toastr["success"](response,{
-            //             "closeButton": true,
-            //             "debug": false,
-            //             "newestOnTop": false,
-            //             "progressBar": true,
-            //             "positionClass": "toast-bottom-center",
-            //             "preventDuplicates": false,
-            //             "showDuration": "300",
-            //             "hideDuration": "500",
-            //             "timeOut": "3000",
-            //             "extendedTimeOut": "1000",
-            //             "showEasing": "swing",
-            //             "hideEasing": "linear",
-            //             "showMethod": "slideIn",
-            //             "hideMethod": "SlideOout"
-            //             });
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    condition:condition,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    console.log(response);
+                    console.log('test');
+                    orderTable.rows('.selected').remove().draw( false );
+                    toastr["success"](response,{
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "500",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "slideIn",
+                        "hideMethod": "SlideOout"
+                        });
                    
-            //     }
-            // });
+                }
+            });
         }
         
     });
@@ -1142,8 +1153,49 @@ $(document).ready(function(){
     };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
-        console.log('test');
+        var form = $(this).parents('form');
+        var cashPrice = form.find('input[name="cashPrice"]');
+        var prePayment = form.find('input[name="prePayment"]')
+        var chequePrice = form.find('input[name="chequePrice"]');
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        var paymentMethod = $(this).val();
+        if(paymentMethod === 'cash'){
+            cashPrice.attr('disabled',false);
+            prePayment.attr('disabled','disabled');
+            chequePrice.attr('disabled','disabled');
+            cashPrice.val(numberWithCommas(overallPrice));
+            chequePrice.val(0);
+            prePayment.val(0);
+           
+        }else{
+            cashPrice.attr('disabled','disabled');
+            prePayment.attr('disabled', false);
+            chequePrice.attr('disabled', false);
+            chequePrice.val(numberWithCommas(overallPrice));
+            prePayment.val(0);
+            cashPrice.val(0);
+        }
     });
-   
+    $('input[name="prePayment"]').on('keyup',function(){
+        var form = $(this).parents('form');
+        var prePayment = parseInt($(this).val().replace(/\,/g,'',10))
+        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+        if(prePayment){
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice - prePayment) );
+        }else{
+            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+        }
+    });
+    //Agents Charts
+    if($('#visitors-chart').length){
+        var userId = $('#userId').val();
+        $.ajax({
+            url:'http://localhost:8000/types/'+ product_id,
+            type:'Get',
+            success:function(response){
+                updateProductTypes(response,product_id,CSRF_TOKEN);
+            }
+        });
+    }
 });
 
