@@ -233,18 +233,22 @@ class OrderController extends Controller
     | Agent Change Order Status
     |--------------------------------------------------------------------------
     |*/
-    public function AgentChangeOrderStatus(){
-
-        return response('ok');
+    public function AgentChangeOrderStatus(Request $request){
+        //     $data =array();
+        // foreach($request->orders as $item){
+        //     $data[]=$item;
+        // }
+        $status = Input::get('status');;
+        return response()->json($status);
     }
     /*
     |--------------------------------------------------------------------------
     | Factor
     |--------------------------------------------------------------------------
     |*/
-    public function Factor(){
-        $pdf = PDF::loadView('Admin.Order.Factor');
-        return $pdf->download('invoice.pdf');
+    public function Factor($id){
+        $order = 'App\Order'::findOrFail($id);
+        return view('Admin.Order.Factor',compact('order'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -263,12 +267,17 @@ class OrderController extends Controller
     |*/
     public function UnverifiedOrderList(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::Role('agent')->latest()->get();
         $orders = Order::where([
             'followUpManager_id'=>$user->id,
-            'status'=>1,
+            'status'=>3,
             'agent_id'=>null
             ])->latest()->get();
-        return view('Admin.Order.FollowUpManager.unverified-orders',compact('orders'));
+        return view('Admin.Order.FollowUpManager.unverified-orders',compact(
+            'orders',
+            'agents',
+            'user'
+        ));
     }
     
 }

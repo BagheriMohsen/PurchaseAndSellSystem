@@ -66,5 +66,21 @@ class Order extends Model
     public function state(){
         return $this->belongsTo('App\State');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function seller(){
+        return $this->belongsTo('App\User','seller_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function agent(){
+        return $this->belongsTo('App\User','agent_id','id');
+    }
 
 }

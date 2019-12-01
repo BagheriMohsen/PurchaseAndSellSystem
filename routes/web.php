@@ -122,7 +122,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     //FollowUpManager 
     Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
     //Factor
-    Route::get('Factor','OrderController@Factor')->name('Factor');
+    Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
 Route::middleware('auth')->resource('orders','OrderController');
 /*

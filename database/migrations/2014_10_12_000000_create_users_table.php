@@ -81,6 +81,7 @@ class CreateUsersTable extends Migration
             $table->integer('locallyPrice')->nullable();
             $table->integer('internalPrice')->nullable();
             $table->integer('villagePrice')->nullable();
+            $table->integer('gift')->default(0);
             $table->timestamps();
 
             $table->Foreign('image_id')->references('id')->on('media')

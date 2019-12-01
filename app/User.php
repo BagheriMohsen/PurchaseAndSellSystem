@@ -80,6 +80,22 @@ class User extends Authenticatable implements HasMedia,BannableContract
     ];
     /*
     |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderSeller(){
+        return $this->hasMany('App\Order');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with Order Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderAgent(){
+        return $this->hasMany('App\Order');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
