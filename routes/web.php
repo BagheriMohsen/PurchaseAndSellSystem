@@ -59,6 +59,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('uploadCS_status/{id}','UserController@uploadCS_status')->name('uploadCS_status');
     Route::get('followUpManagerStateStore','UserController@followUpManagerStateStore')->name('followUpManager.stateStore');
     Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
+    /* Admin Dashboard */
+    Route::get('Admin-Dashboard','UserController@AdminDashboard')->name('AdminDashboard');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
     Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
@@ -120,7 +122,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     //FollowUpManager 
     Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
     //Factor
-    Route::get('Factor','OrderController@Factor')->name('Factor');
+    Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
 Route::middleware('auth')->resource('orders','OrderController');
 /*

@@ -69,7 +69,7 @@ class OrderController extends Controller
             'agent_id'          =>      $agent_id,
             'followUpManager_id'=>      $followUpManager_id,
             'seller_id'         =>      auth()->user()->id,
-            'status'            =>      1,
+            'status'            =>      7,
             'lastStatus'        =>      1,
             'trackingCode'      =>      $trackingCode,
             'mobile'            =>      $request->mobile,
@@ -151,7 +151,7 @@ class OrderController extends Controller
     public function AgentOrderLists(){
         $bottom_statuses = 'App\OrderStatus'::skip(10)->take(4)->get();
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
+        $orders = Order::where(['agent_id'=>$user->id,'status'=>7])->latest()->get();
         return view('Admin.Order.Agent.agent-orders',compact('orders','bottom_statuses'));
     }
     /*
@@ -233,18 +233,22 @@ class OrderController extends Controller
     | Agent Change Order Status
     |--------------------------------------------------------------------------
     |*/
-    public function AgentChangeOrderStatus(){
-
-        return response('ok');
+    public function AgentChangeOrderStatus(Request $request){
+        //     $data =array();
+        // foreach($request->orders as $item){
+        //     $data[]=$item;
+        // }
+        $status = Input::get('status');;
+        return response()->json($status);
     }
     /*
     |--------------------------------------------------------------------------
     | Factor
     |--------------------------------------------------------------------------
     |*/
-    public function Factor(){
-        $pdf = PDF::loadView('Admin.Order.Factor');
-        return $pdf->download('invoice.pdf');
+    public function Factor($id){
+        $order = 'App\Order'::findOrFail($id);
+        return view('Admin.Order.Factor',compact('order'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -263,12 +267,17 @@ class OrderController extends Controller
     |*/
     public function UnverifiedOrderList(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::Role('agent')->latest()->get();
         $orders = Order::where([
             'followUpManager_id'=>$user->id,
-            'status'=>1,
+            'status'=>3,
             'agent_id'=>null
             ])->latest()->get();
-        return view('Admin.Order.FollowUpManager.unverified-orders',compact('orders'));
+        return view('Admin.Order.FollowUpManager.unverified-orders',compact(
+            'orders',
+            'agents',
+            'user'
+        ));
     }
     
 }

@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
                 if($roleName == "agent" || $roleName == "agentChief"){
                     $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
-                    $orderNotif = 'App\Order'::where(['agent_id'=>$user->id,'status'=>1])
+                    $orderNotif = 'App\Order'::where(['agent_id'=>$user->id,'status'=>7])
                     ->count();
                 }elseif($roleName == "fundWarehouser"){
                     $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>5])
@@ -67,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
                     $orderNotif = 0;
                 }elseif($roleName == "followUpManager"){
                     $notifs = 0;
-                    $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>1,'agent_id'=>null])
+                    $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>3,'agent_id'=>null])
                     ->count();
                 }else{
                     $notifs = 0;

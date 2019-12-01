@@ -212,7 +212,55 @@ class UserController extends Controller
         User::destroy($id);
         return redirect()->route('users.index');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Dashboard
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminDashboard(){
+        $today = 'Carbon\Carbon'::now();
+        
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        //Order Waiting For Delivery  
+        $OrderWaitingForDeliveryToday = 'App\Order'::where([
+            ['status','=',7],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderWaitingForDeliveryInMonth = 'App\Order'::where([
+            ['status','=',7],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        //Returned Collected  
+        $OrderReturnedToday = 'App\Order'::where([
+            ['status','=',14],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderReturnedInMonth = 'App\Order'::where([
+            ['status','=',14],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        //Order Collected 
+        $OrderCollectedToday = 'App\Order'::where([
+            ['status','=',13],
+            ['updated_at','=',$today->toDateString()],
+        ])->count();
+        $OrderCollectedInMonth = 'App\Order'::where([
+            ['status','=',13],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo],
+        ])->count();
+        return view('Admin/index',compact(
+            'OrderWaitingForDeliveryToday',
+            'OrderWaitingForDeliveryInMonth',
+            'OrderCollectedToday',
+            'OrderCollectedInMonth',
+            'OrderReturnedToday',
+            'OrderReturnedInMonth'
 
+        ));
+    }
     /*
     |--------------------------------------------------------------------------
     | Agent Details
@@ -335,7 +383,7 @@ class UserController extends Controller
     public function AgentDashboard(Request $request){
         $user = User::findOrFail(auth()->user()->id);
         
-        $WaitingForDelivery = 'App\Order'::where(['status'=>1,'agent_id'=>$user->id])->get();
+        $WaitingForDelivery = 'App\Order'::where(['status'=>7,'agent_id'=>$user->id])->get();
         $subsended  =   'App\Order'::where(['status'=>15,'agent_id'=>$user->id])->get();
         $Returned   =   'App\Order'::where(['status'=>14,'agent_id'=>$user->id])->get();
         
@@ -363,7 +411,7 @@ class UserController extends Controller
     |*/
     public function AgentDashboardChartApi($userID){
         /* ############ Charts ############## */
-        $today = 'Carbon\Carbon'::today()->addDays(1);
+        $today = 'Carbon\Carbon'::now();
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
         //Collected Charts  
         $collectedCharts = 'App\Order'::where([

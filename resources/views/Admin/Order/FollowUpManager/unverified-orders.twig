@@ -162,7 +162,16 @@
                   <span class="text-danger">*</span>
                 </label>
                 <select class="p-2 pb-2 form-control col-sm-6" name="status">
-                  <option value="">گزینه ای انتخاب نشده</option>
+                  <option value="{{null}}">گزینه ای انتخاب نشده</option>
+                  {% for agent in agents %}
+                    <option value="{{agent.id}}">
+                      {{agent.name}}
+                      {{' '}}
+                      {{agent.family}}
+                      {{'/'}}
+                      {{agent.city.name}}
+                    </option>
+                  {% endfor %}
                 </select>
               </div>
             
