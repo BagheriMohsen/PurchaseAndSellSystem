@@ -663,7 +663,7 @@ $(document).ready(function(){
         var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
         var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g,'',10);
         var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g,'',10);
-        var chequePrice = form.find('input[name="chequePrice"]').val();
+        var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
@@ -1061,7 +1061,8 @@ $(document).ready(function(){
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
         $.each(tableData,function(index,value){
-            orderNumbers.push(parseInt(value[1]));
+            var orderId = {'id': parseInt(value[1]),'statue': condition};
+            orderNumbers.push(orderId);
         });
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
@@ -1070,10 +1071,10 @@ $(document).ready(function(){
         }else{
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
             form.find('button').attr('disabled','disabled');
-            var formData = [];
-            formData.status = condition;
-            formData.orders = orderNumbers;
-            console.log(formData);
+            // var formData = [];
+            // formData.status = condition;
+            // formData.orders = orderNumbers;
+            console.log(orderNumbers);
             $.ajax({
                 url:actionUrl,
                 type:'get',
@@ -1118,7 +1119,10 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         $.each(tableData,function(index,value){
-            orderNumbers.push(parseInt(value[1]));
+            var orderId = {'id': parseInt(value[1])};
+            console.log(orderId);
+            orderNumbers.push(orderId);
+            console.log(orderNumbers);
         });
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
