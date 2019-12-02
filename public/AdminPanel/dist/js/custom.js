@@ -1095,9 +1095,10 @@ $(document).ready(function(){
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
                         orderTable.rows('.selected').remove().draw( false );
+                        toastr["success"](response.message);
+                    }else if(response.status == 0){
+                        toastr["error"](response.message);
                     }
-                    toastr["info"](response.message);
-                    console.log(response);
                    
                 }
             });
@@ -1132,8 +1133,11 @@ $(document).ready(function(){
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
                         orderTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
                     }
-                    toastr["info"](response.message);
+                    
                     console.log(response);
                 }
             });
@@ -1194,10 +1198,10 @@ $(document).ready(function(){
     if($('#visitors-chart').length){
         var userId = $('#userId').val();
         $.ajax({
-            url:'http://localhost:8000/types/'+ product_id,
+            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/'+ userId,
             type:'Get',
             success:function(response){
-                updateProductTypes(response,product_id,CSRF_TOKEN);
+                console.log(response);
             }
         });
     };

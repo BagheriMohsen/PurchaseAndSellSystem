@@ -87,3 +87,12 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 .modal{
     z-index: 3100;
 }
+.no-border td{
+    border: 0!important;
+}
+.no-border th{
+    border: 0!important;
+}
+.label-light label{
+    font-weight: normal !important;
+}
