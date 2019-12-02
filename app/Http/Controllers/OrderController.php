@@ -417,7 +417,7 @@ class OrderController extends Controller
         /*## Agent ## */
         $orders = Order::where([
             ['followUpManager_id','=',$user->id],
-            ['status','=',3],
+            ['status','=',7],
             ['agent_id','=',null]
             ])->latest()->get();
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
