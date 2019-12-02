@@ -396,7 +396,7 @@ class OrderController extends Controller
     |*/
     public function UnverifiedOrderList(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $transports = 'App\Transport'::skip(3)->take(10)->get();
+        
         /*## Agent ## */
         $agents = array();
         foreach($user->statesUnderControl as $state){
@@ -424,7 +424,6 @@ class OrderController extends Controller
             'orders',
             'agents',
             'user',
-            'transports'
         ));
     }
     /*
@@ -451,7 +450,7 @@ class OrderController extends Controller
     |*/
     public function receiveOrderFromAgent(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $transports = 'App\Transport'::skip(3)->take(10)->get();
+       
         /*####### Agent ####### */
         $agents = array();
         foreach($user->statesUnderControl as $state){
@@ -478,7 +477,6 @@ class OrderController extends Controller
         return view('Admin.Order.FollowUpManager.receive-order-fromAgent',compact(
             'orders',
             'agents',
-            'transports'
         ));
     }
     /*
@@ -493,9 +491,8 @@ class OrderController extends Controller
         foreach($items as $item){
             $order = 'App\Order'::findOrFail($item['id']);
             $order->update([
-                'status'=>7,
-                'agent_id'      =>   $item['agent_id'],
-                'transport_id'  =>   $item['transport']
+                'status'        =>      7,
+                'agent_id'      =>      $item['agent_id'],
                 ]);
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);

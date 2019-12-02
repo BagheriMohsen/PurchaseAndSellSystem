@@ -437,7 +437,7 @@ class StoreRoomController extends Controller
     |*/
     public function AgentExchangesForm(){
         $products   =   'App\Product'::latest()->get();
-        $transports =   'App\Transport'::skip(0)->take(4)->get();
+        $transports =   'App\Transport'::latest()->get();
         $agents     =   'App\User'::role(['agent'])->get();
         return view('Admin.StoreRoom.Fund.AgentExchanges',compact('products','transports','agents'));
     }

@@ -127,12 +127,42 @@
           <form class="" action="" id="chooseAgentForm">
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
             <h6>نوع ارسال:</h6>
-              {% for transport in transports %}
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" class="waitingDelivery" value="{{transport.id}}" name="postType" checked>
-                  <label class="form-check-label" for="waitingDelivery">{{transport.name}}</label>
-                </div>
-              {% endfor %}
+            <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'پیک'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'شکوه مهر'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'چابک'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فارس پست'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فلوکس'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فروتل'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'سپیده ماهان'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'گیتوی پست'}}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'لجیتو'}}</label>
+              </div>
               <div class="mt-4">
                 <label for="status">
                   ارسال سفارش برای نماینده:

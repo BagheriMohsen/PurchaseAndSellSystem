@@ -260,15 +260,15 @@ class StartingSeeder extends Seeder
       'App\Transport'::create(['name'=>"باربری",]);
       'App\Transport'::create(['name'=>"تاکسیرانی",]);
       'App\Transport'::create(['name'=>"تحویل به نماینده",]);
-      'App\Transport'::create(['name'=>"پیک",]);
-      'App\Transport'::create(['name'=>"شکوه مهر",]);
-      'App\Transport'::create(['name'=>"چابک",]);
-      'App\Transport'::create(['name'=>"فارس پست",]);
-      'App\Transport'::create(['name'=>"فلوکس",]);
-      'App\Transport'::create(['name'=>"فروتل",]);
-      'App\Transport'::create(['name'=>"سپیده ماهان",]);
-      'App\Transport'::create(['name'=>"گیتوی پست",]);
-      'App\Transport'::create(['name'=>"لجیتو",]);
+      // 'App\Transport'::create(['name'=>"پیک",]);
+      // 'App\Transport'::create(['name'=>"شکوه مهر",]);
+      // 'App\Transport'::create(['name'=>"چابک",]);
+      // 'App\Transport'::create(['name'=>"فارس پست",]);
+      // 'App\Transport'::create(['name'=>"فلوکس",]);
+      // 'App\Transport'::create(['name'=>"فروتل",]);
+      // 'App\Transport'::create(['name'=>"سپیده ماهان",]);
+      // 'App\Transport'::create(['name'=>"گیتوی پست",]);
+      // 'App\Transport'::create(['name'=>"لجیتو",]);
       /*
       |--------------------------------------------------------------------------
       | Create Order Status
