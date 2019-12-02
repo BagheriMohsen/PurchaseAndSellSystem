@@ -1014,8 +1014,8 @@ $(document).ready(function(){
         });
     }
     //Change order condition fields depending on radio button in AgentOrderLists page
-    $('.conditionForm input[name="condition"]:radio').change(function(e) {
-        var value = e.target.value.trim()
+    $('.conditionAssignForm input[name="condition"]:radio').change(function(e) {
+        var value = e.target.value.trim();
         var form = $(this).parents('form');
         var waitingDelivery = form.find('.waitingDeliveryField');
         var suspend = form.find('.suspendField');
@@ -1026,34 +1026,34 @@ $(document).ready(function(){
      
     
         switch (value) {
-          case '1':
+          case '7':
             waitingDelivery.removeClass('d-none');
             break;
-          case '2':
+          case '14':
             suspend.removeClass('d-none');
             break;
-          case '3':
+          case '13':
             cancelField.removeClass('d-none');
             break;
           default:
             break;
         }
     });
-    $('.conditionForm input[name="cancel"]:radio').change(function(e) {
+    $('.conditionAssignForm input[name="cancel"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var cancelDescField = form.find('.cancelDescField');
-        if(value == '9'){
+        if(value == 'cancelDesc'){
             cancelDescField.removeClass('d-none');
         }else{
             cancelDescField.addClass('d-none');
         }
     });
-    $('.conditionForm input[name="suspend"]:radio').change(function(e) {
+    $('.conditionAssignForm input[name="suspend"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var dueDateFuild = form.find('.dueDateFuild');
-        if(value == '3'){
+        if(value == 'dueDate'){
             dueDateFuild.removeClass('d-none');
         }else{
             dueDateFuild.addClass('d-none');
@@ -1147,14 +1147,14 @@ $(document).ready(function(){
             'excel', 'pdf', 'print'
         ]
     } );
-    pdfMake.fonts = {
-        Arial: {
-                normal: 'arial.ttf',
-                bold: 'arialbd.ttf',
-                italics: 'ariali.ttf',
-                bolditalics: 'arialbi.ttf'
-        }
-    };
+    // pdfMake.fonts = {
+    //     Arial: {
+    //             normal: 'arial.ttf',
+    //             bold: 'arialbd.ttf',
+    //             italics: 'ariali.ttf',
+    //             bolditalics: 'arialbi.ttf'
+    //     }
+    // };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
         var form = $(this).parents('form');
@@ -1200,6 +1200,41 @@ $(document).ready(function(){
                 updateProductTypes(response,product_id,CSRF_TOKEN);
             }
         });
-    }
+    };
+    // Condition assign per order in modal 
+    $('.conditionAssignForm button').on('click',function(event){
+        event.preventDefault();
+        var form = $(this).parents('form');
+        form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+        form.find('button').attr('disabled','disabled');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var condition = form.find('input[name="condition"]').val();
+        var waitingDeliveryDesc = form.find('textarea[name="waitingDeliveryDesc"]').val();
+        var suspend = form.find('input[name="suspend"]').val();
+        var dueDate = form.find('input[name="dueDate"]').val();
+        var cancel = form.find('input[name="cancel"]').val();
+        var cancelDesc = form.find('textarea[name="cancelDesc"]').val();
+        console.log(actionUrl,CSRF_TOKEN,condition,waitingDeliveryDesc,suspend,dueDate,cancel,cancelDesc);
+        $.ajax({
+            url:actionUrl,
+            type:'get',
+            data:{
+                _token:CSRF_TOKEN,
+                status:condition,
+                waitDesc:waitingDeliveryDesc,
+                suspend:suspend,
+                dueDate:dueDate,
+                cancel:cancel,
+                cancelDesc:cancelDesc,
+            },
+            success:function(response){
+                form.find('button').html('<strong class="h6">ذخیره</strong>');
+                form.find('button').attr('disabled',false);
+                console.log(response);
+            }
+        });
+    });
+    
 });
 

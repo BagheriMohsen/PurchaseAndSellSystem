@@ -21,7 +21,7 @@
   {% include 'Messages/switchSuccess' %}
   {% set user = auth_user() %}
   <div class="row">
-   
+    <a class="test">test</a>
     <div class="card col-sm-12">
      
                 <div class="card-header">
@@ -350,20 +350,20 @@
 
       <!-- Modal body -->
       <div class="modal-body text-center ">
-        <form action="#" method="post" class="conditionForm">
+        <form action="{{route('orders.AgentChangeOrderStatus')}}" method="post" class="conditionAssignForm">
           <div class="row">
             <div class="col-6 text-right">
-              <h6>انتخاب حالات دیگر:</h6>
+              <h6 class="test">انتخاب حالات دیگر:</h6>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="condition" checked>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="7" name="condition" checked>
                 <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="suspend" value="2" name="condition" >
+                <input type="radio" class="form-check-input" class="suspend" value="14" name="condition" >
                 <label class="form-check-label" for="suspend">معلق</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="cancel" value="3" name="condition">
+                <input type="radio" class="form-check-input" class="cancel" value="13" name="condition">
                 <label class="form-check-label" for="cancel">کنسلی</label>
               </div>
             </div>
@@ -375,58 +375,58 @@
               <div class="suspendField d-none">
                 <h6>انتخاب حالت تماس مجدد:</h6>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" checked>
+                  <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
                   <label class="form-check-label">عدم پاسخگویی</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" >
+                  <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
                   <label class="form-check-label">خارج از دسترس</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" value="3" name="suspend">
+                  <input type="radio" class="form-check-input" value="dueDate" name="suspend">
                   <label class="form-check-label">زمان سررسید</label>
                 </div>
                 <div class="dueDateFuild d-none">
                   <label>تاریخ: </label>
-                  <input type="text" class="form-control persianDateTimepicker">
+                  <input type="text" class="form-control persianDateTimepicker" name="dueDate">
                 </div>
               </div>
               <div class="cancelField d-none">
                 <h6>انتخاب حالت انصراف :</h6>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" checked>
+                  <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
                   <label class="form-check-label">قیمت بالا</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
                   <label class="form-check-label">کیفیت پایین</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
                   <label class="form-check-label">ناکارآمد بودن </label>
                 </div>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
                   <label class="form-check-label">برآورده نکردن خواسته ها </label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value=" مزاحمت" name="cancel" >
                   <label class="form-check-label">  مزاحمت</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
                   <label class="form-check-label">تماس دیروقت </label>
                 </div>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
                   <label class="form-check-label"> خرید از مکان دیگر</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر" name="cancel" >
                   <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" value="9" name="cancel">
+                  <input type="radio" class="form-check-input" value="cancelDesc" name="cancel">
                   <label class="form-check-label">توضیحات </label>
                 </div>
                 <div class="cancelDescField d-none">
@@ -436,7 +436,7 @@
               </div>
             </div>
             <div class="col-12 text-center mt-5">
-              <button class="btn btn-success" type="submit" name="button">
+              <button class="btn btn-success" type="button" name="button">
                 <strong class="h6 text-dark">
                   اعمال
                 </strong>
