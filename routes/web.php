@@ -113,6 +113,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('AgentExistInState/{CityName}','OrderController@AgentExistInState')->name('AgentExistInState');
     Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
     Route::get('sellerNoActionOrders','OrderController@sellerNoActionOrders')->name('sellerNoActionOrders');
+    Route::get('sellerOrderCallBack','OrderController@sellerOrderCallBack')->name('sellerOrderCallBack');
     /* Agents */
     Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
     Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');
@@ -183,6 +184,7 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/AgentIn','StoreRoomController@AgentIn')->name('AgentIn');
       Route::get('/returnToFundForm','StoreRoomController@returnToFundForm')->name('returnToFundForm');
       Route::post('/returnToFund','StoreRoomController@returnToFund')->name('returnToFund');
+      Route::get('DeliveryToCustomersList','StoreRoomController@DeliveryToCustomersList')->name('DeliveryToCustomersList');
     });
 
 /*

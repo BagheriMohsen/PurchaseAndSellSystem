@@ -82,6 +82,13 @@ $(document).ready(function(){
             $('.callcenterFields').addClass('d-none');
             $('.otherRolesFields').removeClass('d-none');
         }
+        // enabled backToFollowManager option when agent role selected in create&edit user page
+        if(user_value == '2'){
+            $('#backToFollowManager').parents('.col-sm-4').removeClass('d-none');
+        }else{
+            $('#backToFollowManager').parents('.col-sm-4').addClass('d-none');
+        }
+        
     };
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
@@ -663,7 +670,7 @@ $(document).ready(function(){
         var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
         var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g,'',10);
         var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g,'',10);
-        var chequePrice = form.find('input[name="chequePrice"]').val();
+        var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
@@ -1061,7 +1068,8 @@ $(document).ready(function(){
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
         $.each(tableData,function(index,value){
-            orderNumbers.push(parseInt(value[1]));
+            var orderId = {'id': parseInt(value[1]),'statue': condition};
+            orderNumbers.push(orderId);
         });
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
@@ -1070,40 +1078,26 @@ $(document).ready(function(){
         }else{
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
             form.find('button').attr('disabled','disabled');
-            var formData = [];
-            formData.status = condition;
-            formData.orders = orderNumbers;
-            console.log(formData);
+            // var formData = [];
+            // formData.status = condition;
+            // formData.orders = orderNumbers;
+            console.log(orderNumbers);
             $.ajax({
                 url:actionUrl,
                 type:'get',
                 data:{
                     _token:CSRF_TOKEN,
-                    condition:condition,
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
+                    console.log(response);
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                    }
+                    toastr["info"](response.message);
                     console.log(response);
-                    console.log('test');
-                    orderTable.rows('.selected').remove().draw( false );
-                    toastr["success"](response,{
-                        "closeButton": true,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": true,
-                        "positionClass": "toast-bottom-center",
-                        "preventDuplicates": false,
-                        "showDuration": "300",
-                        "hideDuration": "500",
-                        "timeOut": "3000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "slideIn",
-                        "hideMethod": "SlideOout"
-                        });
                    
                 }
             });
@@ -1118,7 +1112,8 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         $.each(tableData,function(index,value){
-            orderNumbers.push(parseInt(value[1]));
+            var orderId = {'id': parseInt(value[1])};
+            orderNumbers.push(orderId);
         });
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
@@ -1135,24 +1130,10 @@ $(document).ready(function(){
                 success:function(response){
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
-                    orderTable.rows('.selected').remove().draw( false );
-                    toastr["success"](response,{
-                        "closeButton": false,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-top-right",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "300",
-                        "hideDuration": "1000",
-                        "timeOut": "5000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                      });
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                    }
+                    toastr["info"](response.message);
                     console.log(response);
                 }
             });

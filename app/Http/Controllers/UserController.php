@@ -381,16 +381,21 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentDashboard(Request $request){
+
         $user = User::findOrFail(auth()->user()->id);
-        
         $WaitingForDelivery = 'App\Order'::where(['status'=>7,'agent_id'=>$user->id])->get();
         $subsended  =   'App\Order'::where(['status'=>15,'agent_id'=>$user->id])->get();
         $Returned   =   'App\Order'::where(['status'=>14,'agent_id'=>$user->id])->get();
         
-        $userAllOrders  =   'App\Order'::where('agent_id',$user->id)->firstOrFail()->count();
+        $userAllOrders  =   'App\Order'::where('agent_id',$user->id)->get()->count();
+  
         $collected      =   'App\Order'::where(['status'=>13,'agent_id'=>$user->id])->get();
-        
-        $collectedPercent = ($collected->count() * 100 ) / $userAllOrders ;
+        if($collected->count() != 0){
+            $collectedPercent = ($collected->count() * 100 ) / $userAllOrders ;
+        }else{
+            $collectedPercent = 0;
+        }
+       
         
     
         return view('Admin.agent-index',compact(

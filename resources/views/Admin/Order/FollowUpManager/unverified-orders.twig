@@ -163,14 +163,16 @@
                 </label>
                 <select class="p-2 pb-2 form-control col-sm-6" name="status">
                   <option value="{{null}}">گزینه ای انتخاب نشده</option>
-                  {% for agent in agents %}
-                    <option value="{{agent.id}}">
-                      {{agent.name}}
-                      {{' '}}
-                      {{agent.family}}
-                      {{'/'}}
-                      {{agent.city.name}}
-                    </option>
+                  {% set user = auth_user() %}
+                  {% for state in user.followUpManager %}
+                      <option value="{{agent.id}}">
+                        {# {{agent.name}}
+                        {{' '}}
+                        {{agent.family}}
+                        {{'/'}}
+                        {{agent.city.name}} #}
+                        {{state.name}}
+                      </option>
                   {% endfor %}
                 </select>
               </div>

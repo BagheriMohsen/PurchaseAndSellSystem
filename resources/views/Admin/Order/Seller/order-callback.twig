@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-   سفارشات معلق
+   تماس مجدد
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':' سفارشات معلق'} %}
+  {% include 'Admin/Master/path' with {'title':'تماس مجدد'} %}
 {% endblock %}
 
 {% block content %}
@@ -50,6 +50,7 @@
                       <th>همراه-ثابت</th>
                       <th>نوع پرداخت</th>
                       <th>کالسنتر</th>
+                      <th>نماینده</th>
                       <th>زمان سررسید</th>
                       <th>حالت</th>
                       <th>عملیات</th>
@@ -72,7 +73,8 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td>{{''}}</td>
-                        <td>{{'-'}}</td>
+                        <td>{{order.agent.name}}{{' '}}{{order.agent.family}}</td>
+                        <td>{{''}}</td>
                         <td>{{'-'}}</td>
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
@@ -81,12 +83,7 @@
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>
-                          {# <a title="فاکتور" class="text-secondary" href="#">
-                            <i class="fa fa-book crud-icon"></i>
-                          </a> #}
-                          <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
-                              <i class="fa fa-cogs crud-icon"></i>
-                          </a>
+                          
                         </td>
                       </tr>
                     {% endfor %}
@@ -106,9 +103,9 @@
               <span class="text-danger">*</span>
             </label>
             <select class="p-2 pb-2 form-control col-sm-6" name="status">
-              {% for bot_status in bottom_statuses %}
-                <option {% if Orders_Status == bot_status.id %} style="display:none;" {% endif %} value="{{bot_status.id}}">{{bot_status.name}}</option>
-              {% endfor %}
+                <option  value="{{null}}">{{'گزینه ای انتخاب نشده است'}}</option>
+                <option  value="7">{{'برگشت به چرخه تحویل'}}</option>
+                <option  value="16">{{'انصراف نهایی'}}</option>
             </select>
             <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
               <strong class="h6">
@@ -117,13 +114,6 @@
             </button>
           </form>
           <hr>
-          <form class="" action="" method="post" id="toFollowManagerForm">
-              <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
-                <strong class="h6">
-                  برگشت به مدیر پیگیری
-                </strong>
-              </button>
-          </form>
         </div>
          <div class="col-6">
             <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
@@ -293,121 +283,7 @@
 {% endfor %}
 {# Order Product #}
 
-<!-- Order condition modal -->
-<div class="modal fade" id="condition">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header bg-success justify-content-start pb-0">
-        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="white-text">&times;</span>
-        </button>
-        <p class="heading lead"> 
-         تعیین وضعیت
-        </p>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body text-center ">
-        <form action="#" method="post" class="conditionForm">
-          <div class="row">
-            <div class="col-6 text-right">
-              <h6>انتخاب حالات دیگر:</h6>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="condition" checked>
-                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
-              </div>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" class="suspend" value="2" name="condition" >
-                <label class="form-check-label" for="suspend">معلق</label>
-              </div>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" class="cancel" value="3" name="condition">
-                <label class="form-check-label" for="cancel">کنسلی</label>
-              </div>
-            </div>
-            <div class="col-6 text-right">
-              <div class="waitingDeliveryField">
-                <label for="waitingDeliveryDesc">توضیحات:</label>
-                <textarea rows="10" cols="50" class="form-control" type="text"  name="waitingDeliveryDesc" value="" placeholder="توضیحات وضعیت سفارش"></textarea>
-              </div>
-              <div class="suspendField d-none">
-                <h6>انتخاب حالت تماس مجدد:</h6>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" checked>
-                  <label class="form-check-label">عدم پاسخگویی</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" >
-                  <label class="form-check-label">خارج از دسترس</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" value="3" name="suspend">
-                  <label class="form-check-label">زمان سررسید</label>
-                </div>
-                <div class="dueDateFuild d-none">
-                  <label>تاریخ: </label>
-                  <input type="text" class="form-control persianDateTimepicker">
-                </div>
-              </div>
-              <div class="cancelField d-none">
-                <h6>انتخاب حالت انصراف :</h6>
-                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" checked>
-                  <label class="form-check-label">قیمت بالا</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
-                  <label class="form-check-label">کیفیت پایین</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
-                  <label class="form-check-label">ناکارآمد بودن </label>
-                </div>
-                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
-                  <label class="form-check-label">برآورده نکردن خواسته ها </label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
-                  <label class="form-check-label">  مزاحمت</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
-                  <label class="form-check-label">تماس دیروقت </label>
-                </div>
-                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
-                  <label class="form-check-label"> خرید از مکان دیگر</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
-                  <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" value="9" name="cancel">
-                  <label class="form-check-label">توضیحات </label>
-                </div>
-                <div class="cancelDescField d-none">
-                   <label for="cancelDesc">توضیحات:</label>
-                    <textarea rows="10" cols="50" class="form-control " type="text"  name="cancelDesc" value="" placeholder="توضیحات دلیل کنسلی"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 text-center mt-5">
-              <button class="btn btn-success" type="submit" name="button">
-                <strong class="h6 text-dark">
-                  اعمال
-                </strong>
-              </button>
-            </div>
-          </div>
-        </from>
-      </div>
-    </div>
-  </div>
-</div>
 
 {% endblock %}
 
