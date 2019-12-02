@@ -322,8 +322,8 @@ class OrderController extends Controller
                                 ])->exists();
                                 // Product Not Found
                                 if($storage_status != true){
-                                    $message = ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ';
-                                    return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                                    $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ','status' => 0];
+                                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
                                 }
 
                                 $storage = 'App\Storage'::where([
