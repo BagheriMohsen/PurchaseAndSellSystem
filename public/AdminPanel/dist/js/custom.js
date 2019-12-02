@@ -1142,7 +1142,7 @@ $(document).ready(function(){
     });
     $('#chooseAgentForm button').on('click',function(event){
         event.preventDefault();
-        var tableData = orderTable.rows({ selected: true }).data().toArray();
+        var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
         var form = $(this).parents('form');
         var actionUrl = form.attr('action');
