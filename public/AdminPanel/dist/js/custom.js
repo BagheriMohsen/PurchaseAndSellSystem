@@ -1106,10 +1106,12 @@ $(document).ready(function(){
         var form = $(this).parents('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var status = form.find('input[name="status"]').val();
         $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1])};
+            var orderId = {'id': parseInt(value[1]),'statue': status};
             orderNumbers.push(orderId);
         });
+        console.log(orderNumbers);
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
         }else{
@@ -1120,7 +1122,7 @@ $(document).ready(function(){
                 type:'get',
                 data:{
                     _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers
+                    orderNumbers:orderNumbers,
                 },
                 success:function(response){
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
