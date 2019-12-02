@@ -168,11 +168,11 @@
                 <label class="form-check-label" for="cancel">لجیتو</label>
               </div> #}
               <div class="mt-4">
-                <label for="status">
+                <label for="agent">
                   ارسال سفارش برای نماینده:
                   <span class="text-danger">*</span>
                 </label>
-                <select class="p-2 pb-2 form-control col-sm-6" name="status">
+                <select class="p-2 pb-2 form-control col-sm-6" name="agent">
                   <option value="{{null}}">گزینه ای انتخاب نشده</option>
                   {% for agent in agents %}
                       <option value="{{agent.id}}">

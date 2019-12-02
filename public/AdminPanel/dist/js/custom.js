@@ -1140,6 +1140,47 @@ $(document).ready(function(){
         }
         
     });
+    $('#chooseAgentForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = orderTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var agent_id = form.find('select[name="agent"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'agent_id': agent_id};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(!orderNumbers.length){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers,
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
     $('#productTable').DataTable( {
         "language": persianDataTable,
         // dom: 'Bfrtip',
