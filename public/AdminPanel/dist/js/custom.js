@@ -82,6 +82,13 @@ $(document).ready(function(){
             $('.callcenterFields').addClass('d-none');
             $('.otherRolesFields').removeClass('d-none');
         }
+        // enabled backToFollowManager option when agent role selected in create&edit user page
+        if(user_value == '2'){
+            $('#backToFollowManager').parents('.col-sm-4').removeClass('d-none');
+        }else{
+            $('#backToFollowManager').parents('.col-sm-4').addClass('d-none');
+        }
+        
     };
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
@@ -1083,27 +1090,14 @@ $(document).ready(function(){
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
+                    console.log(response);
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                    }
+                    toastr["info"](response.message);
                     console.log(response);
-                    console.log('test');
-                    orderTable.rows('.selected').remove().draw( false );
-                    toastr["success"](response,{
-                        "closeButton": true,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": true,
-                        "positionClass": "toast-bottom-center",
-                        "preventDuplicates": false,
-                        "showDuration": "300",
-                        "hideDuration": "500",
-                        "timeOut": "3000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "slideIn",
-                        "hideMethod": "SlideOout"
-                        });
                    
                 }
             });
@@ -1119,9 +1113,7 @@ $(document).ready(function(){
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         $.each(tableData,function(index,value){
             var orderId = {'id': parseInt(value[1])};
-            console.log(orderId);
             orderNumbers.push(orderId);
-            console.log(orderNumbers);
         });
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
@@ -1138,24 +1130,10 @@ $(document).ready(function(){
                 success:function(response){
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
-                    orderTable.rows('.selected').remove().draw( false );
-                    toastr["success"](response,{
-                        "closeButton": false,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-top-right",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "300",
-                        "hideDuration": "1000",
-                        "timeOut": "5000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                      });
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                    }
+                    toastr["info"](response.message);
                     console.log(response);
                 }
             });
