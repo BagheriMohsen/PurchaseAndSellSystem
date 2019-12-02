@@ -20,7 +20,7 @@
 
   {% include 'Messages/switchSuccess' %}
   {% set user = auth_user() %}
-  <div class="row">
+  {# <div class="row">
   <div class="col-md-6">
      <div class="card">
       <div class="card-header text-center bg-info">
@@ -112,15 +112,15 @@
       </div>
       <!-- /.card-body -->
     </div>
-  </div>
+  </div> #}
    
      
-</div>
+{# </div>
 <a title="پرداخت" class="text-secondary" data-toggle="modal" href="#test">
     <sub class="text-dark">
     پرداخت
     </sub>
-  </a>
+  </a> #}
 <!-- Order details modal -->
 <div class="modal fade orderDetail" id="test">
   <div class="modal-dialog modal-dialog-centered modal-md">
@@ -296,7 +296,7 @@
           
             {% set user = auth_user() %}
             {% if user.backToFollowManager != null %} 
-            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="conditionForm"> 
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
               <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به مدیر پیگیری
@@ -305,7 +305,7 @@
               <input name="status" type="hidden"  value="8" />
             </form>
             {% else %}
-              <button title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
+              <button onclick="alert('این ویژگی برای شما در دسترس نیست')" title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                     <i class="fas fa-lock crud-icon"></i>
                   برگشت به مدیر پیگیری
