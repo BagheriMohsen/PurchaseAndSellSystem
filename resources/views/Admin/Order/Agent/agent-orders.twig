@@ -297,7 +297,7 @@
             {% set user = auth_user() %}
             {% if user.backToFollowManager != null %} 
             <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
-              <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
+              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به مدیر پیگیری
                 </strong>
@@ -609,8 +609,8 @@
               </div>
             </div>
             <div class="col-12 text-center mt-5">
-              <button class="btn btn-success" type="button" name="button">
-                <strong class="h6 text-dark">
+              <button class="btn btn-info" type="button" name="button">
+                <strong class="">
                   اعمال
                 </strong>
               </button>
