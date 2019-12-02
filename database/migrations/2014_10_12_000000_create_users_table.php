@@ -62,6 +62,7 @@ class CreateUsersTable extends Migration
             $table->string('uploadCS_status')->nullable();
             $table->string('level')->nullable();
             $table->string('backToWareHouse')->nullable();
+            $table->string('backToFollowManager')->nullable();
             $table->string('sendAuto')->nullable();
             $table->string('calType')->nullable();
             $table->string('calTypeCallCenter')->nullable();

@@ -38,6 +38,7 @@ class User extends Authenticatable implements HasMedia,BannableContract
         'uploadCS',
         'level',
         'backToWareHouse',
+        'backToFollowManager',
         'sendAuto',
         'callCenter',
         'agent_id',
