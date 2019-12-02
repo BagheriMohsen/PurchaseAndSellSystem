@@ -42,7 +42,9 @@
 
       {# کد کالا #}
       <div class="col-sm-6 mt-3 px-5">
-        <label for="code">کد کالا</label>
+        <label for="code">کد کالا
+          <span class="text-danger">*</span>
+        </label>
         <input value="{{old("code")}}" class="form-control" type="text" placeholder=""name="code">
       </div>
       {# کد کالا #}
@@ -102,8 +104,8 @@
       {# توضیحات #}
 
       <div class="col-12 text-center mt-5">
-        <button class="btn btn-success" type="submit" name="button">
-          <strong class="h6 text-light">
+        <button class="btn btn-info" type="submit" name="button">
+          <strong class="text-light">
             ثبت محصول
           </strong>
         </button>

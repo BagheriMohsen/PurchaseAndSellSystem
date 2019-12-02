@@ -30,6 +30,14 @@ $(document).ready(function(){
         });
         $(this)[0].submit();
     });
+    //Remove comma from number inputs for off price Form
+    $('#offPriceForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
     //Remove comma from number inputs for product Edit Form
     $('#productEditForm').submit(function(event){
         event.preventDefault();
@@ -301,6 +309,7 @@ $(document).ready(function(){
             success:function(response){
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
                 self.find('button[type="submit"]').attr('disabled',false);
+                toastr["success"]('با موفقیت ثبت شد');
                 getProductTypes(product_id,CSRF_TOKEN);
             }
         });
@@ -702,22 +711,7 @@ $(document).ready(function(){
             success:function(response){
                 form.find('button[type="submit"]').html('ثبت سفارش');
                 
-                toastr["success"](response,{
-                    "closeButton": true,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": true,
-                    "positionClass": "toast-bottom-center",
-                    "preventDuplicates": false,
-                    "showDuration": "300",
-                    "hideDuration": "500",
-                    "timeOut": "3000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "slideIn",
-                    "hideMethod": "SlideOout"
-                    });
+                toastr["success"](response);
                 $('#orderForm').trigger('reset');
                 $('#cityAgent').html('');
             }
@@ -1146,10 +1140,10 @@ $(document).ready(function(){
     });
     $('#productTable').DataTable( {
         "language": persianDataTable,
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'pdf', 'print'
-        ]
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     'excel', 'pdf', 'print'
+        // ]
     } );
     // pdfMake.fonts = {
     //     Arial: {

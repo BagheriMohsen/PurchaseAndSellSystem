@@ -65,7 +65,7 @@
             <div class="md-form mb-5 col-sm-9 mx-auto">
               <label>آواتار شما:</label>
               <br /><br />
-              <input type="file" id="inputIconEx4" class=" form-control" name="image" value="" >
+              <input type="file" id="inputIconEx4" class=" form-control border-0" name="image" value="" >
             </div>
             {# avatar #}
 
@@ -74,7 +74,7 @@
               <div class="md-form mb-5 col-sm-9 mx-auto">
                 <label>تصویر کارت ملی:</label>
                 <br /><br />
-                <input type="file" id="inputIconEx4"  class=" form-control" name="uploadCS" value="" >
+                <input type="file" id="inputIconEx4"  class=" form-control border-0" name="uploadCS" value="" >
                 {% if auth_user().getRoleNames().first() == "admin" and user.uploadCS is null %}
                   <span class="right badge badge-danger">این فروشنده هنوز تصویر کارت ملی خود را آپلود نکرده است</span>
                 {% elseif user.uploadCS is null %}
@@ -97,8 +97,8 @@
 
 
   <div class="col-12 text-center mt-5">
-    <button class="btn btn-success btn-sm col-2" type="submit" name="button">
-      <strong class="h6 text-dark">
+    <button class="btn btn-info" type="submit" name="button">
+      <strong class="">
         ذخیره
       </strong>
     </button>

@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  {{product.name}}
+  افزودن تخفیف
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':product.name} %}
+  {% include 'Admin/Master/path' with {'title':' افزودن تخفیف'} %}
 {% endblock %}
 
 
@@ -24,23 +24,24 @@
     
     <section class="row bg-white pt-2 pb-3 ">
 
-        <div class="col-sm-4 mx-auto">
-            <form action="{{route('products.off.store',product.id)}}" method="post" class="row">
+        <div class="col-sm-4 mx-auto mt-3">
+            <h5 class="text-white bg-default text-center py-3 rounded-pill">{{product.name}}</h5>
+            <form id="offPriceForm" action="{{route('products.off.store',product.id)}}" method="post" class="row">
                 <input type="hidden" name="_token" value="{{csrf_token()}}" />
                 <input type="hidden" name="product_id" value="{{product.id}}" />
                 <!-- numberOfProduct input -->
                 <div class="md-form col-sm-12 m-3">
-                    <input name="numberOfProduct" type="text" id="form1" class="form-control" required>
-                    <label for="form1">تعداد کالا</label>
+                    <input name="numberOfProduct" type="text" id="amount" class="form-control" required>
+                    <label for="amount">تعداد کالا</label>
                 </div>
                 <!-- offPrice input -->
                 <div class="md-form col-sm-12 m-3">
-                    <input name="offPrice" type="text" id="form1" class="form-control" required>
-                    <label for="form1">میزان تخفیف</label>
+                    <input name="offPrice" type="text" id="offPrice" class="form-control comma" required>
+                    <label for="offPrice">میزان تخفیف</label>
                 </div>
 
-                <button class="btn btn-sm btn-info">
-                    <strong class="h6 text-dark">
+                <button class="btn btn-info">
+                    <strong class="">
                         ذخیره
                     </strong>
                 </button>
@@ -48,8 +49,8 @@
         </div>
 
 
-        <div class="col-sm-7 mx-auto">
-            <table  id="example2" class="table table-bordered table-striped ">
+        <div class="col-sm-7 mx-auto mt-3">
+            <table  id="example2" class="table table-striped text-center">
                 <thead>
                 <tr>
                   <th class="h6">تعداد</th>
@@ -67,10 +68,9 @@
                     <form id="formForDelete" action="{{route('products.off.destroy',item.id)}}" method="POST">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <input type="hidden" name="_method" value="DELETE" />
-                      <a href="javascript:{}" 
-                        onclick="document.getElementById('formForDelete').submit();" >
+                      <button type="submit" class="deleteConfirm">
                         <i class="far fa-trash-alt text-danger crud-icon"></i>
-                      </a>
+                      </button>
                     </form>
                    {# Form Delete #}
                    

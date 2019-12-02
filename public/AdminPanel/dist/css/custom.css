@@ -57,6 +57,13 @@ body{
     background: initial;
     border: 0;
     cursor: pointer;
+    padding-top: 0;
+}
+button.deleteConfirm{
+    background: initial;
+    border: 0;
+    cursor: pointer;
+    padding-top: 0;
 }
 .cursor-pointer{
     cursor: pointer;
@@ -95,4 +102,17 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 }
 .label-light label{
     font-weight: normal !important;
+}
+.text-dark {
+    color: #343a40!important;
+}
+.dataTables_wrapper label{
+    font-size: .9rem!important;
+    font-weight: normal!important;
+}
+.table td, .table th {
+    padding: .5rem!important;
+}
+.rounded-pill{
+    border-radius: 7px;
 }

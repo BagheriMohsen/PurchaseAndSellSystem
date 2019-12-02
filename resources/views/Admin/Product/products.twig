@@ -24,8 +24,8 @@
 
       {% include 'Messages/message' %}
 
-                <a class="btn btn-success btn-sm mb-2" href="{{route('products.create')}}">
-                  <strong class="h6 text-dark">
+                <a class="btn btn-info my-3" href="{{route('products.create')}}">
+                  <strong class="">
                     افزودن محصول
                   </strong>
                 </a>
@@ -105,11 +105,11 @@
     <div class="modal-content">
 
       <!-- Modal Header -->
-      <div class="modal-header bg-success justify-content-start pb-0">
+      <div class="modal-header bg-info space-content-between flex-row-reverse p-2">
         <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" class="white-text">&times;</span>
         </button>
-        <p class="heading lead">افزودن نوع محصول</p>
+        <span class="p-1">افزودن نوع محصول</span>
       </div>
 
       <!-- Modal body -->
@@ -129,7 +129,7 @@
                 <input class="d-none text-center" type="text" value="{{type.name}}">
               </td>
               <td class="d-flex justify-content-center">
-                <a  class="editTypeButton text-warning btn-sm d-none" href="#">
+                <a  class="editTypeButton text-info btn-sm d-none" href="#">
                   <i class="far fa-edit crud-icon"></i>
                 </a>
                 {# Form Edit #}
