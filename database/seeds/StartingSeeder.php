@@ -328,8 +328,238 @@ class StartingSeeder extends Seeder
       'status'        =>  'on',
       'messageStatus' =>  'on',
     ]);
-   
-   
+    /*
+    |--------------------------------------------------------------------------
+    | Store Product Type
+    |--------------------------------------------------------------------------
+    |*/
+    'App\ProductType'::create([
+      'user_id'     =>  1,
+      'product_id'  =>  1,
+      'name'        =>  'شب'
+    ]);
+    'App\ProductType'::create([
+      'user_id'     =>  1,
+      'product_id'  =>  1,
+      'name'        =>  'روز'
+    ]);
+    /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+  'App\OrderProduct'::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+    /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+    'App\OrderProduct'::create([
+      'order_id'      =>  $order->id,
+      'product_id'    =>  1,
+      'count'         =>  5,
+      'off'           =>  400,
+      'product_type'  =>  1
+  ]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+  'App\OrderProduct'::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+  'App\OrderProduct'::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+  'App\OrderProduct'::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = 'App\Order'::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      null,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'shippingCost'      =>      null,
+      'prePayment'        =>      null,
+      'cashPrice'         =>      null,
+      'chequePrice'       =>      null,
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      null
+  ]);
+    'App\OrderProduct'::create([
+      'order_id'      =>  $order->id,
+      'product_id'    =>  1,
+      'count'         =>  5,
+      'off'           =>  400,
+      'product_type'  =>  1
+  ]);
+  'App\OrderProduct'::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+  ]);
 
 
     }

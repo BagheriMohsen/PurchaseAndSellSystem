@@ -287,11 +287,11 @@ class OrderController extends Controller
         $items = $request->orderNumbers;
         foreach($items as $item){
 
-
+            
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
-               
+                
                 $order = Order::findOrFail($item['id']);
-
+              
                     foreach($order->products as $order_product){
                         
                             $status = 'App\Storage'::where([
@@ -299,14 +299,25 @@ class OrderController extends Controller
                                 ['product_id','=',$order_product->product_id],
                                 ['number','<',$order_product->count]
                             ])->exists();
+                           
                             //IF Product is not exists in agent storage
-                            if($status == True){
+                            if($status == true){
+                                
                                 $message = ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ';
                                 return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
                         
                             //IF Product is exists in agent storage
                             }else{
 
+                                $storage_status = 'App\Storage'::where([
+                                    ['agent_id','=',$user->id],
+                                    ['product_id','=',$order_product->product_id]
+                                ])->exists();
+                                // Product Not Found
+                                if($storage_status != true){
+                                    $message = ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ';
+                                    return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                                }
 
                                 $storage = 'App\Storage'::where([
                                     ['agent_id','=',$user->id],
