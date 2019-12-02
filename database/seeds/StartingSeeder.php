@@ -47,7 +47,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -71,7 +71,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -95,7 +95,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -119,7 +119,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -143,8 +143,8 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
-            'sendAuto'      =>  'on',
+            'level'         =>  null,
+            'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
@@ -191,7 +191,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -202,7 +202,7 @@ class StartingSeeder extends Seeder
             'internalPrice' =>  null,
             'villagePrice'  =>  null
           ]);
-          #8.create seller
+          #8.create callCenter
           'App\User'::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
@@ -215,7 +215,7 @@ class StartingSeeder extends Seeder
             'state_id'      =>  1,
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
-            'level'         =>  'S',
+            'level'         =>  null,
             'sendAuto'      =>  null,
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
@@ -291,8 +291,7 @@ class StartingSeeder extends Seeder
       'App\OrderStatus'::create(['name'=>'تحویل به مشتری-روستا']);
       'App\OrderStatus'::create(['name'=>'انصراف مشتری']);
       'App\OrderStatus'::create(['name'=>'معلق']);
-      'App\OrderStatus'::create(['name'=>'وصولی']);
-      'App\OrderStatus'::create(['name'=>'کنسلی']);
+      'App\OrderStatus'::create(['name'=>'وصول شده']);
       'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
       'App\OrderStatus'::create(['name'=>'خام']);
       /*

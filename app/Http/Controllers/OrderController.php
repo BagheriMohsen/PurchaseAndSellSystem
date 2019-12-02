@@ -51,7 +51,9 @@ class OrderController extends Controller
             if($userSendAuto != null){
                 $agent_id = $userSendAuto->id;
                 $followUpManager_id = null;
+                
             }else{
+               
                 $agent_id = null;
                 $state = 'App\State'::where('id',$city->state->id)->first();
                 $followUpManager_id = $state->followUpManager;
@@ -59,6 +61,7 @@ class OrderController extends Controller
                 if($followUpManager_id == null){
                     $user = 'App\User'::role('followUpManager')->first();
                     $followUpManager_id = $user->id;
+                   
                 }
             }
         /*##################ENDIF##################*/
@@ -149,9 +152,12 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderLists(){
-        $bottom_statuses = 'App\OrderStatus'::skip(10)->take(4)->get();
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['agent_id'=>$user->id,'status'=>7])->latest()->get();
+        $orders = Order::where([
+            ['status','=',7],// Waiting For Delivary
+            ['agent_id','=',$user->id]
+        ])->latest()->get();
         return view('Admin.Order.Agent.agent-orders',compact('orders','bottom_statuses'));
     }
     /*
@@ -160,9 +166,26 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderCollectedlist(){
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
-        return view('Admin.Order.Agent.agent-orders-collected',compact('orders'));
+        $orders = Order::where([
+                ['status','=',10],//Collected in City
+                ['agent_id','=',$user->id]
+            ])
+            ->orWhere([
+                ['status','=',11],//Collected in Suburbs
+                ['agent_id','=',$user->id]
+            ])
+            ->orWhere([
+                ['status','=',12],//Collected in Village
+                ['agent_id','=',$user->id]
+            ])
+            ->latest()->get();
+            
+        return view('Admin.Order.Agent.agent-orders-collected',compact(
+            'orders',
+            'bottom_statuses',
+        ));
     }
     /*
     |--------------------------------------------------------------------------
@@ -170,9 +193,25 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderCanceledList(){
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
+        $CustomerCancelled = 13;//Customer cancelled
+        $CustomerFinalCancelled = 16;//Customer Final Cancelled
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
-        return view('Admin.Order.Agent.agent-orders-canceled',compact('orders'));
+        $orders = Order::where([
+            ['status','=',13],//Customer cancelled
+            ['agent_id','=',$user->id]
+        ])
+        ->orWhere([
+            ['status','=',16],//Customer Final Cancelled
+            ['agent_id','=',$user->id]
+        ])
+        ->latest()->get();
+        return view('Admin.Order.Agent.agent-orders-canceled',compact(
+            'orders',
+            'bottom_statuses',
+            'CustomerCancelled',
+            'CustomerFinalCancelled'
+        ));
     }
     /*
     |--------------------------------------------------------------------------
@@ -180,9 +219,18 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderSuspendedList(){
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['agent_id'=>$user->id,'status'=>1])->latest()->get();
-        return view('Admin.Order.Agent.agent-orders-suspended',compact('orders'));
+        $Orders_Status = 14;// Order Suspended
+        $orders = Order::where([
+            ['status','=',14],// Order Suspended
+            ['agent_id','=',$user->id]
+        ])->latest()->get();
+        return view('Admin.Order.Agent.agent-orders-suspended',compact(
+            'orders',
+            'bottom_statuses',
+            'Orders_Status'
+        ));
     }
     /*
     |--------------------------------------------------------------------------
@@ -237,8 +285,21 @@ class OrderController extends Controller
 
         $items = $request->orderNumbers;
         foreach($items as $item){
-            $order = 'App\Order'::findOrFail($item['id']);
-            $order->update(['status'=>$item['statue']]);
+
+
+            if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
+                return response()->json('کالایی در انبار شما وجود ندارد');
+            }else{
+                $order = 'App\Order'::findOrFail($item['id']);
+                $order->update(['status'=>$item['statue']]);
+            }
+
+
+
+
+
+
+            
         }
         
         return response()->json('موفقیت آمیز بود');
@@ -271,14 +332,27 @@ class OrderController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $agents = 'App\User'::Role('agent')->latest()->get();
         $orders = Order::where([
-            'followUpManager_id'=>$user->id,
-            'status'=>3,
-            'agent_id'=>null
+            ['followUpManager_id','=',$user->id],
+            ['status','=',3],
+            ['agent_id','=',null]
             ])->latest()->get();
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
             'orders',
             'agents',
             'user'
+        ));
+    }
+
+    public function sellerOrderCallBack(){
+     
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['status','=',13],//Customer Cancelled
+            ])->latest()->get();
+        
+        return view('Admin.Order.Seller.order-callback',compact(
+            'orders',
         ));
     }
     
