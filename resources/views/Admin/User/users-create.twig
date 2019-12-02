@@ -177,6 +177,21 @@
             >
         </div>
         {# end auto send #}
+        {# Back to follow manager #}
+        <div class="col-sm-4 mb-4 d-none">
+          <h6>برگشت به مدیر پیگیری
+          </h6>
+          <input id="backToFollowManager" type="checkbox"
+          
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="danger"
+            data-onlabel="فعال"
+            data-offlabel="غیر فعال" name="backToFollowManager"
+            {% if old('backToFollowManager') != null %} checked {% endif %}
+            >
+        </div>
+        {# Back to follow manager #}
       </div>
     </div>
     <div class="col-12 mx-4 callcenterFields d-none">

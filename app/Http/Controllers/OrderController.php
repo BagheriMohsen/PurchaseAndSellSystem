@@ -301,10 +301,16 @@ class OrderController extends Controller
                             ])->exists();
                            
                             //IF Product is not exists in agent storage
+<<<<<<< HEAD
                             if($status == true){
                                 
                                 $message = ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ';
                                 return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+=======
+                            if($status == True){
+                                $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                                return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+>>>>>>> 18fe72ad32ad41fb6c4933dc9c381328c8e6a63b
                         
                             //IF Product is exists in agent storage
                             }else{
@@ -355,12 +361,11 @@ class OrderController extends Controller
             }else{
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update(['status'=>$item['statue']]);
-                
             }
 
             
         }
-        return response()->json('موفقیت آمیز بود');
+        return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
         
     }
     /*
