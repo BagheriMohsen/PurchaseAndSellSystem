@@ -438,7 +438,7 @@ class StoreRoomController extends Controller
     public function AgentExchangesForm(){
         $products   = 'App\Product'::latest()->get();
         $transports = 'App\Transport'::latest()->get();
-        $agents     =  'App\User'::role(['agent','agentChief'])->get();
+        $agents     =  'App\User'::role(['agent'])->get();
         return view('Admin.StoreRoom.Fund.AgentExchanges',compact('products','transports','agents'));
     }
     /*
@@ -954,8 +954,25 @@ class StoreRoomController extends Controller
     |*/
     public function AgentIn(){
         $id = auth()->user()->id;
-        $storeRooms = StoreRoom::where(['receiver_id'=>$id,'in_out'=>11])->latest()->paginate(10);
+        $storeRooms = StoreRoom::where([
+            ['receiver_id','=',$id],
+            ['in_out','=',11]
+        ])->latest()->paginate(10);
         return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Delivery To Customers List
+    |--------------------------------------------------------------------------
+    |*/
+    public function DeliveryToCustomersList(){
+        $id = auth()->user()->id;
+        $storeRooms = StoreRoom::where([
+            ['sender_id','=',$id],
+            ['in_out','=',13]
+        ])->latest()->paginate(10);
+        
+        return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
     }
 
 }

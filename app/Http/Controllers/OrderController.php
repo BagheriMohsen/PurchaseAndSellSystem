@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Order;
 use PDF;
+use Carbon\Carbon;
 class OrderController extends Controller
 {
     /**
@@ -282,27 +283,74 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentChangeOrderStatus(Request $request){
-
+        $user = 'App\User'::findOrFail(auth()->user()->id);
         $items = $request->orderNumbers;
         foreach($items as $item){
 
 
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
-                return response()->json('کالایی در انبار شما وجود ندارد');
+               
+                $order = Order::findOrFail($item['id']);
+
+                    foreach($order->products as $order_product){
+                        
+                            $status = 'App\Storage'::where([
+                                ['agent_id','=',$user->id],
+                                ['product_id','=',$order_product->product_id],
+                                ['number','<',$order_product->count]
+                            ])->exists();
+                            //IF Product is not exists in agent storage
+                            if($status == True){
+                                $message = ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ';
+                                return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                        
+                            //IF Product is exists in agent storage
+                            }else{
+
+
+                                $storage = 'App\Storage'::where([
+                                    ['agent_id','=',$user->id],
+                                    ['product_id','=',$order_product->product_id]
+                                ])->firstOrFail();
+
+                                // Change Order Status To Collected 
+                                $order = 'App\Order'::findOrFail($item['id']);
+                                $order->update(['status'=>$item['statue']]);
+                                // Discount count of product in Agent Storage
+                                $number = $storage->number - $order_product->count;
+                                $storage->update(['number'=>$number]);
+
+                                // Create OutPut store room for Agent
+                                'App\StoreRoom'::create([
+                                    'user_id'           =>  $user->id,
+                                    'storage_id'        =>  $storage->id,
+                                    'sender_id'         =>  $user->id,
+                                    'customerName'      =>  $order->fullName,
+                                    'product_id'        =>  $order_product->product_id,
+                                    'transport_id'      =>  null,
+                                    'number'            =>  $order_product->count,
+                                    'description'       =>  'تحویل به مشتری',
+                                    'status'            =>  'به مشتری تحویل داده شد',
+                                    'in_out'            =>  13,
+                                    'out_date'          =>  Carbon::now()
+                                ]);
+                            }
+
+
+               }     
+
+
+            //Other order Statuses
             }else{
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update(['status'=>$item['statue']]);
+                
             }
-
-
-
-
-
 
             
         }
-        
         return response()->json('موفقیت آمیز بود');
+        
     }
     /*
     |--------------------------------------------------------------------------

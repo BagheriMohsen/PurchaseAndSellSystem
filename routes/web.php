@@ -184,6 +184,7 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/AgentIn','StoreRoomController@AgentIn')->name('AgentIn');
       Route::get('/returnToFundForm','StoreRoomController@returnToFundForm')->name('returnToFundForm');
       Route::post('/returnToFund','StoreRoomController@returnToFund')->name('returnToFund');
+      Route::get('DeliveryToCustomersList','StoreRoomController@DeliveryToCustomersList')->name('DeliveryToCustomersList');
     });
 
 /*
