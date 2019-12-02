@@ -29,7 +29,8 @@
                   <thead>
                   <tr class="text-center">
                    <th>نام-نام خانوادگی</th>
-                    <th>نام کاربری</th>
+                   
+                    <th>استان-شهر</th>
                     <th>نوع کالسنتر</th>
                     <th>ثبت جدید</th>
                     <th >ویرایش شماره تلفن</th>
@@ -42,7 +43,7 @@
                   {% for user in users %}
                     <tr class="text-center">
                       <td>{{user.name}}{{' '}}{{user.family}}</td>
-                      <td>{{user.username}}</td>
+                      <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
                       <td>
                         {% if user.callCenterType == "channelDist" %}
                           {{'مویرگی'}}
