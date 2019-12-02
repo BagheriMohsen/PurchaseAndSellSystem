@@ -122,6 +122,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('AgentChangeOrderStatus','OrderController@AgentChangeOrderStatus')->name('AgentChangeOrderStatus');
     //FollowUpManager 
     Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
+    Route::get('receiveOrderFromAgent','OrderController@receiveOrderFromAgent')->name('receiveOrderFromAgent');
     //Factor
     Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
