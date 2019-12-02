@@ -90,13 +90,24 @@
 
       <div class="row">
       <div class="col-6">
+          {% set user = auth_user() %}
+          {% if user.allowNumberBack is not null %}
             <form class="" action="" method="post" id="backToSellerForm">
               <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به فروشنده 
                 </strong>
               </button>
+              <input type="hidden" name="status" value="6" />
           </form>
+          {% else %}
+              <button title="شما به این ویژگی دسترسی ندارید" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  <i class="fas fa-lock crud-icon"></i>
+                  برگشت به فروشنده 
+                </strong>
+              </button>
+          {% endif %}
            <form class="mt-4" action="" method="post" id="">
               <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
@@ -116,45 +127,41 @@
           <form class="" action="" id="chooseAgentForm">
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
             <h6>نوع ارسال:</h6>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="postType" checked>
-                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'پیک'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input"  value="2" name="postType" >
-                <label class="form-check-label" for="suspend">پیک</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'شکوه مهر'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input"  value="3" name="postType">
-                <label class="form-check-label" for="cancel">شکوه مهر</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'چابک'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">چابک</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فارس پست'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فارس پست</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فلوکس'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فلوکس</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فروتل'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فروتل</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'سپیده ماهان'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">سپیده ماهان</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'گیتوی پست'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">گیتوی پست</label>
-              </div>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">لجیتو</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'لجیتو'}}</label>
               </div>
               <div class="mt-4">
                 <label for="status">
@@ -163,15 +170,14 @@
                 </label>
                 <select class="p-2 pb-2 form-control col-sm-6" name="status">
                   <option value="{{null}}">گزینه ای انتخاب نشده</option>
-                  {% set user = auth_user() %}
-                  {% for state in user.followUpManager %}
-                      <option value="{{agent.id}}">
-                        {# {{agent.name}}
+                  
+                  {% for agent in agents %}
+                      <option value="#">
+                        {{agent.name}}
                         {{' '}}
                         {{agent.family}}
                         {{'/'}}
-                        {{agent.city.name}} #}
-                        {{state.name}}
+                        {{agent.city.name}}
                       </option>
                   {% endfor %}
                 </select>
