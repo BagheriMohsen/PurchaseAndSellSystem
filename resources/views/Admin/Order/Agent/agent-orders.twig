@@ -293,25 +293,26 @@
             </button>
           </form>
           <hr>
-          <form class="" action="" method="post" id="toFollowManagerForm">
+          
+            {% set user = auth_user() %}
+            {% if user.backToFollowManager != null %} 
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="conditionForm"> 
               <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به مدیر پیگیری
                 </strong>
               </button>
-          </form>
-        </div>
-         <div class="col-6">
-            <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+              <input name="status" type="hidden"  value="8" />
+            </form>
+            {% else %}
+              <button title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
-                  چاپ
+                    <i class="fas fa-lock crud-icon"></i>
+                  برگشت به مدیر پیگیری
                 </strong>
-            </button>
-            <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
-                <strong class="h6">
-                  اکسل
-                </strong>
-            </button>
+              </button>
+            {% endif %}
+
          </div>
         
       </div>

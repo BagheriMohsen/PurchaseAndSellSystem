@@ -51,7 +51,15 @@ class OrderController extends Controller
             // if find agent send auto not null
             if($userSendAuto != null){
                 $agent_id = $userSendAuto->id;
-                $followUpManager_id = null;
+               
+                $state = 'App\State'::where('id',$city->state->id)->first();
+                $followUpManager_id = $state->followUpManager;
+
+                if($followUpManager_id == null){
+                    $user = 'App\User'::role('followUpManager')->first();
+                    $followUpManager_id = $user->id;
+                   
+                }
                 
             }else{
                
@@ -399,7 +407,11 @@ class OrderController extends Controller
             'user'
         ));
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Seller Order CallBack
+    |--------------------------------------------------------------------------
+    |*/
     public function sellerOrderCallBack(){
      
         $user = 'App\User'::findOrFail(auth()->user()->id);
@@ -409,6 +421,22 @@ class OrderController extends Controller
             ])->latest()->get();
         
         return view('Admin.Order.Seller.order-callback',compact(
+            'orders',
+        ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Receive Order From Agent
+    |--------------------------------------------------------------------------
+    |*/
+    public function receiveOrderFromAgent(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            ['followUpManager_id','=',$user->id],
+            ['status','=',8],//Receive Order From Agent
+            ])->latest()->get();
+        
+        return view('Admin.Order.FollowUpManager.receive-order-fromAgent',compact(
             'orders',
         ));
     }
