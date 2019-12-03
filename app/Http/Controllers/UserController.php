@@ -37,8 +37,12 @@ class UserController extends Controller
     public function create()
     {
         $agentChiefs  = User::Role('agentChief')->get();
-
-        $roles          =   Role::latest()->get();
+        $roles = Role::where([
+            ['id','!=',1],
+            ['id','!=',7],
+            ['id','!=',8]
+        ])->get();
+        
         $cities         =   'App\City'::latest()->get();
         $states         =   'App\State'::latest()->get();
         $agentChiefs    =   User::Role('agentChief')->get();
