@@ -1214,7 +1214,48 @@ $(document).ready(function(){
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
-                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').html('<strong class="h6">برگشت به فروشنده</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    $('#notAbleToSendForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var statue = form.find('input[name="status"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'statue': statue};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(false){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">غیر قابل ارسال</strong>');
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
                         unverifiedOrdersTable.rows('.selected').remove().draw( false );
