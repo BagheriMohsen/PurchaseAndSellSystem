@@ -1195,9 +1195,9 @@ $(document).ready(function(){
         var form = $(this).parents('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
-        var status = form.find('input[name="status"]').val();
+        var statue = form.find('input[name="status"]').val();
         $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'status': status};
+            var orderId = {'id': parseInt(value[1]),'statue': statue};
             orderNumbers.push(orderId);
         });
         console.log(orderNumbers);
@@ -1229,6 +1229,7 @@ $(document).ready(function(){
         }
         
     });
+    
     $('#productTable').DataTable( {
         "language": persianDataTable,
         // dom: 'Bfrtip',
