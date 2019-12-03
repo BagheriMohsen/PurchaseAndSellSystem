@@ -96,6 +96,11 @@ $(document).ready(function(){
         }else{
             $('#backToFollowManager').parents('.col-sm-4').addClass('d-none');
         }
+        if(user_value == '6'){
+            $('#backToSeller').parents('.col-sm-4').removeClass('d-none');
+        }else{
+            $('#backToSeller').parents('.col-sm-4').addClass('d-none');
+        }
         
     };
     checkUserRole();
