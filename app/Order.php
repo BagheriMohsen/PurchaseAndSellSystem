@@ -32,7 +32,7 @@ class Order extends Model
     'addressConfirm',
     'HBD_Date',
     'trackingCode',
-   
+    'transport_id'
    ];
     /*
     |--------------------------------------------------------------------------

@@ -30,6 +30,14 @@ $(document).ready(function(){
         });
         $(this)[0].submit();
     });
+    //Remove comma from number inputs for off price Form
+    $('#offPriceForm').submit(function(event){
+        event.preventDefault();
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
     //Remove comma from number inputs for product Edit Form
     $('#productEditForm').submit(function(event){
         event.preventDefault();
@@ -88,6 +96,11 @@ $(document).ready(function(){
         }else{
             $('#backToFollowManager').parents('.col-sm-4').addClass('d-none');
         }
+        if(user_value == '6'){
+            $('#backToSeller').parents('.col-sm-4').removeClass('d-none');
+        }else{
+            $('#backToSeller').parents('.col-sm-4').addClass('d-none');
+        }
         
     };
     checkUserRole();
@@ -99,9 +112,9 @@ $(document).ready(function(){
     //        'print'
     //     ]
     // });
-    $('#sellerNoActionTable').DataTable({
-        "language": persianDataTable
-    });
+    // $('#sellerNoActionTable').DataTable({
+    //     "language": persianDataTable
+    // });
     var orderTable = $('#orderTable').DataTable({
         "language": persianDataTable,
         columnDefs: [ {
@@ -142,6 +155,27 @@ $(document).ready(function(){
             ]
           }
     });
+    var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
+        "language": persianDataTable,
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        buttons: {
+            buttons: [
+              { extend: 'print', text: 'Print List' },
+              { extend: 'pdf', text: 'PDF' },
+              { extend: 'copy', text: 'Copy to clipboard' }
+            ]
+          }
+    });
+    
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
         "language": persianDataTable
@@ -301,6 +335,7 @@ $(document).ready(function(){
             success:function(response){
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
                 self.find('button[type="submit"]').attr('disabled',false);
+                toastr["success"]('با موفقیت ثبت شد');
                 getProductTypes(product_id,CSRF_TOKEN);
             }
         });
@@ -702,22 +737,7 @@ $(document).ready(function(){
             success:function(response){
                 form.find('button[type="submit"]').html('ثبت سفارش');
                 
-                toastr["success"](response,{
-                    "closeButton": true,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": true,
-                    "positionClass": "toast-bottom-center",
-                    "preventDuplicates": false,
-                    "showDuration": "300",
-                    "hideDuration": "500",
-                    "timeOut": "3000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "slideIn",
-                    "hideMethod": "SlideOout"
-                    });
+                toastr["success"](response);
                 $('#orderForm').trigger('reset');
                 $('#cityAgent').html('');
             }
@@ -1014,8 +1034,8 @@ $(document).ready(function(){
         });
     }
     //Change order condition fields depending on radio button in AgentOrderLists page
-    $('.conditionForm input[name="condition"]:radio').change(function(e) {
-        var value = e.target.value.trim()
+    $('.conditionAssignForm input[name="condition"]:radio').change(function(e) {
+        var value = e.target.value.trim();
         var form = $(this).parents('form');
         var waitingDelivery = form.find('.waitingDeliveryField');
         var suspend = form.find('.suspendField');
@@ -1026,34 +1046,34 @@ $(document).ready(function(){
      
     
         switch (value) {
-          case '1':
+          case '7':
             waitingDelivery.removeClass('d-none');
             break;
-          case '2':
+          case '14':
             suspend.removeClass('d-none');
             break;
-          case '3':
+          case '13':
             cancelField.removeClass('d-none');
             break;
           default:
             break;
         }
     });
-    $('.conditionForm input[name="cancel"]:radio').change(function(e) {
+    $('.conditionAssignForm input[name="cancel"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var cancelDescField = form.find('.cancelDescField');
-        if(value == '9'){
+        if(value == 'cancelDesc'){
             cancelDescField.removeClass('d-none');
         }else{
             cancelDescField.addClass('d-none');
         }
     });
-    $('.conditionForm input[name="suspend"]:radio').change(function(e) {
+    $('.conditionAssignForm input[name="suspend"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var dueDateFuild = form.find('.dueDateFuild');
-        if(value == '3'){
+        if(value == 'dueDate'){
             dueDateFuild.removeClass('d-none');
         }else{
             dueDateFuild.addClass('d-none');
@@ -1095,9 +1115,10 @@ $(document).ready(function(){
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
                         orderTable.rows('.selected').remove().draw( false );
+                        toastr["success"](response.message);
+                    }else if(response.status == 0){
+                        toastr["error"](response.message);
                     }
-                    toastr["info"](response.message);
-                    console.log(response);
                    
                 }
             });
@@ -1111,11 +1132,97 @@ $(document).ready(function(){
         var form = $(this).parents('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var status = form.find('input[name="status"]').val();
         $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1])};
+            var orderId = {'id': parseInt(value[1]),'statue': status};
             orderNumbers.push(orderId);
         });
+        console.log(orderNumbers);
         if(!orderNumbers.length){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers,
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        orderTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    $('#chooseAgentForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var agent_id = form.find('select[name="agent"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'agent_id': agent_id};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(!orderNumbers.length){
+            alert('سفارشی انتخاب نشده است');
+        }else if(!agent_id){
+            alert('گزینه ای انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers,
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    $('#backToSellerForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var statue = form.find('input[name="status"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'statue': statue};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(false){
             alert('سفارشی انتخاب نشده است');
         }else{
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
@@ -1128,33 +1235,119 @@ $(document).ready(function(){
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
-                    form.find('button').html('<strong class="h6">ذخیره</strong>');
+                    form.find('button').html('<strong class="h6">برگشت به فروشنده</strong>');
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
-                        orderTable.rows('.selected').remove().draw( false );
+                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
                     }
-                    toastr["info"](response.message);
+                    
                     console.log(response);
                 }
             });
         }
         
     });
+    $('#notAbleToSendForm button').on('click',function(event){
+        event.preventDefault();
+        var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var statue = form.find('input[name="status"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'statue': statue};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(false){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">غیر قابل ارسال</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    $('#toFollowManager button').on('click',function(event){
+        event.preventDefault();
+        var tableData = sellerNoActionTable.rows({ selected: true }).data().toArray();
+        var orderNumbers = [];
+        var form = $(this).parents('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var statue = form.find('input[name="status"]').val();
+        $.each(tableData,function(index,value){
+            var orderId = {'id': parseInt(value[1]),'statue': statue};
+            orderNumbers.push(orderId);
+        });
+        console.log(orderNumbers);
+        if(false){
+            alert('سفارشی انتخاب نشده است');
+        }else{
+            form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+            form.find('button').attr('disabled','disabled');
+            $.ajax({
+                url:actionUrl,
+                type:'get',
+                data:{
+                    _token:CSRF_TOKEN,
+                    orderNumbers:orderNumbers
+                },
+                success:function(response){
+                    form.find('button').html('<strong class="h6">غیر قابل ارسال</strong>');
+                    form.find('button').attr('disabled',false);
+                    if(response.status == 1){
+                        sellerNoActionTable.rows('.selected').remove().draw( false );
+                        toastr["info"](response.message);
+                    }else{
+                        toastr["danger"](response.message);
+                    }
+                    
+                    console.log(response);
+                }
+            });
+        }
+        
+    });
+    
     $('#productTable').DataTable( {
         "language": persianDataTable,
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'pdf', 'print'
-        ]
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     'excel', 'pdf', 'print'
+        // ]
     } );
-    pdfMake.fonts = {
-        Arial: {
-                normal: 'arial.ttf',
-                bold: 'arialbd.ttf',
-                italics: 'ariali.ttf',
-                bolditalics: 'arialbi.ttf'
-        }
-    };
+    // pdfMake.fonts = {
+    //     Arial: {
+    //             normal: 'arial.ttf',
+    //             bold: 'arialbd.ttf',
+    //             italics: 'ariali.ttf',
+    //             bolditalics: 'arialbi.ttf'
+    //     }
+    // };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
         var form = $(this).parents('form');
@@ -1194,12 +1387,47 @@ $(document).ready(function(){
     if($('#visitors-chart').length){
         var userId = $('#userId').val();
         $.ajax({
-            url:'http://localhost:8000/types/'+ product_id,
+            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/'+ userId,
             type:'Get',
             success:function(response){
-                updateProductTypes(response,product_id,CSRF_TOKEN);
+                console.log(response);
             }
         });
-    }
+    };
+    // Condition assign per order in modal 
+    $('.conditionAssignForm button').on('click',function(event){
+        event.preventDefault();
+        var form = $(this).parents('form');
+        form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
+        form.find('button').attr('disabled','disabled');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var condition = form.find('input[name="condition"]').val();
+        var waitingDeliveryDesc = form.find('textarea[name="waitingDeliveryDesc"]').val();
+        var suspend = form.find('input[name="suspend"]').val();
+        var dueDate = form.find('input[name="dueDate"]').val();
+        var cancel = form.find('input[name="cancel"]').val();
+        var cancelDesc = form.find('textarea[name="cancelDesc"]').val();
+        console.log(actionUrl,CSRF_TOKEN,condition,waitingDeliveryDesc,suspend,dueDate,cancel,cancelDesc);
+        $.ajax({
+            url:actionUrl,
+            type:'get',
+            data:{
+                _token:CSRF_TOKEN,
+                status:condition,
+                waitDesc:waitingDeliveryDesc,
+                suspend:suspend,
+                dueDate:dueDate,
+                cancel:cancel,
+                cancelDesc:cancelDesc,
+            },
+            success:function(response){
+                form.find('button').html('<strong class="h6">ذخیره</strong>');
+                form.find('button').attr('disabled',false);
+                console.log(response);
+            }
+        });
+    });
+    
 });
 

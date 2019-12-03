@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-   سفارشات کنسلی
+   سفارشات برگشت خورده
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':' سفارشات کنسلی'} %}
+  {% include 'Admin/Master/path' with {'title':'سفارشات برگشت خورده'} %}
 {% endblock %}
 
 {% block content %}
@@ -36,43 +36,52 @@
                 <!-- /.card-header -->
                 <div class="card-body col-12 mx-auto">
                 
-                  <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
+                  <table  id="sellerNoActionTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
                 width="100%">
                     <thead>
                     <tr>
-                      <th></th>
+                    <th></th>
                       <th>شماره<br> سفارش</th>
-                      <th>تاریخ اقدام</th>
-                      {# <th>تاریخ تخصیص</th> #}
+                      <th>نام خریدار</th>
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
-                      <th>نام خریدار</th>
                       <th>همراه-ثابت</th>
+                      <th>کد پیگیری</th>
                       <th>نوع پرداخت</th>
-                      <th>کالسنتر</th>
-                      <th>وضعیت</th>
+                      <th>تاریخ ثبت</th>
                       <th>عملیات</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for order in orders %}
                       <tr>
-                        <td></td>
+                      <td></td>
                         <td>{{order.id}}</td>
-                        <td>{{'-'}}</td>
-                        {# <td>{{'-'}}</td> #}
+                        <td>{{order.fullName}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
-                        <td>{{order.fullName}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
+                        <td>{{order.trackingCode}}</td>
                         {% if order.paymentMethod == 'cash' %}
                           <td>{{'نقدی'}}</td>
                         {% else %}
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
-                        <td>{{''}}</td>
-                         <td>{{''}}</td>
+                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         <td>
+                          {% if order.paymentMethod != 'cash' %}
+                            <a title="جزئیات چک" class="text-secondary" >
+                                <i class="fas fa-money-bill crud-icon"></i>
+                            </a>
+                          {% else %}
+                            <a title="پرداخت بصورت نقدی ست" class="text-primary" >
+                                <i class="fas fa-money-bill crud-icon"></i>
+                            </a>
+                          {% endif %}
+                          <a title="ویرایش سفارش" class="text-secondary" >
+                              <i class="far fa-edit crud-icon"></i>
+                          </a>
+
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
                               {{order.products.count()}}
@@ -90,66 +99,31 @@
               </div>
           </div>
 
-      {# <div class="row">
+      <div class="row">
         <div class="col-6">
-          <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
-            <label for="status">
-              تعیین وضعیت
-              <span class="text-danger">*</span>
-            </label>
-            <select class="p-2 pb-2 form-control col-sm-6" name="status">
-              {% for bot_status in bottom_statuses %}
-                <option 
-                  {% if CustomerCancelled == bot_status.id %}
-                    style="display:none;"
-                  {% elseif CustomerFinalCancelled == bot_status.id %}
-                    style="display:none;" 
-                  {% endif %} 
-                 value="{{bot_status.id}}">{{bot_status.name}}</option>
-              {% endfor %}
-            </select>
-            <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
-              <strong class="h6">
-                ذخیره
-              </strong>
-            </button>
-          </form>
-          <hr>
-         
-            {% set user = auth_user() %}
-            {% if user.backToFollowManager == null %} 
-            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="conditionForm"> 
-              <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
+          {# <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManager"> 
+              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به مدیر پیگیری
                 </strong>
               </button>
               <input name="status" type="hidden"  value="8" />
-            </form>
-            {% else %}
-              <button title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
-                <strong class="h6">
-                    <i class="fas fa-lock crud-icon"></i>
-                  برگشت به مدیر پیگیری
-                </strong>
-              </button>
-            {% endif %}
-            
+            </form> #}
         </div>
-         <div class="col-6">
-            <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
-                <strong class="h6">
-                  چاپ
-                </strong>
-            </button>
-            <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
-                <strong class="h6">
-                  اکسل
-                </strong>
-            </button>
-         </div>
-        
-      </div> #}
+          
+        <div class="col-6">
+          <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+              <strong class="h6">
+                چاپ
+              </strong>
+          </button>
+          <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
+              <strong class="h6">
+                اکسل
+              </strong>
+          </button>
+        </div>
+      </div>
      
 
           
@@ -167,7 +141,7 @@
           <span aria-hidden="true" class="white-text">&times;</span>
         </button>
         <p class="heading lead"> 
-          محصولات سفارش
+          مشخصات سفارش
           {{order.fullName}}
         </p>
       </div>
@@ -195,14 +169,12 @@
             <tr class="text-center">
               <th>کد پستی</th>
               <th>کد پیگیری</th>
-              <th>مبلغ مشارکت پایه</th>
               <th colspan="3">آدرس</th>
             </tr>
             <tr>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td colspan="3">-</td>
+              <td>{{ order.postalCode }}</td>
+              <td>{{ order.trackingCode }}</td>
+              <td colspan="3">{{order.address}}</td>
             </tr>
           </tbody>
         </table>
@@ -215,8 +187,7 @@
               <th>مبلغ</th>
               <th>تعداد</th>
               <th>تخفیف</th>
-              <th>مبلغ مشارکت ویژه</th>
-              <th>مبلغ کل</th>
+              <th>جمع</th>
             </tr>
             {% for item in order.products %}
               <tr class="text-center">
@@ -230,8 +201,17 @@
                 <td>{{ item.product.price }}</td>
                 <td>{{ item.count }}</td>
                 <td>{{ item.off }}</td>
-                <td>-</td>
-                <td>{{ (item.product.price * item.count) - item.off }}</td>
+                <td class="priceSum">{{ (item.product.price * item.count) - item.off }}</td>
+                  {# <td>
+                  <form  action="#" method="post" >
+                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                      <input type="hidden" name="_method" value="DELETE" />
+                      <input type="hidden" name="user_id" value="{{item.id}}">
+                      <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
+                      <i class="far fa-trash-alt crud-icon"></i>
+                    </a>
+                  </form>
+                </td> #}
               </tr>
 
             {% endfor %}
@@ -254,14 +234,17 @@
             <th>پیش پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
+            {% if order.paymentMethod == "cash" %}
+              <td>{{ 'نقدی' }}</td>
+            {% else %}
+              <td>{{ 'نقدی + چک' }}</td>
+            {% endif %}
+            <td>{{ order.cashPrice | number_format }}</td>
+            <td>{{ order.chequePrice | number_format }}</td>
+            <td>{{ order.prePayment | number_format }}</td>
           </tr>
           <tr class="text-center">
             <th>هزینه ارسال</th>
-            <th>مبلغ مشارکت</th>
             <th>قابل پرداخت</th>
           </tr>
           <tr class="text-center">
@@ -276,11 +259,10 @@
       <tbody>
           <tr class="text-center">
             <th>توضیحات ارسال</th>
-            <th>توضیحات فروشنده</th>
+            <th>توضیحات فروشنده(شما)</th>
           </tr>
-          
               <tr class="text-center">
-                <td>-</td>
+                <td>{{ item.sendDescription }}</td>
                 <td>{{ item.sellerDescription }}</td>
               </tr>
           </tbody>

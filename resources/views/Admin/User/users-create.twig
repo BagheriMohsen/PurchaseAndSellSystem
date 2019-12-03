@@ -192,6 +192,21 @@
             >
         </div>
         {# Back to follow manager #}
+        {# Back to seller  #}
+        <div class="col-sm-4 mb-4 d-none">
+          <h6>برگشت به فروشنده
+          </h6>
+          <input id="backToSeller" type="checkbox"
+          
+            data-toggle="switchbutton"
+            data-onstyle="success"
+            data-offstyle="danger"
+            data-onlabel="فعال"
+            data-offlabel="غیر فعال" name="backToSeller"
+            {% if old('backToSeller') != null %} checked {% endif %}
+            >
+        </div>
+        {# Back to seller  #}
       </div>
     </div>
     <div class="col-12 mx-4 callcenterFields d-none">
@@ -414,8 +429,8 @@
     {# وضعیت #}
     
     <div class="col-12 text-center mt-5">
-      <button class="btn btn-success" type="submit" name="button">
-        <strong class="h6 text-dark">
+      <button class="btn btn-info" type="submit" name="button">
+        <strong class="">
           افزودن کاربر
         </strong>
       </button>

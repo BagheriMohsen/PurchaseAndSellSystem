@@ -80,6 +80,7 @@ class UserController extends Controller
             'level'                 =>  $request->level,
             'sendAuto'              =>  $request->sendAuto,
             'backToWareHouse'       =>  $request->backToWareHouse,
+            'backToFollowManager'   =>  $request->backToFollowManager,
             'callCenter'            =>  $request->callCenter,
             'agent_id'              =>  $request->agent_id,
             'porsantSeller'         =>  (float) str_replace(',', '', $request->porsantSeller),
@@ -91,7 +92,7 @@ class UserController extends Controller
             'internalPrice'         =>  (float) str_replace(',', '', $request->internal),
             'villagePrice'          =>  (float) str_replace(',', '', $request->village),
             'allowNumber'           =>  $request->allowNumber,
-            'allowNumberBack'       =>  $request->allowNumberBack,
+            'backToSeller'          =>  $request->backToSeller,
             'allowNumberEdit'       =>  $request->allowNumberEdit,
             'allowNumberDup'        =>  $request->allowNumberDup,
             'allowNewOrder'         =>  $request->allowNewOrder,
@@ -174,6 +175,7 @@ class UserController extends Controller
        'level'              =>  $request->level,
        'sendAuto'           =>  $request->sendAuto,
        'backToWareHouse'    =>  $request->backToWareHouse,
+       'backToFollowManager'=>  $request->backToFollowManager,
        'callCenter'         =>  $request->callCenter,
        'agent_id'           =>  $request->agent_id,
        'porsantSeller'      =>  (float) str_replace(',', '', $request->porsantSeller),
@@ -185,7 +187,7 @@ class UserController extends Controller
        'villagePrice'       =>  (float) str_replace(',', '', $request->village),
        'callCenterType'     =>  $request->callCenterType,
        'allowNumber'        =>  $request->allowNumber,
-       'allowNumberBack'    =>  $request->allowNumberBack,
+       'backToSeller'       =>  $request->backToSeller,
        'allowNumberDup'     =>  $request->allowNumberDup,
        'allowNumberEdit'    =>  $request->allowNumberEdit,
        'allowNewOrder'      =>  $request->allowNewOrder,
@@ -219,12 +221,13 @@ class UserController extends Controller
     |*/
     public function AdminDashboard(){
         $today = 'Carbon\Carbon'::now();
-        
+        $yesterday = 'Carbon\Carbon'::now()->subDays(1);
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
         //Order Waiting For Delivery  
         $OrderWaitingForDeliveryToday = 'App\Order'::where([
             ['status','=',7],
-            ['updated_at','=',$today->toDateString()],
+            ['updated_at','<',$today],
+            ['updated_at','>',$yesterday]
         ])->count();
         $OrderWaitingForDeliveryInMonth = 'App\Order'::where([
             ['status','=',7],
@@ -234,7 +237,8 @@ class UserController extends Controller
         //Returned Collected  
         $OrderReturnedToday = 'App\Order'::where([
             ['status','=',14],
-            ['updated_at','=',$today->toDateString()],
+            ['updated_at','<',$today],
+            ['updated_at','>',$yesterday]
         ])->count();
         $OrderReturnedInMonth = 'App\Order'::where([
             ['status','=',14],
@@ -244,20 +248,35 @@ class UserController extends Controller
         //Order Collected 
         $OrderCollectedToday = 'App\Order'::where([
             ['status','=',13],
-            ['updated_at','=',$today->toDateString()],
+            ['updated_at','<',$today],
+            ['updated_at','>',$yesterday]
         ])->count();
         $OrderCollectedInMonth = 'App\Order'::where([
             ['status','=',13],
             ['updated_at','<=',$today],
             ['updated_at','>=',$ThirtyDaysAgo],
         ])->count();
+        // Tables
+        $storeRooms = 'App\StoreRoom'::where([
+            ['in_out','=',13],
+            ['out_date','<',$today],
+            ['out_date','>',$yesterday]
+        ])->latest()->skip(0)->take(5)->get();
+        $TopStoreRooms =  'App\OrderProduct'::with('product')->select('product_id')
+        ->groupBy('product_id')
+        ->orderByRaw('COUNT(*) DESC')
+        ->limit(5)
+        ->get();
+       
         return view('Admin/index',compact(
             'OrderWaitingForDeliveryToday',
             'OrderWaitingForDeliveryInMonth',
             'OrderCollectedToday',
             'OrderCollectedInMonth',
             'OrderReturnedToday',
-            'OrderReturnedInMonth'
+            'OrderReturnedInMonth',
+            'storeRooms',
+            'TopStoreRooms'
 
         ));
     }

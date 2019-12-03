@@ -51,7 +51,15 @@ class OrderController extends Controller
             // if find agent send auto not null
             if($userSendAuto != null){
                 $agent_id = $userSendAuto->id;
-                $followUpManager_id = null;
+               
+                $state = 'App\State'::where('id',$city->state->id)->first();
+                $followUpManager_id = $state->followUpManager;
+
+                if($followUpManager_id == null){
+                    $user = 'App\User'::role('followUpManager')->first();
+                    $followUpManager_id = $user->id;
+                   
+                }
                 
             }else{
                
@@ -75,6 +83,7 @@ class OrderController extends Controller
             'seller_id'         =>      auth()->user()->id,
             'status'            =>      7,
             'lastStatus'        =>      1,
+            'transport_id'      =>      4,
             'trackingCode'      =>      $trackingCode,
             'mobile'            =>      $request->mobile,
             'telephone'         =>      $request->telephone,
@@ -314,8 +323,8 @@ class OrderController extends Controller
                                 ])->exists();
                                 // Product Not Found
                                 if($storage_status != true){
-                                    $message = ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ';
-                                    return response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                                    $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ','status' => 0];
+                                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
                                 }
 
                                 $storage = 'App\Storage'::where([
@@ -387,19 +396,41 @@ class OrderController extends Controller
     |*/
     public function UnverifiedOrderList(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $agents = 'App\User'::Role('agent')->latest()->get();
+        
+        /*## Agent ## */
+        $agents = array();
+        foreach($user->statesUnderControl as $state){
+            
+            foreach($state->cities as $city){
+                $agents[] = 'App\User'::with('city')
+                ->where('city_id',$city->id)
+                ->Role('agent')->get();
+            }
+
+        }
+        if(isset($agents[0])){
+            $agents = $agents[0]->toArray();
+        }else{
+            $agents = null; 
+        }
+       
+        /*## Agent ## */
         $orders = Order::where([
             ['followUpManager_id','=',$user->id],
-            ['status','=',3],
+            ['status','=',7],
             ['agent_id','=',null]
             ])->latest()->get();
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
             'orders',
             'agents',
-            'user'
+            'user',
         ));
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Seller Order CallBack
+    |--------------------------------------------------------------------------
+    |*/
     public function sellerOrderCallBack(){
      
         $user = 'App\User'::findOrFail(auth()->user()->id);
@@ -411,6 +442,74 @@ class OrderController extends Controller
         return view('Admin.Order.Seller.order-callback',compact(
             'orders',
         ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Receive Order From Agent
+    |--------------------------------------------------------------------------
+    |*/
+    public function receiveOrderFromAgent(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+       
+        /*####### Agent ####### */
+        $agents = array();
+        foreach($user->statesUnderControl as $state){
+            
+            foreach($state->cities as $city){
+                $agents[] = 'App\User'::with('city')
+                ->where('city_id',$city->id)
+                ->Role('agent')->get();
+            }
+
+        }
+        if(isset($agents[0])){
+            $agents = $agents[0]->toArray();
+        }else{
+            $agents = null; 
+        }
+        /*####### Agent ####### */
+
+        $orders = Order::where([
+            ['followUpManager_id','=',$user->id],
+            ['status','=',8],//Receive Order From Agent
+            ])->latest()->get();
+        
+        return view('Admin.Order.FollowUpManager.receive-order-fromAgent',compact(
+            'orders',
+            'agents',
+        ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Choose Agent For Delivary
+    |--------------------------------------------------------------------------
+    |*/
+    public function chooseAgentForDelivary(Request $request){
+     
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $items = $request->orderNumbers;
+        foreach($items as $item){
+            $order = 'App\Order'::findOrFail($item['id']);
+            $order->update([
+                'status'        =>      7,
+                'agent_id'      =>      $item['agent_id'],
+                ]);
+        }
+        return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Receive Order From FollowUpManager
+    |--------------------------------------------------------------------------
+    |*/
+    public function receiveOrderFromFollowUpManager(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['status','=',6],//Receive Order From FollowUpManager
+            ])->latest()->get();
+
+            return view('Admin.Order.Seller.receive-order-fromFollowUpManager',compact('orders'));
     }
     
 }

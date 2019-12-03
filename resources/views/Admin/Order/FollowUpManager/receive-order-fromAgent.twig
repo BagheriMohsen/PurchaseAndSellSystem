@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-   سفارشات تایید نشده
+   سفارشات برگشت خورده
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'سفارشات تایید نشده'} %}
+  {% include 'Admin/Master/path' with {'title':'سفارشات برگشت خورده'} %}
 {% endblock %}
 
 {% block content %}
@@ -55,8 +55,8 @@
                     <tbody>
                     {% for order in orders %}
                       <tr>
-                       <td> </td>
-                       <td>{{order.id}}</td>
+                       <td></td>
+                        <td>{{order.id}}</td>
                         <td>{{order.fullName}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
@@ -94,8 +94,7 @@
       <div class="col-6">
           {% set user = auth_user() %}
           {% if user.backToSeller is not null %}
-            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm">
-              <input type="hidden" name="_token" value="{{csrf_token()}}" />
+            <form form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm">
               <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به فروشنده 
@@ -104,14 +103,15 @@
               <input type="hidden" name="status" value="6" />
           </form>
           {% else %}
-              <button onclick="alert('شما به این ویژگی دسترسی ندارید')" title="شما به این ویژگی دسترسی ندارید" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
+              <button title="شما به این ویژگی دسترسی ندارید" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   <i class="fas fa-lock crud-icon"></i>
                   برگشت به فروشنده 
                 </strong>
               </button>
           {% endif %}
-           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="notAbleToSendForm">
+           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" id="notAbleToSendForm" >
+              <input type="hidden" name="_token" value="{{csrf_token()}}" />
               <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   غیر قابل ارسال 
@@ -128,58 +128,55 @@
           </form>
          </div>
         <div class="col-6">
-          <form class="" action="{{route('orders.chooseAgentForDelivary')}}" id="chooseAgentForm">
+          <form class="" action="" id="chooseAgentForm">
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
-            {# <h6>نوع ارسال:</h6>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="postType" checked>
-                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+            <h6>نوع ارسال:</h6>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'پیک'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input"  value="2" name="postType" >
-                <label class="form-check-label" for="suspend">پیک</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'شکوه مهر'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input"  value="3" name="postType">
-                <label class="form-check-label" for="cancel">شکوه مهر</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'چابک'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">چابک</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فارس پست'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فارس پست</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فلوکس'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فلوکس</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'فروتل'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">فروتل</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'سپیده ماهان'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">سپیده ماهان</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'گیتوی پست'}}</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">گیتوی پست</label>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="{{'on'}}" name="postType" checked>
+                <label class="form-check-label" for="waitingDelivery">{{'لجیتو'}}</label>
               </div>
-              <div class="form-check">
-                <input type="radio" class="form-check-input" value="3" name="postType">
-                <label class="form-check-label" for="cancel">لجیتو</label>
-              </div> #}
               <div class="mt-4">
-                <label for="agent">
+                <label for="status">
                   ارسال سفارش برای نماینده:
                   <span class="text-danger">*</span>
                 </label>
-                <select class="p-2 pb-2 form-control col-sm-6" name="agent">
+                <select class="p-2 pb-2 form-control col-sm-6" name="status">
                   <option value="{{null}}">گزینه ای انتخاب نشده</option>
+                  
                   {% for agent in agents %}
-                      <option value="{{agent.id}}">
+                      <option value="#">
                         {{agent.name}}
                         {{' '}}
                         {{agent.family}}

@@ -20,19 +20,191 @@
 
   {% include 'Messages/switchSuccess' %}
   {% set user = auth_user() %}
-  <div class="row">
+  {# <div class="row">
+  <div class="col-md-6">
+     <div class="card">
+      <div class="card-header text-center bg-info">
+       <i class="fa fa-book crud-icon"></i>
+      صورت حساب جاری شما
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body col-12 mx-auto">
+        <table class="table table-sm text-center no-border">
+          <tr>
+              <th scope="row">مجموع فروش</th>
+              <th scope="col">1000 تومان</th>
+          </tr>
+          <tr>
+            <th scope="row">مجموع پیش واریزی</th>
+            <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">هزینه حمل</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع چک ها</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع چک های تایید شده</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع پرداختی</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ مشارکت</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ عودت وجه</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ هزینه ها</th>
+              <td>10000</td>
+          </tr>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header text-center bg-info">
+      <i class="fas fa-money-check-alt"></i>
+      مبلغ بدهی شما
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body col-12 mx-auto">
+        <table class="table table-sm text-center no-border">
+          <tr>
+              <th scope="row">تخفیف</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+            <th scope="row">جایزه</th>
+            <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">امتیاز</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع بدهی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">بدهی چکی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">بدهی نقدی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+            <th scope="row">مانده حساب</th>
+            <td>10000</td>
+          </tr>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div> #}
    
+     
+{# </div>
+<a title="پرداخت" class="text-secondary" data-toggle="modal" href="#test">
+    <sub class="text-dark">
+    پرداخت
+    </sub>
+  </a> #}
+<!-- Order details modal -->
+<div class="modal fade orderDetail" id="test">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-info justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead"> 
+          پرداخت سفارش
+        </p>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container">
+         <form class="row label-light" method="post" id="payOrders">
+          <div class="col-sm-6 mt-3">
+            <label for="mobile">مبلغ-تومان
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="bill" value="" required>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="date">تاریخ
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control persianDatePicker" type="text" name="date" value="" required>
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="tracingCode">کد (کد پیگیری-شماره مرجع-شماره بازاریابی-شماره سند-شماره پیگیری پایا)
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="tracingCode" value="" required>
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="bankAccount">شماره حساب
+              <span class="text-danger">*</span>
+            </label>
+            <select id="state" class="form-control"  name="bankAccount" required>
+              <option value="{{null}}">انتخاب کنید</option>
+            </select>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <input class=" bg-sec" type="radio"  name="paymentMethod" value="card" checked>
+            <label for="paymentMethod">ثبت فیش
+            </label>
+            <br />
+            <input class=" bg-sec" type="radio" name="paymentMethod" value="online" >
+            <label for="paymentMethod">آنلاین
+            </label>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="image">تصویر محصول</label>
+            <input value="" class="form-control border-0" type="file" placeholder="" name="image">
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="billDesc">توضیحات
+              <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" type="text"  name="billDesc" value="" ></textarea>
+          </div>
+          <div class="col-12 mt-3 text-center">
+           <button class="btn btn-sm btn-primary" type="submit" name="button">
+              <strong class="h6 text-white">
+                ثبت پرداخت
+              </strong>
+            </button>
+          </div>
+          
+        </form>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<!--End order details modal -->
+  <div class="row">
     <div class="card col-sm-12">
      
-                <div class="card-header">
-                  {# <a class="col-3 btn btn-warning btn-sm" href="#">
-                    <strong class="h6 text-dark">
-                      برگشت به مدیر پیگیری
-                    </strong>
-                  </a> #}
-
-                  
-                </div>
+                
                 <!-- /.card-header -->
                 <div class="card-body col-12 mx-auto">
                 
@@ -121,25 +293,26 @@
             </button>
           </form>
           <hr>
-          <form class="" action="" method="post" id="toFollowManagerForm">
-              <button class="col-sm-6  btn btn-primary btn-sm mx-auto" type="submit" name="button">
+          
+            {% set user = auth_user() %}
+            {% if user.backToFollowManager != null %} 
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
+              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به مدیر پیگیری
                 </strong>
               </button>
-          </form>
-        </div>
-         <div class="col-6">
-            <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+              <input name="status" type="hidden"  value="8" />
+            </form>
+            {% else %}
+              <button onclick="alert('این ویژگی برای شما در دسترس نیست')" title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
-                  چاپ
+                    <i class="fas fa-lock crud-icon"></i>
+                  برگشت به مدیر پیگیری
                 </strong>
-            </button>
-            <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
-                <strong class="h6">
-                  اکسل
-                </strong>
-            </button>
+              </button>
+            {% endif %}
+
          </div>
         
       </div>
@@ -350,20 +523,20 @@
 
       <!-- Modal body -->
       <div class="modal-body text-center ">
-        <form action="#" method="post" class="conditionForm">
+        <form action="{{route('orders.AgentChangeOrderStatus')}}" method="post" class="conditionAssignForm">
           <div class="row">
             <div class="col-6 text-right">
               <h6>انتخاب حالات دیگر:</h6>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="waitingDelivery" value="1" name="condition" checked>
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="7" name="condition" checked>
                 <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="suspend" value="2" name="condition" >
+                <input type="radio" class="form-check-input" class="suspend" value="14" name="condition" >
                 <label class="form-check-label" for="suspend">معلق</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" class="cancel" value="3" name="condition">
+                <input type="radio" class="form-check-input" class="cancel" value="13" name="condition">
                 <label class="form-check-label" for="cancel">کنسلی</label>
               </div>
             </div>
@@ -375,58 +548,58 @@
               <div class="suspendField d-none">
                 <h6>انتخاب حالت تماس مجدد:</h6>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" checked>
+                  <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
                   <label class="form-check-label">عدم پاسخگویی</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="suspend" >
+                  <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
                   <label class="form-check-label">خارج از دسترس</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" value="3" name="suspend">
+                  <input type="radio" class="form-check-input" value="dueDate" name="suspend">
                   <label class="form-check-label">زمان سررسید</label>
                 </div>
                 <div class="dueDateFuild d-none">
                   <label>تاریخ: </label>
-                  <input type="text" class="form-control persianDateTimepicker">
+                  <input type="text" class="form-control persianDateTimepicker" name="dueDate">
                 </div>
               </div>
               <div class="cancelField d-none">
                 <h6>انتخاب حالت انصراف :</h6>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" checked>
+                  <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
                   <label class="form-check-label">قیمت بالا</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
                   <label class="form-check-label">کیفیت پایین</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
                   <label class="form-check-label">ناکارآمد بودن </label>
                 </div>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
                   <label class="form-check-label">برآورده نکردن خواسته ها </label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value=" مزاحمت" name="cancel" >
                   <label class="form-check-label">  مزاحمت</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
                   <label class="form-check-label">تماس دیروقت </label>
                 </div>
                  <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel">
+                  <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
                   <label class="form-check-label"> خرید از مکان دیگر</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" name="cancel" >
+                  <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر" name="cancel" >
                   <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" class="form-check-input" value="9" name="cancel">
+                  <input type="radio" class="form-check-input" value="cancelDesc" name="cancel">
                   <label class="form-check-label">توضیحات </label>
                 </div>
                 <div class="cancelDescField d-none">
@@ -436,8 +609,8 @@
               </div>
             </div>
             <div class="col-12 text-center mt-5">
-              <button class="btn btn-success" type="submit" name="button">
-                <strong class="h6 text-dark">
+              <button class="btn btn-info" type="button" name="button">
+                <strong class="">
                   اعمال
                 </strong>
               </button>
@@ -449,9 +622,12 @@
   </div>
 </div>
 
+
 {% endblock %}
 
 {% block footer %}
   {% include 'Admin/Master/footer' %}
 {% endblock %}
 
+
+     

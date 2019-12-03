@@ -114,6 +114,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('sellerOrdersLists','OrderController@sellerOrdersLists')->name('sellerOrdersLists');
     Route::get('sellerNoActionOrders','OrderController@sellerNoActionOrders')->name('sellerNoActionOrders');
     Route::get('sellerOrderCallBack','OrderController@sellerOrderCallBack')->name('sellerOrderCallBack');
+    Route::get('receiveOrderFromFollowUpManager','OrderController@receiveOrderFromFollowUpManager')->name('receiveOrderFromFollowUpManager');
     /* Agents */
     Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
     Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');
@@ -122,6 +123,8 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('AgentChangeOrderStatus','OrderController@AgentChangeOrderStatus')->name('AgentChangeOrderStatus');
     //FollowUpManager 
     Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
+    Route::get('receiveOrderFromAgent','OrderController@receiveOrderFromAgent')->name('receiveOrderFromAgent');
+    Route::get('chooseAgentForDelivary','OrderController@chooseAgentForDelivary')->name('chooseAgentForDelivary');
     //Factor
     Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });

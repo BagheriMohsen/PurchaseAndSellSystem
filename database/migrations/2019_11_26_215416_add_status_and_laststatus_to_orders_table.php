@@ -16,12 +16,15 @@ class AddStatusAndLaststatusToOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->bigInteger('status')->unsigned()->nullable();
             $table->bigInteger('lastStatus')->unsigned()->nullable();
-            
+            $table->bigInteger('transport_id')->unsigned()->nullable();
 
             $table->foreign('status')->references('id')->on('order_statuses')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('lastStatus')->references('id')->on('order_statuses')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('transport_id')->references('id')->on('transports')
             ->onUpdate('cascade')->onDelete('cascade');
         });
     }
@@ -36,6 +39,8 @@ class AddStatusAndLaststatusToOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('status');
             $table->dropColumn('lastStatus');
+            $table->dropColumn('transport_id');
+
         });
     }
 }
