@@ -484,7 +484,7 @@ class OrderController extends Controller
     | Choose Agent For Delivary
     |--------------------------------------------------------------------------
     |*/
-    public function chooseAgentForDelivary(){
+    public function chooseAgentForDelivary(Request $request){
      
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $items = $request->orderNumbers;
@@ -496,6 +496,20 @@ class OrderController extends Controller
                 ]);
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Receive Order From FollowUpManager
+    |--------------------------------------------------------------------------
+    |*/
+    public function receiveOrderFromFollowUpManager(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['status','=',6],//Receive Order From FollowUpManager
+            ])->latest()->get();
+
+            return view('Admin.Order.Seller.receive-order-fromFollowUpManager',compact('orders'));
     }
     
 }

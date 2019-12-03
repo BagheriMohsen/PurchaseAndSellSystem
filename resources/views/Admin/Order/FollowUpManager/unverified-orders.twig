@@ -93,8 +93,9 @@
       <div class="row">
       <div class="col-6">
           {% set user = auth_user() %}
-          {% if user.allowNumberBack is not null %}
-            <form class="" action="" method="post" id="backToSellerForm">
+          {% if user.backToSeller is not null %}
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
+              <input type="hidden" name="_token" value="{{csrf_token()}}" />
               <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به فروشنده 

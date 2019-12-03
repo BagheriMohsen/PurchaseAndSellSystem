@@ -69,7 +69,7 @@ class CreateUsersTable extends Migration
             $table->string('callCenter')->nullable();
             $table->string('callCenterType')->nullable();
             $table->string('allowNumber')->nullable();
-            $table->string('allowNumberBack')->nullable();
+            $table->string('backToSeller')->nullable();
             $table->string('allowNumberDup')->nullable();
             $table->string('allowNumberEdit')->nullable();
             $table->string('allowNewOrder')->nullable();

@@ -50,7 +50,7 @@ class User extends Authenticatable implements HasMedia,BannableContract
         'villagePrice',
         'uploadCS_status',
         'allowNumber',
-        'allowNumberBack',
+        'backToSeller',
         'allowNumberDup',
         'allowNewOrder',
         'messageStatus',
