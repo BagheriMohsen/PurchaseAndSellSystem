@@ -1201,7 +1201,7 @@ $(document).ready(function(){
             orderNumbers.push(orderId);
         });
         console.log(orderNumbers);
-        if(!orderNumbers.length){
+        if(false){
             alert('سفارشی انتخاب نشده است');
         }else{
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
