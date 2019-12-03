@@ -40,6 +40,8 @@
                 width="100%">
                     <thead>
                     <tr>
+                    <th></th>
+                      <th>شماره<br> سفارش</th>
                       <th>نام خریدار</th>
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
@@ -53,6 +55,8 @@
                     <tbody>
                     {% for order in orders %}
                       <tr>
+                      <td></td>
+                        <td>{{order.id}}</td>
                         <td>{{order.fullName}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
@@ -96,6 +100,17 @@
           </div>
 
       <div class="row">
+        <div class="col-6">
+          {# <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManager"> 
+              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  برگشت به مدیر پیگیری
+                </strong>
+              </button>
+              <input name="status" type="hidden"  value="8" />
+            </form> #}
+        </div>
+          
         <div class="col-6">
           <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
               <strong class="h6">
