@@ -92,7 +92,7 @@
       <div class="col-6">
           {% set user = auth_user() %}
           {% if user.backToSeller is not null %}
-            <form action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
+            <form form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm">
               <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   برگشت به فروشنده 
@@ -108,7 +108,7 @@
                 </strong>
               </button>
           {% endif %}
-           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm" >
+           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm" >
               <input type="hidden" name="_token" value="{{csrf_token()}}" />
               <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
