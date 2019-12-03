@@ -41,6 +41,7 @@
                     <thead>
                     <tr>
                       <th></th>
+                      <th>شماره سفارش</th>
                       <th>نام خریدار</th>
                       <th>استان-شهر</th>
                       <th>همراه-ثابت</th>
@@ -54,7 +55,8 @@
                     <tbody>
                     {% for order in orders %}
                       <tr>
-                       <td> </td>
+                        <td></td>
+                        <td>{{order.id}}</td>
                         <td>{{order.fullName}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
@@ -108,13 +110,14 @@
                 </strong>
               </button>
           {% endif %}
-           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm" >
+           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" id="notAbleToSendForm" >
               <input type="hidden" name="_token" value="{{csrf_token()}}" />
               <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   غیر قابل ارسال 
                 </strong>
               </button>
+              <input type="hidden" name="status" value="9" />
           </form>
           <form class="" action="" method="post" id="">
               <button class="col-sm-6  btn btn-mdb-color btn-sm mx-auto" type="submit" name="button">

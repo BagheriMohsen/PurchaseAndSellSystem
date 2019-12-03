@@ -111,7 +111,7 @@
                 </strong>
               </button>
           {% endif %}
-           <form class="mt-4" action="" method="post" id="notAbleToSendForm">
+           <form class="mt-4" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="notAbleToSendForm">
               <button class="col-sm-6 btn btn-blue-grey  btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   غیر قابل ارسال 
