@@ -94,7 +94,7 @@
       <div class="col-6">
           {% set user = auth_user() %}
           {% if user.backToSeller is not null %}
-            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="backToSellerForm">
               <input type="hidden" name="_token" value="{{csrf_token()}}" />
               <button class="col-sm-6  btn btn-info btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
@@ -117,6 +117,8 @@
                   غیر قابل ارسال 
                 </strong>
               </button>
+              <input type="hidden" name="status" value="9" />
+
           </form>
           <form class="" action="" method="post" id="">
               <button class="col-sm-6  btn btn-mdb-color btn-sm mx-auto" type="submit" name="button">
