@@ -106,15 +106,7 @@ $(document).ready(function(){
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
 
-    // Order and Product section tables
-    // $('#productTable').DataTable({
-    //     buttons: [
-    //        'print'
-    //     ]
-    // });
-    // $('#sellerNoActionTable').DataTable({
-    //     "language": persianDataTable
-    // });
+   // Setup tables section
     var orderTable = $('#orderTable').DataTable({
         "language": persianDataTable,
         columnDefs: [ {
@@ -175,7 +167,10 @@ $(document).ready(function(){
             ]
           }
     });
-    
+    // Other section tabless
+    $('#cityTable,#stateTable').DataTable({
+        "language": persianDataTable
+    });
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
         "language": persianDataTable

@@ -18,7 +18,127 @@
 
 {% block content %}
 
-
+<div class="row">
+  <div class="card col-sm-12">
+    <div class="card-body col-12 mx-auto">
+      <form method="post" action="#" class="row">
+        <div class="col-sm-6 px-4">
+          <div class="form-row">
+             <div class="form-group col-12 px-4">
+              <label for="case">وضعیت</label>
+              <select id="case" class="form-control" name="case">
+                <option selected>همه ی وضعیت ها</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-6 px-4">
+              <label for="seller">فروشنده</label>
+              <select id="seller" class="form-control" name="seller">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-6 px-4">
+              <label for="callcenter">کالسنتر</label>
+              <select id="callcenter" class="form-control" name="callcenter">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-6 px-4">
+              <label for="follow_manager">مدیر پیگیری</label>
+              <select id="follow_manager" class="form-control" name="follow_manager">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-6 px-4">
+              <label for="agent">نماینده</label>
+              <select id="agent" class="form-control" name="agent">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 px-4">
+          <div class="form-row">
+            <div class="form-group col-sm-12 px-4">
+              <label for="name">نام</label>
+              <input type="text" class="form-control" id="name" name="name">
+            </div>
+            <div class="form-group col-sm-6 px-4">
+              <label for="telephone">شماره تلفن</label>
+              <input type="text" class="form-control" id="telephone" name="telephone">
+            </div>
+            <div class="form-group col-sm-6 px-4">
+              <label for="mobile">شماره موبایل</label>
+              <input type="text" class="form-control" id="mobile" name="mobile">
+            </div>
+            <div class="form-group col-sm-12 px-4">
+              <label for="address">آدرس</label>
+              <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <div class="form-group col-sm-6 px-4">
+              <label for="postal_code">کد پستی</label>
+              <input type="text" class="form-control" id="postal_code" name="postal_code">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 px-4">
+          <div class="form-row">
+            <div class="form-group col-6 px-4">
+              <label for="product">محصولات</label>
+              <select id="product" class="form-control" name="product">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="state">استان</label>
+              <select id="state" class="form-control" name="state">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="city">شهر</label>
+              <select id="city" class="form-control" name="city">
+                <option selected>همه</option>
+                <option></option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 px-4">
+          <div class="form-row ">
+            <div class="form-group col-3 px-4">
+              <label for="from_register">از تاریخ ثبت</label>
+              <input type="text" name="from_register" class="persianDatePicker"></input>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="to_register_date">تا تاریخ ثبت</label>
+              <input type="text" name="to_register_date" class="form-control persianDatePicker"></input>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="from_deliver_date">از تاریخ تحویل</label>
+              <input type="text" name="from_register_date" class="form-control persianDatePicker"></input>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="to_deliver_date">تا تاریخ تحویل</label>
+              <input type="text" name="to_deliver_date" class="form-control persianDatePicker"></input>
+            </div>
+            <div class="form-group col-3 px-4">
+              <label for="excel_export">گرفتن خروجی اکسل</label>
+              <input type="checkbox" name="excel_export" class="form-control"></input>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">جستجو</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 
