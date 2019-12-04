@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserInventory extends Model
 {
+    protected $table = 'users_inventory';
     protected $fillable = [
         'seller_id',
         'agent_id',

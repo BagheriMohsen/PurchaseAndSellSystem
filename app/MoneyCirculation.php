@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MoneyCirculation extends Model
 {
+    protected $table = 'money_circulations';
     protected $fillable =[
         'user_inventory_id',
         'agent_id',
