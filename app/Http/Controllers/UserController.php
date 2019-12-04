@@ -156,11 +156,11 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
       $user = User::findOrFail($id);
-      if(isset($request->username)){
-          $username = $request->username;
-      }else{
-          $username = $user->username;
-      }
+    //   if(isset($request->username)){
+    //       $username = $request->username;
+    //   }else{
+    //       $username = $user->username;
+    //   }
      
 
         
@@ -168,14 +168,14 @@ class UserController extends Controller
        'name'               =>  $request->name,
        'family'             =>  $request->family,
        'sex'                =>  $request->sex,
-       'username'           =>  $username,
-       'password'           =>  Hash::make($request->password),
+    //    'username'           =>  $username,
+    //    'password'           =>  Hash::make($request->password),
        'mobile'             =>  $request->mobile,
        'status'             =>  $request->status,
        'state_id'           =>  $request->state,
        'city_id'            =>  $request->city,
        'address'            =>  $request->address,
-       'uploadCS'           =>  $user->uploadCS,
+    //    'uploadCS'           =>  $user->uploadCS,
        'level'              =>  $request->level,
        'sendAuto'           =>  $request->sendAuto,
        'backToWareHouse'    =>  $request->backToWareHouse,

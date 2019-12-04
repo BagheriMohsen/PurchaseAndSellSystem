@@ -189,4 +189,14 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
 
 
     });
+
+    /*
+|--------------------------------------------------------------------------
+| Search Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(){
+      /* Admin */
+      Route::get('AdminAdvancedSearchPage','SearchController@AdminAdvancedSearchPage')->name('AdminAdvancedSearchPage');
+});
 Route::middleware('auth')->resource('warehouses','WarehouseController');
