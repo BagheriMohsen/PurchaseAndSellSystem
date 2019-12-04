@@ -17,7 +17,66 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="row">
+  <div class="card col-sm-12">
+    <div class="card-body col-12 mx-auto">
+      <table  class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>تاریخ</th>
+            <th>جمع پیش پرداخت </th>
+            <th>جمع پیش واریزی</th>
+            <th>جمع مشارکت </th>
+            <th> مبلغ جایزه  </th>
+            <th>پرداختی</th>
+            <th>کد پیگیری </th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+          <tr>
+            <td></td>
+            <td>{{order.id}}</td>
+            <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+            <td>{{'-'}}</td>
+            <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+            <td>{{order.postalCode}}</td>
+            <td>{{order.fullName}}</td>
+            <td>{{order.mobile}}<br>{{order.telephone}}</td>
+            {% if order.paymentMethod == 'cash' %}
+              <td>{{'نقدی'}}</td>
+            {% else %}
+              <td>{{'غیر نقدی'}}</td>
+            {% endif %}
+            <td>{{''}}</td>
+            <td>
+              <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                <sub class="text-dark">
+                  {{order.products.count()}}
+                </sub>
+                <i class="fas fa-shopping-basket crud-icon"></i>
+              </a>
+              <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+              target="_blank">
+                <i class="fa fa-book crud-icon"></i>
+              </a>
+              <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
+                  <i class="fa fa-cogs crud-icon"></i>
+              </a>
+              {# <a  title="ویرایش" class="text-warning mx-auto"
+                href="#">
+                <i class="far fa-edit crud-icon"></i>
+              </a> #}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 
