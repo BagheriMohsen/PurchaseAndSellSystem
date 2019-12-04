@@ -18,7 +18,162 @@
 
 {% block content %}
 
+<div class="row">
+  <div class="card col-sm-12">
+    <div class="card-body col-12 mx-auto">
+      <div class="col-12">
+        <button class="btn btn-info" type="button" data-toggle="modal" href="#pay">
+          <strong class="">
+          ثبت پرداخت
+          </strong>
+        </button>
+        <form class="" action="" method="post" id=""> 
+          <button class="btn btn-default" type="submit" data-toggle="modal" href="#">
+            <strong class="">
+          افزودن به لیست پیش سفارشات
+            </strong>
+          </button>
+        </form>
+        
+      </div>
+      <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th></th>
+            <th>شماره<br> سفارش</th>
+            <th>تاریخ ثبت</th>
+            <th>تاریخ تخصیص</th>
+            <th>استان-شهر</th>
+            <th>کد پستی</th>
+            <th>نام خریدار</th>
+            <th>همراه-ثابت</th>
+            <th>نوع پرداخت</th>
+            <th>کالسنتر</th>
+            <th>عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+          <tr>
+            <td></td>
+            <td>{{order.id}}</td>
+            <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+            <td>{{'-'}}</td>
+            <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+            <td>{{order.postalCode}}</td>
+            <td>{{order.fullName}}</td>
+            <td>{{order.mobile}}<br>{{order.telephone}}</td>
+            {% if order.paymentMethod == 'cash' %}
+              <td>{{'نقدی'}}</td>
+            {% else %}
+              <td>{{'غیر نقدی'}}</td>
+            {% endif %}
+            <td>{{''}}</td>
+            <td>
+              <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                <sub class="text-dark">
+                  {{order.products.count()}}
+                </sub>
+                <i class="fas fa-shopping-basket crud-icon"></i>
+              </a>
+              <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+              target="_blank">
+                <i class="fa fa-book crud-icon"></i>
+              </a>
+              <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
+                  <i class="fa fa-cogs crud-icon"></i>
+              </a>
+              {# <a  title="ویرایش" class="text-warning mx-auto"
+                href="#">
+                <i class="far fa-edit crud-icon"></i>
+              </a> #}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
+
+<!-- Pay orders modal -->
+<div class="modal fade" id="pay">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-info space-content-between flex-row-reverse p-2">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <span class="p-1">پرداخت سفارش</span>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container">
+         <form class="row label-light" method="post" id="payOrders">
+          <div class="col-sm-6 mt-3">
+            <label for="mobile">مبلغ-تومان
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="bill" value="" required>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="date">تاریخ
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control persianDatePicker" type="text" name="date" value="" required autocomplete="off">
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="tracingCode">کد (کد پیگیری-شماره مرجع-شماره بازاریابی-شماره سند-شماره پیگیری پایا)
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="tracingCode" value="" required>
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="bankAccount">شماره حساب
+              <span class="text-danger">*</span>
+            </label>
+            <select id="state" class="form-control"  name="bankAccount" required>
+              <option value="{{null}}">انتخاب کنید</option>
+            </select>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <input class=" bg-sec" type="radio"  name="paymentMethod" value="card" checked>
+            <label for="paymentMethod">ثبت فیش
+            </label>
+            <br />
+            <input class=" bg-sec" type="radio" name="paymentMethod" value="online" >
+            <label for="paymentMethod">آنلاین
+            </label>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="image">تصویر محصول</label>
+            <input value="" class="form-control border-0" type="file" placeholder="" name="image">
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="billDesc">توضیحات
+              <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" type="text"  name="billDesc" value="" ></textarea>
+          </div>
+          <div class="col-12 mt-3 text-center">
+           <button class="btn btn-primary" type="submit" name="button">
+              <strong class="">
+                ثبت پرداخت
+              </strong>
+            </button>
+          </div>
+          
+        </form>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block footer %}
