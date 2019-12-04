@@ -152,6 +152,38 @@ class User extends Authenticatable implements HasMedia,BannableContract
     public function tariffs(){
       return $this->hasMany('App\SpecialTariff');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation - agent
+    |--------------------------------------------------------------------------
+    */
+    public function agentMoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation - seller
+    |--------------------------------------------------------------------------
+    */
+    public function sellerMoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation','seller_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with UserInventory - agent
+    |--------------------------------------------------------------------------
+    */
+    public function agentInventories(){
+        return $this->hasMany('App\UserInventory','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with UserInventory - seller
+    |--------------------------------------------------------------------------
+    */
+    public function sellerInventories(){
+        return $this->hasMany('App\UserInventory','seller_id','id');
+    }
 
     /*
     |--------------------------------------------------------------------------
