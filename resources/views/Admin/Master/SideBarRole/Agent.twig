@@ -104,3 +104,57 @@
     </ul>
 </li>
 {#  orders #}
+{#  user-inventory #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-calculator"></i>
+    <p>
+        امور مالی
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentCurrentBills')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>صورت حساب جاری</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentPaymentOrders')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>پرداخت سفارشات</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentPrePaymentList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>لیست پیش پرداخت ها</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentPaymentList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>لیست پرداخت ها</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentCostsList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>لیست هزینه ها</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentPaybackList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>لیست عودت وجه</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{url('/user-inventory/AgentpaymentSettlement')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>تسویه حساب ها</p>
+            </a>
+        </li>
+    </ul>
+</li>
+{#  user-inventory #}

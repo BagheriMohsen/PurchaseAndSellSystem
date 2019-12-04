@@ -4,34 +4,6 @@
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
-Route::get('/order-test/{name}',function($name){
-
-    //Find City
-    $city = 'App\City'::where('name',$name)->first();
-    
-    // Find Agent In This City if agent send auto is not null
-    $userSendAuto = 'App\User'::where([
-    ['city_id','=',$city->id],
-    ['sendAuto','!=',Null]
-    ])->first();
-
-    // if find agent send auto not null
-    if($userSendAuto != null){
-
-        $agent_id = $userSendAuto->id;
-        $followUpManager_id = null;
-    }else{
-        $agent_id = null;
-        $followUpManager_id = $city->followUpManager;
-        if($followUpManager_id == null){
-          $user = 'App\User'::role('followUpManager')->first();
-          $followUpManager_id = $user->id;
-        }
-    }
-    echo 'agent:'.$agent_id;
-    echo '<br/>';
-    echo 'followUpManager:'.$followUpManager_id;
-});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
@@ -198,5 +170,23 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
 Route::group(['middleware'=>'auth','prefix'=>'warehouses','as'=>'warehouses.'],function(){
     Route::get('{slug}','WarehouseController@inout')->name('inout');
 });
+/*
+|--------------------------------------------------------------------------
+| Money Circulation Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInventory.'],function(){
+      /* Agent */
+      Route::get('AgentCurrentBills','MoneyCirculationController@AgentCurrentBills')->name('AgentCurrentBills');
+      Route::get('AgentPaymentOrders','MoneyCirculationController@AgentPaymentOrders')->name('AgentPaymentOrders');
+      Route::get('AgentPrePaymentList','MoneyCirculationController@AgentPrePaymentList')->name('AgentPrePaymentList');
+      Route::get('AgentPaymentList','MoneyCirculationController@AgentPaymentList')->name('AgentPaymentList');
+      Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
+      Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
+      Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');
 
+
+
+
+    });
 Route::middleware('auth')->resource('warehouses','WarehouseController');

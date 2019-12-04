@@ -98,47 +98,7 @@ class CreateOrdersTable extends Migration
             
 
         });
-        /*
-        |--------------------------------------------------------------------------
-        | seller Porsant order
-        |--------------------------------------------------------------------------
-        |*/
-        Schema::create('seller_porsant', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('order_id')->unsigned();
-            $table->bigInteger('seller_id')->unsigned();
-            $table->Integer('amount')->nullable();
-            $table->timestamps();
-
-            $table->foreign('order_id')->references('id')->on('orders')
-            ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->foreign('seller_id')->references('id')->on('users')
-            ->onUpdate('cascade')->onDelete('cascade');
-        });
-        /*
-        |--------------------------------------------------------------------------
-        | agent paid order
-        |--------------------------------------------------------------------------
-        |*/
-        Schema::create('agent_pay', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('order_id')->unsigned();
-            $table->bigInteger('agent_id')->unsigned();
-            $table->string('code')->nullable();
-            $table->integer('amount')->nullable();
-            $table->string('confirm')->nullable();
-            $table->string('image')->nullable();
-            $table->text('description')->nullable();
-            $table->Date('payDate')->nullable();
-            $table->timestamps();
-
-            $table->foreign('order_id')->references('id')->on('orders')
-            ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->foreign('agent_id')->references('id')->on('users')
-            ->onUpdate('cascade')->onDelete('cascade');
-        });
+       
     }
 
     /**
