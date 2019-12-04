@@ -68,5 +68,13 @@ class MoneyCirculationController extends Controller
         return view('Admin.UserInventory.Agent.payment-settlement');
 
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Unverified Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentUnverifiedPayment(){
+        return view('Admin.UserInventory.Admin.unverified-payment');
+    }
 
 }

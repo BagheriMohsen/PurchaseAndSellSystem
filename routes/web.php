@@ -184,7 +184,8 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
       Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
       Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');
-
+      /* Admin */
+      Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
 
 
 

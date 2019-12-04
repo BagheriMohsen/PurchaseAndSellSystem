@@ -81,6 +81,25 @@
     </ul>
 </li>
 {# Users #}
+{#  user-inventory #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-calculator"></i>
+    <p>
+        امور مالی
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentUnverifiedPayment')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>پرداخت های تایید نشده نماینده</p>
+            </a>
+        </li>
+       
+    </ul>
+</li>
+{#  user-inventory #}
 {# Citites #}
 <li class="nav-item">
     <a href="{{route('states.index')}}" class="nav-link">
