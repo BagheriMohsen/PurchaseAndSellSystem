@@ -164,7 +164,7 @@
       </div>
 
       <!-- Modal body -->
-      <div class="modal-body text-center ">
+      <div class="modal-body text-center  ">
         <table  class="table pt-2 pb-2 text-center">
           <tbody>
             <tr class="text-center">
@@ -254,17 +254,7 @@
                   {% endfor %}
 
                 </td>
-                <td class="priceSum">{{ (item.product.price * item.count) - item.off }}</td>
-                  {# <td>
-                  <form  action="#" method="post" >
-                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
-                      <input type="hidden" name="_method" value="DELETE" />
-                      <input type="hidden" name="user_id" value="{{item.id}}">
-                      <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
-                      <i class="far fa-trash-alt crud-icon"></i>
-                    </a>
-                  </form>
-                </td> #}
+                <td class="row_total">{{ (item.product.price * item.count) - item.off }}</td>
               </tr>
 
             {% endfor %}
@@ -294,7 +284,7 @@
             {% endif %}
             <td>{{ order.cashPrice | number_format }}</td>
             <td>{{ order.chequePrice | number_format }}</td>
-            <td>{{ order.prePayment | number_format }}</td>
+            <td class="pre_payment">{{ order.prePayment | number_format }}</td>
           </tr>
           <tr class="text-center">
             <th>هزینه ارسال</th>
@@ -302,9 +292,9 @@
             <th>قابل پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
+            <td class="post_price">2000</td>
+            <td>0</td>
+            <td class="total"></td>
           </tr>
         </tbody>
         </table>
