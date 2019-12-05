@@ -1382,9 +1382,9 @@ $(document).ready(function(){
     if($('#visitors-chart').length){
         var userId = $('#userId').val();
         $.ajax({
-            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/'+ userId,
+            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/6',
             type:'Get',
-            success:function(response){
+            success:function(response){ 
                 console.log(response);
             }
         });
@@ -1423,6 +1423,35 @@ $(document).ready(function(){
             }
         });
     });
-    
+    // Invoice calculation in agent page
+    if($('.invoice_table').length){
+        var total_without_off = null;
+        var post_price = parseInt($('.post_price').html());
+        var pre_payment = parseInt($('.pre_payment').html());
+        post_price = post_price || 0;
+        pre_payment = pre_payment || 0;
+        $('.row_total').each(function(index,value){
+            total_without_off += parseInt(value.innerHTML);
+        });
+        console.log(total_without_off,post_price,pre_payment);
+        
+        $('.total').html( total_without_off - post_price - pre_payment);
+        
+    }
+    // Order_details modal calculation for agent,seller,etc..
+    if($('.orderDetail').length){
+        $('.orderDetail').each(function(index,value){
+            var total_without_off = null;
+            var post_price = parseInt($(this).find('.post_price').html());
+            var pre_payment = parseInt($(this).find('.pre_payment').html());
+            post_price = post_price || 0;
+            pre_payment = pre_payment || 0;
+            $(this).find('.row_total').each(function(index,value){
+                total_without_off += parseInt(value.innerHTML);
+            });
+            $(this).find('.total').html( total_without_off - post_price - pre_payment);
+        });
+     
+    }
 });
 

@@ -12,7 +12,7 @@
     <div class="container-fluid invoiceWrapper mx-auto">
         <div class="row">
             <div class="col-12 mt-4">
-              <table class="table table-bordered">
+              <table class="table table-bordered invoice_table">
                 <tbody>
                   <tr>
                     <td class="text-center" rowspan="3"><p class="mt-4">
@@ -137,12 +137,20 @@
                         <td class="text-center">{{item.count}}</td>
                         <td class="text-right">{{item.product.price}}</td>
                         <td class="text-right">{{item.off}}</td>
-                        <td class="text-right">{{item.product.price * item.count }}</td>
+                        <td class="row_total text-right">{{(item.product.price * item.count) - item.off }}</td>
                       </tr>
                       {% endfor %}
+                      <tr class="">
+                        <td colspan="5" class="text-center"><strong>هزینه ارسال</strong></td>
+                        <td class="post_price"></td>
+                      </tr>
+                      <tr class="">
+                        <td colspan="5" class="text-center"><strong>مبلغ پیش واریزی</strong></td>
+                        <td class="pre_payment">{{order.prePayment}}</td>
+                      </tr>
                       <tr class="bg-dark">
                         <td colspan="5" class="text-center"><strong>جمع کل</strong></td>
-                        <td class=" ">200000</td>
+                        <td class="total"></td>
                       </tr>
                     </tbody>
                   </table>
@@ -162,4 +170,5 @@
 
 </body>
 </html>
+ {% include 'Admin/Master/scripts' %}
 
