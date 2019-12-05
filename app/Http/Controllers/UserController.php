@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\User;
+use Carbon\Carbon;
 class UserController extends Controller
 {
     /**
@@ -439,45 +440,58 @@ class UserController extends Controller
     |*/
     public function AgentDashboardChartApi($userID){
         /* ############ Charts ############## */
-        $today = 'Carbon\Carbon'::now();
+        $today      = 'Carbon\Carbon'::now();
+        $yesterday  = 'Carbon\Carbon'::now()->subDays(1);
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
-        //Collected Charts  
-        $collectedCharts = 'App\Order'::where([
-            ['status','=',13],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])->get('updated_at');
-        $collectedCharts = $collectedCharts->toArray();
-        // Cancelled Charts
-        $cancelledCharts = 'App\Order'::where([
-            ['status','=',14],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])->get('updated_at');
-        $cancelledCharts = $cancelledCharts->toArray();
-        // Subsended Charts
-        $subsendedCharts = 'App\Order'::where([
-            ['status','=',1],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])
-        ->orWhere([
-            ['status','=',15],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo]
+        $days = $ThirtyDaysAgo->diffInDays($today);
+     
+        $charts = array();
+        for($i=0;$i <= $days ;$days--){
+            
+            //Collected Charts  
+            $collectedCharts = 'App\Order'::where([
+                ['status','=',13],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])->get('updated_at');
+            $collectedCharts = $collectedCharts->toArray();
+           
+            // Cancelled Charts
+            $cancelledCharts = 'App\Order'::where([
+                ['status','=',14],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])->get('updated_at');
+            $cancelledCharts = $cancelledCharts->toArray();
+            // Subsended Charts
+            $subsendedCharts = 'App\Order'::where([
+                ['status','=',1],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
             ])
-        ->get('updated_at');
-        $subsendedCharts = $subsendedCharts->toArray();
-        
-        return Response()->json(array(
-            'subsendedCharts'=>$subsendedCharts,
-            'cancelledCharts'=>$cancelledCharts,
-            'collectedCharts'=>$collectedCharts
-        ),200,[],JSON_UNESCAPED_UNICODE);
+            ->orWhere([
+                ['status','=',15],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+                ])
+            ->get('updated_at');
+            $subsendedCharts = $subsendedCharts->toArray();
+            $charts[] =[
+                'Date' => $today->toDateString(),
+                'subsended'   =>  count($subsendedCharts),
+                'cancelled'   =>  count($cancelledCharts),
+                'collected'   =>  count($collectedCharts)
+            ]; 
+         
+            $today->addDays(1);
+            $yesterday->addDays(1);
+        }
+       
+        return Response()->json([$charts],200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
