@@ -1453,5 +1453,25 @@ $(document).ready(function(){
         });
      
     }
+    // Togge allowNewOrder in callcenter users list
+    $('#callcenterTable input[name="allowNewOrder"]').on('change',function(){
+        var allowNewOrder = $(this). is(":checked");
+        if(allowNewOrder == true){
+            allowNewOrder =  'on';
+        }else{
+            allowNewOrder = null;
+        }
+        var user_id = $('#user_id').val();
+        $.ajax({
+            url:'http://localhost:8000/users/callCenterAddNewOrderChange/'+ user_id,
+            type:'get',
+            data: {
+                allowNewOrder: allowNewOrder
+            },
+            success:function(response){
+                toastr["success"](response);
+            }
+        });
+    });
 });
 

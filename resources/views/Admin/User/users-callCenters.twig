@@ -54,14 +54,14 @@
                         {% endif %}
                       </td>
                       <td>
-                        {# ارسال پیامک #}
+                        {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
 
                           <div class="ckbx-style-11">
                               <input {% if user.allowNewOrder is not null %} checked {% endif %} type="checkbox" id="ckbx-style-12-1" value="active" name="allowNewOrder">
                               <label for="ckbx-style-12-1"></label>
                           </div>
 
-                        {# ارسال پیامک #}
+                        {# امکان وارد کردن سفارش از ثبت سفارش جدید #}
                       </td>
                       <td>
                         {% if user.allowNumber is null %}
@@ -87,7 +87,7 @@
 
                       <td class="d-flex justify-content-between">
 
-                        <a class="mx-auto" title="اطلاعات اکانت" href="{{route('users.public.edit',user.id )}}" >
+                        <a class="" title="اطلاعات اکانت" href="{{route('users.public.edit',user.id )}}" >
                             <i class="far fa-user crud-icon text-primary"></i>
                         </a>
                         <a  title="ویرایش" class="text-warning "
@@ -183,6 +183,7 @@
           <form action="{{route('users.uploadCS_status',user.id)}}">
             <input type="hidden" name="_token" value="{{csrf_token()}}"  />
             <input type="hidden" name="status" value="{{'apply'}}" />
+            <input type="hidden" value="{{user.id}}" id="user_id"></input>
             <button class="btn btn-info btn-sm"  >
               <strong class="text-dark h6">
                 تایید مدارک
