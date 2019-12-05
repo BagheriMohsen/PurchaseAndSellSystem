@@ -550,6 +550,18 @@ class UserController extends Controller
         $state->update(['followUpManager'=>null]);
         return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان از لیست این مدیر پیگیری خارج شد');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Call Center Add New Order Change
+    |--------------------------------------------------------------------------
+    |*/
+    public function callCenterAddNewOrderChange(Request $request,$id){
+
+        $user = 'App\User'::findOrFail($id);
+        $user->update(['allowNewOrder'=>$request->allowNewOrder]);
+        return Response()->json('با موفقیت ثبت سفارش تغییر کرد',
+        200,[],JSON_UNESCAPED_UNICODE);
+    }
 
 
 }

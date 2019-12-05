@@ -40,7 +40,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
     Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
-
+    /* CallCenter */
+    Route::get('callCenterAddNewOrderChange/{id}','UserController@callCenterAddNewOrderChange')->name('callCenterAddNewOrderChange');
   });
 
 Route::middleware('auth')->resource('users','UserController');
