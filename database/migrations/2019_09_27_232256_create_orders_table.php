@@ -45,6 +45,9 @@ class CreateOrdersTable extends Migration
             $table->Date('HBD_Date')->nullable();
             $table->Date('returnDate')->nullable();
             $table->string('instant')->default('IsNot');
+            $table->string('isPaid',10)->default('No');
+            $table->boolean('PaidConfirm')->default(0);
+            $table->Date('payDate')->nullable();
             $table->text('address')->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();

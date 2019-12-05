@@ -75,13 +75,13 @@ class CreateUsersTable extends Migration
             $table->string('allowNewOrder')->nullable();
             $table->string('messageStatus')->nullable();
             $table->string('determinPercent')->nullable();
-            $table->string('porsantType')->nullable();
+            $table->integer('porsantType')->nullable();
             $table->string('forceOrder')->nullable();
-            $table->integer('porsantSeller')->nullable();
+            $table->integer('porsantSeller')->default(0);
             $table->integer('percent')->nullable();
-            $table->integer('locallyPrice')->nullable();
-            $table->integer('internalPrice')->nullable();
-            $table->integer('villagePrice')->nullable();
+            $table->integer('locallyPrice')->default(0);
+            $table->integer('internalPrice')->default(0);
+            $table->integer('villagePrice')->default(0);
             $table->integer('gift')->default(0);
             $table->timestamps();
 

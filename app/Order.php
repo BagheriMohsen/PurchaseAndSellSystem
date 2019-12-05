@@ -32,7 +32,10 @@ class Order extends Model
     'addressConfirm',
     'HBD_Date',
     'trackingCode',
-    'transport_id'
+    'transport_id',
+    'isPaid',
+    'PaidConfirm',
+    'payDate'
    ];
     /*
     |--------------------------------------------------------------------------
@@ -81,6 +84,14 @@ class Order extends Model
     */
     public function agent(){
         return $this->belongsTo('App\User','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation Model 
+    |--------------------------------------------------------------------------
+    |*/
+    public function MoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation');
     }
 
 }

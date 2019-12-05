@@ -12,6 +12,7 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCurrentBills(){
+        
         return view('Admin.UserInventory.Agent.current-bills');
     }
     /*
@@ -20,7 +21,20 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentOrders(){
-        return view('Admin.UserInventory.Agent.payment-orders');
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = 'App\Order'::where([
+            ['agent_id','=',$user->id],
+            ['status','=',10]
+        ])
+        ->orWhere([
+            ['agent_id','=',$user->id],
+            ['status','=',11]
+        ])
+        ->orWhere([
+            ['agent_id','=',$user->id],
+            ['status','=',12]
+        ])->latest()->paginate(10);
+        return view('Admin.UserInventory.Agent.payment-orders',compact('orders'));
 
     }
     /*

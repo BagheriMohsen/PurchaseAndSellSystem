@@ -12,14 +12,13 @@ class MoneyCirculation extends Model
         'agent_id',
         'seller_id',
         'order_status_id',
+        'order_product_id',
         'order_id',
         'amount',
         'sharedSpecialAmount',
-        'paymentStatus',
-        'adminConfirm',
         'code',
         'trackingCode',
-        'payDate'
+       
     ];
     /*
     |--------------------------------------------------------------------------
@@ -52,6 +51,14 @@ class MoneyCirculation extends Model
     |*/
     public function status(){
         return $this->belongsTo('App\OrderStatus','order_status_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with Order Model 
+    |--------------------------------------------------------------------------
+    |*/
+    public function order(){
+        return $this->belongsTo('App\Order');
     }
 
 
