@@ -47,9 +47,9 @@
                       <td>{{storeRoom.description}}</td>
                       <td>{{storeRoom.number}}</td>
                       {% if auth_user().getRoleNames().first() == 'mainWarehouser' %}
-                      <td class="timestamp">{{storeRoom.created_at | date('Y-m-d') }}</td>
+                      <td class="justDate">{{storeRoom.created_at | date('Y-m-d') }}</td>
                       {% else %}
-                        <td class="timestamp">{{storeRoom.created_at | date('Y-m-d')}}</td>
+                        <td class="justDate">{{storeRoom.created_at | date('Y-m-d')}}</td>
                         <td class="justDate">{{storeRoom.in_date | date('Y-m-d')}}</td>
                       {% endif %}
                       {% set price = storeRoom.product.price * storeRoom.number %}

@@ -467,7 +467,7 @@ class UserController extends Controller
             $cancelledCharts = $cancelledCharts->toArray();
             // Subsended Charts
             $subsendedCharts = 'App\Order'::where([
-                ['status','=',1],
+                ['status','=',7],
                 ['agent_id','=',$userID],
                 ['updated_at','<=',$today],
                 ['updated_at','>=',$yesterday]

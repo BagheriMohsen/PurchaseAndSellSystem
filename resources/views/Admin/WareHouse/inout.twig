@@ -99,8 +99,8 @@
                     {{'توضیحات ندارد'}}
                 {% endif %}
             </td>
-            <td>{{storeRoom.created_at|date('Y-m-d')}}</td>
-            <td>{{storeRoom.out_date}}</td>
+            <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
+            <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
         </tr>
         {% endfor %}
     </tbody>

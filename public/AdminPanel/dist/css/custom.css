@@ -116,3 +116,6 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 .rounded-pill{
     border-radius: 7px;
 }
+.sidebar{
+    height: calc(100%);
+}
