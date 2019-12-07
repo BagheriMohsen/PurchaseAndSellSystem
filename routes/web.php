@@ -33,6 +33,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
     /* Admin Dashboard */
     Route::get('Admin-Dashboard','UserController@AdminDashboard')->name('AdminDashboard');
+    Route::get('Admin-Dashboard-Chart-API','UserController@AdminDashboardChartApi')->name('AdminDashboardChartApi');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
     Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
@@ -185,14 +186,19 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
       Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
       Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');
+      Route::post('cartStore','MoneyCirculationController@cartStore')->name('cartStore');
+      Route::get('cartSetDefaultStore/{id}','MoneyCirculationController@cartSetDefault')->name('cartSetDefault');
+      Route::get('cartDelete/{id}','MoneyCirculationController@cartDelete')->name('cartDelete');
+
+
       /* Admin */
       Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
-
+      
 
 
     });
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | Search Routes
 |--------------------------------------------------------------------------
@@ -200,5 +206,8 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
 Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(){
       /* Admin */
       Route::get('AdminAdvancedSearchPage','SearchController@AdminAdvancedSearchPage')->name('AdminAdvancedSearchPage');
+      Route::post('AdminAdvancedSearch','SearchController@AdminAdvancedSearch')->name('AdminAdvancedSearch');
 });
+
+
 Route::middleware('auth')->resource('warehouses','WarehouseController');

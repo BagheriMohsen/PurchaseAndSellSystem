@@ -86,7 +86,44 @@ class AppServiceProvider extends ServiceProvider
             if(auth()->check()){
                 // find user detail
                 $sellers       = 'App\User'::Role('seller')->get();
-                $view ->with(compact('sellers'));
+                $sellerRegisters = array();
+                $today = 'Carbon\Carbon'::now();
+                $yesterday = 'Carbon\Carbon'::now()->subDays(1);
+                foreach($sellers as $seller){
+                    $name = $seller->name.' '.$seller->family;
+                    $register = 'App\Order'::where([
+                        ['seller_id','=',$seller->id],
+                        ['created_at','<',$today],
+                        ['created_at','>',$yesterday]
+                    ])->get();
+
+                    $collected = 'App\Order'::where([
+                        ['seller_id','=',$seller->id],
+                        ['status','=',10],
+                        ['created_at','<',$today],
+                        ['created_at','>',$yesterday]
+                    ])
+                    ->orWhere([
+                        ['seller_id','=',$seller->id],
+                        ['status','=',11],
+                        ['created_at','<',$today],
+                        ['created_at','>',$yesterday]
+                    ])
+                    ->orWhere([
+                        ['seller_id','=',$seller->id],
+                        ['status','=',12],
+                        ['created_at','<',$today],
+                        ['created_at','>',$yesterday]
+                    ])
+                    ->get();
+
+                    $sellerRegisters[] = [
+                        'Name'          =>  $name,
+                        'Registercount' =>  $register->count(),
+                        'Collected'     =>  $collected->count()
+                    ];
+                }
+                $view ->with(compact('sellerRegisters'));
             }
         });
 

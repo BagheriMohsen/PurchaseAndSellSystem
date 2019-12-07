@@ -589,7 +589,9 @@ class OrderController extends Controller
         // }else{
         //     $agents = null; 
         // }
-        $agents = User::Role('agent')->latest()->get();
+        $agents = 'App\User'::where([
+            ['status','=','on']
+        ])->Role('agent')->latest()->get();
         /*## Agent ## */
         $orders = Order::where([
             ['followUpManager_id','=',$user->id],
@@ -643,7 +645,9 @@ class OrderController extends Controller
         // }else{
         //     $agents = null; 
         // }
-        $agents = User::Role('agent')->latest()->get();
+        $agents = 'App\User'::where([
+            ['status','=','on']
+        ])->Role('agent')->latest()->get();
         /*####### Agent ####### */
 
         $orders = Order::where([

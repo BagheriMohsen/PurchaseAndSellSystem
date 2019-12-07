@@ -21,7 +21,9 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentOrders(){
+        
         $user = 'App\User'::findOrFail(auth()->user()->id);
+        $carts = 'App\BankAccount'::where('user_id',$user->id)->latest()->get();
         $orders = 'App\Order'::where([
             ['agent_id','=',$user->id],
             ['status','=',10]
@@ -34,7 +36,7 @@ class MoneyCirculationController extends Controller
             ['agent_id','=',$user->id],
             ['status','=',12]
         ])->latest()->paginate(10);
-        return view('Admin.UserInventory.Agent.payment-orders',compact('orders'));
+        return view('Admin.UserInventory.Agent.payment-orders',compact('orders','carts'));
 
     }
     /*
@@ -89,6 +91,48 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentUnverifiedPayment(){
         return view('Admin.UserInventory.Admin.unverified-payment');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Cart Store
+    |--------------------------------------------------------------------------
+    |*/
+    public function cartStore(Request $request){
+        
+        'App\BankAccount'::create([
+            'name'          =>  $request->name,
+            'user_id'       =>  auth()->user()->id,
+            'cartNumber'    =>  $request->cartNumber,
+            'shabaNumber'   =>  $request->shabaNumber,
+        ]);
+
+        return redirect()->back()->with('message','شماره کارت شما با موفقیت ثبت شد');
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Cart set default
+    |--------------------------------------------------------------------------
+    |*/
+    public function cartSetDefault(Request $request,$id){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        'App\BankAccount'::where('user_id',$user->id)->update(['default'=>0]);
+
+        $cart = 'App\BankAccount'::findOrFail($id);
+        $cart->update(['default'=>1]);
+
+        return back()->with('message',' کارت مورد نظر به عنوان کارت پیش فرض انتخاب شد');
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Cart Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function cartDelete($id){
+
+        $cart = 'App\BankAccount'::destroy($id);
+        return back()->with('message','کارت مورد نظر از لیست حذف شد');
     }
 
 }

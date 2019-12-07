@@ -63,16 +63,52 @@ class CreateTableMoneyCirculations extends Migration
 
           
         });
-    }
+
+        Schema::create('bank_accounts', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('cartNumber',256);
+            $table->string('shabaNumber',512)->nullable();
+            $table->boolean('default')->default(0);
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+        });
+
+        Schema::create('payment_circulations', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('bank_account_id')->unsigned()->nullable();
+            $table->string('receiptImage')->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->integer('bill');
+            $table->Date('billDate');
+            $table->Date('confirmDate')->nullable();
+            $table->string('trackingCode',256);
+            $table->string('paymentMethod');
+            $table->text('billDesc')->nullable();
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('bank_account_id')->references('id')->on('bank_accounts')
+            ->onUpdate('cascade')->onDelete('set null');
+        });
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
+    }
     public function down()
     {
         Schema::dropIfExists('users_inventory');
         Schema::dropIfExists('money_circulations');
+        Schema::dropIfExists('bank_accounts');
+        Schema::dropIfExists('payment_circulations');
     }
 }

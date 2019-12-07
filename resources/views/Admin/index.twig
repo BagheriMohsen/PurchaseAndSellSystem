@@ -151,14 +151,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for topStoreRoom in TopStoreRooms %}
+      {% for product in topProduct %}
       <tr>
         <td class="d-flex">
             <div class="col-10 mx-auto">
-              {{topStoreRoom.product.name}}
+              {{product.name}}
             </div>
             <div class="col-2 mx-auto">
-              {{' '}}
+              {{product.count | number_format}}
             </div>
         </td>
       </tr>
@@ -177,16 +177,22 @@
       </tr>
     </thead>
     <tbody>
+      {% for DebtorAgent in DebtorAgents %}
       <tr>
         <td class="d-flex">
             <div class="col-9 mx-auto">
-              نماینده تهران
+              {{ DebtorAgent.agent.name }}
+              {{' '}}
+              {{ DebtorAgent.agent.family }}
+              {{'/'}}
+              {{ DebtorAgent.agent.city.name }}
             </div>
             <div class="col-3 mx-auto">
-                220,500
+                {{ DebtorAgent.balance | number_format }}
             </div>
         </td>
       </tr>
+      {% endfor %}
      
     </tbody>
   </table>
