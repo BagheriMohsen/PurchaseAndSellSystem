@@ -267,12 +267,29 @@ class UserController extends Controller
             ['out_date','<',$today],
             ['out_date','>',$yesterday]
         ])->latest()->skip(0)->take(5)->get();
+
         $TopStoreRooms =  'App\OrderProduct'::with('product')->select('product_id')
         ->groupBy('product_id')
         ->orderByRaw('COUNT(*) DESC')
         ->limit(5)
         ->get();
-       
+        $topProduct = array();
+
+        foreach($TopStoreRooms as $item){
+            $name = $item->product->name;
+            $count = 'App\OrderProduct'::where('product_id',$item->product_id)->sum('count');
+
+            $topProduct[]=[
+                'name'  =>  $name,
+                'count' =>  $count
+            ];
+        }
+        
+
+
+        $DebtorAgents = 'App\UserInventory'::where('agent_id','!=',null)
+        ->latest()->skip(0)->take(5)->get();
+         
         return view('Admin/index',compact(
             'OrderWaitingForDeliveryToday',
             'OrderWaitingForDeliveryInMonth',
@@ -281,7 +298,8 @@ class UserController extends Controller
             'OrderReturnedToday',
             'OrderReturnedInMonth',
             'storeRooms',
-            'TopStoreRooms'
+            'topProduct',
+            'DebtorAgents'
 
         ));
     }
