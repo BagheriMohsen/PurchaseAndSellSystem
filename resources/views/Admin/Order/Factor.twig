@@ -135,22 +135,22 @@
                         <td>#</td>
                         <td class="text-center">{{item.product.name}}</td>
                         <td class="text-center">{{item.count}}</td>
-                        <td class="text-right">{{item.product.price}}</td>
-                        <td class="text-right">{{item.off}}</td>
-                        <td class="row_total text-right">{{(item.product.price * item.count) - item.off }}</td>
+                        <td class="text-right number">{{item.product.price}}</td>
+                        <td class="text-right number">{{item.off}}</td>
+                        <td class="row_total text-right number">{{(item.product.price * item.count) - item.off }}</td>
                       </tr>
                       {% endfor %}
                       <tr class="">
-                        <td colspan="5" class="text-center"><strong>هزینه ارسال</strong></td>
-                        <td class="post_price"></td>
+                        <td colspan="5" class="text-center "><strong>هزینه ارسال</strong></td>
+                        <td class="post_price number"></td>
                       </tr>
                       <tr class="">
-                        <td colspan="5" class="text-center"><strong>مبلغ پیش واریزی</strong></td>
-                        <td class="pre_payment">{{order.prePayment}}</td>
+                        <td colspan="5" class="text-center "><strong>مبلغ پیش واریزی</strong></td>
+                        <td class="pre_payment number">{{order.prePayment}}</td>
                       </tr>
                       <tr class="bg-dark">
-                        <td colspan="5" class="text-center"><strong>جمع کل</strong></td>
-                        <td class="total"></td>
+                        <td colspan="5" class="text-center "><strong>جمع کل</strong></td>
+                        <td class="total number"></td>
                       </tr>
                     </tbody>
                   </table>
