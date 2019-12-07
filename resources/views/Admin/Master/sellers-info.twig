@@ -25,24 +25,34 @@
         <table class="table" id="sellerInfoTable">
           <thead>
             <tr>
-              <th scope="col ">
+              <th class="text-center" scope="col ">
                 <strong>
                   نام فروشنده
                 </strong>
               </th>
               
-              <th scope="col ">
+              <th class="text-center" scope="col ">
                 <strong>
-                  تعداد فروش امروز 
+                  ثبت شده 
                 </strong>
                </th>
+               <th class="text-center" scope="col ">
+                  <strong>
+                    تحویل داده شد 
+                  </strong>
+                </th>
             </tr>
           </thead>
           <tbody>
-          {% for seller in sellers %}
+          {% for seller in sellerRegisters %}
             <tr>
-              <td>{{seller.name}}{{' '}}{{seller.family}}</td>
-              <td>-</td>
+              <td class="text-center">{{seller.Name}}</td>
+              <td class="text-center">
+                {{seller.Registercount}}
+              </td>
+              <td class="text-center">
+                {{seller.Collected}}
+              </td>
             </tr>
           
           {% endfor %}
