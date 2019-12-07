@@ -1,25 +1,25 @@
 $(document).ready(function(){
 
-    pdfMake.fonts = {
-        Yekan: {
-          normal: 'Yekan.ttf',
-          bold: 'Yekan.ttf',
-          italics: 'Yekan.ttf',
-          bolditalics: 'Yekan.ttf'
-        },
-        Roboto: {
-            normal: 'Roboto-Regular.ttf',
-            bold: 'Roboto-Medium.ttf',
-            italics: 'Roboto-Italic.ttf',
-            bolditalics: 'Roboto-MediumItalic.ttf'
-        }
-     }
-     var docDefinition = {
-        defaultStyle: {
-          font: 'Yekan'
-        }
-      }
-      pdfMake.createPdf(docDefinition);
+    // pdfMake.fonts = {
+    //     Yekan: {
+    //       normal: 'Yekan.ttf',
+    //       bold: 'Yekan.ttf',
+    //       italics: 'Yekan.ttf',
+    //       bolditalics: 'Yekan.ttf'
+    //     },
+    //     Roboto: {
+    //         normal: 'Roboto-Regular.ttf',
+    //         bold: 'Roboto-Medium.ttf',
+    //         italics: 'Roboto-Italic.ttf',
+    //         bolditalics: 'Roboto-MediumItalic.ttf'
+    //     }
+    //  }
+    //  var docDefinition = {
+    //     defaultStyle: {
+    //       font: 'Yekan'
+    //     }
+    //   }
+    //   pdfMake.createPdf(docDefinition);
 
 
     var persianDataTable = {
@@ -145,13 +145,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
         "language": persianDataTable,
@@ -165,13 +165,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
         "language": persianDataTable,
@@ -185,13 +185,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     // Other section tabless
     $('#cityTable,#stateTable').DataTable({
@@ -643,7 +643,7 @@ $(document).ready(function(){
         var ctx = document.getElementById('agent_sell_chart').getContext('2d');
         window.myLine = new Chart(ctx, config);
     }
-    //Sell and orders Chart Setup for agents
+    /
     if(document.querySelector('#agent_sell_chart')){
         var chartData =[];
         var userId = $('#userId').val();
@@ -654,6 +654,18 @@ $(document).ready(function(){
                 chartData = response[0];
                 configureChart(chartData);
                 console.log(chartData);
+            }
+        });
+    };
+    //Sell and orders Chart Setup for admin
+    if(document.querySelector('#admin_sell_chart')){
+        var chartData =[];
+        $.ajax({
+            url:'http://localhost:8000/users/Admin-Dashboard-Chart-API',
+            type:'Get',
+            success:function(response){ 
+                // configureChart(chartData);
+                console.log(response);
             }
         });
     };
@@ -1427,21 +1439,21 @@ $(document).ready(function(){
     });
     
     $('#productTable').DataTable( {
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [2,3,4,5,6,7 ]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [2,3,4,5,6,7 ]
-                }
-            },
-        ]
+        // dom: 'lBfrtip',
+        // buttons: [
+        //     {
+        //         extend: 'excelHtml5',
+        //         exportOptions: {
+        //             columns: [2,3,4,5,6,7 ]
+        //         }
+        //     },
+        //     {
+        //         extend: 'pdfHtml5',
+        //         exportOptions: {
+        //             columns: [2,3,4,5,6,7 ]
+        //         }
+        //     },
+        // ]
     } );
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
@@ -1563,7 +1575,5 @@ $(document).ready(function(){
             }
         });
     });
-    // var element = document.getElementById('productTable');
-    // html2pdf(element);
 });
 
