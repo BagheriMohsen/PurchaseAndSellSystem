@@ -808,6 +808,7 @@ $(document).ready(function(){
         var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
+        var deliverDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
         var formData = {
             _token:CSRF_TOKEN,
@@ -827,6 +828,7 @@ $(document).ready(function(){
             chequePrice:chequePrice,
             instant:instant,
             sellerDescription:sellerDescription,
+            deliverDescription:deliverDescription,
             orderArray:orderArray
         }
         console.log(formData);
