@@ -21,42 +21,77 @@
 <div class="row">
   <div class="card col-sm-12">
     <div class="card-body col-12 mx-auto">
-      <form method="post" action="#" class="row">
+      <form method="post" action="{{route('search.AdminAdvancedSearch')}}" class="row">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <div class="col-sm-6 px-4">
           <div class="form-row">
              <div class="form-group col-12 px-4">
-              <label for="case">وضعیت</label>
-              <select id="case" class="form-control" name="case">
-                <option selected>همه ی وضعیت ها</option>
-                <option></option>
+              <label for="status">وضعیت</label>
+              <select id="order_status" class="form-control" name="status">
+                <option value="{{null}}" selected>همه ی وضعیت ها</option>
+                {% for status in statuses %}
+                  <option value="{{status.id}}">{{status.name}}</option>
+                {% endfor %}
               </select>
             </div>
             <div class="form-group col-6 px-4">
               <label for="seller">فروشنده</label>
               <select id="seller" class="form-control" name="seller">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for seller in sellers %}
+                  <option>
+                    {{ seller.name }}
+                    {{' '}}
+                    {{ seller.family }}
+                    {{'/'}}
+                    {{ seller.state.name }}{{'-'}}{{seller.city.name}}
+                  </option>
+                {% endfor %}
               </select>
             </div>
             <div class="form-group col-6 px-4">
               <label for="callcenter">کالسنتر</label>
               <select id="callcenter" class="form-control" name="callcenter">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for callCenter in callCenters %}
+                  <option>
+                    {{ callCenter.name }}
+                    {{' '}}
+                    {{ callCenter.family }}
+                    {{'/'}}
+                    {{ callCenter.state.name }}{{'-'}}{{callCenter.city.name}}
+                  </option>
+                {% endfor %}
               </select>
             </div>
             <div class="form-group col-6 px-4">
               <label for="follow_manager">مدیر پیگیری</label>
               <select id="follow_manager" class="form-control" name="follow_manager">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for followUpManager in followUpManagers %}
+                  <option value="{{null}}">
+                    {{ followUpManager.name }}
+                    {{' '}}
+                    {{ followUpManager.family }}
+                    {{'/'}}
+                    {{ followUpManager.state.name }}{{'-'}}{{followUpManager.city.name}}
+                  </option>
+                {% endfor %}
               </select>
             </div>
             <div class="form-group col-6 px-4">
               <label for="agent">نماینده</label>
               <select id="agent" class="form-control" name="agent">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for agent in agents %}
+                  <option>
+                    {{ agent.name }}
+                    {{' '}}
+                    {{ agent.family }}
+                    {{'/'}}
+                    {{ agent.state.name }}{{'-'}}{{agent.city.name}}
+                  </option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -64,7 +99,7 @@
         <div class="col-sm-6 px-4">
           <div class="form-row">
             <div class="form-group col-sm-12 px-4">
-              <label for="name">نام</label>
+              <label for="name">نام و نام خانوادگی</label>
               <input type="text" class="form-control" id="name" name="name">
             </div>
             <div class="form-group col-sm-6 px-4">
@@ -87,25 +122,31 @@
         </div>
         <div class="col-sm-12 px-4">
           <div class="form-row">
-            <div class="form-group col-6 px-4">
+            {# <div class="form-group col-6 px-4">
               <label for="product">محصولات</label>
               <select id="product" class="form-control" name="product">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for product in products %}
+                  <option>{{product.name}}</option>
+                {% endfor %}
               </select>
-            </div>
+            </div> #}
             <div class="form-group col-3 px-4">
               <label for="state">استان</label>
               <select id="state" class="form-control" name="state">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for state in states %}
+                  <option value="{{state.id}}">{{state.name}}</option>
+                {% endfor %}
               </select>
             </div>
             <div class="form-group col-3 px-4">
               <label for="city">شهر</label>
               <select id="city" class="form-control" name="city">
-                <option selected>همه</option>
-                <option></option>
+                <option value="{{null}}" selected>همه</option>
+                {% for city in cities %}
+                  <option value="{{city.id}}">{{city.name}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
