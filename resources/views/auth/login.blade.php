@@ -63,7 +63,7 @@
 					</span>
 						@csrf
 						<div class="wrap-input100 validate-input text-right" data-validate = "Valid email is required: ex@abc.xyz">
-							<input class="input100 text-right" type="text" name="username" placeholder="نام کاربری" value=""  autocomplete="off">
+							<input class="input100 text-right" type="text" name="username" placeholder="نام کاربری" value="" autocomplete="off">
 							@error('username')
 									<span class="invalid-feedback" role="alert">
 											<strong>{{ $message }}</strong>

@@ -32,7 +32,10 @@ class Order extends Model
     'addressConfirm',
     'HBD_Date',
     'trackingCode',
-    'transport_id'
+    'transport_id',
+    'isPaid',
+    'PaidConfirm',
+    'payDate'
    ];
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +51,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function status(){
-        return $this->belongsTo('App\OrderStatus');
+        return $this->belongsTo('App\OrderStatus','status','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -81,6 +84,30 @@ class Order extends Model
     */
     public function agent(){
         return $this->belongsTo('App\User','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function followUpManager(){
+        return $this->belongsTo('App\User','followUpManager_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function callCenter(){
+        return $this->belongsTo('App\User','callCenter_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation Model 
+    |--------------------------------------------------------------------------
+    |*/
+    public function MoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation');
     }
 
 }

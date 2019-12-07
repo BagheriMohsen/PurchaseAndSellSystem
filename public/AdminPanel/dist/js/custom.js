@@ -1,4 +1,27 @@
 $(document).ready(function(){
+
+    pdfMake.fonts = {
+        Yekan: {
+          normal: 'Yekan.ttf',
+          bold: 'Yekan.ttf',
+          italics: 'Yekan.ttf',
+          bolditalics: 'Yekan.ttf'
+        },
+        Roboto: {
+            normal: 'Roboto-Regular.ttf',
+            bold: 'Roboto-Medium.ttf',
+            italics: 'Roboto-Italic.ttf',
+            bolditalics: 'Roboto-MediumItalic.ttf'
+        }
+     }
+     var docDefinition = {
+        defaultStyle: {
+          font: 'Yekan'
+        }
+      }
+      pdfMake.createPdf(docDefinition);
+
+
     var persianDataTable = {
         "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
         "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
@@ -22,6 +45,10 @@ $(document).ready(function(){
             "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
         }
     };
+    $.extend( $.fn.dataTable.defaults, {
+        "language": persianDataTable,
+    } );
+    
     //Remove comma from number inputs for product Create Form
     $('#productCreateForm').submit(function(event){
         event.preventDefault();
@@ -106,17 +133,8 @@ $(document).ready(function(){
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
 
-    // Order and Product section tables
-    // $('#productTable').DataTable({
-    //     buttons: [
-    //        'print'
-    //     ]
-    // });
-    // $('#sellerNoActionTable').DataTable({
-    //     "language": persianDataTable
-    // });
+   // Setup tables section
     var orderTable = $('#orderTable').DataTable({
-        "language": persianDataTable,
         columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -175,7 +193,10 @@ $(document).ready(function(){
             ]
           }
     });
-    
+    // Other section tabless
+    $('#cityTable,#stateTable').DataTable({
+        "language": persianDataTable
+    });
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
         "language": persianDataTable
@@ -536,36 +557,105 @@ $(document).ready(function(){
             }
         });
     });
-    //All Orders Chart Setup
-    if(document.querySelector('#allOrdersChart')){
-        var data = [
-                { y: '2014', a: 50, b: 90 , c: 110 , d: 45},
-                { y: '2015', a: 65,  b: 75 , c: 190 , d: 65},
-                { y: '2016', a: 50,  b: 50 , c: 77 , d: 45},
-                { y: '2017', a: 75,  b: 60 , c: 66 , d: 33},
-                { y: '2018', a: 80,  b: 65 , c: 55 , d: 22},
-                { y: '2019', a: 90,  b: 70 , c: 99 , d: 55},
-                { y: '2020', a: 100, b: 75 , c: 75 , d: 66},
-                { y: '2021', a: 115, b: 75 , c: 37 , d: 33},
-                { y: '2022', a: 120, b: 85 , c: 86 , d: 22},
-                { y: '2023', a: 145, b: 85 , c: 97 , d: 11},
-                { y: '2024', a: 160, b: 95 , c: 34 , d: 22}
-            ],
-            config = {
-                data: data,
-                xkey: 'y',
-                ykeys: ['a', 'b' , 'c' , 'd'],
-                labels: ['سفارشات وصولی', 'سفارشات کنسلی','سفارشات ثبت شده','پیام های دریافتی'],
-                fillOpacity: 0.6,
-                hideHover: 'auto',
-                behaveLikeLine: true,
-                resize: true,
-                pointFillColors:['#ffffff'],
-                pointStrokeColors: ['black'],
-                lineColors:['#33b5e5','#ff3547','#ff3547','#ffbb33']
-            };
-        config.element = 'allOrdersChart';
-        Morris.Line(config);
+   
+
+    
+    function configureChart(chartData){
+        var chartData = chartData;
+        var dates = [];
+        var suspended = [];
+        var collected = [];
+        var cancelled = [];
+        chartData.forEach(function(element){
+            var gregorianDate = element.Date.replace(/\-/g,' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(gregorianDate[0]),parseInt(gregorianDate[1]),parseInt(gregorianDate[2]));
+            dates.push(jalaliDate);
+        });
+        chartData.forEach(function(element){
+            suspended.push(element.subsended);
+        });
+        chartData.forEach(function(element){
+            collected.push(element.collected);
+        });
+        chartData.forEach(function(element){
+            cancelled.push(element.cancelled);
+        });
+        console.log(dates,suspended,collected,cancelled);
+        var config = {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'سفارشات وصولی',
+                    backgroundColor: '#17a2b8',
+                    borderColor: '#17a2b8',
+                    data: collected,
+                    fill: false,
+                }, 
+                {
+                    label: 'سفارشات کنسلی',
+                    fill: false,
+                    backgroundColor: '#dc3545',
+                    borderColor: '#dc3545',
+                    data: cancelled,
+                },
+                {
+                    label: 'سفارشات در انتظار و معلق',
+                    fill: false,
+                    backgroundColor: '#ffc107',
+                    borderColor: '#ffc107',
+                    data: suspended,
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: false,
+                    text: 'Chart.js Line Chart'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'تاریخ'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'تعداد'
+                        }
+                    }]
+                }
+            }
+        };
+    
+        var ctx = document.getElementById('agent_sell_chart').getContext('2d');
+        window.myLine = new Chart(ctx, config);
+    }
+    //Sell and orders Chart Setup for agents
+    if(document.querySelector('#agent_sell_chart')){
+        var chartData =[];
+        var userId = $('#userId').val();
+        $.ajax({
+            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/' + userId,
+            type:'Get',
+            success:function(response){ 
+                chartData = response[0];
+                configureChart(chartData);
+                console.log(chartData);
+            }
+        });
     };
     var productList;
     var orderListTable = document.querySelector('.orderList');
@@ -901,7 +991,7 @@ $(document).ready(function(){
         }
         jm=(days < 186)?1+parseInt(days/31):7+parseInt((days-186)/30);
         jd=1+((days < 186)?(days%31):((days-186)%30));
-        result = jy +'/' + jm + '/' + jd;
+        result = jy +'-' + jm + '-' + jd;
 
         if(h && m && s){
             var hours = addZero(h);
@@ -923,6 +1013,7 @@ $(document).ready(function(){
         }
 
     });
+    
     // $(".waves-effect").click(function () {
     //     toastr["info"]("I was launched via jQuery!")
     // });
@@ -960,6 +1051,7 @@ $(document).ready(function(){
     $('#productExit').on('change', calculateCargoValue);
     $('#warehouseToTankhah').on('change', calculateCargoValue);
     $('#tankhahExit').on('change', calculateCargoValue);
+    $('#returnToFund').on('change', calculateCargoValue);
     // $('#sendToAgentForm').on('click',function(){
     //     // $(this).val() = isoDate;
     //     console.log(isoDate);
@@ -1113,11 +1205,12 @@ $(document).ready(function(){
                     console.log(response);
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
-                    if(response.status == 1){
+                    if(response.status == 0){
+                        toastr["error"](response.message);
+                        
+                    }else{
                         orderTable.rows('.selected').remove().draw( false );
                         toastr["success"](response.message);
-                    }else if(response.status == 0){
-                        toastr["error"](response.message);
                     }
                    
                 }
@@ -1334,20 +1427,22 @@ $(document).ready(function(){
     });
     
     $('#productTable').DataTable( {
-        "language": persianDataTable,
-        // dom: 'Bfrtip',
-        // buttons: [
-        //     'excel', 'pdf', 'print'
-        // ]
+        dom: 'lBfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [2,3,4,5,6,7 ]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [2,3,4,5,6,7 ]
+                }
+            },
+        ]
     } );
-    // pdfMake.fonts = {
-    //     Arial: {
-    //             normal: 'arial.ttf',
-    //             bold: 'arialbd.ttf',
-    //             italics: 'ariali.ttf',
-    //             bolditalics: 'arialbi.ttf'
-    //     }
-    // };
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
         var form = $(this).parents('form');
@@ -1383,17 +1478,7 @@ $(document).ready(function(){
             form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
         }
     });
-    //Agents Charts
-    if($('#visitors-chart').length){
-        var userId = $('#userId').val();
-        $.ajax({
-            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/'+ userId,
-            type:'Get',
-            success:function(response){
-                console.log(response);
-            }
-        });
-    };
+    
     // Condition assign per order in modal 
     $('.conditionAssignForm button').on('click',function(event){
         event.preventDefault();
@@ -1428,6 +1513,57 @@ $(document).ready(function(){
             }
         });
     });
-    
+    // Invoice calculation in agent page
+    if($('.invoice_table').length){
+        var total_without_off = null;
+        var post_price = parseInt($('.post_price').html());
+        var pre_payment = parseInt($('.pre_payment').html());
+        post_price = post_price || 0;
+        pre_payment = pre_payment || 0;
+        $('.row_total').each(function(index,value){
+            total_without_off += parseInt(value.innerHTML);
+        });
+        console.log(total_without_off,post_price,pre_payment);
+        
+        $('.total').html( total_without_off - post_price - pre_payment);
+        
+    }
+    // Order_details modal calculation for agent,seller,etc..
+    if($('.orderDetail').length){
+        $('.orderDetail').each(function(index,value){
+            var total_without_off = null;
+            var post_price = parseInt($(this).find('.post_price').html());
+            var pre_payment = parseInt($(this).find('.pre_payment').html());
+            post_price = post_price || 0;
+            pre_payment = pre_payment || 0;
+            $(this).find('.row_total').each(function(index,value){
+                total_without_off += parseInt(value.innerHTML);
+            });
+            $(this).find('.total').html( total_without_off - post_price - pre_payment);
+        });
+     
+    }
+    // Togge allowNewOrder in callcenter users list
+    $('#callcenterTable input[name="allowNewOrder"]').on('change',function(){
+        var allowNewOrder = $(this). is(":checked");
+        if(allowNewOrder == true){
+            allowNewOrder =  'on';
+        }else{
+            allowNewOrder = null;
+        }
+        var user_id = $('#user_id').val();
+        $.ajax({
+            url:'http://localhost:8000/users/callCenterAddNewOrderChange/'+ user_id,
+            type:'get',
+            data: {
+                allowNewOrder: allowNewOrder
+            },
+            success:function(response){
+                toastr["success"](response);
+            }
+        });
+    });
+    // var element = document.getElementById('productTable');
+    // html2pdf(element);
 });
 

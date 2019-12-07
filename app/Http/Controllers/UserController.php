@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\User;
+use Carbon\Carbon;
 class UserController extends Controller
 {
     /**
@@ -156,11 +157,11 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
       $user = User::findOrFail($id);
-      if(isset($request->username)){
-          $username = $request->username;
-      }else{
-          $username = $user->username;
-      }
+    //   if(isset($request->username)){
+    //       $username = $request->username;
+    //   }else{
+    //       $username = $user->username;
+    //   }
      
 
         
@@ -168,14 +169,14 @@ class UserController extends Controller
        'name'               =>  $request->name,
        'family'             =>  $request->family,
        'sex'                =>  $request->sex,
-       'username'           =>  $username,
-       'password'           =>  Hash::make($request->password),
+    //    'username'           =>  $username,
+    //    'password'           =>  Hash::make($request->password),
        'mobile'             =>  $request->mobile,
        'status'             =>  $request->status,
        'state_id'           =>  $request->state,
        'city_id'            =>  $request->city,
        'address'            =>  $request->address,
-       'uploadCS'           =>  $user->uploadCS,
+    //    'uploadCS'           =>  $user->uploadCS,
        'level'              =>  $request->level,
        'sendAuto'           =>  $request->sendAuto,
        'backToWareHouse'    =>  $request->backToWareHouse,
@@ -266,12 +267,29 @@ class UserController extends Controller
             ['out_date','<',$today],
             ['out_date','>',$yesterday]
         ])->latest()->skip(0)->take(5)->get();
+
         $TopStoreRooms =  'App\OrderProduct'::with('product')->select('product_id')
         ->groupBy('product_id')
         ->orderByRaw('COUNT(*) DESC')
         ->limit(5)
         ->get();
-       
+        $topProduct = array();
+
+        foreach($TopStoreRooms as $item){
+            $name = $item->product->name;
+            $count = 'App\OrderProduct'::where('product_id',$item->product_id)->sum('count');
+
+            $topProduct[]=[
+                'name'  =>  $name,
+                'count' =>  $count
+            ];
+        }
+        
+
+
+        $DebtorAgents = 'App\UserInventory'::where('agent_id','!=',null)
+        ->latest()->skip(0)->take(5)->get();
+         
         return view('Admin/index',compact(
             'OrderWaitingForDeliveryToday',
             'OrderWaitingForDeliveryInMonth',
@@ -280,9 +298,76 @@ class UserController extends Controller
             'OrderReturnedToday',
             'OrderReturnedInMonth',
             'storeRooms',
-            'TopStoreRooms'
+            'topProduct',
+            'DebtorAgents'
 
         ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Dashboard Chart Api
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminDashboardChartApi(){
+        /* ############ Charts ############## */
+        $today      = 'Carbon\Carbon'::now();
+        $yesterday  = 'Carbon\Carbon'::now()->subDays(1);
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        $days = $ThirtyDaysAgo->diffInDays($today);
+        
+        $charts = array();
+        for($i=0;$i <= $days ;$days--){
+            
+            //Collected Charts  
+            $collectedCharts = 'App\Order'::where([
+                ['status','=',10],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])->orWhere([
+                ['status','=',11],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])
+            ->orWhere([
+                ['status','=',12],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])
+            ->get('updated_at');
+            $collectedCharts = $collectedCharts->toArray();
+           
+            // Cancelled Charts
+            $cancelledCharts = 'App\Order'::where([
+                ['status','=',14],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])->get('updated_at');
+            $cancelledCharts = $cancelledCharts->toArray();
+            // Subsended Charts
+            $subsendedCharts = 'App\Order'::where([
+                ['status','=',7],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])
+            ->orWhere([
+                ['status','=',15],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+                ])
+            ->get('updated_at');
+            $subsendedCharts = $subsendedCharts->toArray();
+            $charts[] =[
+                'Date' => $today->toDateString(),
+                'subsended'   =>  count($subsendedCharts),
+                'cancelled'   =>  count($cancelledCharts),
+                'collected'   =>  count($collectedCharts)
+            ]; 
+         
+            $today->subDays(1);
+            $yesterday->subDays(1);
+        }
+  
+        return Response()->json([$charts],200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
@@ -406,21 +491,55 @@ class UserController extends Controller
     public function AgentDashboard(Request $request){
 
         $user = User::findOrFail(auth()->user()->id);
-        $WaitingForDelivery = 'App\Order'::where(['status'=>7,'agent_id'=>$user->id])->get();
-        $subsended  =   'App\Order'::where(['status'=>15,'agent_id'=>$user->id])->get();
+        $WaitingForDelivery = 'App\Order'::where([
+            ['status','=',7],
+            ['agent_id','=',$user->id]
+        ])->get();
+        $subsended  =   'App\Order'::where([
+            ['status','=',15],
+            ['agent_id','=',$user->id]
+        ])->get();
         $Returned   =   'App\Order'::where(['status'=>14,'agent_id'=>$user->id])->get();
         
         $userAllOrders  =   'App\Order'::where('agent_id',$user->id)->get()->count();
   
-        $collected      =   'App\Order'::where(['status'=>13,'agent_id'=>$user->id])->get();
+        $collected      =   'App\Order'::where([
+            ['status','=',10],
+            ['agent_id','=',$user->id]
+        ])
+        ->orWhere([
+            ['status','=',11],
+            ['agent_id','=',$user->id]
+        ])
+        ->orWhere([
+            ['status','=',12],
+            ['agent_id','=',$user->id]
+        ])
+        ->get();
         if($collected->count() != 0){
-            $collectedPercent = ($collected->count() * 100 ) / $userAllOrders ;
+            $collectedPercent = round (($collected->count() * 100 ) / $userAllOrders , 2) ;
         }else{
             $collectedPercent = 0;
         }
-       
-        
-    
+        /* All Sells in this mounth  */
+        $today      = 'Carbon\Carbon'::now();
+        $yesterday  = 'Carbon\Carbon'::now()->subDays(1);
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+
+        $AllSell = 
+        'App\MoneyCirculation'::where('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)->sum('amount');
+            
+        $AllSpecialShared = 'App\MoneyCirculation'::where([
+            ['agent_id','=',$user->id]
+        ])->sum('sharedSpecialAmount');
+
+        $TotalSettle = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['confirmDate','!=',null]
+        ])->sum('bill');
+
         return view('Admin.agent-index',compact(
             'WaitingForDelivery',
             'collected',
@@ -428,6 +547,9 @@ class UserController extends Controller
             'collectedPercent',
             'subsended',
             'user',
+            'AllSell',
+            'AllSpecialShared',
+            'TotalSettle'
          
         
         ));
@@ -439,45 +561,70 @@ class UserController extends Controller
     |*/
     public function AgentDashboardChartApi($userID){
         /* ############ Charts ############## */
-        $today = 'Carbon\Carbon'::now();
+        $today      = 'Carbon\Carbon'::now();
+        $yesterday  = 'Carbon\Carbon'::now()->subDays(1);
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
-        //Collected Charts  
-        $collectedCharts = 'App\Order'::where([
-            ['status','=',13],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])->get('updated_at');
-        $collectedCharts = $collectedCharts->toArray();
-        // Cancelled Charts
-        $cancelledCharts = 'App\Order'::where([
-            ['status','=',14],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])->get('updated_at');
-        $cancelledCharts = $cancelledCharts->toArray();
-        // Subsended Charts
-        $subsendedCharts = 'App\Order'::where([
-            ['status','=',1],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])
-        ->orWhere([
-            ['status','=',15],
-            ['agent_id','=',$userID],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo]
-            ])
-        ->get('updated_at');
-        $subsendedCharts = $subsendedCharts->toArray();
+        $days = $ThirtyDaysAgo->diffInDays($today);
         
-        return Response()->json(array(
-            'subsendedCharts'=>$subsendedCharts,
-            'cancelledCharts'=>$cancelledCharts,
-            'collectedCharts'=>$collectedCharts
-        ),200,[],JSON_UNESCAPED_UNICODE);
+        $charts = array();
+        for($i=0;$i <= $days ;$days--){
+            
+            //Collected Charts  
+            $collectedCharts = 'App\Order'::where([
+                ['status','=',10],
+                ['agent_id','=',$userID],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])->orWhere([
+                ['status','=',11],
+                ['agent_id','=',$userID],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])
+            ->orWhere([
+                ['status','=',12],
+                ['agent_id','=',$userID],
+                ['created_at','<=',$today],
+                ['created_at','>=',$yesterday]
+            ])
+            ->get('updated_at');
+            $collectedCharts = $collectedCharts->toArray();
+           
+            // Cancelled Charts
+            $cancelledCharts = 'App\Order'::where([
+                ['status','=',14],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])->get('updated_at');
+            $cancelledCharts = $cancelledCharts->toArray();
+            // Subsended Charts
+            $subsendedCharts = 'App\Order'::where([
+                ['status','=',7],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+            ])
+            ->orWhere([
+                ['status','=',15],
+                ['agent_id','=',$userID],
+                ['updated_at','<=',$today],
+                ['updated_at','>=',$yesterday]
+                ])
+            ->get('updated_at');
+            $subsendedCharts = $subsendedCharts->toArray();
+            $charts[] =[
+                'Date' => $today->toDateString(),
+                'subsended'   =>  count($subsendedCharts),
+                'cancelled'   =>  count($cancelledCharts),
+                'collected'   =>  count($collectedCharts)
+            ]; 
+         
+            $today->subDays(1);
+            $yesterday->subDays(1);
+        }
+  
+        return Response()->json([$charts],200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
@@ -549,6 +696,18 @@ class UserController extends Controller
         $id = $state->followUpManager;
         $state->update(['followUpManager'=>null]);
         return redirect('/users/'.$id.'/edit#statesUnderControl')->with('info','این استان از لیست این مدیر پیگیری خارج شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Call Center Add New Order Change
+    |--------------------------------------------------------------------------
+    |*/
+    public function callCenterAddNewOrderChange(Request $request,$id){
+
+        $user = 'App\User'::findOrFail($id);
+        $user->update(['allowNewOrder'=>$request->allowNewOrder]);
+        return Response()->json('با موفقیت ثبت سفارش تغییر کرد',
+        200,[],JSON_UNESCAPED_UNICODE);
     }
 
 

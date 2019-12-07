@@ -34,7 +34,7 @@
 <div class="tab-content " id="myTabContent">
     <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
-         <form class="row bg-white pt-3 pb-3" action="{{route('storeRooms.returnToFund')}}" method="post" enctype="multipart/form-data">
+         <form id="returnToFund" class="row bg-white pt-3 pb-3" action="{{route('storeRooms.returnToFund')}}" method="post" enctype="multipart/form-data">
             <input type="hidden"    name="_token" value="{{csrf_token()}}" />
             <input type="hidden"    name="in_out" value="{{'returnToFund'}}" />
             
@@ -42,8 +42,8 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="date" value="{{old('date')}}" name="date" class="form-control  cursor-pointer">
-                        {# <label for="date-picker-example">تاریخ</label> #}
+                        <input type="text" value="" name="date" class="form-control cursor-pointer persianDatePicker" autocomplete="off">
+                        <label for="date-picker-example">تاریخ</label>
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
@@ -58,11 +58,11 @@
                     </div>
                     {# number #}
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input value="{{old('number')}}" type="number" id="inputIconEx5" class="form-control" name="number" >
+                        <input value="{{old('number')}}" type="text" id="inputIconEx5" class="form-control" name="number" >
                         <label for="inputIconEx5">تعداد</label>
                         <span class="text-secondary">
-                            ارزش ریالی:
-                            0
+                            ارزش به تومان:
+                            <span class="cargoValue">0</span>
                         </span>
                     </div>
                     {# end number #}
@@ -101,8 +101,8 @@
 
             
             <div class="col-sm-6 mt-5 mx-auto">
-                <button class="btn btn-sm btn-success">
-                    <strong class="h6 text-dark">
+                <button class="btn btn-info">
+                    <strong class="">
                         ذخیره
                     </strong>
                 </button>

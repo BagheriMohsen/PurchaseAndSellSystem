@@ -16,6 +16,14 @@ class OrderStatus extends Model
     |--------------------------------------------------------------------------
     */
     public function orders(){
-        return $this->hasMany('App\Order');
+        return $this->hasMany('App\Order','status','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation Model
+    |--------------------------------------------------------------------------
+    |*/
+    public function MoneyCirculation(){
+        return $this->hasMany('App\MoneyCirculation','order_status_id','id');
     }
 }

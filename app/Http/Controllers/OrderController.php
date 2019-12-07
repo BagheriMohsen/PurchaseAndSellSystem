@@ -355,6 +355,8 @@ class OrderController extends Controller
                                 ]);
                             }
 
+                            echo $this->UserInventoryCalculated($user,$order_product,$order);
+
 
                }     
 
@@ -369,6 +371,180 @@ class OrderController extends Controller
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
         
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | User Inventory Calculated:Special Agent Shared 
+    |--------------------------------------------------------------------------
+    |*/
+    public function UserInventoryCalculated($user,$order_product,$order){
+        $trackingCode   =   uniqid();
+        $SellerStatus   =   'App\UserInventory'::where('seller_id',$order->seller_id)->exists();
+        $AgentStatus    =   'App\UserInventory'::where('agent_id',$order->agent_id)->exists();
+
+        /* Seller */
+        if($SellerStatus == True){
+            $Seller             =   'App\User'::findOrFail($order->seller_id);
+            $SellerInventory    =   'App\UserInventory'::where('seller_id',$order->seller_id)->firstOrFail();
+            $balance            =   $SellerInventory->balance + $Seller->porsantSeller;
+            $SellerInventory->update(['balance'=>$balance,'debtor'=>1]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $SellerInventory->id,
+                'agent_id'              =>  null,
+                'order_product_id'      =>  $order_product->id,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order_product->product->price * $order_product->count,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+        }else{
+            $Seller            =   'App\User'::findOrFail($order->seller_id);
+            $userInventory = 'App\UserInventory'::create([
+                'seller_id' =>  $Seller->id,
+                'balance'   =>  $Seller->porsantSeller,
+                'debtor'    =>  1
+            ]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $userInventory->id,
+                'agent_id'              =>  null,
+                'order_product_id'      =>  $order_product->id,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order_product->product->price * $order_product->count,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+            
+        }
+        /* Agent */
+        // if agent has row in users-inventory table
+        if($AgentStatus == True){
+            $Agent = 'App\User'::findOrFail($order->agent_id);
+            $AgentInventory         =   'App\UserInventory'::where('agent_id',$order->agent_id)->firstOrFail();
+            $specialSharedStatus    =   'App\SpecialTariff'::where([
+                ['user_id','=',$order->agent_id],
+                ['product_id','=',$order_product->product_id]
+            ])->exists();
+            // if agent has special shared
+            if($specialSharedStatus == True){
+                $specialShared    =   'App\SpecialTariff'::where([
+                    ['user_id','=',$order->agent_id],
+                    ['product_id','=',$order_product->product_id]
+                ])->firstOrFail();
+
+                $balance        =   $AgentInventory->balance + $specialShared->price;
+                $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                'App\MoneyCirculation'::create([
+                    'user_inventory_id'     =>  $AgentInventory->id,
+                    'agent_id'              =>  $Agent->id,
+                    'order_product_id'      =>  $order_product->id,
+                    'seller_id'             =>  null,
+                    'order_status_id'       =>  $order->status,
+                    'order_id'              =>  $order->id,
+                    'amount'                =>  $order_product->product->price * $order_product->count,
+                    'sharedSpecialAmount'   =>  $specialShared->price,
+                    'trackingCode'          =>  $trackingCode,
+                ]);
+            }else{
+                $Agent = 'App\User'::findOrFail($order->agent_id);
+                $placeNumber = $order->status;
+
+                switch ($placeNumber){
+                    case 10:
+                        $price = $Agent->internalPrice;
+                        break;
+                    case 11:
+                        $price = $Agent->locallyPrice;
+                        break;
+                    case 12:
+                        $price = $Agent->villagePrice;
+                        break;
+                }
+                $balance        =   $AgentInventory->balance + $price;
+                $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                'App\MoneyCirculation'::create([
+                    'user_inventory_id'     =>  $AgentInventory->id,
+                    'agent_id'              =>  $Agent->id,
+                    'order_product_id'      =>  $order_product->id,
+                    'seller_id'             =>  null,
+                    'order_status_id'       =>  $order->status,
+                    'order_id'              =>  $order->id,
+                    'amount'                =>  $order_product->product->price * $order_product->count,
+                    'sharedSpecialAmount'   =>  $price,
+                    'trackingCode'          =>  $trackingCode,
+                ]);
+            }
+        // agent collected for first time
+        }else{
+            $Agent = 'App\User'::findOrFail($order->agent_id);
+            $specialSharedStatus    =   'App\SpecialTariff'::where([
+                ['user_id','=',$order->agent_id],
+                ['product_id','=',$order_product->product_id]
+            ])->exists();
+
+            if($specialSharedStatus == True){
+                $specialShared    =   'App\SpecialTariff'::where([
+                    ['user_id','=',$order->agent_id],
+                    ['product_id','=',$order_product->product_id]
+                ])->firstOrFail();
+
+                $balance    =   $specialShared->price;
+                $userInventory = 'App\UserInventory'::create([
+                        'agent_id'  =>   $Agent->id,
+                        'balance'   =>  $balance,
+                        'debtor'    =>  1
+                    ]);
+                'App\MoneyCirculation'::create([
+                    'user_inventory_id'     =>  $userInventory->id,
+                    'agent_id'              =>  $Agent->id,
+                    'order_product_id'      =>  $order_product->id,
+                    'seller_id'             =>  null,
+                    'order_status_id'       =>  $order->status,
+                    'order_id'              =>  $order->id,
+                    'amount'                =>  $order_product->product->price,
+                    'sharedSpecialAmount'   =>  $specialShared->price,
+                    'trackingCode'          =>  $trackingCode,
+                ]);
+            }else{
+                $Agent = 'App\User'::findOrFail($order->agent_id);
+                $placeNumber = $order->status;
+
+                switch ($placeNumber){
+                    case 10:
+                        $balance = $Agent->internalPrice;
+                        break;
+                    case 11:
+                        $balance = $Agent->locallyPrice;
+                        break;
+                    case 12:
+                        $balance = $Agent->villagePrice;
+                        break;
+                }
+
+                
+                $userInventory = 'App\UserInventory'::create([
+                    'agent_id'  =>      $Agent->id,
+                    'balance'   =>      $balance,
+                    'debtor'    =>  1
+                ]);
+                'App\MoneyCirculation'::create([
+                    'user_inventory_id'     =>  $userInventory->id,
+                    'agent_id'              =>  $Agent->id,
+                    'order_product_id'      =>  $order_product->id,
+                    'seller_id'             =>  null,
+                    'order_status_id'       =>  $order->status,
+                    'order_id'              =>  $order->id,
+                    'amount'                =>  $order_product->product->price,
+                    'sharedSpecialAmount'   =>  $balance,
+                    'trackingCode'          =>  $trackingCode,
+                ]);
+            }
+            return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+
+        }
+
+
     }
     /*
     |--------------------------------------------------------------------------
@@ -398,22 +574,24 @@ class OrderController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
         
         /*## Agent ## */
-        $agents = array();
-        foreach($user->statesUnderControl as $state){
+        // $agents = array();
+        // foreach($user->statesUnderControl as $state){
             
-            foreach($state->cities as $city){
-                $agents[] = 'App\User'::with('city')
-                ->where('city_id',$city->id)
-                ->Role('agent')->get();
-            }
+        //     foreach($state->cities as $city){
+        //         $agents[] = 'App\User'::with('city')
+        //         ->where('city_id',$city->id)
+        //         ->Role('agent')->get();
+        //     }
 
-        }
-        if(isset($agents[0])){
-            $agents = $agents[0]->toArray();
-        }else{
-            $agents = null; 
-        }
-       
+        // }
+        // if(isset($agents[0])){
+        //     $agents = $agents[0]->toArray();
+        // }else{
+        //     $agents = null; 
+        // }
+        $agents = 'App\User'::where([
+            ['status','=','on']
+        ])->Role('agent')->latest()->get();
         /*## Agent ## */
         $orders = Order::where([
             ['followUpManager_id','=',$user->id],
@@ -452,21 +630,24 @@ class OrderController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
        
         /*####### Agent ####### */
-        $agents = array();
-        foreach($user->statesUnderControl as $state){
+        // $agents = array();
+        // foreach($user->statesUnderControl as $state){
             
-            foreach($state->cities as $city){
-                $agents[] = 'App\User'::with('city')
-                ->where('city_id',$city->id)
-                ->Role('agent')->get();
-            }
+        //     foreach($state->cities as $city){
+        //         $agents[] = 'App\User'::with('city')
+        //         ->where('city_id',$city->id)
+        //         ->Role('agent')->get();
+        //     }
 
-        }
-        if(isset($agents[0])){
-            $agents = $agents[0]->toArray();
-        }else{
-            $agents = null; 
-        }
+        // }
+        // if(isset($agents[0])){
+        //     $agents = $agents[0]->toArray();
+        // }else{
+        //     $agents = null; 
+        // }
+        $agents = 'App\User'::where([
+            ['status','=','on']
+        ])->Role('agent')->latest()->get();
         /*####### Agent ####### */
 
         $orders = Order::where([

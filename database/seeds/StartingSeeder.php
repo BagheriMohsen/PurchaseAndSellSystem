@@ -52,11 +52,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+          
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+           
           ]);
         #2.create user for followUpManger
         'App\User'::create([
@@ -76,11 +74,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+     
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+            
           ]);
           #3.create user for mainWareHouse
           'App\User'::create([
@@ -100,11 +96,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+       
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+            
           ]);
           #4.create user for fundWareHouse
           'App\User'::create([
@@ -124,11 +118,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+           
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+         
           ]); 
           #5.create agentChief
           'App\User'::create([
@@ -148,11 +140,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+          
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+            
           ]);
           #6.create agent
           'App\User'::create([
@@ -168,15 +158,13 @@ class StartingSeeder extends Seeder
             'address'       =>  'Qom',
             'uploadCS'      =>  'some file',
             'level'         =>  'S',
-            'sendAuto'      =>  null,
+            'sendAuto'      =>  'on',
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  5,
-            'porsantSeller' =>  '12',
+         
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+          
           ]);
           #7.create seller
           'App\User'::create([
@@ -196,11 +184,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+            'porsantSeller' =>  1000,
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+           
           ]);
           #8.create callCenter
           'App\User'::create([
@@ -220,11 +206,9 @@ class StartingSeeder extends Seeder
             'backToWareHouse'    =>  null,
             'callCenter'    =>  null,
             'agent_id'      =>  null,
-            'porsantSeller' =>  '12',
+           
             'percent'       =>  null,
-            'locallyPrice'  =>  null,
-            'internalPrice' =>  null,
-            'villagePrice'  =>  null
+           
           ]);
         /*
         |--------------------------------------------------------------------------

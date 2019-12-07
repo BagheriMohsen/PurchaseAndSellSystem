@@ -97,6 +97,22 @@ class User extends Authenticatable implements HasMedia,BannableContract
     }
     /*
     |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderFollowUpManager(){
+        return $this->hasMany('App\User','followUpManager_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function orderCallCenter(){
+        return $this->hasMany('App\User','callCenter_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
@@ -152,7 +168,54 @@ class User extends Authenticatable implements HasMedia,BannableContract
     public function tariffs(){
       return $this->hasMany('App\SpecialTariff');
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation - agent
+    |--------------------------------------------------------------------------
+    */
+    public function agentMoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with MoneyCirculation - seller
+    |--------------------------------------------------------------------------
+    */
+    public function sellerMoneyCirculations(){
+        return $this->hasMany('App\MoneyCirculation','seller_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with UserInventory - agent
+    |--------------------------------------------------------------------------
+    */
+    public function agentInventories(){
+        return $this->hasMany('App\UserInventory','agent_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate with UserInventory - seller
+    |--------------------------------------------------------------------------
+    */
+    public function sellerInventories(){
+        return $this->hasMany('App\UserInventory','seller_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with BankAccount Model
+    |--------------------------------------------------------------------------
+    */
+    public function bank_accounts(){
+        return $this->hasMany('App\BankAccount');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with Payment Circulation Model
+    |--------------------------------------------------------------------------
+    */
+    public function payment_circulations(){
+        return $this->hasMany('App\PaymentCirculation','bank_account_id','id');
+    }
     /*
     |--------------------------------------------------------------------------
     | Conversion image with Media Model

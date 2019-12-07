@@ -1,0 +1,119 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  صورت حساب جاری
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'صورت حساب جاری'} %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+     <div class="card">
+      <div class="card-header text-center bg-info">
+       <i class="fa fa-book crud-icon"></i>
+      صورت حساب جاری شما
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body col-12 mx-auto">
+        <table class="table table-sm text-center no-border">
+          <tr>
+              <th scope="row">مجموع فروش</th>
+              <th scope="col">1000 تومان</th>
+          </tr>
+          <tr>
+            <th scope="row">مجموع پیش واریزی</th>
+            <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">هزینه حمل</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع چک ها</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع چک های تایید شده</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع پرداختی</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ مشارکت</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ عودت وجه</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع مبلغ هزینه ها</th>
+              <td>10000</td>
+          </tr>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header text-center bg-info">
+      <i class="fas fa-money-check-alt"></i>
+      مبلغ بدهی شما
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body col-12 mx-auto">
+        <table class="table table-sm text-center no-border">
+          <tr>
+              <th scope="row">تخفیف</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+            <th scope="row">جایزه</th>
+            <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">امتیاز</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">مجموع بدهی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">بدهی چکی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+              <th scope="row">بدهی نقدی شما</th>
+              <td>10000</td>
+          </tr>
+          <tr>
+            <th scope="row">مانده حساب</th>
+            <td>10000</td>
+          </tr>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

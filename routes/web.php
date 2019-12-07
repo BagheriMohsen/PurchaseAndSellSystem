@@ -4,34 +4,6 @@
 | Auth Routes
 |--------------------------------------------------------------------------
 |*/
-Route::get('/order-test/{name}',function($name){
-
-    //Find City
-    $city = 'App\City'::where('name',$name)->first();
-    
-    // Find Agent In This City if agent send auto is not null
-    $userSendAuto = 'App\User'::where([
-    ['city_id','=',$city->id],
-    ['sendAuto','!=',Null]
-    ])->first();
-
-    // if find agent send auto not null
-    if($userSendAuto != null){
-
-        $agent_id = $userSendAuto->id;
-        $followUpManager_id = null;
-    }else{
-        $agent_id = null;
-        $followUpManager_id = $city->followUpManager;
-        if($followUpManager_id == null){
-          $user = 'App\User'::role('followUpManager')->first();
-          $followUpManager_id = $user->id;
-        }
-    }
-    echo 'agent:'.$agent_id;
-    echo '<br/>';
-    echo 'followUpManager:'.$followUpManager_id;
-});
 Auth::routes();
 Route::get('/logout','HomeController@logout')->name('logout');
 Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
@@ -61,6 +33,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('followUpManagerStateClear/{StateName}','UserController@followUpManagerStateClear')->name('followUpManagerStateClear');
     /* Admin Dashboard */
     Route::get('Admin-Dashboard','UserController@AdminDashboard')->name('AdminDashboard');
+    Route::get('Admin-Dashboard-Chart-API','UserController@AdminDashboardChartApi')->name('AdminDashboardChartApi');
     /* Agent Dashboard */
     Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
     Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
@@ -68,7 +41,8 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
     /* Seller Dashboard */
     Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
-
+    /* CallCenter */
+    Route::get('callCenterAddNewOrderChange/{id}','UserController@callCenterAddNewOrderChange')->name('callCenterAddNewOrderChange');
   });
 
 Route::middleware('auth')->resource('users','UserController');
@@ -198,5 +172,42 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
 Route::group(['middleware'=>'auth','prefix'=>'warehouses','as'=>'warehouses.'],function(){
     Route::get('{slug}','WarehouseController@inout')->name('inout');
 });
+/*
+|--------------------------------------------------------------------------
+| Money Circulation Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInventory.'],function(){
+      /* Agent */
+      Route::get('AgentCurrentBills','MoneyCirculationController@AgentCurrentBills')->name('AgentCurrentBills');
+      Route::get('AgentPaymentOrders','MoneyCirculationController@AgentPaymentOrders')->name('AgentPaymentOrders');
+      Route::get('AgentPrePaymentList','MoneyCirculationController@AgentPrePaymentList')->name('AgentPrePaymentList');
+      Route::get('AgentPaymentList','MoneyCirculationController@AgentPaymentList')->name('AgentPaymentList');
+      Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
+      Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
+      Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');
+      Route::post('cartStore','MoneyCirculationController@cartStore')->name('cartStore');
+      Route::get('cartSetDefaultStore/{id}','MoneyCirculationController@cartSetDefault')->name('cartSetDefault');
+      Route::get('cartDelete/{id}','MoneyCirculationController@cartDelete')->name('cartDelete');
+
+
+      /* Admin */
+      Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
+      
+
+
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Search Routes
+|--------------------------------------------------------------------------
+|*/
+Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(){
+      /* Admin */
+      Route::get('AdminAdvancedSearchPage','SearchController@AdminAdvancedSearchPage')->name('AdminAdvancedSearchPage');
+      Route::post('AdminAdvancedSearch','SearchController@AdminAdvancedSearch')->name('AdminAdvancedSearch');
+});
+
 
 Route::middleware('auth')->resource('warehouses','WarehouseController');
