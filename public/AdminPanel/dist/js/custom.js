@@ -584,12 +584,12 @@ $(document).ready(function(){
         var config = {
             type: 'line',
             data: {
-                labels: dates,
+                labels: dates.reverse(),
                 datasets: [{
                     label: 'سفارشات وصولی',
                     backgroundColor: '#17a2b8',
                     borderColor: '#17a2b8',
-                    data: collected,
+                    data: collected.reverse(),
                     fill: false,
                 }, 
                 {
@@ -597,14 +597,14 @@ $(document).ready(function(){
                     fill: false,
                     backgroundColor: '#dc3545',
                     borderColor: '#dc3545',
-                    data: cancelled,
+                    data: cancelled.reverse(),
                 },
                 {
                     label: 'سفارشات در انتظار و معلق',
                     fill: false,
                     backgroundColor: '#ffc107',
                     borderColor: '#ffc107',
-                    data: suspended,
+                    data: suspended.reverse(),
                 }]
             },
             options: {
@@ -808,6 +808,7 @@ $(document).ready(function(){
         var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
+        var deliverDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
         var formData = {
             _token:CSRF_TOKEN,
@@ -827,6 +828,7 @@ $(document).ready(function(){
             chequePrice:chequePrice,
             instant:instant,
             sellerDescription:sellerDescription,
+            deliverDescription:deliverDescription,
             orderArray:orderArray
         }
         console.log(formData);
@@ -1578,10 +1580,7 @@ $(document).ready(function(){
         event.preventDefault();
 
     });
-    // m = moment('1398/9/16', 'jYYYY/jM/jD') // Parse a Jalaali date
-    // console.log(m); 
-    // m.format('jYYYY/jM/jD [is] YYYY/M/D') // 1360/5/26 is 1981/8/17
-    // console.log(m._i.replace('-//',''));
+ 
     $('.persianDatePicker').on('change paste keyup select',function(){
         console.log($(this).val());
         // $(this).siblings('.georgian_date').val()

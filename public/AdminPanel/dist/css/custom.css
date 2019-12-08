@@ -119,3 +119,6 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 .sidebar{
     height: calc(100%);
 }
+.nav-treeview .nav-item{
+    font-size: 14px;
+}
