@@ -73,8 +73,29 @@ class OrderController extends Controller
                    
                 }
             }
+
+            $status = 'App\Customer'::query()
+            ->where('fullName', 'LIKE', "%{$request->fullName}%") 
+            ->exists();
+
+        // if($status == False){
+        //     // Create Customer details
+        //     $UserID = uniqid(rand(), true);
+        //     $customer = 'App\Customer'::create([
+        //         'state_id'      =>  $request->state_id,
+        //         'city_id'       =>  $request->city_id,
+        //         'UserID'        =>  $UserID,
+        //         'fullName'      =>  $request->fullName,
+        //         'mobile'        =>  $request->mobile,
+        //         'telephone'     =>  $request->telephone,
+        //         'postalCode'    =>  $request->postalCode,
+        //         'address'       =>  $request->address,
+        //         'HBD_Date'      =>  $request->HBD_Date
+        //     ]);
+        // }
+
         /*##################ENDIF##################*/
-        $trackingCode = uniqid();
+        $trackingCode = uniqid(rand(), true);
         $order = Order::create([
             'city_id'           =>      $request->city_id,
             'state_id'          =>      $request->state_id,

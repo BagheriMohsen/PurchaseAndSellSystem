@@ -16,4 +16,12 @@ class ProductType extends Model
     public function product(){
       return $this->belongsTo('App\Product');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Releate to OrderProduct Type table
+    |--------------------------------------------------------------------------
+    |*/
+    public function type(){
+      return $this->hasMany('App\OrderProduct','product_type','id');
+  }
 }

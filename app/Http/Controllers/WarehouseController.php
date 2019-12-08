@@ -140,8 +140,34 @@ class WarehouseController extends Controller
     public function inout($slug){
         $warehouse  = Warehouse::where('slug',$slug)->firstOrFail();
         
-        $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
-        ->latest()->paginate(10);
-        return view('Admin.WareHouse.inout',compact('storeRooms','warehouse'));
+        if($warehouse->id == 1){
+            $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
+            ->latest()->paginate(15);
+            return view('Admin.WareHouse.Maininout',compact('storeRooms','warehouse'));
+        }else{
+            $storeRooms = 'App\StoreRoom'::where([
+                ['warehouse_id','=',$warehouse->id],
+                ['in_out','!=',8]
+            ])
+            ->latest()->paginate(15);
+            return view('Admin.WareHouse.Fundinout',compact('storeRooms','warehouse'));
+        }
+        
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Storage List
+    |--------------------------------------------------------------------------
+    |*/
+    public function storage($id){
+        $warehouse  = Warehouse::where('id',$id)->firstOrFail();
+        $storages = 'App\Storage'::where('warehouse_id',$id)->get();
+        $allProduct = 'App\Storage'::where('warehouse_id',1)->sum('number');
+        return view('Admin.WareHouse.storeRoom-index',compact(
+            'storages',
+            'allProduct',
+            'warehouse'
+        ));
+
     }
 }

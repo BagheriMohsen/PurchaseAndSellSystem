@@ -496,9 +496,10 @@ class UserController extends Controller
             ['agent_id','=',$user->id]
         ])->get();
         $subsended  =   'App\Order'::where([
-            ['status','=',15],
+            ['status','=',14],
             ['agent_id','=',$user->id]
         ])->get();
+        
         $Returned   =   'App\Order'::where(['status'=>14,'agent_id'=>$user->id])->get();
         
         $userAllOrders  =   'App\Order'::where('agent_id',$user->id)->get()->count();

@@ -81,26 +81,52 @@
         <thead>
             <tr class="text-center">
             <th>محصول</th>
-            <th>تعداد</th>
             <th>ورودی-خروجی</th>
-            <th >تاریخ ورود</th>
-            <th >تاریخ خروج</th>
+            <th>وضعیت</th>
+            <th>توضیحات</th>
+            <th>تعداد</th>
+            <th >تاریخ دریافت</th>
+            <th >تاریخ ارسال</th>
             </tr>
         </thead>
         <tbody>
         {% for storeRoom in storeRooms %}
         <tr class="text-center">
             <td>{{storeRoom.product.name}}</td>
+            {% if storeRoom.in_out == 5 or storeRoom.in_out == 6 %}
+                <td>{{'ورود'}}</td>
+            {% elseif storeRoom.in_out == 7 %}
+                <td>{{'ارسال به نماینده'}}</td>
+            {% elseif storeRoom.in_out == 9 %}
+                <td>{{'خروج'}}</td>
+            {% endif %}
+            {% if storeRoom.receiver_id == 1 or storeRoom.receiver_id == 2 %}
+                <td>{{storeRoom.status}}</td>
+            {% else %}
+                <td>
+                    {{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}
+                    {{'/'}}
+                    {{storeRoom.receiver.city.name}}
+                </td>
+            {% endif %}
+
+            <td>{{storeRoom.description}}</td>
             <td>{{storeRoom.number}}</td>
-            <td>
-                {% if storeRoom.description is not null %}
-                    {{storeRoom.description}}
-                {% else %}
-                    {{'توضیحات ندارد'}}
-                {% endif %}
-            </td>
-            <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
-            <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
+            {% if storeRoom.in_date is not null %}
+                <td class="justDate">{{storeRoom.in_date|date('Y-m-d')}}</td>
+            {% else %}
+                <td class="">{{'تایید نشده'}}</td>
+            {% endif %}
+
+            {% if storeRoom.in_out == 5 or storeRoom.in_out == 6 %}
+                <td class="">{{'---'}}</td>
+            {% elseif storeRoom.in_out == 3 %}
+                <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
+            {% elseif storeRoom.out_date is not null  %}
+                <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
+            {% else %}
+                <td class="text-danger">{{'تایید نشده'}}</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

@@ -26,10 +26,9 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('seller_id')->unsigned()->nullable();
             $table->bigInteger('callCenter_id')->unsigned()->nullable();
             $table->bigInteger('followUpManager_id')->unsigned()->nullable();
-           
             $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
-            $table->char('trackingCode',100);
+            $table->char('trackingCode',250);
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();

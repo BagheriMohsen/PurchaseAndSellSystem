@@ -8,6 +8,42 @@
     </a>
 </li>
 {#  Dashboard #}
+{#  orders #}
+<li class="nav-item has-treeview">
+        <a href="#" class="nav-link">
+            <i class="far fa-calendar-plus"></i>
+        <p>
+            سفارشات
+        </p>
+        </a>
+        <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('orders.AgentOrderLists')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p> سفارشات در انتظار تحویل</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('orders.AgentOrderCollectedlist')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p> سفارشات وصولی</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('orders.AgentOrderCanceledList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p> سفارشات کنسلی</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('orders.AgentOrderSuspendedList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p> سفارشات معلق</p>
+            </a>
+        </li>
+        </ul>
+    </li>
+    {#  orders #}
 {#  WareHouse #}
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
@@ -68,42 +104,7 @@
     </ul>
 </li>
 {#  WareHouse #}
-{#  orders #}
-<li class="nav-item has-treeview">
-    <a href="#" class="nav-link">
-        <i class="far fa-calendar-plus"></i>
-    <p>
-        سفارشات
-    </p>
-    </a>
-    <ul class="nav nav-treeview">
-    <li class="nav-item">
-        <a href="{{route('orders.AgentOrderLists')}}" class="nav-link">
-        <i class="fas fa-chevron-circle-left"></i>
-        <p> سفارشات در انتظار تحویل</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{{route('orders.AgentOrderCollectedlist')}}" class="nav-link">
-        <i class="fas fa-chevron-circle-left"></i>
-        <p> سفارشات وصولی</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{{route('orders.AgentOrderCanceledList')}}" class="nav-link">
-        <i class="fas fa-chevron-circle-left"></i>
-        <p> سفارشات کنسلی</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{{route('orders.AgentOrderSuspendedList')}}" class="nav-link">
-        <i class="fas fa-chevron-circle-left"></i>
-        <p> سفارشات معلق</p>
-        </a>
-    </li>
-    </ul>
-</li>
-{#  orders #}
+
 {#  user-inventory #}
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">

@@ -15,7 +15,7 @@ class StoreRoomStatus extends Model
     |--------------------------------------------------------------------------
     */
     public function storeRooms(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany('App\StoreRoom','in_out','id');
     }
 
 }

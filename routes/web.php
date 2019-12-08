@@ -117,6 +117,9 @@ Route::middleware('auth')->resource('states','StateController');
 | Cities Routes
 |--------------------------------------------------------------------------
 |*/
+Route::group(['middlware'=>['auth'],'prefix'=>'/cities/','as'=>'cities.'],function(){
+  Route::get('search','CityController@search')->name('search');
+});
 Route::middleware('auth')->resource('cities','CityController');
 /*
 |--------------------------------------------------------------------------
@@ -143,6 +146,8 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/out','StoreRoomController@outStorage')->name('out');
       Route::get('/storageManage','StoreRoomController@storageManage')->name('storageManage');
       Route::get('/returnFromFund','StoreRoomController@returnFromFund')->name('returnFromFund');
+      Route::get('/acceptFromFundForm','StoreRoomController@acceptFromFundForm')->name('acceptFromFundForm');
+      Route::get('/acceptFromFund/{id}','StoreRoomController@acceptFromFund')->name('acceptFromFund');
       /* FundWareHouse */
       Route::get('/mainReceive','StoreRoomController@mainReceive')->name('mainReceive');
       Route::get('/acceptMainReceive/{id}','StoreRoomController@acceptMainReceive')->name('acceptMainReceive');
@@ -171,6 +176,7 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
 |*/
 Route::group(['middleware'=>'auth','prefix'=>'warehouses','as'=>'warehouses.'],function(){
     Route::get('{slug}','WarehouseController@inout')->name('inout');
+    Route::get('/storage/{id}','WarehouseController@storage')->name('storage');
 });
 /*
 |--------------------------------------------------------------------------
