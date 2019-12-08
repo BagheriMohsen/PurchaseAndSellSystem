@@ -219,6 +219,7 @@ class StartingSeeder extends Seeder
           'App\Warehouse'::create([
             'user_id'       =>  3,
             'name'          =>  "انبار مادر",
+            'state_id'       =>  1,
             'city_id'       =>  1,
             'description'   =>  "",
             'address'       =>  "قم-خیابان ارم",
@@ -229,12 +230,20 @@ class StartingSeeder extends Seeder
         'App\Warehouse'::create([
           'user_id'       =>  4,
           'name'          =>  "انبار تنخواه",
+          'state_id'       =>  1,
           'city_id'       =>  1,
           'description'   =>  "",
           'address'       =>  "قم-خیابان ارم",
           'telephone'      =>  "",
           'postalCard'    =>  "" 
       ]);
+      /*
+      |--------------------------------------------------------------------------
+      | Create Payment Status
+      |--------------------------------------------------------------------------
+      |*/
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید نشده",]);
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید شده",]);
       /*
       |--------------------------------------------------------------------------
       | Create Transport

@@ -80,9 +80,14 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
+        $users = 'App\User'::Role(['followUpManager','mainWarehouser'])->get();
         $cities = 'App\City'::latest()->get();
         $warehouse = Warehouse::findOrFail($id);
-        return view('Admin.WareHouse.warehouse-edit',compact('warehouse','cities'));
+        return view('Admin.WareHouse.warehouse-edit',compact(
+            'warehouse',
+            'cities',
+            'users'
+        ));
     }
 
     /**
@@ -108,10 +113,11 @@ class WarehouseController extends Controller
         $warehouse->update([
             'user_id'       =>  auth()->user()->id,
             'name'          =>  $request->name,
+            'state_id'      =>  $request->state,
             'city_id'       =>  $request->city,
             'description'   =>  $request->description,
             'address'       =>  $request->address,
-            'telephone'      =>  $request->telephon,
+            'telephone'     =>  $request->telephon,
             'postalCard'    =>  $request->postalCard 
         ]);
         $message = $request->name.' به روز رسانی شد';

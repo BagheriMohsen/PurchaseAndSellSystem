@@ -538,7 +538,7 @@ class UserController extends Controller
 
         $TotalSettle = 'App\PaymentCirculation'::where([
             ['user_id','=',$user->id],
-            ['confirmDate','!=',null]
+            ['status_id','=',2]
         ])->sum('bill');
 
         return view('Admin.agent-index',compact(

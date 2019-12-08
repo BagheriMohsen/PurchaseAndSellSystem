@@ -33,17 +33,10 @@ class MoneyCirculation extends Model
     | Releate with User Model - agent
     |--------------------------------------------------------------------------
     |*/
-    public function agent(){
-        return $this->belongsTo('App\User','agent_id','id');
+    public function user(){
+        return $this->belongsTo('App\User','user_id','id');
     }
-    /*
-    |--------------------------------------------------------------------------
-    | Releate with User Model - seller
-    |--------------------------------------------------------------------------
-    |*/
-    public function seller(){
-        return $this->belongsTo('App\User','seller_id','id');
-    }
+    
     /*
     |--------------------------------------------------------------------------
     | Releate with User Model - Orderstatus

@@ -40,13 +40,37 @@
                     <label for="inputIconEx2">کارت پستال</label>
                 </div>
                 {# City #}
+                <div class="col-sm-3 mt-3  mb-4">
+                    <label for="users">مسئول انبار</label>
+                    <select class="form-control"  name="users">
+                        {% for user in users %}
+                            <option disabled value="{{user.id}}">
+                                {{user.name}}{{' '}} {{user.family}}
+                                {{'/'}}
+                                {{user.city.name}}{{'-'}}{{user.state.name}}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {# end City #}
+                {# City #}
                 <div  class="col-sm-3 mt-3  mb-4">
-                <select class="form-control"  name="city">
-                    
-                    {% for city in cities %}
-                        <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
-                    {% endfor %}
-                </select>
+                    <label for="city">استان</label>
+                    <select class="form-control"  name="state">
+                        {% for state in cities %}
+                            <option {% if warehouse.state_id == state.id %} selected {% endif %} value="{{state.id}}" >{{state.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {# end City #}
+                {# City #}
+                <div  class="col-sm-3 mt-3  mb-4">
+                    <label for="city">شهر</label>
+                    <select class="form-control"  name="city">
+                        {% for city in cities %}
+                            <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 {# end City #}
                 {# آدرس کامل #}

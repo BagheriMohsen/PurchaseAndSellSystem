@@ -30,11 +30,11 @@
             ثبت پرداخت
           </strong>
         </button>
-        <button class="btn btn-default btn-sm" type="button" data-toggle="modal" href="#bank_cart_table">
+        {# <button class="btn btn-default btn-sm" type="button" data-toggle="modal" href="#bank_cart_table">
           <strong class="text-dark h6">
             ثبت کارت بانکی
           </strong>
-        </button>
+        </button> #}
         
       </div>
       <table  class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
@@ -114,7 +114,8 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="container">
-         <form class="row label-light" method="post" id="payOrders">
+         <form action="{{route('userInventory.AgentPayMoney')}}" class="row label-light" method="POST" id="payOrders" enctype="multipart/form-data">
+          <input name="_token" type="hidden" value="{{ csrf_token() }}" />
           <div class="col-sm-6 mt-3">
             <label for="bill">مبلغ-تومان
               <span class="text-danger">*</span>
@@ -131,28 +132,28 @@
             <label for="tracingCode">کد (کد پیگیری-شماره مرجع-شماره بازاریابی-شماره سند-شماره پیگیری پایا)
               <span class="text-danger">*</span>
             </label>
-            <input class="form-control comma" type="text" name="tracingCode" value="" required>
+            <input class="form-control comma" type="text" name="trackingCode" value="" required>
           </div>
-          <div class="col-sm-12 mt-3">
+          {# <div class="col-sm-12 mt-3">
             <label for="bankAccount">شماره حساب
               <span class="text-danger">*</span>
             </label>
             <select id="state" class="form-control"  name="bankAccount" required>
               <option value="{{null}}">انتخاب کنید</option>
             </select>
-          </div>
+          </div> #}
           <div class="col-sm-6 mt-3">
             <input class=" bg-sec" type="radio"  name="paymentMethod" value="card" checked>
             <label for="paymentMethod">ثبت فیش
             </label>
             <br />
-            <input class=" bg-sec" type="radio" name="paymentMethod" value="online" >
+            <input disabled class=" bg-sec" type="radio" name="paymentMethod" value="online" >
             <label for="paymentMethod">آنلاین
             </label>
           </div>
           <div class="col-sm-6 mt-3">
             <label for="receiptImage">تصویر فیش</label>
-            <input value="" class="form-control border-0" type="file" placeholder="" name="receiptImage">
+            <input value="" class="form-control border-0" type="file" placeholder="" name="image">
           </div>
           <div class="col-sm-12 mt-3">
             <label for="billDesc">توضیحات
