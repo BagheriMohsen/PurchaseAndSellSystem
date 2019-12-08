@@ -116,6 +116,7 @@ class OrderController extends Controller
             'chequePrice'       =>      $request->chequePrice,
             'instant'           =>      $request->instant,
             'sellerDescription' =>      $request->sellerDescription,
+            'sendDescription'   =>      $request->deliverDescription,
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
             'HBD_Date'          =>      $request->HBD_Date
@@ -583,7 +584,11 @@ class OrderController extends Controller
     |*/
     public function sellerNoActionOrders(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['seller_id'=>$user->id,'status'=>1,'agent_id'=>null])->latest()->get();
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['status','=',7],
+        ])->latest()->paginate(15);
+        
         return view('Admin.Order.Seller.seller-noAction-orders',compact('orders'));
     }
     /*
