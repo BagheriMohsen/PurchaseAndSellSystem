@@ -217,7 +217,7 @@ class OrderController extends Controller
             
         return view('Admin.Order.Agent.agent-orders-collected',compact(
             'orders',
-            'bottom_statuses',
+            'bottom_statuses'
         ));
     }
     /*
@@ -671,7 +671,7 @@ class OrderController extends Controller
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
             'orders',
             'agents',
-            'user',
+            'user'
         ));
     }
     /*
@@ -688,7 +688,7 @@ class OrderController extends Controller
             ])->latest()->get();
         
         return view('Admin.Order.Seller.order-callback',compact(
-            'orders',
+            'orders'
         ));
     }
     /*
@@ -727,7 +727,7 @@ class OrderController extends Controller
         
         return view('Admin.Order.FollowUpManager.receive-order-fromAgent',compact(
             'orders',
-            'agents',
+            'agents'
         ));
     }
     /*
