@@ -227,14 +227,14 @@
               <tr class="text-center">
 
                 <td>{{ item.product.name }}</td>
-                {% if item.type is null %}
+                {% if item.product_type is null %}
                   <td>{{ 'ندارد' }}</td>
                 {% else %}
-                  <td>{{ item.type }}</td>
+                  <td>{{ item.type.name }}</td>
                 {% endif %}
-                <td>{{ item.product.price }}</td>
+                <td class="number">{{ item.product.price }}</td>
                 <td>{{ item.count }}</td>
-                <td>{{ item.off }}</td>
+                <td class="number">{{ item.off }}</td>
                 <td>
                   {% for share in user.tariffs %}
 
@@ -254,7 +254,7 @@
                   {% endfor %}
 
                 </td>
-                <td class="row_total">{{ (item.product.price * item.count) - item.off }}</td>
+                <td class="row_total number">{{ (item.product.price * item.count) - item.off  }}</td>
               </tr>
 
             {% endfor %}
@@ -282,9 +282,9 @@
             {% else %}
               <td>{{ 'نقدی + چک' }}</td>
             {% endif %}
-            <td>{{ order.cashPrice | number_format }}</td>
-            <td>{{ order.chequePrice | number_format }}</td>
-            <td class="pre_payment">{{ order.prePayment | number_format }}</td>
+            <td class="number">{{ order.cashPrice | number_format }}</td>
+            <td class="number">{{ order.chequePrice | number_format }}</td>
+            <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
           </tr>
           <tr class="text-center">
             <th>هزینه ارسال</th>
@@ -292,9 +292,9 @@
             <th>قابل پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td class="post_price">2000</td>
-            <td>0</td>
-            <td class="total"></td>
+            <td class="post_price number">2000</td>
+            <td class="number">0</td>
+            <td class="total number"></td>
           </tr>
         </tbody>
         </table>
@@ -307,8 +307,8 @@
           </tr>
           
               <tr class="text-center">
-                <td>{{item.sendDescription}}</td>
-                <td>{{ item.sellerDescription }}</td>
+                <td>{{order.sendDescription}}</td>
+                <td>{{ order.sellerDescription }}</td>
               </tr>
           </tbody>
         </table>

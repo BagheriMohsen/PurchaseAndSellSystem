@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 class MoneyCirculationController extends Controller
 {
     /*
@@ -12,8 +13,26 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCurrentBills(){
-        
-        return view('Admin.UserInventory.Agent.current-bills');
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $AllSell = 
+        'App\MoneyCirculation'::where('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)->sum('amount');
+            
+        $AllSpecialShared = 'App\UserInventory'::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+            
+        $TotalSettle = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])->sum('bill');
+        return view('Admin.UserInventory.Agent.current-bills',compact(
+            'AllSell',
+            'AllSpecialShared',
+            'TotalSettle',
+            'user'
+        ));
     }
     /*
     |--------------------------------------------------------------------------
@@ -41,20 +60,22 @@ class MoneyCirculationController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
-    | Agent PrePayment List
-    |--------------------------------------------------------------------------
-    |*/
-    public function AgentPrePaymentList(){
-        return view('Admin.UserInventory.Agent.prepayment-list');
-
-    }
-    /*
-    |--------------------------------------------------------------------------
     | Agent Payment List
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentList(){
-        return view('Admin.UserInventory.Agent.payment-list');
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $payments = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',1],
+        ])
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.Agent.payment-list',compact('payments'));
 
     }
     /*
@@ -90,7 +111,9 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentUnverifiedPayment(){
-        return view('Admin.UserInventory.Admin.unverified-payment');
+        $payments = 'App\PaymentCirculation'::where('status_id',1)
+        ->latest()->paginate(15);
+        return view('Admin.UserInventory.Admin.unverified-payment',compact('payments'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -134,5 +157,48 @@ class MoneyCirculationController extends Controller
         $cart = 'App\BankAccount'::destroy($id);
         return back()->with('message','کارت مورد نظر از لیست حذف شد');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Pay Money
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPayMoney(Request $request){
 
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        if($request->hasFile('image')){
+            $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
+        }else{
+            $image = null;
+        }
+        
+        'App\PaymentCirculation'::create([
+                'receiptImage'  =>  $image,
+                'user_id'       =>  $user->id,
+                'status_id'     =>  1,
+                'bill'          =>  (float) str_replace(',', '', $request->bill),
+                'billDate'      =>  $request->date,
+                'trackingCode'  =>  (float) str_replace(',', '', $request->trackingCode),
+                'paymentMethod' =>  $request->paymentMethod,
+                'billDesc'      =>  $request->billDesc
+            ]);
+        return back()->with('message','اطلاعات به درستی ارسال شد.پس از تایید مدیریت در حساب جاری شما اعمال میشود');
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Accept Agent Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminAcceptAgentPayment($id){
+        $pay = 'App\PaymentCirculation'::findOrFail($id);
+        $pay->update([
+            'status_id'     =>  2,
+            'confirmDate'   =>  Carbon::now()
+            ]);
+
+        return back()->with('message','فیش واریزی تایید و در حساب جاری نماینده اعمال شد');
+    }
+
+   
 }

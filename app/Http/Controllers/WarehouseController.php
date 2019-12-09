@@ -80,9 +80,14 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
+        $users = 'App\User'::Role(['followUpManager','mainWarehouser'])->get();
         $cities = 'App\City'::latest()->get();
         $warehouse = Warehouse::findOrFail($id);
-        return view('Admin.WareHouse.warehouse-edit',compact('warehouse','cities'));
+        return view('Admin.WareHouse.warehouse-edit',compact(
+            'warehouse',
+            'cities',
+            'users'
+        ));
     }
 
     /**
@@ -108,10 +113,11 @@ class WarehouseController extends Controller
         $warehouse->update([
             'user_id'       =>  auth()->user()->id,
             'name'          =>  $request->name,
+            'state_id'      =>  $request->state,
             'city_id'       =>  $request->city,
             'description'   =>  $request->description,
             'address'       =>  $request->address,
-            'telephone'      =>  $request->telephon,
+            'telephone'     =>  $request->telephone,
             'postalCard'    =>  $request->postalCard 
         ]);
         $message = $request->name.' به روز رسانی شد';
@@ -140,8 +146,34 @@ class WarehouseController extends Controller
     public function inout($slug){
         $warehouse  = Warehouse::where('slug',$slug)->firstOrFail();
         
-        $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
-        ->latest()->paginate(10);
-        return view('Admin.WareHouse.inout',compact('storeRooms','warehouse'));
+        if($warehouse->id == 1){
+            $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
+            ->latest()->paginate(15);
+            return view('Admin.WareHouse.Maininout',compact('storeRooms','warehouse'));
+        }else{
+            $storeRooms = 'App\StoreRoom'::where([
+                ['warehouse_id','=',$warehouse->id],
+                ['in_out','!=',8]
+            ])
+            ->latest()->paginate(15);
+            return view('Admin.WareHouse.Fundinout',compact('storeRooms','warehouse'));
+        }
+        
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Storage List
+    |--------------------------------------------------------------------------
+    |*/
+    public function storage($id){
+        $warehouse  = Warehouse::where('id',$id)->firstOrFail();
+        $storages = 'App\Storage'::where('warehouse_id',$id)->get();
+        $allProduct = 'App\Storage'::where('warehouse_id',$id)->sum('number');
+        return view('Admin.WareHouse.storeRoom-index',compact(
+            'storages',
+            'allProduct',
+            'warehouse'
+        ));
+
     }
 }

@@ -21,7 +21,8 @@ class CreateStoreRoomsTable extends Migration
         Schema::create('warehouses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('city_id')->unsigned();
+            $table->bigInteger('state_id')->unsigned()->nullable();
+            $table->bigInteger('city_id')->unsigned()->nullable();
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
@@ -33,6 +34,12 @@ class CreateStoreRoomsTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreign('state_id')->references('id')->on('states')
+            ->onDelete('cascade')->onUpdate('set null');
+
+            $table->foreign('city_id')->references('id')->on('cities')
+            ->onDelete('cascade')->onUpdate('set null');
         });
         /*
         |--------------------------------------------------------------------------

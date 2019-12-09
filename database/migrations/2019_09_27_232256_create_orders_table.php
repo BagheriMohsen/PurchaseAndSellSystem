@@ -26,10 +26,9 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('seller_id')->unsigned()->nullable();
             $table->bigInteger('callCenter_id')->unsigned()->nullable();
             $table->bigInteger('followUpManager_id')->unsigned()->nullable();
-           
             $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
-            $table->char('trackingCode',100);
+            $table->char('trackingCode',250);
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
@@ -46,6 +45,11 @@ class CreateOrdersTable extends Migration
             $table->Date('returnDate')->nullable();
             $table->string('instant')->default('IsNot');
             $table->text('address')->nullable();
+            $table->Date('suspended_Date')->nullable();
+            $table->Date('delivary_Date')->nullable();
+            $table->Date('collected_Date')->nullable();
+            $table->Date('cancelled_Date')->nullable();
+            $table->Date('returnToSeller_Date')->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
             $table->timestamps();

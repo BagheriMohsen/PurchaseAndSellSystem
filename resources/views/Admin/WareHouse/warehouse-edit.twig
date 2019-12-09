@@ -35,18 +35,29 @@
                     <label for="inputIconEx2">تلفن ثابت</label>
                 </div>
                 {# کار پستال #}
-                <div class="md-form mb-4 m-2 mx-auto col-sm-3">
+                {# <div class="md-form mb-4 m-2 mx-auto col-sm-3">
                     <input name="postalCard" value="{{warehouse.postalCard}}" type="text" id="inputIconEx2" class="form-control" >
                     <label for="inputIconEx2">کارت پستال</label>
-                </div>
+                </div> #}
+                
                 {# City #}
                 <div  class="col-sm-3 mt-3  mb-4">
-                <select class="form-control"  name="city">
-                    
-                    {% for city in cities %}
-                        <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
-                    {% endfor %}
-                </select>
+                    <label for="city">استان</label>
+                    <select class="form-control"  name="state">
+                        {% for state in cities %}
+                            <option {% if warehouse.state_id == state.id %} selected {% endif %} value="{{state.id}}" >{{state.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {# end City #}
+                {# City #}
+                <div  class="col-sm-3 mt-3  mb-4">
+                    <label for="city">شهر</label>
+                    <select class="form-control"  name="city">
+                        {% for city in cities %}
+                            <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 {# end City #}
                 {# آدرس کامل #}

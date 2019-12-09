@@ -14,8 +14,8 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::latest()->get();
-        $states = State::latest()->paginate(10);
+        $cities = City::latest()->paginate(15);
+        $states = State::latest()->get();
         return view('Admin.City&State.cities',compact('states','cities'));
     }
 
@@ -118,5 +118,20 @@ class CityController extends Controller
           $message .= $cityName;
           $message .= ' با موفقیت از بین لیست شهرها حذف شد ';
         return redirect()->route('cities.index')->with('message',$message);
+    }
+
+    public function search(Request $request){
+
+      $name = $request->cityName;
+     
+      $cities = City::query()
+      ->when($name,function($query,$name){
+          return $query
+          ->where('name','LIKE',"%{$name}%");
+      })
+      ->latest()->paginate(10);
+
+      $states = State::latest()->paginate(10);
+      return view('Admin.City&State.cities',compact('states','cities'));
     }
 }

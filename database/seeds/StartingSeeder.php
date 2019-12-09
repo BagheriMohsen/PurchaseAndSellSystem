@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Carbon\Carbon;
 class StartingSeeder extends Seeder
 {
     /**
@@ -219,6 +219,7 @@ class StartingSeeder extends Seeder
           'App\Warehouse'::create([
             'user_id'       =>  3,
             'name'          =>  "انبار مادر",
+            'state_id'       =>  1,
             'city_id'       =>  1,
             'description'   =>  "",
             'address'       =>  "قم-خیابان ارم",
@@ -229,12 +230,20 @@ class StartingSeeder extends Seeder
         'App\Warehouse'::create([
           'user_id'       =>  4,
           'name'          =>  "انبار تنخواه",
+          'state_id'       =>  1,
           'city_id'       =>  1,
           'description'   =>  "",
           'address'       =>  "قم-خیابان ارم",
           'telephone'      =>  "",
           'postalCard'    =>  "" 
       ]);
+      /*
+      |--------------------------------------------------------------------------
+      | Create Payment Status
+      |--------------------------------------------------------------------------
+      |*/
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید نشده",]);
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید شده",]);
       /*
       |--------------------------------------------------------------------------
       | Create Transport
@@ -288,12 +297,13 @@ class StartingSeeder extends Seeder
       'App\StoreRoomStatus'::create(['name'=>'ورود از انبار مرکزی-پذیرفته شده']);
       'App\StoreRoomStatus'::create(['name'=>'ارسال به نماینده']);
       'App\StoreRoomStatus'::create(['name'=>'انبار به انبار نماینده']);
-      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار تنخواه']);
+      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار مادر-تایید نشده']);
       'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته نشده']);
       'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
       'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار نماینده']);
       'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه']);
       'App\StoreRoomStatus'::create(['name'=>'تحویل به مشتری']);
+      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
     /*
     |--------------------------------------------------------------------------
     | Store Product
@@ -350,7 +360,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -385,7 +396,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
     'App\OrderProduct'::create([
       'order_id'      =>  $order->id,
@@ -420,7 +432,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -455,7 +468,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -490,7 +504,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -525,7 +540,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
     'App\OrderProduct'::create([
       'order_id'      =>  $order->id,

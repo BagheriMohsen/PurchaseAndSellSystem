@@ -77,12 +77,17 @@ class CreateTableMoneyCirculations extends Migration
             ->onUpdate('cascade')->onDelete('cascade');
 
         });
-
+        Schema::create('payment_status', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
+        });
         Schema::create('payment_circulations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('bank_account_id')->unsigned()->nullable();
             $table->string('receiptImage')->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->bigInteger('status_id')->unsigned();
             $table->integer('bill');
             $table->Date('billDate');
             $table->Date('confirmDate')->nullable();
@@ -92,6 +97,9 @@ class CreateTableMoneyCirculations extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('status_id')->references('id')->on('payment_status')
             ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('bank_account_id')->references('id')->on('bank_accounts')

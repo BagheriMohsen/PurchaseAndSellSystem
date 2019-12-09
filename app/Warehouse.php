@@ -9,6 +9,7 @@ class Warehouse extends Model
     use Sluggable;
     protected $fillable = [
         'user_id',
+        'state_id',
         'city_id',
         'name',
         'slug',

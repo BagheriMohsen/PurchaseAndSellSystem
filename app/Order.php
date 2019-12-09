@@ -35,7 +35,12 @@ class Order extends Model
     'transport_id',
     'isPaid',
     'PaidConfirm',
-    'payDate'
+    'payDate',
+    'suspended_Date',
+    'delivary_Date',
+    'collected_Date',
+    'cancelled_Date',
+    'returnToSeller_Date'
    ];
     /*
     |--------------------------------------------------------------------------

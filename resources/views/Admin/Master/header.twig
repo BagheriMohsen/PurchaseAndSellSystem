@@ -52,6 +52,8 @@
                 {% include 'Admin.Master.HeaderNotif.FundWareHouser' %}
               {% elseif role.name == "followUpManager" %}
                 {% include 'Admin.Master.HeaderNotif.FollowUpManager' %}
+              {% elseif role.name == "mainWarehouser" %}
+                {% include 'Admin.Master.HeaderNotif.MainWareHouser' %}
               {% endif %}
               {#
               --------------------------------------------------------------------------

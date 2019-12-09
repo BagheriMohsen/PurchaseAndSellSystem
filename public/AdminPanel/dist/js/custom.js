@@ -1,25 +1,25 @@
 $(document).ready(function(){
 
-    pdfMake.fonts = {
-        Yekan: {
-          normal: 'Yekan.ttf',
-          bold: 'Yekan.ttf',
-          italics: 'Yekan.ttf',
-          bolditalics: 'Yekan.ttf'
-        },
-        Roboto: {
-            normal: 'Roboto-Regular.ttf',
-            bold: 'Roboto-Medium.ttf',
-            italics: 'Roboto-Italic.ttf',
-            bolditalics: 'Roboto-MediumItalic.ttf'
-        }
-     }
-     var docDefinition = {
-        defaultStyle: {
-          font: 'Yekan'
-        }
-      }
-      pdfMake.createPdf(docDefinition);
+    // pdfMake.fonts = {
+    //     Yekan: {
+    //       normal: 'Yekan.ttf',
+    //       bold: 'Yekan.ttf',
+    //       italics: 'Yekan.ttf',
+    //       bolditalics: 'Yekan.ttf'
+    //     },
+    //     Roboto: {
+    //         normal: 'Roboto-Regular.ttf',
+    //         bold: 'Roboto-Medium.ttf',
+    //         italics: 'Roboto-Italic.ttf',
+    //         bolditalics: 'Roboto-MediumItalic.ttf'
+    //     }
+    //  }
+    //  var docDefinition = {
+    //     defaultStyle: {
+    //       font: 'Yekan'
+    //     }
+    //   }
+    //   pdfMake.createPdf(docDefinition);
 
 
     var persianDataTable = {
@@ -145,13 +145,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
         "language": persianDataTable,
@@ -165,13 +165,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
         "language": persianDataTable,
@@ -185,13 +185,13 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        buttons: {
-            buttons: [
-              { extend: 'print', text: 'Print List' },
-              { extend: 'pdf', text: 'PDF' },
-              { extend: 'copy', text: 'Copy to clipboard' }
-            ]
-          }
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
     });
     // Other section tabless
     $('#cityTable,#stateTable').DataTable({
@@ -560,7 +560,7 @@ $(document).ready(function(){
    
 
     
-    function configureChart(chartData){
+    function configureChart(chartData,element_id){
         var chartData = chartData;
         var dates = [];
         var suspended = [];
@@ -584,12 +584,12 @@ $(document).ready(function(){
         var config = {
             type: 'line',
             data: {
-                labels: dates,
+                labels: dates.reverse(),
                 datasets: [{
                     label: 'سفارشات وصولی',
                     backgroundColor: '#17a2b8',
                     borderColor: '#17a2b8',
-                    data: collected,
+                    data: collected.reverse(),
                     fill: false,
                 }, 
                 {
@@ -597,14 +597,14 @@ $(document).ready(function(){
                     fill: false,
                     backgroundColor: '#dc3545',
                     borderColor: '#dc3545',
-                    data: cancelled,
+                    data: cancelled.reverse(),
                 },
                 {
                     label: 'سفارشات در انتظار و معلق',
                     fill: false,
                     backgroundColor: '#ffc107',
                     borderColor: '#ffc107',
-                    data: suspended,
+                    data: suspended.reverse(),
                 }]
             },
             options: {
@@ -640,23 +640,33 @@ $(document).ready(function(){
             }
         };
     
-        var ctx = document.getElementById('agent_sell_chart').getContext('2d');
+        var ctx = document.getElementById(element_id).getContext('2d');
         window.myLine = new Chart(ctx, config);
     }
-    //Sell and orders Chart Setup for agents
     if(document.querySelector('#agent_sell_chart')){
-        var chartData =[];
+        var element_id = 'agent_sell_chart'; 
         var userId = $('#userId').val();
         $.ajax({
             url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/' + userId,
             type:'Get',
             success:function(response){ 
-                chartData = response[0];
-                configureChart(chartData);
-                console.log(chartData);
+                configureChart(response[0],element_id);
             }
         });
     };
+    //Sell and orders Chart Setup for admin
+    if(document.querySelector('#admin_sell_chart')){
+        var element_id = 'admin_sell_chart';
+        $.ajax({
+            url:'http://localhost:8000/users/Admin-Dashboard-Chart-API',
+            type:'Get',
+            success:function(response){ 
+                configureChart(response[0],element_id);
+            }
+        });
+    };
+
+
     var productList;
     var orderListTable = document.querySelector('.orderList');
     //Setup for order page
@@ -798,6 +808,7 @@ $(document).ready(function(){
         var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
+        var deliverDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
         var formData = {
             _token:CSRF_TOKEN,
@@ -817,6 +828,7 @@ $(document).ready(function(){
             chequePrice:chequePrice,
             instant:instant,
             sellerDescription:sellerDescription,
+            deliverDescription:deliverDescription,
             orderArray:orderArray
         }
         console.log(formData);
@@ -913,8 +925,9 @@ $(document).ready(function(){
         });
     });
    
-    var isoDate;
+    // var isoDate;
     // Setup persian datepicker for date inputs
+    var isoDate;
     $(".persianDatePicker").pDatepicker({
         calendar:{
             persian: {
@@ -1052,14 +1065,10 @@ $(document).ready(function(){
     $('#warehouseToTankhah').on('change', calculateCargoValue);
     $('#tankhahExit').on('change', calculateCargoValue);
     $('#returnToFund').on('change', calculateCargoValue);
-    // $('#sendToAgentForm').on('click',function(){
-    //     // $(this).val() = isoDate;
-    //     console.log(isoDate);
-    // })
+
     $('#sendToAgentForm').submit(function(event){
        event.preventDefault();
        $(this).find('input[name="date"]').val(isoDate);
-       console.log($(this).find('input[name="date"]').val());
        $(this)[0].submit();
     });
     $('#storeToStoreAgents').submit(function(event){
@@ -1075,7 +1084,7 @@ $(document).ready(function(){
     
     //Get State and cities array via ajax for user_create and user_edit 
     var statesCityArray;
-    if($('#createUserForm').length || $('#editUserForm').length){
+    if($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length){
         $.ajax({
             url:'http://localhost:8000/states/AllStatesAndCitiesName',
             type:'Get',
@@ -1085,10 +1094,13 @@ $(document).ready(function(){
         });
         //City dependency to states in forms
         $('#state').on('change',function(){
+            var null_value = null;
             var form = $(this).parents('form');
             var city = form.find('#city')[0];
             city.innerHTML = '';
-            city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
+            if($('#searchForm').length){
+                city.innerHTML += `<option value="${null_value}">همه</option>`;
+            }
             var stateName = form.find('#state option:selected').html();
             $.each(statesCityArray,function(index,value){
                 if(value.name == stateName){
@@ -1427,21 +1439,21 @@ $(document).ready(function(){
     });
     
     $('#productTable').DataTable( {
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [2,3,4,5,6,7 ]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [2,3,4,5,6,7 ]
-                }
-            },
-        ]
+        // dom: 'lBfrtip',
+        // buttons: [
+        //     {
+        //         extend: 'excelHtml5',
+        //         exportOptions: {
+        //             columns: [2,3,4,5,6,7 ]
+        //         }
+        //     },
+        //     {
+        //         extend: 'pdfHtml5',
+        //         exportOptions: {
+        //             columns: [2,3,4,5,6,7 ]
+        //         }
+        //     },
+        // ]
     } );
     //Handling cash and cheque in order_create page
     $('#orderForm input[name="paymentMethod"]').on('change',function(){
@@ -1563,7 +1575,33 @@ $(document).ready(function(){
             }
         });
     });
-    // var element = document.getElementById('productTable');
-    // html2pdf(element);
+    // Before submitting search form
+    $('#searchForm').submit(function(event){
+        event.preventDefault();
+
+    });
+ 
+    $('.persianDatePicker').on('change paste keyup select',function(){
+        console.log($(this).val());
+        // $(this).siblings('.georgian_date').val()
+    });
+    $('#searchForm').submit(function(event){
+        event.preventDefault();
+        $('.persianDatePicker').each(function(index,item){
+            var jalali_date = $(this).val();
+            if(jalali_date){
+                m = moment(jalali_date, 'jYYYY/jM/jD');
+                $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+            }
+        });
+        $(this)[0].submit();
+    });
+    //Adding comma to numbers in tables 
+    $.fn.digits = function(){ 
+        return this.each(function(){ 
+            $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
+        })
+    }
+    $(".number").digits();
 });
 

@@ -11,6 +11,7 @@ class PaymentCirculation extends Model
         'bank_account_id',
         'receiptImage',
         'user_id',
+        'status_id',
         'bill',
         'billDate',
         'confirmDate',

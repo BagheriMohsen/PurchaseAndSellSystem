@@ -44,7 +44,7 @@
                       <th>فروشنده</th>
                       <th>کالسنتر</th>
                       <th>مدیر پیگیری</th>
-                      <th>وضعیت سفارش</th>
+                      {# <th>وضعیت سفارش</th> #}
                       <th>عملیات</th>
                     </tr>
                     </thead>
@@ -54,11 +54,23 @@
                         <td>{{order.id}}</td>
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         <td>{{order.fullName}}</td>
-                        <td>{{order.agent.name}}{{' '}}{{order.agent.family}}</td>
-                        <td>{{order.seller.name}}{{' '}}{{order.seller.family}}</td>
-                        <td>{{order.callCenter.name}}{{' '}}{{order.callCenter.family}}</td>
-                        <td>{{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}</td>
-                        <td>{{order.status.name}}</td>
+                        <td>{{order.agent.name}}{{' '}}{{order.agent.family}}
+                          {{'/'}}
+                          {{order.agent.city.name}}
+                        </td>
+                        <td>{{order.seller.name}}{{' '}}{{order.seller.family}}
+                          {{'/'}}
+                          {{order.seller.city.name}}
+                        </td>
+                        <td>{{order.callCenter.name}}{{' '}}{{order.callCenter.family}}
+                          {{'/'}}
+                          {{order.callCenter.city.name}}
+                        </td>
+                        <td>{{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}
+                          {{'/'}}
+                          {{order.followUpManager.city.name}}
+                        </td>
+                        {# <td>{{dump(order.status.name)}}</td> #}
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
@@ -139,15 +151,15 @@
               <td>
                     <span>
                       {{'داخل شهر:'}}
-                      {{order.agent.internalPrice}}
+                      {{user.internalPrice}}
                     </span>/
                     <span>
                       {{'حومه شهر:'}}
-                      {{order.agent.locallyPrice}}
+                      {{user.locallyPrice}}
                       </span>/
                     <span>
                       {{'روستا:'}}
-                      {{order.agent.villagePrice}}
+                      {{user.villagePrice}}
                     </span>
 
               </td>
@@ -172,16 +184,16 @@
               <tr class="text-center">
 
                 <td>{{ item.product.name }}</td>
-                {% if item.type is null %}
+                {% if item.product_type is null %}
                   <td>{{ 'ندارد' }}</td>
                 {% else %}
-                  <td>{{ item.type }}</td>
+                  <td>{{ item.type.name }}</td>
                 {% endif %}
-                <td>{{ item.product.price }}</td>
+                <td class="number">{{ item.product.price }}</td>
                 <td>{{ item.count }}</td>
-                <td>{{ item.off }}</td>
+                <td class="number">{{ item.off }}</td>
                 <td>
-                  {% for share in order.agent.tariffs %}
+                  {% for share in user.tariffs %}
 
                     {% if share.product_id == item.product.id %}
                       {% if share.place == "internal" %}
@@ -199,7 +211,7 @@
                   {% endfor %}
 
                 </td>
-                <td class="row_total">{{ (item.product.price * item.count) - item.off }}</td>
+                <td class="row_total number">{{ (item.product.price * item.count) - item.off  }}</td>
               </tr>
 
             {% endfor %}
@@ -227,9 +239,9 @@
             {% else %}
               <td>{{ 'نقدی + چک' }}</td>
             {% endif %}
-            <td>{{ order.cashPrice | number_format }}</td>
-            <td>{{ order.chequePrice | number_format }}</td>
-            <td class="pre_payment">{{ order.prePayment | number_format }}</td>
+            <td class="number">{{ order.cashPrice | number_format }}</td>
+            <td class="number">{{ order.chequePrice | number_format }}</td>
+            <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
           </tr>
           <tr class="text-center">
             <th>هزینه ارسال</th>
@@ -237,9 +249,9 @@
             <th>قابل پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td class="post_price">0</td>
-            <td>0</td>
-            <td class="total"></td>
+            <td class="post_price number">2000</td>
+            <td class="number">0</td>
+            <td class="total number"></td>
           </tr>
         </tbody>
         </table>
@@ -252,8 +264,8 @@
           </tr>
           
               <tr class="text-center">
-                <td>{{item.sendDescription}}</td>
-                <td>{{ item.sellerDescription }}</td>
+                <td>{{order.sendDescription}}</td>
+                <td>{{ order.sellerDescription }}</td>
               </tr>
           </tbody>
         </table>

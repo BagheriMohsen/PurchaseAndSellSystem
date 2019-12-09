@@ -157,13 +157,13 @@
           <span aria-hidden="true" class="white-text">&times;</span>
         </button>
         <p class="heading lead"> 
-          محصولات سفارش
+          مشخصات سفارش
           {{order.fullName}}
         </p>
       </div>
 
       <!-- Modal body -->
-      <div class="modal-body text-center ">
+      <div class="modal-body text-center  ">
         <table  class="table pt-2 pb-2 text-center">
           <tbody>
             <tr class="text-center">
@@ -186,16 +186,30 @@
               <th>کد پستی</th>
               <th>کد پیگیری</th>
               <th>مبلغ مشارکت پایه</th>
-              <th colspan="3">آدرس</th>
             </tr>
             <tr>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td colspan="3">-</td>
+              <td>{{ order.postalCode }}</td>
+              <td>{{ order.trackingCode }}</td>
+              <td>
+                    <span>
+                      {{'داخل شهر:'}}
+                      {{user.internalPrice}}
+                    </span>/
+                    <span>
+                      {{'حومه شهر:'}}
+                      {{user.locallyPrice}}
+                      </span>/
+                    <span>
+                      {{'روستا:'}}
+                      {{user.villagePrice}}
+                    </span>
+
+              </td>
             </tr>
           </tbody>
         </table>
+        <strong>آدرس:</strong>
+        {{order.address}}
         <hr>
         <table  class="table pt-2 pb-2 text-center">
           <tbody>
@@ -206,32 +220,40 @@
               <th>تعداد</th>
               <th>تخفیف</th>
               <th>مبلغ مشارکت ویژه</th>
-              <th>مبلغ کل</th>
+              <th>جمع</th>
             </tr>
             {% for item in order.products %}
               <tr class="text-center">
 
                 <td>{{ item.product.name }}</td>
-                {% if item.type is null %}
+                {% if item.product_type is null %}
                   <td>{{ 'ندارد' }}</td>
                 {% else %}
-                  <td>{{ item.type }}</td>
+                  <td>{{ item.type.name }}</td>
                 {% endif %}
-                <td>{{ item.product.price }}</td>
+                <td class="number">{{ item.product.price }}</td>
                 <td>{{ item.count }}</td>
-                <td>{{ item.off }}</td>
-                <td>-</td>
-                <td>{{ (item.product.price * item.count) - item.off }}</td>
-                  {# <td>
-                  <form  action="#" method="post" >
-                      <input type="hidden" name="_token" value="{{csrf_token()}}" />
-                      <input type="hidden" name="_method" value="DELETE" />
-                      <input type="hidden" name="user_id" value="{{item.id}}">
-                      <a href="javascript:void(0)" class="deleteSpecialTariff text-danger btn-sm" name="button">
-                      <i class="far fa-trash-alt crud-icon"></i>
-                    </a>
-                  </form>
-                </td> #}
+                <td class="number">{{ item.off }}</td>
+                <td>
+                  {% for share in user.tariffs %}
+
+                    {% if share.product_id == item.product.id %}
+                      {% if share.place == "internal" %}
+                        {{'داخل شهر'}}
+                      {% elseif share.place == "suburb" %}
+                        {{'حومه شهر'}}
+                      {% else %}
+                        {{'روستا'}}
+                      {% endif %}
+                      {{':'}}
+                      {{share.price | number_format}}
+                      {{'<br />'}}
+                    {% endif %}
+
+                  {% endfor %}
+
+                </td>
+                <td class="row_total number">{{ (item.product.price * item.count) - item.off  }}</td>
               </tr>
 
             {% endfor %}
@@ -254,10 +276,14 @@
             <th>پیش پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
+            {% if order.paymentMethod == "cash" %}
+              <td>{{ 'نقدی' }}</td>
+            {% else %}
+              <td>{{ 'نقدی + چک' }}</td>
+            {% endif %}
+            <td class="number">{{ order.cashPrice | number_format }}</td>
+            <td class="number">{{ order.chequePrice | number_format }}</td>
+            <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
           </tr>
           <tr class="text-center">
             <th>هزینه ارسال</th>
@@ -265,9 +291,9 @@
             <th>قابل پرداخت</th>
           </tr>
           <tr class="text-center">
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
-            <td>{{ '-' }}</td>
+            <td class="post_price number">2000</td>
+            <td class="number">0</td>
+            <td class="total number"></td>
           </tr>
         </tbody>
         </table>
@@ -280,8 +306,8 @@
           </tr>
           
               <tr class="text-center">
-                <td>-</td>
-                <td>{{ item.sellerDescription }}</td>
+                <td>{{order.sendDescription}}</td>
+                <td>{{ order.sellerDescription }}</td>
               </tr>
           </tbody>
         </table>

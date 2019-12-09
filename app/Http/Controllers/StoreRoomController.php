@@ -19,12 +19,12 @@ class StoreRoomController extends Controller
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
-            $storages = 'App\Storage'::where('warehouse_id',1)->paginate(1000);
+            $storages = 'App\Storage'::where('warehouse_id',1)->get();
             $allProduct = 'App\Storage'::where('warehouse_id',1)->sum('number');
             
             
         }else{
-            $storages = 'App\Storage'::where('warehouse_id',2)->paginate(1000);
+            $storages = 'App\Storage'::where('warehouse_id',2)->get();
             $allProduct = 'App\Storage'::where('warehouse_id',2)->sum('number');
            
         }
@@ -139,6 +139,7 @@ class StoreRoomController extends Controller
                     'number'        =>  $request->number,
                     'description'   =>  $request->description,
                     'status'        =>  $request->status,
+                    'in_date'       =>  Carbon::now(),
                     'in_out'        =>  1
                 ]);
             }else{
@@ -158,6 +159,7 @@ class StoreRoomController extends Controller
                     'number'        =>  $request->number,
                     'description'   =>  $request->description,
                     'status'        =>  $request->status,
+                    'in_date'       =>  Carbon::now(),
                     'in_out'        =>  1
                 ]);
 
@@ -213,6 +215,7 @@ class StoreRoomController extends Controller
                     'number'        =>  $request->number,
                     'description'   =>  $request->description,
                     'status'        =>  $request->status,
+                    'out_date'      =>  Carbon::now(),
                     'in_out'        =>  3
                 ]);
 
@@ -273,7 +276,7 @@ class StoreRoomController extends Controller
                     'product_id'    =>  $request->product,
                     'number'        =>  $request->number,
                     'description'   =>  $request->description,
-                    'status'        =>  $request->status,
+                    'status'        =>  'به انبار تنخواه',
                     'in_out'        =>  2
                 ]);
                 // fundWarehouse
@@ -286,7 +289,7 @@ class StoreRoomController extends Controller
                     'product_id'    =>  $request->product,
                     'number'        =>  $request->number,
                     'description'   =>  $request->description,
-                    'status'        =>  $request->status,
+                    'status'        =>  'از انبار مادر',
                     'in_out'        =>  5
                 ]);
 
@@ -309,7 +312,10 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnFromFund(){
-        $storeRooms = StoreRoom::where(['receiver_id'=>1,'in_out'=>4])->latest()->paginate(1000);
+        $storeRooms = StoreRoom::where([
+            ['receiver_id','=',1],
+            ['in_out','=',4]
+        ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Main.returnFromFund',compact('storeRooms'));
     }
     /*
@@ -322,10 +328,16 @@ class StoreRoomController extends Controller
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>1,'in_out'=>1])->latest()->paginate(1000);
+            $storeRooms = StoreRoom::where([
+                ['warehouse_id','=',1],
+                ['in_out','=',1]
+            ])->latest()->paginate(15);
             return view('Admin.StoreRoom.Main.inStorage',compact('storeRooms'));
         }elseif($role == "fundWarehouser"){
-            $storeRooms = StoreRoom::where(['warehouse_id'=>2,'in_out'=>6])->latest()->paginate(1000);
+            $storeRooms = StoreRoom::where([
+                ['warehouse_id','=',2],
+                ['in_out','=',6]
+            ])->latest()->paginate(15);
             return view('Admin.StoreRoom.Fund.inStorage',compact('storeRooms'));
         }else{
             return abort(404);
@@ -737,15 +749,15 @@ class StoreRoomController extends Controller
                 'number'            =>  $request->number,
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
-                'in_out'            =>  4,
-                'in_date'           =>  $request->date
+                'in_out'            =>  15,
+                'out_date'          =>  $request->date
             ]);
             // FundWareHouse Storage 
             $numberInFundHouse = $fundWarestorage->number - $request->number;
             $fundWarestorage->update(['number'=>$numberInFundHouse]);
             // MainWareHouse Storage
-            $numberInMainHouse = $mainWarestorage->number + $request->number;
-            $mainWarestorage->update(['number'=>$numberInMainHouse]);
+            // $numberInMainHouse = $mainWarestorage->number + $request->number;
+            // $mainWarestorage->update(['number'=>$numberInMainHouse]);
             $message = 'این کالا به انبار مادر برگشت داده شد';
             return back()->with('message',$message);
     
@@ -754,6 +766,31 @@ class StoreRoomController extends Controller
             $message .= ' در انبار این '.$fundWarestorage->number.' عدد از این محصول وجود دارد ';
             return back()->with('message',$message);
         }   
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Accept From Fund Form
+    |--------------------------------------------------------------------------
+    |*/
+    public function acceptFromFundForm(){
+        $storeRooms = StoreRoom::where(['in_out'=>15])->latest()->paginate(15);
+        return view('Admin.StoreRoom.Main.returnFromFundNotConfirm',compact('storeRooms'));
+    }
+
+    public function acceptFromFund(Request $request,$id){
+        $pre_id = $id -1;
+        $storeRoom      = StoreRoom::findOrFail($id);
+        $pre_storeRoom = StoreRoom::findOrFail($pre_id); 
+        $mainWarestorage = 'App\Storage'::where([
+            ['product_id','=',$storeRoom->product_id],
+            ['warehouse_id','=',1]
+        ])->first();
+     
+        $numberInMainHouse = $mainWarestorage->number + $storeRoom->number;
+        $mainWarestorage->update(['number'=>$numberInMainHouse]);
+        $storeRoom->update(['in_out'=>4,'in_date'=>Carbon::now()]);
+        $pre_storeRoom->update(['in_date'=>Carbon::now()]);    
+        return back()->with('message','به لیست مرجوعی از انبار تنخواه اضافه شد.موجودی محصول افزایش یافت');
     }
     /*
     |--------------------------------------------------------------------------
@@ -971,7 +1008,7 @@ class StoreRoomController extends Controller
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$id],
             ['in_out','=',13]
-        ])->latest()->paginate(10);
+        ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
     }

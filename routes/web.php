@@ -117,6 +117,9 @@ Route::middleware('auth')->resource('states','StateController');
 | Cities Routes
 |--------------------------------------------------------------------------
 |*/
+Route::group(['middlware'=>['auth'],'prefix'=>'/cities/','as'=>'cities.'],function(){
+  Route::get('search','CityController@search')->name('search');
+});
 Route::middleware('auth')->resource('cities','CityController');
 /*
 |--------------------------------------------------------------------------
@@ -143,6 +146,8 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/out','StoreRoomController@outStorage')->name('out');
       Route::get('/storageManage','StoreRoomController@storageManage')->name('storageManage');
       Route::get('/returnFromFund','StoreRoomController@returnFromFund')->name('returnFromFund');
+      Route::get('/acceptFromFundForm','StoreRoomController@acceptFromFundForm')->name('acceptFromFundForm');
+      Route::get('/acceptFromFund/{id}','StoreRoomController@acceptFromFund')->name('acceptFromFund');
       /* FundWareHouse */
       Route::get('/mainReceive','StoreRoomController@mainReceive')->name('mainReceive');
       Route::get('/acceptMainReceive/{id}','StoreRoomController@acceptMainReceive')->name('acceptMainReceive');
@@ -171,6 +176,7 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
 |*/
 Route::group(['middleware'=>'auth','prefix'=>'warehouses','as'=>'warehouses.'],function(){
     Route::get('{slug}','WarehouseController@inout')->name('inout');
+    Route::get('/storage/{id}','WarehouseController@storage')->name('storage');
 });
 /*
 |--------------------------------------------------------------------------
@@ -181,7 +187,6 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       /* Agent */
       Route::get('AgentCurrentBills','MoneyCirculationController@AgentCurrentBills')->name('AgentCurrentBills');
       Route::get('AgentPaymentOrders','MoneyCirculationController@AgentPaymentOrders')->name('AgentPaymentOrders');
-      Route::get('AgentPrePaymentList','MoneyCirculationController@AgentPrePaymentList')->name('AgentPrePaymentList');
       Route::get('AgentPaymentList','MoneyCirculationController@AgentPaymentList')->name('AgentPaymentList');
       Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
       Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
@@ -189,12 +194,11 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::post('cartStore','MoneyCirculationController@cartStore')->name('cartStore');
       Route::get('cartSetDefaultStore/{id}','MoneyCirculationController@cartSetDefault')->name('cartSetDefault');
       Route::get('cartDelete/{id}','MoneyCirculationController@cartDelete')->name('cartDelete');
-
+      Route::post('AgentPayMoney','MoneyCirculationController@AgentPayMoney')->name('AgentPayMoney');
 
       /* Admin */
       Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
-      
-
+      Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');
 
     });
 

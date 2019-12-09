@@ -73,8 +73,29 @@ class OrderController extends Controller
                    
                 }
             }
+
+            $status = 'App\Customer'::query()
+            ->where('fullName', 'LIKE', "%{$request->fullName}%") 
+            ->exists();
+
+        // if($status == False){
+        //     // Create Customer details
+        //     $UserID = uniqid(rand(), true);
+        //     $customer = 'App\Customer'::create([
+        //         'state_id'      =>  $request->state_id,
+        //         'city_id'       =>  $request->city_id,
+        //         'UserID'        =>  $UserID,
+        //         'fullName'      =>  $request->fullName,
+        //         'mobile'        =>  $request->mobile,
+        //         'telephone'     =>  $request->telephone,
+        //         'postalCode'    =>  $request->postalCode,
+        //         'address'       =>  $request->address,
+        //         'HBD_Date'      =>  $request->HBD_Date
+        //     ]);
+        // }
+
         /*##################ENDIF##################*/
-        $trackingCode = uniqid();
+        $trackingCode = uniqid(rand(), true);
         $order = Order::create([
             'city_id'           =>      $request->city_id,
             'state_id'          =>      $request->state_id,
@@ -95,9 +116,11 @@ class OrderController extends Controller
             'chequePrice'       =>      $request->chequePrice,
             'instant'           =>      $request->instant,
             'sellerDescription' =>      $request->sellerDescription,
+            'sendDescription'   =>      $request->deliverDescription,
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
-            'HBD_Date'          =>      $request->HBD_Date
+            'HBD_Date'          =>      $request->HBD_Date,
+            'delivary_Date'     =>      Carbon::now()
         ]);
         $items = $request->orderArray;
         foreach($items as $item){
@@ -334,7 +357,10 @@ class OrderController extends Controller
 
                                 // Change Order Status To Collected 
                                 $order = 'App\Order'::findOrFail($item['id']);
-                                $order->update(['status'=>$item['statue']]);
+                                $order->update([
+                                    'status'            =>  $item['statue'],
+                                    'collected_Date'    =>  Carbon::now()
+                                    ]);
                                 // Discount count of product in Agent Storage
                                 $number = $storage->number - $order_product->count;
                                 $storage->update(['number'=>$number]);
@@ -361,10 +387,33 @@ class OrderController extends Controller
                }     
 
 
-            //Other order Statuses
+            //Cancelled Status
+            }elseif($item['statue'] == 13 || $item['statue'] == 16){
+                $order = 'App\Order'::findOrFail($item['id']);
+                $order->update([
+                    'status'=>$item['statue'],
+                    'cancelled_Date'=>Carbon::now()
+                    ]);
+            //Suspended Status
+            }elseif($item['statue'] == 14){
+                $order = 'App\Order'::findOrFail($item['id']);
+                $order->update([
+                    'status'=>$item['statue'],
+                    'suspended_Date'=>Carbon::now(),
+                    ]);
+            //Return To Seller_Date Status
+            }elseif($item['statue'] == 6){
+                $order = 'App\Order'::findOrFail($item['id']);
+                $order->update([
+                    'status'=>$item['statue'],
+                    'returnToSeller_Date'=>Carbon::now(),
+                    ]);
+            //Other Statuses
             }else{
                 $order = 'App\Order'::findOrFail($item['id']);
-                $order->update(['status'=>$item['statue']]);
+                $order->update([
+                    'status'=>$item['statue'],
+                    ]);
             }
 
             
@@ -432,7 +481,7 @@ class OrderController extends Controller
                     ['user_id','=',$order->agent_id],
                     ['product_id','=',$order_product->product_id]
                 ])->firstOrFail();
-
+                
                 $balance        =   $AgentInventory->balance + $specialShared->price;
                 $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                 'App\MoneyCirculation'::create([
@@ -484,17 +533,32 @@ class OrderController extends Controller
             ])->exists();
 
             if($specialSharedStatus == True){
-                $specialShared    =   'App\SpecialTariff'::where([
-                    ['user_id','=',$order->agent_id],
-                    ['product_id','=',$order_product->product_id]
-                ])->firstOrFail();
 
-                $balance    =   $specialShared->price;
-                $userInventory = 'App\UserInventory'::create([
-                        'agent_id'  =>   $Agent->id,
-                        'balance'   =>  $balance,
-                        'debtor'    =>  1
-                    ]);
+                $specialAmount = array();
+                foreach($order->products as $item){
+
+                    $specialShared    =   'App\SpecialTariff'::where([
+                        ['user_id','=',$order->agent_id],
+                        ['product_id','=',$item->product_id]
+                    ])->firstOrFail();
+    
+                    $balance    =   $specialShared->price;
+                    if($AgentStatus == False){
+                        $userInventory = 'App\UserInventory'::create([
+                            'agent_id'  =>      $Agent->id,
+                            'balance'   =>      $balance,
+                            'debtor'    =>      1
+                        ]);
+                    }else{
+                        $AgentInventory='App\UserInventory'::where('agent_id',$order->agent_id)->firstOrFail();
+                        $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                    }
+                   
+
+                    $specialAmount[] = $specialShared->price;
+                    
+                }
+
                 'App\MoneyCirculation'::create([
                     'user_inventory_id'     =>  $userInventory->id,
                     'agent_id'              =>  $Agent->id,
@@ -503,9 +567,11 @@ class OrderController extends Controller
                     'order_status_id'       =>  $order->status,
                     'order_id'              =>  $order->id,
                     'amount'                =>  $order_product->product->price,
-                    'sharedSpecialAmount'   =>  $specialShared->price,
+                    'sharedSpecialAmount'   =>  $specialAmount,
                     'trackingCode'          =>  $trackingCode,
                 ]);
+
+                
             }else{
                 $Agent = 'App\User'::findOrFail($order->agent_id);
                 $placeNumber = $order->status;
@@ -562,7 +628,11 @@ class OrderController extends Controller
     |*/
     public function sellerNoActionOrders(){
         $user = 'App\User'::findOrFail(auth()->user()->id);
-        $orders = Order::where(['seller_id'=>$user->id,'status'=>1,'agent_id'=>null])->latest()->get();
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['status','=',7],
+        ])->latest()->paginate(15);
+        
         return view('Admin.Order.Seller.seller-noAction-orders',compact('orders'));
     }
     /*
