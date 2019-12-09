@@ -45,6 +45,11 @@ class CreateOrdersTable extends Migration
             $table->Date('returnDate')->nullable();
             $table->string('instant')->default('IsNot');
             $table->text('address')->nullable();
+            $table->Date('suspended_Date')->nullable();
+            $table->Date('delivary_Date')->nullable();
+            $table->Date('collected_Date')->nullable();
+            $table->Date('cancelled_Date')->nullable();
+            $table->Date('returnToSeller_Date')->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
             $table->timestamps();

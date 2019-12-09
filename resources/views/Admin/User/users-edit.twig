@@ -106,7 +106,11 @@
             <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
 
             {% for chief in agentChiefs %}
-              <option value="{{chief.id}}">{{chief.persianName}}</option>
+              <option value="{{chief.id}}">
+                {{chief.name}}{{' '}}{{chief.family}}
+                {{'/'}}
+                {{chief.state.name}}{{'-'}}{{chief.city.name}}
+              </option>
             {% else %}
                 <option Disabled >چیزی برای انتخاب وجود ندارد</option>
             {% endfor %}

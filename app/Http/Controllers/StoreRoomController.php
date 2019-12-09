@@ -1007,7 +1007,7 @@ class StoreRoomController extends Controller
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$id],
             ['in_out','=',13]
-        ])->latest()->paginate(10);
+        ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
     }

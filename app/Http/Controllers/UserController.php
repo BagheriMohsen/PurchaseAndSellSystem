@@ -231,36 +231,80 @@ class UserController extends Controller
         //Order Waiting For Delivery  
         $OrderWaitingForDeliveryToday = 'App\Order'::where([
             ['status','=',7],
-            ['updated_at','<',$today],
-            ['updated_at','>',$yesterday]
+            ['delivary_Date','<=',$today],
+            ['delivary_Date','>=',$yesterday]
         ])->count();
         $OrderWaitingForDeliveryInMonth = 'App\Order'::where([
             ['status','=',7],
-            ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
+            ['delivary_Date','<=',$today],
+            ['delivary_Date','>=',$ThirtyDaysAgo],
         ])->count();
         //Returned Collected  
         $OrderReturnedToday = 'App\Order'::where([
             ['status','=',14],
-            ['updated_at','<',$today],
-            ['updated_at','>',$yesterday]
-        ])->count();
+            ['updated_at','=<',$today],
+            ['updated_at','=>',$yesterday]
+        ])
+        ->orWhere([
+            ['status','=',13],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$yesterday]
+        ])
+        ->orWhere([
+            ['status','=',16],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$yesterday]
+        ])
+        ->count();
         $OrderReturnedInMonth = 'App\Order'::where([
             ['status','=',14],
             ['updated_at','<=',$today],
-            ['updated_at','>=',$ThirtyDaysAgo],
-        ])->count();
-        //Order Collected 
-        $OrderCollectedToday = 'App\Order'::where([
-            ['status','=',13],
-            ['updated_at','<',$today],
-            ['updated_at','>',$yesterday]
-        ])->count();
-        $OrderCollectedInMonth = 'App\Order'::where([
+            ['updated_at','>=',$ThirtyDaysAgo]
+        ])
+        ->orWhere([
             ['status','=',13],
             ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo]
+        ])
+        ->orWhere([
+            ['status','=',16],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo]
+        ])
+        ->count();
+        //Order Collected 
+        $OrderCollectedToday = 'App\Order'::where([
+            ['status','=',10],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$yesterday]
+        ])
+        ->orWhere([
+            ['status','=',11],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$yesterday]
+        ])
+        ->orWhere([
+            ['status','=',12],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$yesterday]
+        ])
+        ->count();
+        $OrderCollectedInMonth = 'App\Order'::where([
+            ['status','=',10],
+            ['updated_at','<=',$today],
             ['updated_at','>=',$ThirtyDaysAgo],
-        ])->count();
+        ])
+        ->orWhere([
+            ['status','=',11],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo]
+        ])
+        ->orWhere([
+            ['status','=',12],
+            ['updated_at','<=',$today],
+            ['updated_at','>=',$ThirtyDaysAgo]
+        ])
+        ->count();
         // Tables
         $storeRooms = 'App\StoreRoom'::where([
             ['in_out','=',13],
@@ -321,40 +365,40 @@ class UserController extends Controller
             //Collected Charts  
             $collectedCharts = 'App\Order'::where([
                 ['status','=',10],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])->orWhere([
                 ['status','=',11],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])
             ->orWhere([
                 ['status','=',12],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])
-            ->get('updated_at');
+            ->get();
             $collectedCharts = $collectedCharts->toArray();
            
             // Cancelled Charts
             $cancelledCharts = 'App\Order'::where([
-                ['status','=',14],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
-            ])->get('updated_at');
-            $cancelledCharts = $cancelledCharts->toArray();
-            // Subsended Charts
-            $subsendedCharts = 'App\Order'::where([
-                ['status','=',7],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
+                ['status','=',13],
+                ['cancelled_Date','<=',$today],
+                ['cancelled_Date','>=',$yesterday]
             ])
             ->orWhere([
-                ['status','=',15],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
-                ])
-            ->get('updated_at');
+                ['status','=',16],
+                ['cancelled_Date','<=',$today],
+                ['cancelled_Date','>=',$yesterday]
+            ])
+            ->get();
+            $cancelledCharts = $cancelledCharts->toArray();
+            // Subsended Charts
+            $subsendedCharts = 'App\Order'::Where([
+                ['delivary_Date','<=',$today],
+                ['delivary_Date','>=',$yesterday]
+            ])
+            ->get();
             $subsendedCharts = $subsendedCharts->toArray();
             $charts[] =[
                 'Date' => $today->toDateString(),
@@ -532,10 +576,10 @@ class UserController extends Controller
         ->orWhere('agent_id',$user->id)
         ->orWhere('agent_id',$user->id)->sum('amount');
             
-        $AllSpecialShared = 'App\MoneyCirculation'::where([
+        $AllSpecialShared = 'App\UserInventory'::where([
             ['agent_id','=',$user->id]
-        ])->sum('sharedSpecialAmount');
-
+        ])->sum('balance');
+            
         $TotalSettle = 'App\PaymentCirculation'::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
@@ -574,45 +618,45 @@ class UserController extends Controller
             $collectedCharts = 'App\Order'::where([
                 ['status','=',10],
                 ['agent_id','=',$userID],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])->orWhere([
                 ['status','=',11],
                 ['agent_id','=',$userID],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])
             ->orWhere([
                 ['status','=',12],
                 ['agent_id','=',$userID],
-                ['created_at','<=',$today],
-                ['created_at','>=',$yesterday]
+                ['collected_Date','<=',$today],
+                ['collected_Date','>=',$yesterday]
             ])
-            ->get('updated_at');
+            ->get();
             $collectedCharts = $collectedCharts->toArray();
            
             // Cancelled Charts
             $cancelledCharts = 'App\Order'::where([
-                ['status','=',14],
+                ['status','=',13],
                 ['agent_id','=',$userID],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
-            ])->get('updated_at');
+                ['cancelled_Date','<=',$today],
+                ['cancelled_Date','>=',$yesterday]
+            ])
+            ->orwhere([
+                ['status','=',16],
+                ['agent_id','=',$userID],
+                ['cancelled_Date','<=',$today],
+                ['cancelled_Date','>=',$yesterday]
+            ])
+            ->get();
             $cancelledCharts = $cancelledCharts->toArray();
             // Subsended Charts
             $subsendedCharts = 'App\Order'::where([
-                ['status','=',7],
+                
                 ['agent_id','=',$userID],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
-            ])
-            ->orWhere([
-                ['status','=',15],
-                ['agent_id','=',$userID],
-                ['updated_at','<=',$today],
-                ['updated_at','>=',$yesterday]
-                ])
-            ->get('updated_at');
+                ['delivary_Date','<=',$today],
+                ['delivary_Date','>=',$yesterday]
+            ])->get();
             $subsendedCharts = $subsendedCharts->toArray();
             $charts[] =[
                 'Date' => $today->toDateString(),
@@ -633,7 +677,51 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentChiefDashboard(){
-        return view('Admin.agentChief-index');
+        $user = User::findOrFail(auth()->user()->id);
+
+        $agents = User::where('agent_id',$user->id)->latest()->get();
+
+
+        $CollectedPercentDetails = array();
+        foreach($agents as $agent){
+            $userAllOrders  =   'App\Order'::where('agent_id',$agent->id)->get()->count();
+            $collected      =   'App\Order'::where([
+                ['status','=',10],
+                ['agent_id','=',$agent->id]
+            ])
+            ->orWhere([
+                ['status','=',11],
+                ['agent_id','=',$agent->id]
+            ])
+            ->orWhere([
+                ['status','=',12],
+                ['agent_id','=',$agent->id]
+            ])
+            ->get();
+            if($collected->count() != 0){
+                $collectedPercent = round (($collected->count() * 100 ) / $userAllOrders , 2) ;
+            }else{
+                $collectedPercent = 0;
+            }
+            $balance = 'App\UserInventory'::where('agent_id',$agent->id)->sum('balance');
+            $delivaryOrders = 'App\Order'::where([
+                ['agent_id','=',$agent->id],
+                ['status','=',7]
+            ])->get();
+            
+            $CollectedPercentDetails[] = [
+                'name'              =>  $agent->name.' '.$agent->family,
+                'city_state'        =>  $agent->state->name.'-'.$agent->city->name,
+                'percent'           =>  $collectedPercent,
+                'balance'           =>  $balance,
+                'delivaryOrders'    =>  count($delivaryOrders) 
+            ];
+        }
+
+
+        return view('Admin.agentChief-index',compact(
+            'CollectedPercentDetails'
+        ));
     }
     /*
     |--------------------------------------------------------------------------

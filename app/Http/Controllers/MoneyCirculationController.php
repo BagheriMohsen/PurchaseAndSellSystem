@@ -13,8 +13,26 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCurrentBills(){
-        
-        return view('Admin.UserInventory.Agent.current-bills');
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $AllSell = 
+        'App\MoneyCirculation'::where('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)->sum('amount');
+            
+        $AllSpecialShared = 'App\UserInventory'::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+            
+        $TotalSettle = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])->sum('bill');
+        return view('Admin.UserInventory.Agent.current-bills',compact(
+            'AllSell',
+            'AllSpecialShared',
+            'TotalSettle',
+            'user'
+        ));
     }
     /*
     |--------------------------------------------------------------------------

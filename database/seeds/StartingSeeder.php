@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Carbon\Carbon;
 class StartingSeeder extends Seeder
 {
     /**
@@ -360,7 +360,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -395,7 +396,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
     'App\OrderProduct'::create([
       'order_id'      =>  $order->id,
@@ -430,7 +432,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -465,7 +468,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -500,7 +504,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
   'App\OrderProduct'::create([
     'order_id'      =>  $order->id,
@@ -535,7 +540,8 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null
+      'HBD_Date'          =>      null,
+      'delivary_Date'    =>      Carbon::now()
   ]);
     'App\OrderProduct'::create([
       'order_id'      =>  $order->id,

@@ -23,19 +23,10 @@
 {% block content %}
   {% include 'Messages/message' %}
   {% include 'Messages/custom_error' %}
-  <form class="col-sm-4 mt-5 mb-5" action="{{route('cities.search')}}" method="GET">
-    <div class="md-form input-group input-group-sm mb-3">
-      <input name="cityName" placeholder="شهر مورد نظر را جستجو کنید" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroupMaterial-sizing-sm">
-      <div class="input-group-prepend">
-        <button class="input-group-text md-addon" id="inputGroupMaterial-sizing-sm">
-          <i class="fas fa-search crud-icon"></i>
-        </button>
-      </div>
-    </div>
-  </form>
+  
 
   <div class="row">
-    <div class="col-sm-10 mx-auto">
+    <div class="col-sm-10 mx-auto pt-3">
       <form class="mx-auto" action="{{route('cities.store')}}" method="post">
         <input type="hidden" name="_token" value="{{csrf_token()}}" />
         <div class="input-group mb-3 col-sm-10">
@@ -58,7 +49,20 @@
         </div>
       </form>
       <table class="table table-bordered table-striped  bg-white pt-2 pb-2">
+          <div class="col-sm-6">
+              <form class="col-sm-4 " action="{{route('cities.search')}}" method="GET">
+                  <div class="md-form input-group input-group-sm mb-3">
+                    <input name="cityName" placeholder="شهر مورد نظر را جستجو کنید" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroupMaterial-sizing-sm">
+                    <div class="input-group-prepend">
+                      <button class="input-group-text md-addon" id="inputGroupMaterial-sizing-sm">
+                        <i class="fas fa-search crud-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+          </div>
         <thead>
+            
         <tr>
           <th class="text-center">استان</th>
           <th class="text-center">شهر</th>

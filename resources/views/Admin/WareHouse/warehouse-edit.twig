@@ -35,24 +35,11 @@
                     <label for="inputIconEx2">تلفن ثابت</label>
                 </div>
                 {# کار پستال #}
-                <div class="md-form mb-4 m-2 mx-auto col-sm-3">
+                {# <div class="md-form mb-4 m-2 mx-auto col-sm-3">
                     <input name="postalCard" value="{{warehouse.postalCard}}" type="text" id="inputIconEx2" class="form-control" >
                     <label for="inputIconEx2">کارت پستال</label>
-                </div>
-                {# City #}
-                <div class="col-sm-3 mt-3  mb-4">
-                    <label for="users">مسئول انبار</label>
-                    <select class="form-control"  name="users">
-                        {% for user in users %}
-                            <option disabled value="{{user.id}}">
-                                {{user.name}}{{' '}} {{user.family}}
-                                {{'/'}}
-                                {{user.city.name}}{{'-'}}{{user.state.name}}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {# end City #}
+                </div> #}
+                
                 {# City #}
                 <div  class="col-sm-3 mt-3  mb-4">
                     <label for="city">استان</label>

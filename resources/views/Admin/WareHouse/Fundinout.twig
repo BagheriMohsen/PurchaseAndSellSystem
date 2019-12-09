@@ -115,7 +115,7 @@
             {% if storeRoom.in_date is not null %}
                 <td class="justDate">{{storeRoom.in_date|date('Y-m-d')}}</td>
             {% else %}
-                <td class="">{{'تایید نشده'}}</td>
+                <td class="text-danger">{{'تایید نشده'}}</td>
             {% endif %}
 
             {% if storeRoom.in_out == 5 or storeRoom.in_out == 6 %}

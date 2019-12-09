@@ -22,28 +22,28 @@
 
 <!-- Small boxes (Stat box) -->
 <div class="row">
-    <div style="flex-basis:245px;" class=" text-center bg-default shadow pt-3 pb-5 mx-auto">
+    <div style="flex-basis:225px;" class=" text-center bg-default shadow pt-3 pb-5 mx-auto">
         <strong class="text-white" style="font-size: .9rem">سفارشات تحویل داده شده نمایندگان</strong>
         <div>
           <i style="font-size:36px" class="fas fa-shopping-bag text-white mt-2"></i>
         </div>
     </div>
   <!-- ./col -->
-  <div style="flex-basis:245px;" class=" text-center bg-secondary shadow pt-3 pb-5 mx-auto">
+  <div style="flex-basis:225px;" class=" text-center bg-secondary shadow pt-3 pb-5 mx-auto">
         <strong class="text-white" style="font-size: .9rem">سفارشات برگشت خورده نمایندگان</strong>
         <div>
           <i style="font-size:36px" class="fas fa-undo text-white mt-2"></i>
         </div>
     </div>
   <!-- ./col -->
-  <div style="flex-basis:245px;" class=" text-center bg-info shadow pt-3 pb-5 mx-auto ">
+  <div style="flex-basis:225px;" class=" text-center bg-info shadow pt-3 pb-5 mx-auto ">
         <strong class="text-white" style="font-size: .9rem">فاکتورهای در انتظار تحویل</strong>
         <div>
           <i  style="font-size:36px" class="far fa-file-alt text-white mt-2"></i>
         </div>
     </div>
   <!-- ./col -->
-   <div style="flex-basis:245px;" class=" text-center bg-warning shadow pt-3 pb-5 mx-auto">
+   <div style="flex-basis:225px;" class=" text-center bg-warning shadow pt-3 pb-5 mx-auto">
         <strong class="text-white" style="font-size: .9rem">مالی مدیر نماینده</strong>
         <div>
           <i style="font-size:36px" class="far fa-money-bill-alt text-white mt-2"></i>
@@ -58,14 +58,19 @@
     <table class="table table-bordered table-striped">
         <div class="bg-primary pt-3 pb-3 text-center dana-bold">درصد وصولی نمایندگان</div>
     <tbody>
+    {% for agentDetail in CollectedPercentDetails %}
      <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>25%</td>
+        <td>
+          {{agentDetail.name}}
+          {{'/'}}
+          {{agentDetail.city_state}}
+        </td>
+        <td>
+          {{agentDetail.percent}}
+          <i style="font-size:14px;" class="fas fa-percentage"></i>
+        </td>
       </tr>
-      <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>75%</td>
-      </tr>
+     {% endfor %}
     </tbody>
   </table>
   </div>
@@ -75,14 +80,18 @@
     <table class="table table-bordered table-striped">
         <div class="bg-primary pt-3 pb-3 text-center dana-bold">تعداد فاکتورهای در انتظار تحویل نمایندگان</div>
     <tbody>
+      {% for agentDetail in CollectedPercentDetails %}
       <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>0 </td>
+        <td>
+            {{agentDetail.name}}
+            {{'/'}}
+            {{agentDetail.city_state}}
+        </td>
+        <td>
+            {{agentDetail.delivaryOrders}}
+        </td>
       </tr>
-      <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>0 </td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
   </div>
@@ -92,14 +101,18 @@
     <table class="table table-bordered table-striped">
         <div class="bg-primary pt-3 pb-3 text-center dana-bold">مبالغ بدهی نمایندگان</div>
     <tbody>
+      {% for agentDetail in CollectedPercentDetails %}
       <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>5,000 </td>
+        <td>
+            {{agentDetail.name}}
+            {{'/'}}
+            {{agentDetail.city_state}}
+        </td>
+        <td>
+          {{agentDetail.balance | number_format}}
+        </td>
       </tr>
-      <tr>
-        <td>آقای احمدی نماینده تهران</td>
-        <td>5,000 </td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
   </div>
