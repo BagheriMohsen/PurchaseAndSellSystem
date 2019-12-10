@@ -99,6 +99,11 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
     Route::get('receiveOrderFromAgent','OrderController@receiveOrderFromAgent')->name('receiveOrderFromAgent');
     Route::get('chooseAgentForDelivary','OrderController@chooseAgentForDelivary')->name('chooseAgentForDelivary');
+    //Agent Chief
+    Route::get('AgentsDelivaryOrders','OrderController@AgentsDelivaryOrders')->name('AgentsDelivaryOrders');
+    Route::get('AgentsCollectedOrders','OrderController@AgentsCollectedOrders')->name('AgentsCollectedOrders');
+    Route::get('AgentsCancelledOrders','OrderController@AgentsCancelledOrders')->name('AgentsCancelledOrders');
+    Route::get('AgentsSuspendedOrders','OrderController@AgentsSuspendedOrders')->name('AgentsSuspendedOrders');
     //Factor
     Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
@@ -167,6 +172,13 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('/returnToFundForm','StoreRoomController@returnToFundForm')->name('returnToFundForm');
       Route::post('/returnToFund','StoreRoomController@returnToFund')->name('returnToFund');
       Route::get('DeliveryToCustomersList','StoreRoomController@DeliveryToCustomersList')->name('DeliveryToCustomersList');
+      /* AgentChief WareHouse Check*/
+      Route::get('AgentsListForCheckStorage','StoreRoomController@AgentsListForCheckStorage')->name('AgentsListForCheckStorage');
+      Route::get('AgensStorageWareHoouse/{agent_id}','StoreRoomController@AgensStorageWareHoouse')->name('AgensStorageWareHoouse');
+      Route::get('AgensStorageIn/{agent_id}','StoreRoomController@AgensStorageIn')->name('AgensStorageIn');
+      Route::get('AgensStorageOut/{agent_id}','StoreRoomController@AgensStorageOut')->name('AgensStorageOut');
+      Route::get('AgensDeliveryToCustomers/{agent_id}','StoreRoomController@AgensDeliveryToCustomers')->name('AgensDeliveryToCustomers');
+   
     });
 
 /*
@@ -195,7 +207,9 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::get('cartSetDefaultStore/{id}','MoneyCirculationController@cartSetDefault')->name('cartSetDefault');
       Route::get('cartDelete/{id}','MoneyCirculationController@cartDelete')->name('cartDelete');
       Route::post('AgentPayMoney','MoneyCirculationController@AgentPayMoney')->name('AgentPayMoney');
-
+       /* Agent Chief */
+      Route::get('AgentsMoneyCirculation','MoneyCirculationController@AgentsMoneyCirculation')->name('AgentsMoneyCirculation');
+      Route::get('AgentsPaymentList/{agent_id}','MoneyCirculationController@AgentsPaymentList')->name('AgentsPaymentList');
       /* Admin */
       Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
       Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');

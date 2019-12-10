@@ -8,3 +8,57 @@
     </a>
 </li>
 {# Agent Chief Dashboard #}
+{#  orders #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+    <i class="far fa-calendar-plus"></i>
+    <p>
+        سفارشات
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+    <li class="nav-item">
+        <a href="{{route('orders.AgentsDelivaryOrders')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p> سفارشات در انتظار تحویل</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('orders.AgentsCollectedOrders')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p> سفارشات وصولی</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('orders.AgentsCancelledOrders')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p> سفارشات کنسلی</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('orders.AgentsSuspendedOrders')}}" class="nav-link">
+        <i class="fas fa-chevron-circle-left"></i>
+        <p> سفارشات معلق</p>
+        </a>
+    </li>
+    </ul>
+</li>
+{#  orders #}
+{#  WareHouse #}
+<li class="nav-item">
+    <a href="{{route('storeRooms.AgentsListForCheckStorage')}}" class="nav-link">
+        <i class="fas fa-boxes "></i>
+        <p>
+        انبار
+        </p>
+    </a>
+</li>
+{#  WareHouse #}
+<li class="nav-item">
+    <a href="{{route('userInventory.AgentsMoneyCirculation')}}" class="nav-link">
+        <i class="fas fa-calculator"></i>
+        <p>
+        امور مالی
+        </p>
+    </a>
+</li>

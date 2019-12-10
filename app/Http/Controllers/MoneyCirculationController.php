@@ -200,5 +200,38 @@ class MoneyCirculationController extends Controller
         return back()->with('message','فیش واریزی تایید و در حساب جاری نماینده اعمال شد');
     }
 
+    public function AgentsMoneyCirculation(){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.AgentChief.agents-money-circulation',compact('agents'));
+    }
+
+    public function AgentsPaymentList($agent_id){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agent = 'App\User'::findOrFail($agent_id);
+
+        if($agent->agent_id != $user->id){
+            return abort(404);
+        }
+
+        $payments = 'App\PaymentCirculation'::where([
+            ['user_id','=',$agent_id],
+            ['status_id','=',2]
+        ])
+        ->orWhere([
+            ['user_id','=',$agent_id],
+            ['status_id','=',1],
+        ])
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.AgentChief.agents-payment-list',compact('payments'));
+
+    }
+
    
 }
