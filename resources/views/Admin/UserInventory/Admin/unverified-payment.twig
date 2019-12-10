@@ -60,7 +60,7 @@
               {{'-'}}
               {{payment.user.state.name}}
             </td>
-            <td>{{ payment.billDate}}</td>
+            <td class="justDate">{{ payment.billDate}}</td>
             <td>{{ payment.bill | number_format}}</td>
             {% if payment.paymentMethod == "card" %}
                 <td>{{'فیش'}}</td>

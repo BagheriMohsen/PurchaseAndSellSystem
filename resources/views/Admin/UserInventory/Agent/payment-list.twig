@@ -63,7 +63,7 @@
               {{'-'}}
               {{payment.user.state.name}}
             </td> #}
-            <td>{{ payment.billDate}}</td>
+            <td class="justDate">{{ payment.billDate}}</td>
             {% if payment.confirmDate is not null %}
               <td class="justDate">{{ payment.confirmDate | date('Y-m-d')}}</td>
             {% else %}

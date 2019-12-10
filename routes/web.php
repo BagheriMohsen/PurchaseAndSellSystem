@@ -213,7 +213,6 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       /* Admin */
       Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
       Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');
-
     });
 
 /*

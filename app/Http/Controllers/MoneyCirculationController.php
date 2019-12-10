@@ -165,7 +165,7 @@ class MoneyCirculationController extends Controller
     public function AgentPayMoney(Request $request){
 
         $user = 'App\User'::findOrFail(auth()->user()->id);
-
+       
         if($request->hasFile('image')){
             $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
         }else{
