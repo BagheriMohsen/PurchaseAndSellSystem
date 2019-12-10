@@ -982,7 +982,10 @@ class StoreRoomController extends Controller
     |*/
     public function AgentOut(){
         $id = auth()->user()->id;
-        $storeRooms = StoreRoom::where(['sender_id'=>$id,'in_out'=>12])->latest()->paginate(10);
+        $storeRooms = StoreRoom::where([
+            ['sender_id','=',$id],
+            ['in_out','=',12]
+        ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentOut',compact('storeRooms'));
     }
     /*
@@ -1007,6 +1010,100 @@ class StoreRoomController extends Controller
         $id = auth()->user()->id;
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$id],
+            ['in_out','=',13]
+        ])->latest()->paginate(15);
+        
+        return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agents List For Check Storage
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsListForCheckStorage(){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        
+        return view('Admin.StoreRoom.AgentChief.check-agents-storage-list',compact('agents'));
+    
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agens Storage WareHoouse
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgensStorageWareHoouse($agent_id){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agent = 'App\User'::findOrFail($agent_id);
+
+        if($agent->agent_id != $user->id){
+            return abort(404);
+        }
+
+        $storages = 'App\Storage'::where('agent_id',$agent_id)->latest()->get();
+        $allProduct = 'App\Storage'::where('agent_id',$agent_id)->sum('number');
+        return view('Admin.StoreRoom.AgentChief.agents-storage',compact('storages','allProduct'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    |  Agens Storage In
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgensStorageIn($agent_id){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agent = 'App\User'::findOrFail($agent_id);
+
+        if($agent->agent_id != $user->id){
+            return abort(404);
+        }
+        $storeRooms = StoreRoom::where([
+            ['receiver_id','=',$agent_id],
+            ['in_out','=',11]
+        ])->latest()->paginate(15);
+        return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agens Storage Out
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgensStorageOut($agent_id){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agent = 'App\User'::findOrFail($agent_id);
+
+        if($agent->agent_id != $user->id){
+            return abort(404);
+        }
+        $storeRooms = StoreRoom::where([
+            ['sender_id','=',$agent_id],
+            ['in_out','=',12]
+        ])->latest()->paginate(15);
+        return view('Admin.StoreRoom.Agent.AgentOut',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agens Delivery To Customers
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgensDeliveryToCustomers($agent_id){
+       
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        $agent = 'App\User'::findOrFail($agent_id);
+
+        if($agent->agent_id != $user->id){
+            return abort(404);
+        }
+
+        $storeRooms = StoreRoom::where([
+            ['sender_id','=',$agent_id],
             ['in_out','=',13]
         ])->latest()->paginate(15);
         

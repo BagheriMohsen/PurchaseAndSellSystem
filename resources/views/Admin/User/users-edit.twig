@@ -106,7 +106,8 @@
             <option selected value="{{null}}">مدیر نماینده را انتخاب کنید</option>
 
             {% for chief in agentChiefs %}
-              <option value="{{chief.id}}">
+              <option {% if user.agent_id == chief.id %} selected {% endif %} 
+               value="{{chief.id}}">
                 {{chief.name}}{{' '}}{{chief.family}}
                 {{'/'}}
                 {{chief.state.name}}{{'-'}}{{chief.city.name}}

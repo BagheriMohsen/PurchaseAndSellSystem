@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7df21098-2ba8-4851-93c6-4099a47cc475" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/online-shop.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/online-shop.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2017_03_04_000000_create_bans_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_09_27_232256_create_orders_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_09_27_232256_create_orders_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_11_09_130903_add_followUpManager_column_to_cities_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_11_09_130903_add_followUpManager_column_to_cities_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_11_09_175108_create_store_rooms_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_11_09_175108_create_store_rooms_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_12_07_151535_create-table-customers.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_12_07_151535_create-table-customers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/RajabiStartSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/RajabiStartSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,7 +181,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -225,6 +228,11 @@
       <workItem from="1574539994192" duration="1264000" />
       <workItem from="1575849403529" duration="202000" />
       <workItem from="1575849702875" duration="63000" />
+      <workItem from="1575859662926" duration="572000" />
+      <workItem from="1575860258657" duration="523000" />
+      <workItem from="1575860806398" duration="297000" />
+      <workItem from="1575861127151" duration="231000" />
+      <workItem from="1575861500075" duration="197000" />
     </task>
     <servers />
   </component>
@@ -245,13 +253,17 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="129" y="27" width="1012" height="693" key="SettingsEditor" timestamp="1575849613146">
+    <state x="235" y="35" width="800" height="684" key="#Deployment" timestamp="1575859822075">
       <screen x="0" y="27" width="1280" height="693" />
     </state>
-    <state x="129" y="27" width="1012" height="693" key="SettingsEditor/0.27.1280.693/0.27.1280.693@0.27.1280.693" timestamp="1575849613146" />
-    <state x="294" y="201" key="com.intellij.ide.util.TipDialog" timestamp="1575849701871">
+    <state x="235" y="35" width="800" height="684" key="#Deployment/0.27.1280.693/0.27.1280.693@0.27.1280.693" timestamp="1575859822075" />
+    <state x="163" y="27" width="1012" height="693" key="SettingsEditor" timestamp="1575861684615">
       <screen x="0" y="27" width="1280" height="693" />
     </state>
-    <state x="294" y="201" key="com.intellij.ide.util.TipDialog/0.27.1280.693/0.27.1280.693@0.27.1280.693" timestamp="1575849701871" />
+    <state x="163" y="27" width="1012" height="693" key="SettingsEditor/0.27.1280.693/0.27.1280.693@0.27.1280.693" timestamp="1575861684615" />
+    <state x="294" y="201" key="com.intellij.ide.util.TipDialog" timestamp="1575861499961">
+      <screen x="0" y="27" width="1280" height="693" />
+    </state>
+    <state x="294" y="201" key="com.intellij.ide.util.TipDialog/0.27.1280.693/0.27.1280.693@0.27.1280.693" timestamp="1575861499961" />
   </component>
 </project>

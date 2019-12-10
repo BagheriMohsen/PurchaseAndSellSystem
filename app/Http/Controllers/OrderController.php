@@ -217,7 +217,7 @@ class OrderController extends Controller
             
         return view('Admin.Order.Agent.agent-orders-collected',compact(
             'orders',
-            'bottom_statuses',
+            'bottom_statuses'
         ));
     }
     /*
@@ -526,6 +526,7 @@ class OrderController extends Controller
             }
         // agent collected for first time
         }else{
+            
             $Agent = 'App\User'::findOrFail($order->agent_id);
             $specialSharedStatus    =   'App\SpecialTariff'::where([
                 ['user_id','=',$order->agent_id],
@@ -534,12 +535,9 @@ class OrderController extends Controller
 
             if($specialSharedStatus == True){
 
-                $specialAmount = array();
-                foreach($order->products as $item){
-
                     $specialShared    =   'App\SpecialTariff'::where([
                         ['user_id','=',$order->agent_id],
-                        ['product_id','=',$item->product_id]
+                        ['product_id','=',$order_product->product_id]
                     ])->firstOrFail();
     
                     $balance    =   $specialShared->price;
@@ -553,12 +551,7 @@ class OrderController extends Controller
                         $AgentInventory='App\UserInventory'::where('agent_id',$order->agent_id)->firstOrFail();
                         $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                     }
-                   
-
-                    $specialAmount[] = $specialShared->price;
-                    
-                }
-
+         
                 'App\MoneyCirculation'::create([
                     'user_inventory_id'     =>  $userInventory->id,
                     'agent_id'              =>  $Agent->id,
@@ -567,7 +560,7 @@ class OrderController extends Controller
                     'order_status_id'       =>  $order->status,
                     'order_id'              =>  $order->id,
                     'amount'                =>  $order_product->product->price,
-                    'sharedSpecialAmount'   =>  $specialAmount,
+                    'sharedSpecialAmount'   =>  $balance,
                     'trackingCode'          =>  $trackingCode,
                 ]);
 
@@ -606,7 +599,8 @@ class OrderController extends Controller
                     'trackingCode'          =>  $trackingCode,
                 ]);
             }
-            return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+
+            // return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
 
         }
 
@@ -671,7 +665,7 @@ class OrderController extends Controller
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
             'orders',
             'agents',
-            'user',
+            'user'
         ));
     }
     /*
@@ -688,7 +682,7 @@ class OrderController extends Controller
             ])->latest()->get();
         
         return view('Admin.Order.Seller.order-callback',compact(
-            'orders',
+            'orders'
         ));
     }
     /*
@@ -727,7 +721,7 @@ class OrderController extends Controller
         
         return view('Admin.Order.FollowUpManager.receive-order-fromAgent',compact(
             'orders',
-            'agents',
+            'agents'
         ));
     }
     /*
@@ -761,6 +755,112 @@ class OrderController extends Controller
             ])->latest()->get();
 
             return view('Admin.Order.Seller.receive-order-fromFollowUpManager',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Delivary Orders
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsDelivaryOrders(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        
+
+        $orders = 'App\Order'::where('agent_id',$user->id);
+
+        foreach($agents as $agent){
+            $orders->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',7]
+            ]);
+        }
+        $orders = $orders->latest()->paginate(15);
+    
+        return view('Admin.Order.AgentChief.agents-orders',compact('orders'));
+
+    
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Collected Orders
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsCollectedOrders(){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        
+
+        $orders = 'App\Order'::where('agent_id',$user->id);
+
+        foreach($agents as $agent){
+            $orders->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',10]
+            ])
+            ->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',11]
+            ])->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',12]
+            ]);
+        }
+        $orders = $orders->latest()->paginate(15);
+    
+        return view('Admin.Order.AgentChief.agents-collected-orders',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Cancelled Orders
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsCancelledOrders(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        
+
+        $orders = 'App\Order'::where('agent_id',$user->id);
+
+        foreach($agents as $agent){
+            $orders->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',13]
+            ])
+            ->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',16]
+            ]);
+        }
+        $orders = $orders->latest()->paginate(15);
+    
+        return view('Admin.Order.AgentChief.agents-cancelled-orders',compact('orders'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Suspended Orders
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsSuspendedOrders(){
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        
+
+        $orders = 'App\Order'::where('agent_id',$user->id);
+
+        foreach($agents as $agent){
+            $orders->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',13]
+            ])
+            ->Orwhere([
+                ['agent_id','=',$agent->id],
+                ['status','=',16]
+            ]);
+        }
+        $orders = $orders->latest()->paginate(15);
+    
+        return view('Admin.Order.AgentChief.agents-suspended-orders',compact('orders'));
     }
     
 }
