@@ -799,7 +799,7 @@ $(document).ready(function(){
         var city_id = form.find('select[name="city"]').val();
         var fullName = form.find('input[name="fullName"]').val();
         var postalCode = form.find('input[name="postalCode"]').val();
-        var HBD_Date = form.find('input[name="HBD_Date"]').val();
+        var HBD_Date = isoDate;
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
         var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
@@ -831,7 +831,6 @@ $(document).ready(function(){
             deliverDescription:deliverDescription,
             orderArray:orderArray
         }
-        console.log(formData);
         $.ajax({
             url:actionUrl,
             type:'POST',
@@ -1603,5 +1602,12 @@ $(document).ready(function(){
         })
     }
     $(".number").digits();
+
+    // AgentPaymentList page turn jalali to georgian
+    $('#payOrderList').submit(function(event){
+        event.preventDefault();
+        $(this).find('input[name="date"]').val(isoDate);
+        $(this)[0].submit();
+     });
 });
 
