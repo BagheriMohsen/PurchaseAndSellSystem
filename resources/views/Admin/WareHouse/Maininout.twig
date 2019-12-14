@@ -121,7 +121,7 @@
 
             {% if storeRoom.in_out == 1 %}
                 <td class="">{{'---'}}</td>
-            {% elseif storeRoom.in_out == 3 %}
+            {% elseif storeRoom.in_out == 3 or storeRoom.in_out == 2 %}
                 <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
             {% elseif storeRoom.out_date is not null  %}
                 <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
