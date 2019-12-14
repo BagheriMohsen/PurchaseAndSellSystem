@@ -30,7 +30,9 @@
 
 {% block content %}
 
-  {% include 'Messages/errors' %}
+{% include 'Messages/message' %}
+
+{% include 'Messages/errors' %}
 
 <form id="createUserForm" action="{{route('users.store')}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -289,8 +291,8 @@
           <div class="ckbx-style-11">
               <input type="checkbox" 
               id="numberReturn" 
-              value="active" name="allowNumberBack"
-              {% if old('allowNumberBack') != null %} checked {% endif %}
+              value="active" name="backToSeller"
+              {% if old('backToSeller') != null %} checked {% endif %}
               >
               <label for="numberReturn"></label>
           </div>

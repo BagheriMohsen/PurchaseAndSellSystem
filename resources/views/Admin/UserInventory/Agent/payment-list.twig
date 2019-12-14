@@ -63,7 +63,7 @@
               {{'-'}}
               {{payment.user.state.name}}
             </td> #}
-            <td>{{ payment.billDate}}</td>
+            <td class="justDate">{{ payment.billDate}}</td>
             {% if payment.confirmDate is not null %}
               <td class="justDate">{{ payment.confirmDate | date('Y-m-d')}}</td>
             {% else %}
@@ -198,7 +198,7 @@
         <!-- Modal body -->
         <div class="modal-body">
           <div class="container">
-           <form action="{{route('userInventory.AgentPayMoney')}}" class="row label-light" method="POST" id="payOrders" enctype="multipart/form-data">
+           <form action="{{route('userInventory.AgentPayMoney')}}" class="row label-light" method="POST" id="payOrderList" enctype="multipart/form-data">
             <input name="_token" type="hidden" value="{{ csrf_token() }}" />
             <div class="col-sm-6 mt-3">
               <label for="bill">مبلغ-تومان
@@ -210,7 +210,8 @@
               <label for="date">تاریخ
                 <span class="text-danger">*</span>
               </label>
-              <input class="form-control persianDatePicker" type="text" name="date" value="" required autocomplete="off">
+              <input class="form-control persianDatePicker" type="text" value="" required autocomplete="off">
+              <input type="hidden" name="date">
             </div>
             <div class="col-sm-12 mt-3">
               <label for="tracingCode">کد (کد پیگیری-شماره مرجع-شماره بازاریابی-شماره سند-شماره پیگیری پایا)

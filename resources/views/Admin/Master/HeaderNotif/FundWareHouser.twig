@@ -8,3 +8,14 @@
         {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
     </a>
 {% endif %}
+
+{% if AgentReturnedProduct > 0 %}
+    <a 
+        href="{{route('storeRooms.ReturnFromAgentPage')}}"
+        class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{AgentReturnedProduct}}
+        مرجوعی از انبار نماینده
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

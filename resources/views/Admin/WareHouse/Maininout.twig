@@ -41,8 +41,8 @@
                 {{warehouse.name}}
             </p>
             <p class="mb-0">
-                شهر:
-                {{warehouse.cities.name}}
+                استان-شهر:
+                {{warehouse.state.name}}{{'-'}}{{warehouse.city.name}}
             </p>
             <p class="mb-0">
                 آدرس کامل:
@@ -95,6 +95,8 @@
             <td>{{storeRoom.product.name}}</td>
             {% if storeRoom.in_out == 1 %}
                 <td>{{'ورود'}}</td>
+            {% elseif storeRoom.in_out == 4 or storeRoom.in_out == 15 %}
+                <td>{{'مرجوعی از تنخواه'}}</td>
             {% elseif storeRoom.in_out == 2 %}
                 <td>{{'انبار به انبار'}}</td>
             {% elseif storeRoom.in_out == 3 %}
@@ -111,13 +113,15 @@
             <td>{{storeRoom.number}}</td>
             {% if storeRoom.in_date is not null %}
                 <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
+            {% elseif storeRoom.in_out == 4 or storeRoom.in_out == 15 %}
+                <td class="text-danger">{{'تایید نشده'}}</td>
             {% else %}
                 <td class="">{{'---'}}</td>
             {% endif %}
 
             {% if storeRoom.in_out == 1 %}
                 <td class="">{{'---'}}</td>
-            {% elseif storeRoom.in_out == 3 %}
+            {% elseif storeRoom.in_out == 3 or storeRoom.in_out == 2 %}
                 <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
             {% elseif storeRoom.out_date is not null  %}
                 <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>

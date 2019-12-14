@@ -36,6 +36,16 @@ class ProductTypeController extends Controller
      */
     public function store(Request $request)
     {
+        $status = ProductType::where([
+            ['product_id','=',$request->product],
+            ['name','=',$request->name]
+        ])->exists();
+
+        if($status == True){
+            $message = 'این نوع برای این محصول قبلا در سیستم ثبت شده';
+            return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }
+
         ProductType::create([
           'user_id'     =>  auth()->user()->id,
           'product_id'  =>  $request->product,
@@ -43,7 +53,7 @@ class ProductTypeController extends Controller
         ]);
         $product = 'App\Product'::findOrFail($request->product);
         $message = $request->name.' به محصول '.$product->name.' اضافه شد ';
-        // return redirect()->route('products.index')->with('message',$message);
+        
         return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
     }
 

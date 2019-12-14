@@ -40,8 +40,16 @@ class Warehouse extends Model
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
-    public function cities(){
+    public function city(){
         return $this->belongsTo('App\City','city_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with State Model
+    |--------------------------------------------------------------------------
+    */
+    public function state(){
+        return $this->belongsTo('App\State','state_id','id');
     }
     /*
     |--------------------------------------------------------------------------

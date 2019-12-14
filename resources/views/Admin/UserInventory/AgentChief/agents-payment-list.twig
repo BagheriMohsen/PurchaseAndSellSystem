@@ -43,13 +43,13 @@
             
             
             <td>{{payment.trackingCode}}</td>
-            <td>{{ payment.billDate}}</td>
+            <td class="justDate">{{ payment.billDate}}</td>
             {% if payment.confirmDate is not null %}
               <td class="justDate">{{ payment.confirmDate | date('Y-m-d')}}</td>
             {% else %}
               <td class="text-danger">تایید نشده</td>
             {% endif %}
-              <td>{{ payment.bill | number_format}}</td>
+              <td >{{ payment.bill | number_format}}</td>
             {% if payment.paymentMethod == "card" %}
                 <td>{{'فیش'}}</td>
             {% else %}
