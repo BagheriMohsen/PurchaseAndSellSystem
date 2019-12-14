@@ -80,13 +80,24 @@
         width="100%">
         <thead>
             <tr class="text-center">
-            <th>محصول</th>
-            <th>ورودی-خروجی</th>
-            <th>وضعیت</th>
-            <th>توضیحات</th>
-            <th>تعداد</th>
-            <th >تاریخ دریافت</th>
-            <th >تاریخ ارسال</th>
+                <th>محصول</th>
+                <th>ورودی-خروجی</th>
+                <th>وضعیت</th>
+                <th>توضیحات</th>
+                <th>تعداد</th>
+                <th colspan='2'>ورود</th>
+                <th colspan='2'>خروج</th>
+            </tr>
+            <tr class="text-center">
+                <th >{{''}}</th>
+                <th >{{''}}</th>
+                <th >{{''}}</th>
+                <th >{{''}}</th>
+                <th >{{''}}</th>
+                <th > ارسال</th>
+                <th > دریافت</th>
+                <th > ارسال</th>
+                <th > دریافت</th>
             </tr>
         </thead>
         <tbody>
@@ -121,21 +132,56 @@
 
             <td>{{storeRoom.description}}</td>
             <td>{{storeRoom.number}}</td>
-            {% if storeRoom.in_date is not null %}
-                <td class="justDate">{{storeRoom.in_date|date('Y-m-d')}}</td>
-            {% else %}
-                <td class="text-danger">{{'تایید نشده'}}</td>
+
+
+            {# Input FundWareHouse #}
+            {% if storeRoom.in_out == 5
+            or storeRoom.in_out == 6
+            or storeRoom.in_out == 13 
+            or storeRoom.in_out == 16 %}
+
+                {% if storeRoom.created_at is not null %}
+                    <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
+                {% else %}
+                    <td>{{'---'}}</td>
+                {% endif %}
+
+                {% if storeRoom.in_date is not null %}
+                    <td class="justDate">{{storeRoom.in_date|date('Y-m-d')}}</td>
+                {% else %}
+                    <td class="text-danger">{{'تایید نشده'}}</td>
+                {% endif %}
+
+               
+            {% else  %}
+                <td>{{'---'}}</td>
+                <td>{{'---'}}</td>
             {% endif %}
 
-            {% if storeRoom.in_out == 5 or storeRoom.in_out == 6 %}
-                <td class="">{{'---'}}</td>
-            {% elseif storeRoom.in_out == 3 %}
-                <td class="justDate">{{storeRoom.created_at|date('Y-m-d')}}</td>
-            {% elseif storeRoom.out_date is not null  %}
-                <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
-            {% else %}
-                <td class="text-danger">{{'تایید نشده'}}</td>
+            {# Output FundWareHouse #}
+            {% if storeRoom.in_out == 7
+            or storeRoom.in_out == 9
+            %}
+                
+
+                {% if storeRoom.out_date is not null %}
+                    <td class="justDate">{{storeRoom.out_date|date('Y-m-d')}}</td>
+                {% else %}
+                    <td class="text-danger">{{'تایید نشده'}}</td>
+                {% endif %}
+
+                {% if storeRoom.in_date is not null %}
+                    <td class="justDate">{{storeRoom.in_date|date('Y-m-d')}}</td>
+                {% else %}
+                    <td class="text-danger">{{'---'}}</td>
+                {% endif %}
+
+            {% else  %}
+                <td>{{'---'}}</td>
+                <td>{{'---'}}</td>
             {% endif %}
+
+            
         </tr>
         {% endfor %}
     </tbody>
