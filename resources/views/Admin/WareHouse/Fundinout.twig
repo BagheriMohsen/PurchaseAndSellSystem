@@ -41,8 +41,8 @@
                 {{warehouse.name}}
             </p>
             <p class="mb-0">
-                شهر:
-                {{warehouse.cities.name}}
+                استان-شهر:
+                {{warehouse.state.name}}{{'-'}}{{warehouse.city.name}}
             </p>
             <p class="mb-0">
                 آدرس کامل:
@@ -97,10 +97,19 @@
                 <td>{{'ورود'}}</td>
             {% elseif storeRoom.in_out == 7 %}
                 <td>{{'ارسال به نماینده'}}</td>
+            {% elseif storeRoom.in_out == 13 or storeRoom.in_out == 16 %}
+                <td>{{'برگشت از نماینده'}}</td>
             {% elseif storeRoom.in_out == 9 %}
                 <td>{{'خروج'}}</td>
             {% endif %}
-            {% if storeRoom.receiver_id == 1 or storeRoom.receiver_id == 2 %}
+            
+            {% if storeRoom.in_out == 13 or storeRoom.in_out == 16 %}
+                <td>
+                    {{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}
+                    {{'/'}}
+                    {{storeRoom.sender.city.name}}
+                </td>
+            {% elseif storeRoom.receiver_id == 1 or storeRoom.receiver_id == 2 %}
                 <td>{{storeRoom.status}}</td>
             {% else %}
                 <td>

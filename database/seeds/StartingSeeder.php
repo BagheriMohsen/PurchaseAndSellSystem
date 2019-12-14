@@ -301,9 +301,12 @@ class StartingSeeder extends Seeder
       'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته نشده']);
       'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
       'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار نماینده']);
-      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه']);
+      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه-تایید نشده']);
       'App\StoreRoomStatus'::create(['name'=>'تحویل به مشتری']);
       'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
+      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
+      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه-تایید شده']);
+
     /*
     |--------------------------------------------------------------------------
     | Store Product

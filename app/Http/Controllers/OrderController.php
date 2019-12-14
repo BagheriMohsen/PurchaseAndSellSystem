@@ -271,7 +271,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function ProductList(){
-        $products = 'App\Product'::with('types')->get();
+        $products = 'App\Product'::with('types')->where('status','active')->get();
         return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
@@ -376,7 +376,7 @@ class OrderController extends Controller
                                     'number'            =>  $order_product->count,
                                     'description'       =>  'تحویل به مشتری',
                                     'status'            =>  'به مشتری تحویل داده شد',
-                                    'in_out'            =>  13,
+                                    'in_out'            =>  14,
                                     'out_date'          =>  Carbon::now()
                                 ]);
                             }

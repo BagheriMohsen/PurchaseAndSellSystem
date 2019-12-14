@@ -30,7 +30,9 @@
 
 {% block content %}
 
-  {% include 'Messages/errors' %}
+{% include 'Messages/message' %}
+
+{% include 'Messages/errors' %}
 
 <form id="createUserForm" action="{{route('users.store')}}" method="post">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />

@@ -31,7 +31,7 @@
             <th>توضیحات</th>
             <th>تعداد</th>
             <th>تاریخ ارسال</th>
-            {# <th>تاریخ دریافت</th> #}
+            <th>تاریخ دریافت</th>
             <th >جمع(تومان)</th>
           </tr>
           </thead>
@@ -43,19 +43,25 @@
               {% if storeRoom.receiver_id == 2 %}
                 <td>{{'انبار تنخواه'}}</td>
               {% else %}
-                <td>{{storeRoom.receiver.name}}{{' '}}{{storeRoom.receiver.family}}</td>
+                <td>
+                  {{storeRoom.receiver.name}}
+                  {{' '}}
+                  {{storeRoom.receiver.family}}
+                  {{'/'}}
+                  {{storeRoom.receiver.state.name}}
+                  {{'-'}}
+                  {{storeRoom.receiver.city.name}}
+                </td>
               {% endif %}
               <td>{{storeRoom.status}}</td>
               <td>{{storeRoom.description}}</td>
               <td>{{storeRoom.number}}</td>
               <td class="">{{storeRoom.out_date | date('Y/m/d')}}</td>
-              {# {% if storeRoom.in_date is null  %}
+              {% if storeRoom.in_date is null  %}
                 <td class="text-danger">{{'تایید نشده'}}</td>
               {% else %}
-                <td class="justDate">{{storeRoom.in_date | date('Y/m/d')}}</td>
-              {% endif %} #}
-
-
+                <td class="justDate">{{storeRoom.in_date | date('Y-m-d')}}</td>
+              {% endif %}
               {% set price = storeRoom.product.price * storeRoom.number %}
               <td>{{ price|number_format}}</td>
             </tr>

@@ -148,12 +148,27 @@ class WarehouseController extends Controller
         
         if($warehouse->id == 1){
             $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
+            ->orWhere([
+                ['in_out','=',4],
+            ])
+            ->orWhere([
+                ['in_out','=',15],
+            ])
             ->latest()->paginate(15);
             return view('Admin.WareHouse.Maininout',compact('storeRooms','warehouse'));
         }else{
             $storeRooms = 'App\StoreRoom'::where([
                 ['warehouse_id','=',$warehouse->id],
                 ['in_out','!=',8]
+            ])
+            ->orWhere([
+                ['in_out','=',9]
+            ])
+            ->orWhere([
+                ['in_out','=',13]
+            ])
+            ->orWhere([
+                ['in_out','=',16]
             ])
             ->latest()->paginate(15);
             return view('Admin.WareHouse.Fundinout',compact('storeRooms','warehouse'));

@@ -122,10 +122,11 @@
                         <tr>
                           <td><strong>ردیف</strong></td>
                           <td class="text-center"><strong>کالا</strong></td>
+                          <td class="text-center"><strong>نوع کالا</strong></td>
                           <td class="text-center"><strong>تعداد</strong></td>
-                          <td class="text-right"><strong>قیمت واحد</strong></td>
-                          <td class="text-right"><strong>تخفیف</strong></td>
-                          <td class="text-right"><strong>جمع</strong></td>
+                          <td class="text-center"><strong>قیمت واحد</strong></td>
+                          <td class="text-center"><strong>تخفیف</strong></td>
+                          <td class="text-center"><strong>جمع</strong></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,19 +135,24 @@
                       <tr>
                         <td>#</td>
                         <td class="text-center">{{item.product.name}}</td>
+                        {% if item.product_type is null %}
+                          <td class="text-center" >{{ 'ندارد' }}</td>
+                        {% else %}
+                          <td class="text-center" >{{ item.type.name }}</td>
+                        {% endif %}
                         <td class="text-center">{{item.count}}</td>
-                        <td class="text-right number">{{item.product.price}}</td>
-                        <td class="text-right number">{{item.off}}</td>
-                        <td class="row_total text-right number">{{(item.product.price * item.count) - item.off }}</td>
+                        <td class="text-center number">{{item.product.price}}</td>
+                        <td class="text-center number">{{item.off}}</td>
+                        <td class="row_total text-center number">{{(item.product.price * item.count) - item.off }}</td>
                       </tr>
                       {% endfor %}
                       <tr class="">
                         <td colspan="5" class="text-center "><strong>هزینه ارسال</strong></td>
-                        <td class="post_price number"></td>
+                        <td class="post_price number">{{order.shippingCost  | number_format}}</td>
                       </tr>
                       <tr class="">
                         <td colspan="5" class="text-center "><strong>مبلغ پیش واریزی</strong></td>
-                        <td class="pre_payment number">{{order.prePayment}}</td>
+                        <td class="pre_payment number">{{order.prePayment | number_format}}</td>
                       </tr>
                       <tr class="bg-dark">
                         <td colspan="5" class="text-center "><strong>جمع کل</strong></td>

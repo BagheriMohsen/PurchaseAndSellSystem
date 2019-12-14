@@ -1609,5 +1609,9 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
      });
+
+    
+
+
 });
 

@@ -51,8 +51,8 @@
                           <img src="{{ product.thumbUrl }}" alt="">
                         {% endif %}
                       </td>
-                      <td>{{product.name}}</td>
-                      <td>{{product.code}}</td>
+                      <td>{{product.name }}</td>
+                      <td>{{product.code | number_format}}</td>
                         {% if product.status != null %}
                           <td class="text-success" >{{'فعال'}}</td>
                         {% else %}
@@ -63,8 +63,8 @@
                         {% else %}
                           <td class="text-danger" >{{'غیر فعال'}}</td>
                         {% endif %}
-                      <td>{{product.price}}</td>
-                      <td>{{product.buyPrice}}</td>
+                      <td>{{product.price | number_format }}</td>
+                      <td>{{product.buyPrice | number_format }}</td>
                       <td class="d-flex justify-content-around">
                         <a title="انواع" class="text-success" data-toggle="modal" href="#types{{product.id}}">
                           <sub class="text-success" id="typeCounter{{product.id}}">

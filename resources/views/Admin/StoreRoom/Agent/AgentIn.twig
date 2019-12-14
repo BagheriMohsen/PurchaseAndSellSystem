@@ -43,7 +43,15 @@
                       {% if storeRoom.sender_id == 2 %}
                         <td>{{'انبار تنخواه'}}</td>
                       {% else %}    
-                        <td>{{storeRoom.sender.name}}{{' '}}{{storeRoom.sender.family}}</td>
+                        <td>
+                          {{storeRoom.sender.name}}
+                          {{' '}}
+                          {{storeRoom.sender.family}}
+                          {{'/'}}
+                          {{storeRoom.sender.state.name}}
+                          {{'-'}}
+                          {{storeRoom.sender.city.name}}
+                        </td>
                       {% endif %}
                       <td>{{storeRoom.status}}</td>
                       <td>{{storeRoom.description}}</td>

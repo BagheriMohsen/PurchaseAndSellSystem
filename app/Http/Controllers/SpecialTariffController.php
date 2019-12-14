@@ -36,14 +36,17 @@ class SpecialTariffController extends Controller
      */
     public function store(Request $request)
     {
-
+      
         $status = SpecialTariff::where([
           ['user_id'    ,'='  ,$request->user_id],
           ['product_id' ,'='  ,$request->product_id],
-          ['place'      ,'='  .$request->place]
+          ['place'      ,'='  ."%{$request->place}%"]
         ])->exists();
 
-        if($status != True){
+        if($status){
+          $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
+          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+        }else{
           SpecialTariff::create([
             'user_id'       =>  $request->user_id,
             'product_id'    =>  $request->product_id,
@@ -51,9 +54,6 @@ class SpecialTariffController extends Controller
             'price'         =>  $request->price,
           ]);
           $message = 'اطلاعات وارد شد';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }else{
-          $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
           return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
         }
 

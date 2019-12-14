@@ -17,6 +17,11 @@
 {% endblock %}
 
 {% block content %}
+
+{% include 'Messages/message' %}
+
+{% include 'Messages/errors' %}
+
 <div >
   <table id="agentTable" class="table table-striped table-bordered table-sm" cellspacing="2"
   width="100%">

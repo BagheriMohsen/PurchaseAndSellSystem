@@ -32,7 +32,7 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell crud-icon"></i>
           <span class="badge badge-secondary navbar-badge" style="font-size:12px;">
-            {{notifs + orderNotif}}
+            {{notifs + orderNotif + AgentReturnedProduct}}
           </span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -60,7 +60,8 @@
                Notification Count
               --------------------------------------------------------------------------
               #}
-              {% set notifCount = orderNotif + notifs  %}
+              
+              {% set notifCount = orderNotif + notifs + AgentReturnedProduct %}
               {% if  notifCount <= 0 %}
                   <div class="text-center text-muted">
                     چیزی برای نمایش وجود ندارد

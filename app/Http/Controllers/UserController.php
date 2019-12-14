@@ -132,6 +132,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+      $uri = url()->previous();
+      $sessionURL =  session(['uri' => $uri ]);
+       
       $roles  = Role::latest()->get();
       $cities         =   'App\City'::latest()->get();
       $states         =   'App\State'::latest()->get();
@@ -163,7 +166,7 @@ class UserController extends Controller
     //   }else{
     //       $username = $user->username;
     //   }
-     
+   
 
         
       $user->update([
@@ -205,7 +208,13 @@ class UserController extends Controller
        
      
      $user->assignRole($request->role);
-     return redirect()->route('users.index');
+
+     if(session('uri')){
+        return redirect(session('uri'))
+        ->with('message','اطلاعات کاربر با موفقیت به روز رسانی شد');
+     }
+     return redirect()->route('users.index')
+     ->with('message','اطلاعات کاربر با موفقیت به روز رسانی شد');
     }
 
     /**
@@ -456,6 +465,9 @@ class UserController extends Controller
         $role = $user->getRoleNames()->first();
        
         session(['adminLogIn' => $user_id ]);
+        $uri = url()->previous();
+        session(['switchUsersURI' => $uri ]);
+
         if($role == "mainWarehouser" || $role == "fundWarehouser"){
             return redirect()->route('storeRooms.index')->with('switchSuccess','true');
         }elseif($role == "agent"){
@@ -481,6 +493,9 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         Auth::login($user);
         session()->forget('adminLogIn');
+        if(session('switchUsersURI')){
+            return redirect(session('switchUsersURI'));
+        }
         return redirect()->route('users.index');
     }
     /*

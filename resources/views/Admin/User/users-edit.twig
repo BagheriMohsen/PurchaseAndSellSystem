@@ -31,9 +31,8 @@
 
 {% block content %}
 
-  {% include 'Messages/message' %}
-
-  {% include 'Messages/errors' %}
+{% include "Messages/message" %}
+{% include "Messages/errors" %}
 
 
 <form id="editUserForm" action="{{route('users.update',user.id)}}" method="post">
