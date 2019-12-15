@@ -323,33 +323,43 @@ class OrderController extends Controller
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-
+                // foreach for check product exist in storage or not
                 foreach($order->products as $order_product){
-                    $status = 'App\Storage'::where([
+                    $count = $order_product->count;
+                    $user_id = $user->id;
+                    $product_id = $order_product->product_id;
+                    
+                    $storage_status = 'App\Storage'::where([
                         ['agent_id','=',$user->id],
-                        ['product_id','=',$order_product->product_id],
-                        ['number','<',$order_product->count]
+                        ['product_id','=',$order_product->product_id]
                     ])->exists();
-
-                    if($status == True){
-                        $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                    // if product not exist
+                    if($storage_status != True){
+                        $result = ['message' => ' کالای  '.
+                        $order_product->product->name.
+                        ' در انبار وجود ندارد ','status' => 0];
                         return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                    // else product less than order->count 
+                    }else{
+                        $storage = 'App\Storage'::where([
+                            ['agent_id','=',$user_id],
+                            ['product_id','=',$product_id]
+                        ])->firstOrFail(); 
+
+                        if($storage->number < $count){
+                            $result = ['message' => ' کالای  '.
+                            $order_product->product->name.
+                            ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                            return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                        }
                     }
+                   
                 }
 
 
                     foreach($order->products as $order_product){
                 
-                        $storage_status = 'App\Storage'::where([
-                            ['agent_id','=',$user->id],
-                            ['product_id','=',$order_product->product_id]
-                        ])->exists();
-                        // Product Not Found
-                        if($storage_status != true){
-                            $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ','status' => 0];
-                            return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
-                        }
-
+                        
                         $storage = 'App\Storage'::where([
                             ['agent_id','=',$user->id],
                             ['product_id','=',$order_product->product_id]

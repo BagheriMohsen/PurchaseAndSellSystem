@@ -37,16 +37,33 @@ class SpecialTariffController extends Controller
     public function store(Request $request)
     {
       
-        $status = SpecialTariff::where([
-          ['user_id'    ,'='  ,$request->user_id],
-          ['product_id' ,'='  ,$request->product_id],
-          ['place'      ,'='  ."%{$request->place}%"]
-        ])->exists();
+        $user_id    = $request->user_id;
+        $product_id = $request->product_id;
+        $place      = $request->place;
 
-        if($status){
-          $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }else{
+        $product_status = SpecialTariff::where([
+            ['user_id','=',$user_id],
+            ['product_id','=',$product_id]
+        ])->exists(); 
+
+        if($product_status){
+            $specialShareds = SpecialTariff::where([
+                ['user_id','=',$user_id],
+                ['product_id','=',$product_id]
+            ])->get(); 
+
+            foreach($specialShareds as $specialShared){
+
+                if($specialShared->place == $place){
+                    $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
+                    return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                }
+            }
+
+        }
+
+        
+        
           SpecialTariff::create([
             'user_id'       =>  $request->user_id,
             'product_id'    =>  $request->product_id,
@@ -55,7 +72,7 @@ class SpecialTariffController extends Controller
           ]);
           $message = 'اطلاعات وارد شد';
           return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }
+        
 
     }
 
