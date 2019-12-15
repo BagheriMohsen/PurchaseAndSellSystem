@@ -27,8 +27,9 @@
   {% include 'Messages/errors' %}
 
   <section>
-    <form id="orderForm" action="{{route('orders.store')}}" method="post">
+    <form id="orderForm" class="orderEditForm" action="{{route('orders.update',order.id)}}" method="post">
       <input type="hidden" name="_token" value="{{csrf_token()}}" />
+      <input type="hidden" name="order_id" value="{{order.id}}" />
       <div class="row bg-white pt-3 pb-3">
         <h4 class="pt-2 pb-2 col-12 text-center">
           مشخصات مشتری
@@ -60,6 +61,7 @@
             <option {% if order.state_id == state.id %} selected {% endif %}
              value="{{state.id}}">{{state.name}}</option>
             {% endfor %}
+            <option value="2">ارومیه</option>
           </select>
         </div>
         {# city #}
@@ -73,6 +75,7 @@
             <option {% if order.city_id == city.id %} selected {% endif %}
             value="{{city.id}}">{{city.name}}</option>
             {% endfor %}
+            <option value="2">ارومیه</option>
           </select>
           <div id="cityAgent" class="mt-2"></div>
           <input id="agentStatue" type="hidden">
