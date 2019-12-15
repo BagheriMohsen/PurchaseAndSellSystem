@@ -330,7 +330,7 @@ class OrderController extends Controller
                 'order_id'      =>  $item->order_id,
                 'count'         =>  $item->count,
                 'off'           =>  $item->off,
-                'productـtype'  =>  $item->product_type,
+                'product_type'  =>  $item->product_type,
                 'customer_id'   =>  $item->customer_id
             ];
         }
