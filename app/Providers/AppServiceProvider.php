@@ -93,7 +93,7 @@ class AppServiceProvider extends ServiceProvider
         | Seller work information for sellers and admin
         |--------------------------------------------------------------------------
         |*/
-        view()->composer('Admin.Master.sellers-info',function($view){
+        view()->composer('Admin.Master.Repetitive.sellers-info-modal',function($view){
             if(auth()->check()){
                 // find user detail
                 $sellers       = 'App\User'::Role('seller')->get();
