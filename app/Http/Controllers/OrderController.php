@@ -323,65 +323,64 @@ class OrderController extends Controller
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-              
+
+                foreach($order->products as $order_product){
+                    $status = 'App\Storage'::where([
+                        ['agent_id','=',$user->id],
+                        ['product_id','=',$order_product->product_id],
+                        ['number','<',$order_product->count]
+                    ])->exists();
+
+                    if($status == True){
+                        $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                        return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                    }
+                }
+
+
                     foreach($order->products as $order_product){
-                        
-                            $status = 'App\Storage'::where([
-                                ['agent_id','=',$user->id],
-                                ['product_id','=',$order_product->product_id],
-                                ['number','<',$order_product->count]
-                            ])->exists();
-                           
-                            //IF Product is not exists in agent storage
-                            if($status == True){
-                                $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
-                                return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
-                        
-                            //IF Product is exists in agent storage
-                            }else{
+                
+                        $storage_status = 'App\Storage'::where([
+                            ['agent_id','=',$user->id],
+                            ['product_id','=',$order_product->product_id]
+                        ])->exists();
+                        // Product Not Found
+                        if($storage_status != true){
+                            $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ','status' => 0];
+                            return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                        }
 
-                                $storage_status = 'App\Storage'::where([
-                                    ['agent_id','=',$user->id],
-                                    ['product_id','=',$order_product->product_id]
-                                ])->exists();
-                                // Product Not Found
-                                if($storage_status != true){
-                                    $result = ['message' => ' کالای  '.$order_product->product->name.' در انبار وجود ندارد ','status' => 0];
-                                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
-                                }
+                        $storage = 'App\Storage'::where([
+                            ['agent_id','=',$user->id],
+                            ['product_id','=',$order_product->product_id]
+                        ])->firstOrFail();
 
-                                $storage = 'App\Storage'::where([
-                                    ['agent_id','=',$user->id],
-                                    ['product_id','=',$order_product->product_id]
-                                ])->firstOrFail();
+                        // Change Order Status To Collected 
+                        $order = 'App\Order'::findOrFail($item['id']);
+                        $order->update([
+                            'status'            =>  $item['statue'],
+                            'collected_Date'    =>  Carbon::now()
+                            ]);
+                        // Discount count of product in Agent Storage
+                        $number = $storage->number - $order_product->count;
+                        $storage->update(['number'=>$number]);
 
-                                // Change Order Status To Collected 
-                                $order = 'App\Order'::findOrFail($item['id']);
-                                $order->update([
-                                    'status'            =>  $item['statue'],
-                                    'collected_Date'    =>  Carbon::now()
-                                    ]);
-                                // Discount count of product in Agent Storage
-                                $number = $storage->number - $order_product->count;
-                                $storage->update(['number'=>$number]);
-
-                                // Create OutPut store room for Agent
-                                'App\StoreRoom'::create([
-                                    'user_id'           =>  $user->id,
-                                    'storage_id'        =>  $storage->id,
-                                    'sender_id'         =>  $user->id,
-                                    'customerName'      =>  $order->fullName,
-                                    'product_id'        =>  $order_product->product_id,
-                                    'transport_id'      =>  null,
-                                    'number'            =>  $order_product->count,
-                                    'description'       =>  'تحویل به مشتری',
-                                    'status'            =>  'به مشتری تحویل داده شد',
-                                    'in_out'            =>  14,
-                                    'out_date'          =>  Carbon::now()
-                                ]);
-                            }
-
-                            echo $this->UserInventoryCalculated($user,$order_product,$order);
+                        // Create OutPut store room for Agent
+                        'App\StoreRoom'::create([
+                            'user_id'           =>  $user->id,
+                            'storage_id'        =>  $storage->id,
+                            'sender_id'         =>  $user->id,
+                            'customerName'      =>  $order->fullName,
+                            'product_id'        =>  $order_product->product_id,
+                            'transport_id'      =>  null,
+                            'number'            =>  $order_product->count,
+                            'description'       =>  'تحویل به مشتری',
+                            'status'            =>  'به مشتری تحویل داده شد',
+                            'in_out'            =>  14,
+                            'out_date'          =>  Carbon::now()
+                        ]);
+                    
+                    echo $this->UserInventoryCalculated($user,$order_product,$order);
 
 
                }     

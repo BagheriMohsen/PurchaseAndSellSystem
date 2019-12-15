@@ -112,20 +112,20 @@ class AppServiceProvider extends ServiceProvider
                     $collected = 'App\Order'::where([
                         ['seller_id','=',$seller->id],
                         ['status','=',10],
-                        ['created_at','<',$today],
-                        ['created_at','>',$thirteenDaysAgo]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',11],
-                        ['created_at','<',$today],
-                        ['created_at','>',$thirteenDaysAgo]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',12],
-                        ['created_at','<',$today],
-                        ['created_at','>',$thirteenDaysAgo]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->get();
 
