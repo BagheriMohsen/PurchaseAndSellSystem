@@ -303,13 +303,34 @@ class OrderController extends Controller
     public function OrdersProductForEditPage($id){
         $order = Order::findOrFail($id);
         $user = 'App\User'::findOrFail(auth()->user()->id);
+        
 
         if($order->seller_id != $user->id){
             return abort(404);
         }
+        $products = array();
+        foreach($order->products as $item){
 
+            if(isset($item->type)){
+                $type = $item->type->name;
+            }else{
+                $type = null ;
+            }
+            $price = $item->product->price * $item->count;
+            $products[] = [
+                'id'            =>  $item->id,
+                'product'       =>  $item->product->name,
+                'type'          =>  $type,
+                'price'         =>  $price,
+                'product_id'    =>  $item->product_id,
+                'order_id'      =>  $item->order_id,
+                'count'         =>  $item->order->count,
+                'product-type'  =>  $item->product_type,
+                'customer_id'   =>  $item->customer_id
+            ];
+        }
         
-        return Response()->json($order->products,200,[],JSON_UNESCAPED_UNICODE);
+        return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
 
 
     }
