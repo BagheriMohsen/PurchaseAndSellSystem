@@ -160,8 +160,14 @@ class OrderController extends Controller
         if($user->id != $order->seller_id){
             return abort(404);
         }
-
-        return view('Admin.Order.Seller.order-edit',compact('order'));
+        $states = 'App\State'::latest()->get();
+        $cities = 'App\City'::latest()->get();
+       
+        return view('Admin.Order.Seller.order-edit',compact(
+            'order',
+            'states',
+            'cities'
+    ));
     }
 
     /**
@@ -290,12 +296,10 @@ class OrderController extends Controller
             ['status','=',3],//order send To FollowUpManager
         ])
         ->latest()->paginate(15);
-        $states = 'App\State'::latest()->get();
-        $cities = 'App\City'::latest()->get();
+        
         return view('Admin.Order.Seller.ordersForEdit',compact(
-            'orders',
-            'states',
-            'cities'
+            'orders'
+            
         
         ));
     }
