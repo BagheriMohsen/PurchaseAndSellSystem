@@ -100,6 +100,7 @@ class AppServiceProvider extends ServiceProvider
                 $sellerRegisters = array();
                 $today = 'Carbon\Carbon'::now();
                 $yesterday = 'Carbon\Carbon'::now()->subDays(1);
+                $thirteenDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
                 foreach($sellers as $seller){
                     $name = $seller->name.' '.$seller->family;
                     $register = 'App\Order'::where([
@@ -112,19 +113,19 @@ class AppServiceProvider extends ServiceProvider
                         ['seller_id','=',$seller->id],
                         ['status','=',10],
                         ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['created_at','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',11],
                         ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['created_at','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',12],
                         ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['created_at','>',$thirteenDaysAgo]
                     ])
                     ->get();
 

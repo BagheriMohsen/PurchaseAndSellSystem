@@ -67,11 +67,17 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        <td> فروشنده اول</td>
                         <td>
-                          <a title="ویرایش سفارش" class="text-secondary" >
-                              <i class="far fa-edit crud-icon"></i>
-                          </a>
+                          {{order.seller.name}}
+                          {{' '}}
+                          {{order.seller.family}}
+                          {{'/'}}
+                          {{order.seller.state.name}}
+                          {{'-'}}
+                          {{order.seller.city.name}}
+                        </td>
+                        <td>
+                         
 
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">

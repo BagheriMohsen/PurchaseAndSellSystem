@@ -61,7 +61,9 @@
                           <span>
                             {{ProductItem.product.name}}
                             {{' '}}
-                            {{ProductItem.type.name}}
+                            {% if ProductItem.type is not null %}
+                              ({{ProductItem.type.name}})
+                            {% endif %}
                           </span>
                           {% endfor %}
                         </td>
