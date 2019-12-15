@@ -11,8 +11,11 @@ class ProductType extends Model
       'product_id',
       'name'
     ];
-
-    //releation with product model
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with product model
+    |--------------------------------------------------------------------------
+    |*/
     public function product(){
       return $this->belongsTo('App\Product');
     }

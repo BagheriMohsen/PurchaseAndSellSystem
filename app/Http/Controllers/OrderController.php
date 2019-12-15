@@ -324,7 +324,7 @@ class OrderController extends Controller
                 'price'         =>  $price,
                 'product_id'    =>  $item->product_id,
                 'order_id'      =>  $item->order_id,
-                'count'         =>  $item->order->count,
+                'count'         =>  $item->count,
                 'off'           =>  $item->off,
                 'productـtype'  =>  $item->product_type,
                 'customer_id'   =>  $item->customer_id
