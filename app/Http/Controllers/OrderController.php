@@ -299,6 +299,20 @@ class OrderController extends Controller
         
         ));
     }
+
+    public function OrdersProductForEditPage($id){
+        $order = Order::findOrFail($id);
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        if($order->seller_id != $user->id){
+            return abort(404);
+        }
+
+        
+        return Response()->json($order->products,200,[],JSON_UNESCAPED_UNICODE);
+
+
+    }
     /*
     |--------------------------------------------------------------------------
     | Agent Order List

@@ -90,6 +90,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('sellerOrderCallBack','OrderController@sellerOrderCallBack')->name('sellerOrderCallBack');
     Route::get('receiveOrderFromFollowUpManager','OrderController@receiveOrderFromFollowUpManager')->name('receiveOrderFromFollowUpManager');
     Route::get('OrdersForEdit','OrderController@OrdersForEdit')->name('OrdersForEdit');
+    Route::get('OrdersProductForEditPage/{id}','OrderController@OrdersProductForEditPage')->name('OrdersProductForEditPage');
     /* Agents */
     Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
     Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');
