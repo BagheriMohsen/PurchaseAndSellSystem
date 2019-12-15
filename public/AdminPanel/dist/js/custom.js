@@ -1,26 +1,6 @@
 $(document).ready(function(){
 
-    // pdfMake.fonts = {
-    //     Yekan: {
-    //       normal: 'Yekan.ttf',
-    //       bold: 'Yekan.ttf',
-    //       italics: 'Yekan.ttf',
-    //       bolditalics: 'Yekan.ttf'
-    //     },
-    //     Roboto: {
-    //         normal: 'Roboto-Regular.ttf',
-    //         bold: 'Roboto-Medium.ttf',
-    //         italics: 'Roboto-Italic.ttf',
-    //         bolditalics: 'Roboto-MediumItalic.ttf'
-    //     }
-    //  }
-    //  var docDefinition = {
-    //     defaultStyle: {
-    //       font: 'Yekan'
-    //     }
-    //   }
-    //   pdfMake.createPdf(docDefinition);
-
+    // Global variables
 
     var persianDataTable = {
         "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
@@ -45,34 +25,21 @@ $(document).ready(function(){
             "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
         }
     };
+
+    // End Global variables
+
+    //Initiating plugins
+
+    //Initiating datatable js
     $.extend( $.fn.dataTable.defaults, {
         "language": persianDataTable,
     } );
+
+    //End initiating plugins
     
-    //Remove comma from number inputs for product Create Form
-    $('#productCreateForm').submit(function(event){
-        event.preventDefault();
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
-        });
-        $(this)[0].submit();
-    });
-    //Remove comma from number inputs for off price Form
-    $('#offPriceForm').submit(function(event){
-        event.preventDefault();
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
-        });
-        $(this)[0].submit();
-    });
-    //Remove comma from number inputs for product Edit Form
-    $('#productEditForm').submit(function(event){
-        event.preventDefault();
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
-        });
-        $(this)[0].submit();
-    });
+    //Defining functions
+
+    //Check user role in create user page
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
 
@@ -133,82 +100,6 @@ $(document).ready(function(){
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
 
-   // Setup tables section
-    var orderTable = $('#orderTable').DataTable({
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
-        order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
-    });
-    var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
-        "language": persianDataTable,
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
-        order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
-    });
-    var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
-        "language": persianDataTable,
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
-        order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
-    });
-    // Other section tabless
-    $('#cityTable,#stateTable').DataTable({
-        "language": persianDataTable
-    });
-    //User sections tables
-    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
-        "language": persianDataTable
-    });
-    //Dashboard tables
-    $('#sellerInfoTable').DataTable({
-        "language": persianDataTable,
-    });
-    //Store room tables
-    // $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
-    //Warehouse tables
-    // $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
         var CSRF_TOKEN = CSRF_TOKEN;
@@ -254,6 +145,82 @@ $(document).ready(function(){
                 </tr>
             `;
         });
+    }
+   // Setup tables section
+    var orderTable = $('#orderTable').DataTable({
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
+    });
+    var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
+    });
+    var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
+        "language": persianDataTable,
+        columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]],
+        // buttons: {
+        //     buttons: [
+        //       { extend: 'print', text: 'Print List' },
+        //       { extend: 'pdf', text: 'PDF' },
+        //       { extend: 'copy', text: 'Copy to clipboard' }
+        //     ]
+        //   }
+    });
+    // city&state section tabless
+    $('#cityTable,#stateTable').DataTable({
+    });
+    //User sections tables
+    $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
+    });
+    //Dashboard tables
+    $('#sellerInfoTable').DataTable({
+    });
+
+    //Store room tables
+    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
+    //Warehouse tables
+    $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
+
+    
         //Deleting product type via ajax in product type modal in products page
         $('.deleteTypeButton').on('click',function(event){
             event.preventDefault();
@@ -322,7 +289,7 @@ $(document).ready(function(){
         //         }
         //     });
         // });
-    }
+   
     //Getting product types via ajax in product type modal in products page
     var getProductTypes = function(product_id,CSRF_TOKEN){
 
@@ -334,6 +301,38 @@ $(document).ready(function(){
             }
         });
     }
+
+    //End Defining functions
+
+    //Submitting Forms
+
+    // In products_create page
+    $('#productCreateForm').submit(function(event){
+        event.preventDefault();
+        //remove comma before submit
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
+    // In products-off page
+    $('#offPriceForm').submit(function(event){
+        event.preventDefault();
+        //remove comma before submit
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
+    // In products-off page
+    $('#productEditForm').submit(function(event){
+        event.preventDefault();
+        //remove comma before submit
+        $('input.comma').each(function(index,item){
+            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        });
+        $(this)[0].submit();
+    });
     //Adding product type via ajax in product type modal in products page
     $('.storeTypeForm').submit(function(event){
         event.preventDefault();
@@ -354,9 +353,10 @@ $(document).ready(function(){
                 name:name
             },
             success:function(response){
+                console.log(response);
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
                 self.find('button[type="submit"]').attr('disabled',false);
-                toastr["success"]('با موفقیت ثبت شد');
+                toastr["info"](response);
                 getProductTypes(product_id,CSRF_TOKEN);
             }
         });
@@ -466,6 +466,8 @@ $(document).ready(function(){
       </tr>
         `;
 
+        //update tarrif count
+        
         //Deleting special tariffs for users via ajax
         $('.deleteSpecialTariff').on('click',function(event){
             event.preventDefault();
@@ -489,7 +491,10 @@ $(document).ready(function(){
                     $(this).attr('disabled',false);
                 }
             });
-        });
+            var special_type_counter_id = '#specialCounter'+user_id;
+            console.log($(this).parents('table').find('tr'));
+            $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
+            });
     };
     //Getting special tariff table data
     var getSpecialTariff = function(user_id,CSRF_TOKEN,product_name){
@@ -529,6 +534,7 @@ $(document).ready(function(){
                 price:tariff_price
             },
             success:function(response){
+                console.log('response',response);
                 getSpecialTariff(user_id,CSRF_TOKEN,product_name);
                 self.find('button[type="submit"]').html('ذخیره');
                 self.find('button[type="submit"]').attr('disabled',false);
@@ -556,6 +562,10 @@ $(document).ready(function(){
                 form.parents('tr').remove();
             }
         });
+        var special_type_counter_id = '#specialCounter'+user_id;
+        console.log($(this).parents('table').find('tr'));
+        $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
+
     });
    
 
@@ -675,40 +685,30 @@ $(document).ready(function(){
         div.classList.add('row');
         div.innerHTML =  `
             <div class="col-sm-3">
-              <label for="product_name">انتخاب محصول
-                <span class="text-danger">*</span>
-              </label>
+             
               <select class="productSelect form-control bg-sec" name="product_name" required>
                 <option value="">محصول را انتخاب کنید</option>
               </select>
             </div>
             <div class="col-sm-1">
-              <label for="count">تعداد
-                <span class="text-danger">*</span>
-              </label>
+              
               <input class="countField form-control bg-sec" type="number" name="count" value="1" required>
             </div>
             <div class="col-sm-2">
-              <label for="price">قیمت-تومان
-                <span class="text-danger">*</span>
-              </label>
+             
               <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled required>
             </div>
             <div class="col-sm-2">
-              <label for="off">تخفیف
-                <span class="text-danger">*</span>
-              </label>
+             
               <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" required>
             </div>
             <div class="col-sm-3 mt-1">
-              <label for="productType">مدل محصول
-                <span class="text-danger">*</span>
-              </label>
+            
               <select class="typeSelect form-control bg-sec"  name="productType">
                 
               </select>
             </div>
-            <div class="col-sm-1 mt-1 text-center mt-5 " >
+            <div class="col-sm-1 mt-1 text-center mt-2 " >
                 <strong>
                 <a class="removeProduct text-danger" href="#">
                    <i class="far fa-trash-alt text-danger crud-icon"></i>
@@ -857,15 +857,16 @@ $(document).ready(function(){
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(numberWithCommas(overallPrice));
-        // Cash price or cheque price field updated after overallprice update
-        var paymentMethod = $('#orderForm input[name="paymentMethod"]:checked').val();
-        if(paymentMethod === 'cash'){
-            $('#orderForm input[name="cashPrice"]').val(numberWithCommas(overallPrice));
-        }else{
-            $('#orderForm input[name="chequePrice"]').val(numberWithCommas(overallPrice));
-            $('#orderForm input[name="prePayment"]').val(0);
-        }
+        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
+        $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(overallPrice) + parseInt(deliveryPrice)));
     });
+    $('#orderForm input[name="shippingCost"]').on('change keyup',function(){
+        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
+        var productsPrice = $('#overallPrice').html().replace(/\,/g,'',10);
+        console.log('sum',productsPrice+deliveryPrice);
+        $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(productsPrice) + parseInt(deliveryPrice)));
+    });
+
     //Checking if city has agent exist when seller gives order
     $('#orderForm #city').on('click',function(){
         $('#cityAgent').html('');
@@ -1026,10 +1027,6 @@ $(document).ready(function(){
 
     });
     
-    // $(".waves-effect").click(function () {
-    //     toastr["info"]("I was launched via jQuery!")
-    // });
-    // toastr.info('Are you the 6 fingered man?')
     // Calculating sent cargo to agent from tankhah warehouse in agentExchangeForm page
     function getProductPrice(products,product_id){
         var price = 0;
@@ -1080,10 +1077,15 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
     });
+    $('#returnToFund').submit(function(event){
+        event.preventDefault();
+        $(this).find('input[name="date"]').val(isoDate);
+        $(this)[0].submit();
+    });
     
     //Get State and cities array via ajax for user_create and user_edit 
     var statesCityArray;
-    if($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length){
+    if($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length || $('#warehouseForm')){
         $.ajax({
             url:'http://localhost:8000/states/AllStatesAndCitiesName',
             type:'Get',
@@ -1455,40 +1457,40 @@ $(document).ready(function(){
         // ]
     } );
     //Handling cash and cheque in order_create page
-    $('#orderForm input[name="paymentMethod"]').on('change',function(){
-        var form = $(this).parents('form');
-        var cashPrice = form.find('input[name="cashPrice"]');
-        var prePayment = form.find('input[name="prePayment"]')
-        var chequePrice = form.find('input[name="chequePrice"]');
-        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
-        var paymentMethod = $(this).val();
-        if(paymentMethod === 'cash'){
-            cashPrice.attr('disabled',false);
-            prePayment.attr('disabled','disabled');
-            chequePrice.attr('disabled','disabled');
-            cashPrice.val(numberWithCommas(overallPrice));
-            chequePrice.val(0);
-            prePayment.val(0);
+    // $('#orderForm input[name="paymentMethod"]').on('change',function(){
+    //     var form = $(this).parents('form');
+    //     var cashPrice = form.find('input[name="cashPrice"]');
+    //     var prePayment = form.find('input[name="prePayment"]')
+    //     var chequePrice = form.find('input[name="chequePrice"]');
+    //     var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+    //     var paymentMethod = $(this).val();
+    //     if(paymentMethod === 'cash'){
+    //         cashPrice.attr('disabled',false);
+    //         prePayment.attr('disabled','disabled');
+    //         chequePrice.attr('disabled','disabled');
+    //         cashPrice.val(numberWithCommas(overallPrice));
+    //         chequePrice.val(0);
+    //         prePayment.val(0);
            
-        }else{
-            cashPrice.attr('disabled','disabled');
-            prePayment.attr('disabled', false);
-            chequePrice.attr('disabled', false);
-            chequePrice.val(numberWithCommas(overallPrice));
-            prePayment.val(0);
-            cashPrice.val(0);
-        }
-    });
-    $('input[name="prePayment"]').on('keyup',function(){
-        var form = $(this).parents('form');
-        var prePayment = parseInt($(this).val().replace(/\,/g,'',10))
-        var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
-        if(prePayment){
-            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice - prePayment) );
-        }else{
-            form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
-        }
-    });
+    //     }else{
+    //         cashPrice.attr('disabled','disabled');
+    //         prePayment.attr('disabled', false);
+    //         chequePrice.attr('disabled', false);
+    //         chequePrice.val(numberWithCommas(overallPrice));
+    //         prePayment.val(0);
+    //         cashPrice.val(0);
+    //     }
+    // });
+    // $('input[name="prePayment"]').on('keyup',function(){
+    //     var form = $(this).parents('form');
+    //     var prePayment = parseInt($(this).val().replace(/\,/g,'',10))
+    //     var overallPrice = parseInt(form.find('#overallPrice').html().replace(/\,/g,'',10));
+    //     if(prePayment){
+    //         form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice - prePayment) );
+    //     }else{
+    //         form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
+    //     }
+    // });
     
     // Condition assign per order in modal 
     $('.conditionAssignForm button').on('click',function(event){
@@ -1527,8 +1529,8 @@ $(document).ready(function(){
     // Invoice calculation in agent page
     if($('.invoice_table').length){
         var total_without_off = null;
-        var post_price = parseInt($('.post_price').html());
-        var pre_payment = parseInt($('.pre_payment').html());
+        var post_price = parseInt($('.post_price').html().replace(/\,/g,'',10));
+        var pre_payment = parseInt($('.pre_payment').html().replace(/\,/g,'',10));
         post_price = post_price || 0;
         pre_payment = pre_payment || 0;
         $('.row_total').each(function(index,value){
@@ -1536,7 +1538,7 @@ $(document).ready(function(){
         });
         console.log(total_without_off,post_price,pre_payment);
         
-        $('.total').html( total_without_off - post_price - pre_payment);
+        $('.total').html( total_without_off + post_price - pre_payment);
         
     }
     // Order_details modal calculation for agent,seller,etc..

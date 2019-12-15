@@ -119,15 +119,44 @@
           <hr width="150px" style="border-bottom:5px solid red;" />
         </h4>
           {# item row #}
-        <div class="container-fluid orderList">
-        
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="product_name">انتخاب محصول
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-1">
+              <label for="count">تعداد
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-2">
+              <label for="price">قیمت-تومان
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-2">
+              <label for="off">تخفیف
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-3 mt-1">
+              <label for="productType">مدل محصول
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+          </div>
+          <div class="orderList">
+          
+          </div>
         </div>
         {# end item row #}
 
         <a class="addProduct btn btn-success mt-4" href="javascript:void(0)">
           افزودن محصول
         </a>
-        <div class="col-12 mt-4 text-center">مبلغ کل:
+        <div class="col-12 mt-4 text-center"> مبلغ کل محصولات:
           <span id="overallPrice">0</span>
           تومان
         </div>
@@ -158,10 +187,10 @@
         </div>
 
         <div class="col-sm-6">
-          <label for="cashAmount">مبلغ پرداخت نقدی
+          <label for="cashAmount">مبلغ قابل پرداخت (با هزینه ارسال)
             <span class="text-danger">*</span>
           </label>
-          <input class="form-control bg-sec comma" type="text"  name="cashPrice" value="0" >
+          <input class="form-control bg-sec comma" type="text"  name="cashPrice" value="0" disabled>
         </div>
 
         <div class="col-sm-6 d-none">
