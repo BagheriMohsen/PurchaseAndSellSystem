@@ -1,0 +1,247 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  ویرایش سفارش
+{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{asset('AdminPanel/check-box/checkboxes.min.css')}}">
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% include 'Messages/message' %}
+  {% include 'Messages/errors' %}
+
+  <section>
+    <form id="orderForm" action="{{route('orders.store')}}" method="post">
+      <input type="hidden" name="_token" value="{{csrf_token()}}" />
+      <div class="row bg-white pt-3 pb-3">
+        <h4 class="pt-2 pb-2 col-12 text-center">
+          مشخصات مشتری
+          <hr width="200px" style="border-bottom:5px solid red;" />
+        </h4>
+        {# cell-phone #}
+        <div class="col-sm-3 mt-1">
+          <label for="mobile">موبایل(بدون صفر)
+            <span class="text-danger">*</span>
+          </label>
+          <input value="{{order.mobile}}" class="form-control bg-sec" type="text" name="mobile"  required>
+        </div>
+        {# landline-phone #}
+        <div class="col-sm-3 mt-1">
+          <label for="telephone">تلفن ثابت
+            <span class="text-danger">*</span>
+          </label>
+          <input value="{{order.mobile}}" class="form-control bg-sec" type="text" name="telephone"  required>
+        </div>
+        
+        {# state #}
+        <div class="col-sm-3 mt-1">
+          <label for="city">استان
+            <span class="text-danger">*</span>
+          </label>
+          <select id="state" class="form-control bg-sec"  name="state" required>
+            <option value="{{null}}">استان را انتخاب کنید</option>
+            {% for state in states %}
+            <option {% if order.state_id == state.id %} selected {% endif %}
+             value="{{state.id}}">{{state.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {# city #}
+        <div class="col-sm-3 mt-1">
+          <label for="state">شهر
+            <span class="text-danger">*</span>
+          </label>
+          <select id="city" class="form-control bg-sec" name="city" >
+            <option value="{{null}}">شهر را انتخاب کنید</option>
+            {% for city in cities %}
+            <option {% if order.city_id == city.id %} selected {% endif %}
+            value="{{city.id}}">{{city.name}}</option>
+            {% endfor %}
+          </select>
+          <div id="cityAgent" class="mt-2"></div>
+          <input id="agentStatue" type="hidden">
+        </div>
+        
+        {# detail:name-family-code-hbd #}
+        <div class="col-sm-6 mt-5">
+          <div class="container-fluid">
+            <div class="row">
+              {# name and family #}
+              <div class="col-sm-12">
+                <label for="fullName">نام و نام خانوادگی
+                  <span class="text-danger">*</span>
+                </label>
+                <input value="{{order.fullName}}" class="form-control bg-sec" type="text" name="fullName"  >
+              </div>
+              {# code #}
+              <div class="col-sm-6 mt-4">
+                <label for="postalCode">کد پستی
+                  <span class="text-danger">*</span>
+                </label>
+                <input value="{{order.postalCode}}" class="form-control bg-sec" type="text"  name="postalCode" >
+              </div>
+              {# HBD #}
+              <div class="col-sm-6 mt-4">
+                <label for="HBD_Date">تاریخ تولد
+                  <span class="text-danger">*</span>
+                </label>
+                <input value="{{order.HBD_Date}}" class="form-control bg-sec persianDatePicker" type="text" name="HBD_Date"  autocomplete="off">
+              </div>
+              {# end #}
+            </div>
+          </div>
+        </div>
+        {# address #}
+        <div class="col-sm-6 mt-5">
+          <label for="address">آدرس
+            <span class="text-danger">*</span>
+          </label>
+          <textarea rows="5" cols="50" class="form-control bg-sec" type="text"  name="address"  >{{order.address}}</textarea>
+        </div>
+      </div>
+      <div class="row mt-5 bg-white pt-3 pb-3">
+        <h4 class="pt-2 pb-2 col-12 text-center">
+          محصولات
+          <hr width="150px" style="border-bottom:5px solid red;" />
+        </h4>
+          {# item row #}
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="product_name">انتخاب محصول
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-1">
+              <label for="count">تعداد
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-2">
+              <label for="price">قیمت-تومان
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-2">
+              <label for="off">تخفیف
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-sm-3 mt-1">
+              <label for="productType">مدل محصول
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+          </div>
+          <div class="orderList">
+          
+          </div>
+        </div>
+        {# end item row #}
+
+        <a class="addProduct btn btn-success mt-4" href="javascript:void(0)">
+          افزودن محصول
+        </a>
+        <div class="col-12 mt-4 text-center"> مبلغ کل محصولات:
+          <span id="overallPrice">0</span>
+          تومان
+        </div>
+      </div>
+      <div class="row mt-5 bg-white pt-3 pb-3">
+        {# title #}
+        <h4 class="pt-2 pb-2 col-12 text-center">
+          پرداخت
+          <hr width="150px" style="border-bottom:5px solid red;" />
+        </h4>
+
+        <div class="col-sm-6 d-none">
+          <input class=" bg-sec" type="radio"  name="paymentMethod" value="cash" checked>
+          <label for="paymentMethod">نقدی
+          </label>
+
+          <br />
+          <input class=" bg-sec" type="radio" name="paymentMethod" value="nocash" >
+          <label for="paymentMethod">غیر نقدی
+          </label>
+
+        </div>
+        <div class="col-sm-6">
+          <label for="shippingCost">هزینه ارسال
+            <span class="text-danger">*</span>
+          </label>
+          <input class="form-control bg-sec comma" type="text"  name="shippingCost" value="0" >
+        </div>
+
+        <div class="col-sm-6">
+          <label for="cashAmount">مبلغ قابل پرداخت (با هزینه ارسال)
+            <span class="text-danger">*</span>
+          </label>
+          <input class="form-control bg-sec comma" type="text"  name="cashPrice" value="0" disabled>
+        </div>
+
+        <div class="col-sm-6 d-none">
+          <label for="prePrice">مبلغ پیش واریزی
+            <span class="text-danger">*</span>
+          </label>
+          <input class="form-control bg-sec comma" type="text"  name="prePayment" value="0" disabled>
+        </div>
+
+        <div class="col-sm-6 mt-4 d-none">
+          <label for="checkPrice">مبلغ پرداخت بصورت چک
+            <span class="text-danger">*</span>
+          </label>
+          <input class="form-control bg-sec comma" type="text"  name="chequePrice" value="0" disabled>
+        </div>
+        <div class="col-sm-6 mt-4 mx-auto">
+          <input class=" bg-sec" type="radio"  name="instant" value="IsNot" checked>
+          <label for="instant">عادی
+          </label>
+
+          <br />
+          <input class="bg-sec" type="radio"  name="instant" value="ItIs" >
+          <label for="instant">فوری
+          </label>
+
+        </div>
+        <div class="col-12"></div>
+        <div class="col-sm-6 mt-5">
+          <label for="sellerDescription">توضیحات فروشنده
+            <span class="text-danger">*</span>
+          </label>
+          <textarea rows="10" cols="50" class="form-control bg-sec" type="text"  name="sellerDescription">{{order.sellerDescription}}</textarea>
+        </div>
+        <div class="col-sm-6 mt-5">
+          <label for="deliverDescription">توضیحات ارسال
+            <span class="text-danger">*</span>
+          </label>
+          <textarea rows="10" cols="50" class="form-control bg-sec" type="text"  name="deliverDescription" >{{order.deliverDescription}}</textarea>
+        </div>
+      </div>
+      <div class="col-sm-12 mt-5 text-center">
+        <button class="btn btn-info col-2" type="submit" name="button">
+          ثبت تغییرات
+        </button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

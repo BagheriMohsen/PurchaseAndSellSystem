@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-   سفارشات بدون اقدام
+  سفارشات قابل ویرایش
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':' سفارشات بدون اقدام'} %}
+  {% include 'Admin/Master/path' with {'title':'سفارشات قابل ویرایش'} %}
 {% endblock %}
 
 {% block content %}
@@ -64,8 +64,8 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        <td>
-                          {% if order.paymentMethod != 'cash' %}
+                        <td >
+                          {# {% if order.paymentMethod != 'cash' %}
                             <a title="جزئیات چک" class="text-secondary" >
                                 <i class="fas fa-money-bill crud-icon"></i>
                             </a>
@@ -73,18 +73,22 @@
                             <a title="پرداخت بصورت نقدی ست" class="text-primary" >
                                 <i class="fas fa-money-bill crud-icon"></i>
                             </a>
-                          {% endif %}
+                          {% endif %} #}
                           
-                          <a title="ویرایش سفارش" class="text-secondary" >
-                              <i class="far fa-edit crud-icon"></i>
-                          </a>
+                          <div class="mx-auto">
+                            <a href="{{route('orders.edit',order.id)}}" title="ویرایش سفارش" class="mx-auto text-secondary" >
+                                <i class="far fa-edit crud-icon"></i>
+                            </a>
+                          </div >
 
-                          <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
-                            <sub class="text-dark">
-                              {{order.products.count()}}
-                            </sub>
-                            <i class="fas fa-shopping-basket crud-icon"></i>
-                          </a>
+                          <div class="mx-auto">
+                            <a title="جزئیات این سفارش" class=" text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                                <sub class="text-dark">
+                                  {{order.products.count()}}
+                                </sub>
+                                <i class="fas fa-shopping-basket crud-icon"></i>
+                            </a>
+                          </div>
                         </td>
                       </tr>
                     {% endfor %}

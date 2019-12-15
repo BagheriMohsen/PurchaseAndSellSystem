@@ -154,7 +154,14 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        if($user->id != $order->seller_id){
+            return abort(404);
+        }
+
+        return view('Admin.Order.Seller.order-edit',compact('order'));
     }
 
     /**
@@ -166,7 +173,82 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        /*###################IF###################*/
+        $city = 'App\City'::where('id',$request->city_id)->first();
+            
+        // Find Agent In This City if agent send auto is not null
+        $userSendAuto = 'App\User'::where([
+            ['city_id','=',$city->id],
+            ['sendAuto','!=',Null]
+        ])->first();
+        // if find agent send auto not null
+        if($userSendAuto != null){
+            $agent_id = $userSendAuto->id;
+        
+            $state = 'App\State'::where('id',$city->state->id)->first();
+            $followUpManager_id = $state->followUpManager;
+
+            if($followUpManager_id == null){
+                $user = 'App\User'::role('followUpManager')->first();
+                $followUpManager_id = $user->id;
+            
+            }
+            
+        }else{
+        
+            $agent_id = null;
+            $state = 'App\State'::where('id',$city->state->id)->first();
+            $followUpManager_id = $state->followUpManager;
+
+            if($followUpManager_id == null){
+                $user = 'App\User'::role('followUpManager')->first();
+                $followUpManager_id = $user->id;
+            
+            }
+        }
+
+            $status = 'App\Customer'::query()
+            ->where('fullName', 'LIKE', "%{$request->fullName}%") 
+            ->exists();
+
+        /*##################ENDIF##################*/
+        $order = Order::findOrFail($id);
+        $order->update([
+            'city_id'           =>      $request->city_id,
+            'state_id'          =>      $request->state_id,
+            'agent_id'          =>      $agent_id,
+            'followUpManager_id'=>      $followUpManager_id,
+            'seller_id'         =>      auth()->user()->id,
+            'status'            =>      $order->status,
+            'lastStatus'        =>      $order->lastStatus,
+            'transport_id'      =>      4,
+            'mobile'            =>      $request->mobile,
+            'telephone'         =>      $request->telephone,
+            'fullName'          =>      $request->fullName,
+            'paymentMethod'     =>      $request->paymentMethod,
+            'shippingCost'      =>      $request->shippingCost,
+            'prePayment'        =>      $request->prePayment,
+            'cashPrice'         =>      $request->cashPrice,
+            'chequePrice'       =>      $request->chequePrice,
+            'instant'           =>      $request->instant,
+            'sellerDescription' =>      $request->sellerDescription,
+            'sendDescription'   =>      $request->deliverDescription,
+            'postalCode'        =>      $request->postalCode,
+            'address'           =>      $request->address,
+            'HBD_Date'          =>      $request->HBD_Date,
+            
+        ]);
+        $items = $request->orderArray;
+        foreach($items as $item){
+            'App\OrderProduct'::create([
+                'order_id'      =>  $order->id,
+                'product_id'    =>  $item['product_id'],
+                'count'         =>  $item['count'],
+                'off'           =>  $item['off'],
+                'product_type'  =>  $item['type']
+            ]);
+        }
+        return Response()->json('سفارش با موفقیت ثبت شد',200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -178,6 +260,44 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Orders For Edit
+    |--------------------------------------------------------------------------
+    |*/
+    public function OrdersForEdit(){
+
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $orders = Order::where([
+            ['seller_id','=',$user->id],
+            ['agent_id','=',null]//order in FollowUpManager Panel
+        ])
+        ->orWhere([
+            ['seller_id','=',$user->id],
+            ['status','=',6],//order Returned To Seller
+        ])
+        ->orWhere([
+            ['seller_id','=',$user->id],
+            ['status','=',13],//Order Cancelled by Customer
+        ])
+        ->orWhere([
+            ['seller_id','=',$user->id],
+            ['status','=',5],//order for Recall
+        ])
+        ->orWhere([
+            ['seller_id','=',$user->id],
+            ['status','=',3],//order send To FollowUpManager
+        ])
+        ->latest()->paginate(15);
+        $states = 'App\State'::latest()->get();
+        $cities = 'App\City'::latest()->get();
+        return view('Admin.Order.Seller.ordersForEdit',compact(
+            'orders',
+            'states',
+            'cities'
+        
+        ));
     }
     /*
     |--------------------------------------------------------------------------
