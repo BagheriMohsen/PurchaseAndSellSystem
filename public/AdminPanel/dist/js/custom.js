@@ -267,6 +267,7 @@ $(document).ready(function(){
     });
     //Dashboard tables
     $('#sellerInfoTable').DataTable({
+        "order": [[ 2, "desc" ]]
     });
 
     //Store room tables
