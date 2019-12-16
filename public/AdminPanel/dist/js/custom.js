@@ -97,6 +97,8 @@ $(document).ready(function(){
         }
         
     };
+
+
     checkUserRole();
     $('#user_role').on('change', checkUserRole);
 
@@ -146,8 +148,20 @@ $(document).ready(function(){
             `;
         });
     }
-   // Setup tables section
+
+    // Setup tables 
+    
+    //Setup order table in agentOrderList page
     var orderTable = $('#orderTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
         columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -158,15 +172,17 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
         columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -177,15 +193,17 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
     });
     var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
         "language": persianDataTable,
         columnDefs: [ {
             orderable: false,
@@ -197,99 +215,158 @@ $(document).ready(function(){
             selector: 'td:first-child'
         },
         order: [[ 1, 'asc' ]],
-        // buttons: {
-        //     buttons: [
-        //       { extend: 'print', text: 'Print List' },
-        //       { extend: 'pdf', text: 'PDF' },
-        //       { extend: 'copy', text: 'Copy to clipboard' }
-        //     ]
-        //   }
     });
+    $('#productTable').DataTable( {
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [2,3,4,5,6,7 ]
+                }
+            },
+           
+        ]
+    } );
+    $('#storeRoomTable').DataTable( {
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ]
+    } );
     // city&state section tabless
     $('#cityTable,#stateTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
     });
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
     });
     //Dashboard tables
     $('#sellerInfoTable').DataTable({
+        "order": [[ 2, "desc" ]]
     });
 
     //Store room tables
-    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable();
+    $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
+    });
     //Warehouse tables
-    $('#warehouseInOutTable,#warehouseIndexTable').DataTable();
+    $('#warehouseInOutTable,#warehouseIndexTable').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
+    });
+
+    // End setup tables 
 
     
-        //Deleting product type via ajax in product type modal in products page
-        $('.deleteTypeButton').on('click',function(event){
-            event.preventDefault();
-            $(this).html('<i class="fas fa-spinner"></i>');
-            $(this).attr('disabled','disabled');
-            var form = $(this).parent('form');
-            var actionUrl = form.attr('action');
-            var CSRF_TOKEN = form.find('input[name="_token"]').val();
-            var _method = form.find('input[name="_method"]').val();
-            var product_id = form.find('input[name="product"]').val();
-            $.ajax({
-                url:actionUrl,
-                type:'post',
-                data:{
-                    _token:CSRF_TOKEN,
-                    _method:_method,
-                },
-                success:function(response){
-                    getProductTypes(product_id,CSRF_TOKEN);
-                    $(this).attr('disabled',false);
-                }
-            });
+    //Deleting product type via ajax in product type modal in products page
+    $('.deleteTypeButton').on('click',function(event){
+        event.preventDefault();
+        $(this).html('<i class="fas fa-spinner"></i>');
+        $(this).attr('disabled','disabled');
+        var form = $(this).parent('form');
+        var actionUrl = form.attr('action');
+        var CSRF_TOKEN = form.find('input[name="_token"]').val();
+        var _method = form.find('input[name="_method"]').val();
+        var product_id = form.find('input[name="product"]').val();
+        $.ajax({
+            url:actionUrl,
+            type:'post',
+            data:{
+                _token:CSRF_TOKEN,
+                _method:_method,
+            },
+            success:function(response){
+                getProductTypes(product_id,CSRF_TOKEN);
+                $(this).attr('disabled',false);
+            }
         });
-        // //Editing product type via ajax
-        // $('.editTypeButton').on('click',function(event){
-        //     event.preventDefault();
-        //     var row = $(this).parent('td').parent('tr');
-        //     row.find('.editTypeButton').addClass('d-none');
-        //     row.find('.cancelEdit').removeClass('d-none');
-        //     row.find('.confirmEdit').removeClass('d-none');
-        //     row.find('.productTypeName').children('span').addClass('d-none');
-        //     row.find('.productTypeName').children('input').removeClass('d-none');
-        // });
-        // //Cancel Editing product type
-        // $('.cancelEdit').on('click',function(){
-        //     event.preventDefault();
-        //     var row = $(this).parent('td').parent('tr');
-        //     row.find('.editTypeButton').removeClass('d-none');
-        //     row.find('.cancelEdit').addClass('d-none');
-        //     row.find('.confirmEdit').addClass('d-none');
-        //     row.find('.productTypeName').children('span').removeClass('d-none');
-        //     row.find('.productTypeName').children('input').addClass('d-none');
-        // });
-        // //Confirm Editing product type
-        // $('.confirmEdit').on('click',function(event){
-        //     event.preventDefault();
-        //     $(this).html('<i class="fas fa-spinner"></i>');
-        //     var form = $(this).parent('form');
-        //     var row = $(this).parent('form').parent('td').parent('tr');
-        //     var actionUrl = form.attr('action');
-        //     var CSRF_TOKEN = form.find('input[name="_token"]').val();
-        //     var _method = form.find('input[name="_method"]').val();
-        //     var product_id = form.find('input[name="product"]').val();
-        //     var name = row.find('.productTypeName').children('input').val();
-        //     $.ajax({
-        //         url:actionUrl,
-        //         type:'put',
-        //         data:{
-        //             _token:CSRF_TOKEN,
-        //             _method:_method,
-        //             product:product_id,
-        //             name:name
-        //         },
-        //         success:function(response){
-        //             getProductTypes(product_id,CSRF_TOKEN);
-        //         }
-        //     });
-        // });
-   
+    });
+    // //Editing product type via ajax
+    // $('.editTypeButton').on('click',function(event){
+    //     event.preventDefault();
+    //     var row = $(this).parent('td').parent('tr');
+    //     row.find('.editTypeButton').addClass('d-none');
+    //     row.find('.cancelEdit').removeClass('d-none');
+    //     row.find('.confirmEdit').removeClass('d-none');
+    //     row.find('.productTypeName').children('span').addClass('d-none');
+    //     row.find('.productTypeName').children('input').removeClass('d-none');
+    // });
+    // //Cancel Editing product type
+    // $('.cancelEdit').on('click',function(){
+    //     event.preventDefault();
+    //     var row = $(this).parent('td').parent('tr');
+    //     row.find('.editTypeButton').removeClass('d-none');
+    //     row.find('.cancelEdit').addClass('d-none');
+    //     row.find('.confirmEdit').addClass('d-none');
+    //     row.find('.productTypeName').children('span').removeClass('d-none');
+    //     row.find('.productTypeName').children('input').addClass('d-none');
+    // });
+    // //Confirm Editing product type
+    // $('.confirmEdit').on('click',function(event){
+    //     event.preventDefault();
+    //     $(this).html('<i class="fas fa-spinner"></i>');
+    //     var form = $(this).parent('form');
+    //     var row = $(this).parent('form').parent('td').parent('tr');
+    //     var actionUrl = form.attr('action');
+    //     var CSRF_TOKEN = form.find('input[name="_token"]').val();
+    //     var _method = form.find('input[name="_method"]').val();
+    //     var product_id = form.find('input[name="product"]').val();
+    //     var name = row.find('.productTypeName').children('input').val();
+    //     $.ajax({
+    //         url:actionUrl,
+    //         type:'put',
+    //         data:{
+    //             _token:CSRF_TOKEN,
+    //             _method:_method,
+    //             product:product_id,
+    //             name:name
+    //         },
+    //         success:function(response){
+    //             getProductTypes(product_id,CSRF_TOKEN);
+    //         }
+    //     });
+    // });
+
     //Getting product types via ajax in product type modal in products page
     var getProductTypes = function(product_id,CSRF_TOKEN){
 
@@ -522,6 +599,7 @@ $(document).ready(function(){
         var product_name = $(this).find('select[name="product_id"] option:selected').html();
         var tariff_place = $(this).find('select[name="tariff_place"]').val();
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
+        console.log(tariff_price);
         $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
@@ -534,10 +612,18 @@ $(document).ready(function(){
                 price:tariff_price
             },
             success:function(response){
-                console.log('response',response);
-                getSpecialTariff(user_id,CSRF_TOKEN,product_name);
-                self.find('button[type="submit"]').html('ذخیره');
-                self.find('button[type="submit"]').attr('disabled',false);
+                if(response.status == 1){
+                    toastr["info"](response.message);
+                    getSpecialTariff(user_id,CSRF_TOKEN,product_name);
+                    self.find('button[type="submit"]').html('ذخیره');
+                    self.find('button[type="submit"]').attr('disabled',false);
+                   
+                }else{
+                    toastr["info"](response.message);
+                    self.find('button[type="submit"]').html('ذخیره');
+                    self.find('button[type="submit"]').attr('disabled',false);
+                }
+                
             }
         });
     });
@@ -733,7 +819,13 @@ $(document).ready(function(){
             success:function(response){
                 productList = response;
                 console.log(response);
-                addOrderTable();
+                if($('.orderEditForm').length){
+                    getOrderList();
+                    
+                }else{
+                    addOrderTable();
+                }
+                
             }
         });
     }
@@ -769,7 +861,6 @@ $(document).ready(function(){
         addOrderTable();
     });
     $('#orderForm').submit(function(event){
-        // var x = false;
         event.preventDefault();
         var form = $(this);
         form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
@@ -777,20 +868,12 @@ $(document).ready(function(){
         form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
-            // if(!value.querySelector('.productSelect').value){
-            //     x = true;
-            //     return;
-            // }
             orderObject.product_id = value.querySelector('.productSelect').value;
             orderObject.count = value.querySelector('input[name="count"]').value;
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
             orderArray.push(orderObject);
         });
-        // if(x == true){
-        //     alert('لطفا محصول را انتخاب فرمایید');
-        //     return;
-        // }
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var mobile = form.find('input[name="mobile"]').val();
@@ -846,8 +929,9 @@ $(document).ready(function(){
 
     });
     // Calculating order overall price
-    $('#orderForm .orderList').on('change click keyup',function(){
+    function setOverAllPrice(){
         var overallPrice = null;
+        console.log($('.orderList .row'));
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
             var count = value.querySelector('input[name="count"]').value;
@@ -856,10 +940,12 @@ $(document).ready(function(){
             rowPrice = (count*price) - off;
             overallPrice += rowPrice;
         });
+        console.log('overall',overallPrice);
         $('#overallPrice').html(numberWithCommas(overallPrice));
         var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
         $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(overallPrice) + parseInt(deliveryPrice)));
-    });
+    }
+    $('#orderForm .orderList').on('change click keyup load', setOverAllPrice);
     $('#orderForm input[name="shippingCost"]').on('change keyup',function(){
         var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
         var productsPrice = $('#overallPrice').html().replace(/\,/g,'',10);
@@ -1439,23 +1525,7 @@ $(document).ready(function(){
         
     });
     
-    $('#productTable').DataTable( {
-        // dom: 'lBfrtip',
-        // buttons: [
-        //     {
-        //         extend: 'excelHtml5',
-        //         exportOptions: {
-        //             columns: [2,3,4,5,6,7 ]
-        //         }
-        //     },
-        //     {
-        //         extend: 'pdfHtml5',
-        //         exportOptions: {
-        //             columns: [2,3,4,5,6,7 ]
-        //         }
-        //     },
-        // ]
-    } );
+    
     //Handling cash and cheque in order_create page
     // $('#orderForm input[name="paymentMethod"]').on('change',function(){
     //     var form = $(this).parents('form');
@@ -1545,14 +1615,14 @@ $(document).ready(function(){
     if($('.orderDetail').length){
         $('.orderDetail').each(function(index,value){
             var total_without_off = null;
-            var post_price = parseInt($(this).find('.post_price').html());
-            var pre_payment = parseInt($(this).find('.pre_payment').html());
+            var post_price = parseInt($(this).find('.post_price').html().replace(/\,/g,'',10));
+            var pre_payment = parseInt($(this).find('.pre_payment').html().replace(/\,/g,'',10));
             post_price = post_price || 0;
             pre_payment = pre_payment || 0;
             $(this).find('.row_total').each(function(index,value){
                 total_without_off += parseInt(value.innerHTML);
             });
-            $(this).find('.total').html( total_without_off - post_price - pre_payment);
+            $(this).find('.total').html( total_without_off + post_price - pre_payment);
         });
      
     }
@@ -1611,9 +1681,61 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
      });
-
-    
-
-
+     //Order edit page, get order products
+    function getOrderList(){
+        
+        var order_id = $('input[name="order_id"]').val();
+        $.ajax({
+            url:'http://localhost:8000/admin/orders/OrdersProductForEditPage/'+ order_id,
+            type:'get',
+            success:function(response){
+                console.log('edit',response);
+                setOrderList(response);
+            }
+        });
+    }
+        
+    function setOrderList(orderList){
+        var orderListTable = document.querySelector('.orderList');
+        orderList.forEach(function(item){
+            var div = document.createElement('div');
+            div.classList.add('row');
+            div.innerHTML =  `
+                <div class="col-sm-3">
+                    
+                    <select class="productSelect form-control bg-sec" name="product_name" required disabled>
+                    <option value="${item.product_id}" checked>${item.product}</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    
+                    <input class="countField form-control bg-sec" type="number" name="count" value="${item.count}" required disabled>
+                </div>
+                <div class="col-sm-2">
+                    
+                    <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value="${item.price}"  disabled required>
+                </div>
+                <div class="col-sm-2">
+                    
+                    <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="${item.off}" required disabled>
+                </div>
+                <div class="col-sm-3 mt-1">
+                
+                    <select class="typeSelect form-control bg-sec"  name="productType" disabled>
+                    <option value="${item.product_type}" checked>${item.type}</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 mt-1 text-center mt-2 " >
+                    <strong>
+                    <a class="removeProduct text-danger" href="#">
+                        <i class="far fa-trash-alt text-danger crud-icon"></i>
+                    </a>
+                    </strong>
+                </div>
+            `;
+            orderListTable.appendChild(div);
+        });
+        setOverAllPrice();
+    }
 });
 

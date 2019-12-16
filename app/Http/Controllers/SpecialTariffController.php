@@ -55,8 +55,8 @@ class SpecialTariffController extends Controller
             foreach($specialShareds as $specialShared){
 
                 if($specialShared->place == $place){
-                    $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
-                    return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+                    $result = ['message' => 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است', 'status' => '0'];
+                    return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
                 }
             }
 
@@ -70,8 +70,8 @@ class SpecialTariffController extends Controller
             'place'         =>  $request->place,
             'price'         =>  $request->price,
           ]);
-          $message = 'اطلاعات وارد شد';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
+          $result = ['message' => 'اطلاعات وارد شد', 'status' => '1'];
+          return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
         
 
     }
