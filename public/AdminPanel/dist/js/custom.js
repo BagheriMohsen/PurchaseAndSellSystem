@@ -267,7 +267,7 @@ $(document).ready(function(){
     });
     //Dashboard tables
     $('#sellerInfoTable').DataTable({
-        "order": [[ 2, "desc" ]]
+        "order": [[ 1, "desc" ]]
     });
 
     //Store room tables
@@ -865,7 +865,7 @@ $(document).ready(function(){
         var form = $(this);
         form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
         var orderArray = [];
-        form.find('input[name="HBD_Date"]').val(isoDate);
+        // form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
             orderObject.product_id = value.querySelector('.productSelect').value;
@@ -882,7 +882,7 @@ $(document).ready(function(){
         var city_id = form.find('select[name="city"]').val();
         var fullName = form.find('input[name="fullName"]').val();
         var postalCode = form.find('input[name="postalCode"]').val();
-        var HBD_Date = isoDate;
+        var HBD_Date = form.find('input[name="HBD_Date"]').val();;
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
         var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
@@ -893,6 +893,7 @@ $(document).ready(function(){
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var deliverDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
+        m = moment(HBD_Date, 'jYYYY/jM/jD');
         var formData = {
             _token:CSRF_TOKEN,
             mobile:mobile,
@@ -1109,6 +1110,14 @@ $(document).ready(function(){
             var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
             var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
             value.innerHTML = jalaliDate;
+        }
+
+    });
+    $('.inputDateToJalali').each(function(index,value){
+        if(value.value){
+            var dateArray = value.value.replace(/\-/g,' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+            value.value = jalaliDate;
         }
 
     });
@@ -1597,7 +1606,7 @@ $(document).ready(function(){
         });
     });
     // Invoice calculation in agent page
-    if($('.invoice_table').length){
+    if($('.invoice_details').length){
         var total_without_off = null;
         var post_price = parseInt($('.post_price').html().replace(/\,/g,'',10));
         var pre_payment = parseInt($('.pre_payment').html().replace(/\,/g,'',10));
@@ -1698,6 +1707,12 @@ $(document).ready(function(){
     function setOrderList(orderList){
         var orderListTable = document.querySelector('.orderList');
         orderList.forEach(function(item){
+            if(!item.type){
+                item.type = '';
+            };
+            if(!item.product_type){
+                item.product_type = '';
+            }
             var div = document.createElement('div');
             div.classList.add('row');
             div.innerHTML =  `

@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>فاکتور</title>
+  <style>
+    .invoice_details {
+    counter-reset: rowNumber;
+    }
+
+    .invoice_details tbody tr {
+        counter-increment: rowNumber;
+    }
+
+    .invoice_details tbody tr td:first-child::before {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+    }
+  </style>
 
   {% include 'Admin.Master.styles' %}
 </head>
@@ -12,7 +27,7 @@
     <div class="container-fluid invoiceWrapper mx-auto">
         <div class="row">
             <div class="col-12 mt-4">
-              <table class="table table-bordered invoice_table">
+              <table class="table table-bordered">
                 <tbody>
                   <tr>
                     <td class="text-center" rowspan="3"><p class="mt-4">
@@ -117,23 +132,23 @@
               </div>
               <div class="panel-body">
                 <div class="table-responsive">
-                  <table class="table table-condensed">
+                  <table class="table table-condensed invoice_details">
                     <thead class="bg-dark">
                         <tr>
-                          <td><strong>ردیف</strong></td>
-                          <td class="text-center"><strong>کالا</strong></td>
-                          <td class="text-center"><strong>نوع کالا</strong></td>
-                          <td class="text-center"><strong>تعداد</strong></td>
-                          <td class="text-center"><strong>قیمت واحد</strong></td>
-                          <td class="text-center"><strong>تخفیف</strong></td>
-                          <td class="text-center"><strong>جمع</strong></td>
+                          <th><strong>ردیف</strong></td>
+                          <th class="text-center"><strong>کالا</strong></th>
+                          <th class="text-center"><strong>نوع کالا</strong></th>
+                          <th class="text-center"><strong>تعداد</strong></th>
+                          <th class="text-center"><strong>قیمت واحد</strong></th>
+                          <th class="text-center"><strong>تخفیف</strong></th>
+                          <th class="text-center"><strong>جمع</strong></th>
                         </tr>
                     </thead>
                     <tbody>
                       <!-- foreach ($order->lineItems as $line) or some such thing here -->
                       {% for item in order.products %}
                       <tr>
-                        <td>#</td>
+                        <td></td>
                         <td class="text-center">{{item.product.name}}</td>
                         {% if item.product_type is null %}
                           <td class="text-center" >{{ 'ندارد' }}</td>
@@ -146,6 +161,8 @@
                         <td class="row_total text-center number">{{(item.product.price * item.count) - item.off }}</td>
                       </tr>
                       {% endfor %}
+                    </tbody>
+                    <tfoot>
                       <tr class="">
                         <td colspan="6" class="text-center "><strong>هزینه ارسال</strong></td>
                         <td class="post_price number">{{order.shippingCost  | number_format}}</td>
@@ -158,7 +175,7 @@
                         <td colspan="6" class="text-center "><strong>جمع کل</strong></td>
                         <td class="total number"></td>
                       </tr>
-                    </tbody>
+                    </tfoot>
                   </table>
                 </div>
               </div>
