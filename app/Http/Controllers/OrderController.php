@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use PDF;
 use Carbon\Carbon;
+use DB;
 class OrderController extends Controller
 {
     /**
@@ -782,7 +783,14 @@ class OrderController extends Controller
     |*/
     public function Factor($id){
         $order = 'App\Order'::findOrFail($id);
-        return view('Admin.Order.Factor',compact('order'));
+        $settings       = DB::table('settings');
+        $Factor         = $settings->skip(0)->take(1)->get();
+        $FactorStatus   = $settings->skip(0)->take(1)->exists();  
+        if($FactorStatus){
+            $Factor = $Factor[0];
+        }  
+        
+        return view('Admin.Order.Factor',compact('order','Factor'));
     }
     /*
     |--------------------------------------------------------------------------

@@ -14,6 +14,8 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 |*/
 Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
   Route::get('/','AdminController@index')->name('index');
+  Route::get('/general-setting','AdminController@GeneralSetting')->name('GeneralSetting');
+  Route::post('/general-setting-update/{id}','AdminController@GeneralSettingUpdate')->name('GeneralSettingUpdate');
 });
 /*
 |--------------------------------------------------------------------------
