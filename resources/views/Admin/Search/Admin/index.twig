@@ -39,7 +39,7 @@
               <select id="seller" class="form-control" name="seller">
                 <option value="{{null}}" selected>همه</option>
                 {% for seller in sellers %}
-                  <option>
+                  <option value="{{seller.id}}">
                     {{ seller.name }}
                     {{' '}}
                     {{ seller.family }}
@@ -54,7 +54,7 @@
               <select id="callcenter" class="form-control" name="callcenter">
                 <option value="{{null}}" selected>همه</option>
                 {% for callCenter in callCenters %}
-                  <option>
+                  <option value="{{callCenter.id}}">
                     {{ callCenter.name }}
                     {{' '}}
                     {{ callCenter.family }}
@@ -69,7 +69,7 @@
               <select id="follow_manager" class="form-control" name="follow_manager">
                 <option value="{{null}}" selected>همه</option>
                 {% for followUpManager in followUpManagers %}
-                  <option value="{{null}}">
+                  <option value="{{followUpManager.id}}">
                     {{ followUpManager.name }}
                     {{' '}}
                     {{ followUpManager.family }}
@@ -84,7 +84,7 @@
               <select id="agent" class="form-control" name="agent">
                 <option value="{{null}}" selected>همه</option>
                 {% for agent in agents %}
-                  <option>
+                  <option value="{{agent.id}}">
                     {{ agent.name }}
                     {{' '}}
                     {{ agent.family }}
