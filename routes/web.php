@@ -14,6 +14,8 @@ Route::post('/loginToSite','HomeController@loginToSite')->name('loginToSite');
 |*/
 Route::group(['middleware'=>'auth','as'=>'admin.'],function(){
   Route::get('/','AdminController@index')->name('index');
+  Route::get('/general-setting','AdminController@GeneralSetting')->name('GeneralSetting');
+  Route::post('/general-setting-update/{id}','AdminController@GeneralSettingUpdate')->name('GeneralSettingUpdate');
 });
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +93,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     Route::get('receiveOrderFromFollowUpManager','OrderController@receiveOrderFromFollowUpManager')->name('receiveOrderFromFollowUpManager');
     Route::get('OrdersForEdit','OrderController@OrdersForEdit')->name('OrdersForEdit');
     Route::get('OrdersProductForEditPage/{id}','OrderController@OrdersProductForEditPage')->name('OrdersProductForEditPage');
+    Route::post('update/{id}','OrderController@update')->name('update');
     /* Agents */
     Route::get('AgentOrderLists','OrderController@AgentOrderLists')->name('AgentOrderLists');
     Route::get('AgentOrderCollectedlist','OrderController@AgentOrderCollectedlist')->name('AgentOrderCollectedlist');
@@ -109,7 +112,9 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
     //Factor
     Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
   });
-Route::middleware('auth')->resource('orders','OrderController');
+Route::middleware('auth')->resource('orders','OrderController',['except' => [
+  'update',
+]]);
 /*
 |--------------------------------------------------------------------------
 | States Routes

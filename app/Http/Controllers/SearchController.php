@@ -76,7 +76,7 @@ class SearchController extends Controller
         ->when($followUpManager,function($query,$followUpManager){
             return $query->where('followUpManager_id','=',$followUpManager);
         })
-        ->when($agent,function($query){
+        ->when($agent,function($query,$agent){
             return $query->where('agent_id','=',$agent) ;         
         })
         ->when($status,function($query,$status){

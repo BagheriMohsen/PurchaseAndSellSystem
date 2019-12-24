@@ -1,0 +1,68 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  {{'تنظیمات عمومی'}}
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'تنظیمات عمومی'} %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'Messages/message' %}
+
+{% include 'Messages/errors' %}
+
+
+    <form action="{{route('admin.GeneralSettingUpdate',1)}}" method="post" class="row bg-white pt-2 pb-2">
+        <input name="_token" type="hidden" value="{{ csrf_token() }}" />
+        <div class="col-12 pt-2 pb-2 text-center">
+            <strong  class="h5">
+                {{'فاکتور فروش'}}
+                <hr width="200px" style="border-bottom:1px solid red;" />
+            </strong>
+        </div>
+        {# factor number for call #}
+        <div class="col-sm-4 md-form mb-4">
+            <input {% if FactorStatus is defined %} value="{{ Factor.option1 }}" {% endif %} type="text" id="inputIconEx2" class="form-control" name="option1" value="{{old('family')}}">
+            <label for="inputIconEx2">شماره تماس فاکتور</label>
+        </div>
+        {# factor number for call  #}
+        {# factor seller #}
+        <div class="col-sm-4 md-form mb-4">
+            <input {% if FactorStatus is defined %} value="{{ Factor.option2 }}" {% endif %} type="text" id="inputIconEx2" class="form-control" name="option2" value="{{old('family')}}">
+            <label for="inputIconEx2">فروشنده فاکتور</label>
+        </div>
+        {# factor seller  #}
+        {# factor callcenter #}
+        <div class="col-sm-4 md-form mb-4">
+            <input {% if FactorStatus is defined %} value="{{ Factor.option3 }}" {% endif %} type="text" id="inputIconEx2" class="form-control" name="option3" value="{{old('family')}}">
+            <label for="inputIconEx2">مرکز فروش فاکتور</label>
+        </div>
+        {# factor callcenter  #}
+
+        <div>
+            <button class="btn btn-default btn-sm">
+                <strong class="text-dark h6">
+                    ذخیره تغییرات
+                </strong>
+            </button>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+
