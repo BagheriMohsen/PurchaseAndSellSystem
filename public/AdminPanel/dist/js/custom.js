@@ -147,6 +147,8 @@ $(document).ready(function(){
                 </tr>
             `;
         });
+        //Deleting product type via ajax in product type modal in products page
+        $('.deleteTypeButton').on('click', deleteTypeButton);
     }
 
     // Setup tables 
@@ -230,17 +232,17 @@ $(document).ready(function(){
            
         ]
     } );
-    $('#storeRoomTable').DataTable( {
-        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
-                extend: 'excelHtml5',
-            },
+    // $('#storeRoomTable').DataTable( {
+    //     dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+    //     "<'row'<'col-sm-12'tr>>" +
+    //     "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+    //     buttons: [
+    //         {
+    //             extend: 'excelHtml5',
+    //         },
            
-        ]
-    } );
+    //     ]
+    // } );
     // city&state section tabless
     $('#cityTable,#stateTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
@@ -297,9 +299,7 @@ $(document).ready(function(){
 
     // End setup tables 
 
-    
-    //Deleting product type via ajax in product type modal in products page
-    $('.deleteTypeButton').on('click',function(event){
+    function deleteTypeButton(event){
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
         $(this).attr('disabled','disabled');
@@ -320,7 +320,9 @@ $(document).ready(function(){
                 $(this).attr('disabled',false);
             }
         });
-    });
+    }
+   
+
     // //Editing product type via ajax
     // $('.editTypeButton').on('click',function(event){
     //     event.preventDefault();
@@ -439,28 +441,8 @@ $(document).ready(function(){
         });
     });
     //Deleting product type via ajax
-    $('.deleteTypeButton').on('click',function(event){
-        event.preventDefault();
-        $(this).html('<i class="fas fa-spinner"></i>');
-        $(this).attr('disabled','disabled');
-        var form = $(this).parent('form');
-        var actionUrl = form.attr('action');
-        var CSRF_TOKEN = form.find('input[name="_token"]').val();
-        var _method = form.find('input[name="_method"]').val();
-        var product_id = form.find('input[name="product"]').val();
-        $.ajax({
-            url:actionUrl,
-            type:'post',
-            data:{
-                _token:CSRF_TOKEN,
-                _method:_method,
-            },
-            success:function(response){
-                getProductTypes(product_id,CSRF_TOKEN);
-                $(this).attr('disabled',false);
-            }
-        });
-    });
+    $('.deleteTypeButton').on('click',deleteTypeButton);
+
     //  //Editing product type via ajax
     //  $('.editTypeButton').on('click',function(event){
     //     event.preventDefault();

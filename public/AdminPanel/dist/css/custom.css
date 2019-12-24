@@ -133,3 +133,6 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 .select-checkbox{
     width: 30px;
 }
+td,th{
+    vertical-align: middle!important;
+}
