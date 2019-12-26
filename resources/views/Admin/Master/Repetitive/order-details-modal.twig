@@ -1,3 +1,5 @@
+{% set user = auth_user().user %}
+
 {# Order Product #}
 {% for order in orders %}
 
@@ -39,13 +41,13 @@
             </tr>
             <tr class="text-center">
               <th>کد پستی</th>
-              <th>کد پیگیری</th>
-              <th>مبلغ مشارکت پایه</th>
+              {# <th>کد پیگیری</th> #}
+              {# <th>مبلغ مشارکت پایه</th> #}
             </tr>
             <tr>
               <td>{{ order.postalCode }}</td>
-              <td>{{ order.trackingCode }}</td>
-              <td>
+              {# <td>{{ order.trackingCode }}</td> #}
+              {# <td>
                     <span>
                       {{'داخل شهر:'}}
                       {{user.internalPrice}}
@@ -59,7 +61,7 @@
                       {{user.villagePrice}}
                     </span>
 
-              </td>
+              </td> #}
             </tr>
           </tbody>
         </table>

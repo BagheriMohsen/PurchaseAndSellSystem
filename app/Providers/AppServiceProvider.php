@@ -55,11 +55,14 @@ class AppServiceProvider extends ServiceProvider
                 $roleName   = $user->getRoleNames()->first();
                 // find role all detail
                 $role = Role::where('name',$roleName)->firstOrFail();
-
+                $notifs = 0;
+                $AgentReturnedProduct = 0;
+                $orderNotif = 0;
+                $Agentpayments = 0;
                 if($roleName == "agent" || $roleName == "agentChief"){
                     $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
-                    $AgentReturnedProduct = 0;
+              
                     $orderNotif = 'App\Order'::where(['agent_id'=>$user->id,'status'=>7])
                     ->count();
                 }elseif($roleName == "fundWarehouser"){
@@ -69,23 +72,29 @@ class AppServiceProvider extends ServiceProvider
                         ['receiver_id','=',2],
                         ['in_out','=',16]
                     ])->count();
-                    $orderNotif = 0;
+              
                 }elseif($roleName == "mainWarehouser"){
                     $notifs = 'App\StoreRoom'::where(['in_out'=>15])->get()->count();
-                    $orderNotif = 0;
-                    $AgentReturnedProduct = 0;
+                   
                 }elseif($roleName == "followUpManager"){
-                    $notifs = 0;
-                    $AgentReturnedProduct = 0;
+                   
                     $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>3,'agent_id'=>null])
                     ->count();
+                }elseif($roleName == "admin"){
+                    $Agentpayments = 'App\PaymentCirculation'::where('status_id',1)
+                    ->latest()->count();
                 }else{
-                    $notifs = 0;
-                    $AgentReturnedProduct = 0;
-                    $orderNotif = 0;
+                    //
                 }
 
-                $view ->with(compact('role','notifs','orderNotif','AgentReturnedProduct'));
+                $view ->with(compact(
+                    'role',
+                    'notifs',
+                    'orderNotif',
+                    'AgentReturnedProduct',
+                    'Agentpayments'
+                
+                ));
             }
         });
         /*

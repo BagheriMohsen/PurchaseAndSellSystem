@@ -56,7 +56,7 @@
               <td>{{storeRoom.status}}</td>
               <td>{{storeRoom.description}}</td>
               <td>{{storeRoom.number}}</td>
-              <td class="">{{storeRoom.out_date | date('Y/m/d')}}</td>
+              <td class="justDate">{{storeRoom.out_date | date('Y-m-d')}}</td>
               {% if storeRoom.in_date is null  %}
                 <td class="text-danger">{{'تایید نشده'}}</td>
               {% else %}

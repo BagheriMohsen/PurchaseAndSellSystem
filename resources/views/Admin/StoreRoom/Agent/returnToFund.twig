@@ -50,8 +50,8 @@
                         <label for="product">محصول</label>
                         <select class="form-control" name="product">
                             <option {% if old('product') != null %} style="display:none" {% endif %} value="{{null}}">محصول را انتخاب کنید</option>
-                        {% for product in products %}
-                            <option {% if old('product') == product.id %} selected {% endif %}value="{{product.id}}">{{product.name}}</option>
+                        {% for storage in storages %}
+                            <option {% if old('product') == storage.product.id %} selected {% endif %}value="{{storage.product.id}}">{{storage.product.name}}</option>
                         {% endfor %}
                         </select>
                         

@@ -55,7 +55,7 @@ class Order extends Model
     | Releation with ProductStatus Model
     |--------------------------------------------------------------------------
     */
-    public function status(){
+    public function OrderStatus(){
         return $this->belongsTo('App\OrderStatus','status','id');
     }
     /*

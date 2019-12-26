@@ -238,6 +238,15 @@ class UserController extends Controller
         $today = 'Carbon\Carbon'::now();
         $yesterday = 'Carbon\Carbon'::now()->subDays(1);
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        // callcenter created order
+        $OrderCreatedByCallcenterToday = 'App\Order'::where([
+            ['created_at','<=',$today],
+            ['created_at','>=',$yesterday]
+        ])->count();
+        $OrderCreatedByCallcenterInMonth = 'App\Order'::where([
+            ['created_at','<=',$today],
+            ['created_at','>=',$ThirtyDaysAgo],
+        ])->count();
         //Order Waiting For Delivery  
         $OrderWaitingForDeliveryToday = 'App\Order'::where([
             ['status','=',7],
@@ -316,44 +325,74 @@ class UserController extends Controller
         ])
         ->count();
         // Tables
-        $storeRooms = 'App\StoreRoom'::where([
-            ['in_out','=',13],
-            ['out_date','<',$today],
-            ['out_date','>',$yesterday]
-        ])->latest()->skip(0)->take(5)->get();
+        $products = 'App\Product'::latest()->get();
+        $todayProducts = array();
+        foreach($products as $product){
+            $TopProductsToday = 'App\OrderProduct'::where([
+                ['collected','=',True],
+                ['product_id','=',$product->id],
+                ['updated_at','<',$today],
+                ['updated_at','>',$yesterday]
+            ])->latest()->sum('count');
+            
+            $todayProducts[] = [
+                'name'  =>  $product->name,
+                'count' =>  $TopProductsToday
+            ];
+        }
+        
+       
+        asort($todayProducts);
+        
 
         $TopStoreRooms =  'App\OrderProduct'::with('product')->select('product_id')
         ->groupBy('product_id')
         ->orderByRaw('COUNT(*) DESC')
         ->limit(5)
         ->get();
+
+        $topProductToday = array();
         $topProduct = array();
-
-        foreach($TopStoreRooms as $item){
-            $name = $item->product->name;
-            $count = 'App\OrderProduct'::where('product_id',$item->product_id)->sum('count');
-
-            $topProduct[]=[
-                'name'  =>  $name,
-                'count' =>  $count
-            ];
-        }
         
 
+        foreach($TopStoreRooms as $item){
+            
+            $name = $item->product->name;
+            $count = 'App\OrderProduct'::where([
+                ['product_id','=',$item->product_id],
+                ['collected','=',True]
+            ])->sum('count');
+            
+                $topProduct[]=[
+                    'name'  =>  $name,
+                    'count' =>  $count
+                ];
+
+           
+        }
+        
+        asort($topProduct);
+   
+
+
+        
 
         $DebtorAgents = 'App\UserInventory'::where('agent_id','!=',null)
-        ->latest()->skip(0)->take(5)->get();
-         
+        ->latest('balance')->skip(0)->take(5)->get();
+        
         return view('Admin/index',compact(
+            'OrderCreatedByCallcenterToday',
+            'OrderCreatedByCallcenterInMonth',
             'OrderWaitingForDeliveryToday',
             'OrderWaitingForDeliveryInMonth',
             'OrderCollectedToday',
             'OrderCollectedInMonth',
             'OrderReturnedToday',
             'OrderReturnedInMonth',
-            'storeRooms',
+            'TopProductsToday',
             'topProduct',
-            'DebtorAgents'
+            'DebtorAgents',
+            'todayProducts'
 
         ));
     }

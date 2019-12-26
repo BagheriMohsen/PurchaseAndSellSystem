@@ -98,6 +98,7 @@ class CreateStoreRoomsTable extends Migration
             $table->integer('cost')->default(0);
             $table->text('description')->nullable();
             $table->string('customerName')->nullable();
+            $table->integer('pejak')->nullable();
             $table->date('in_date')->nullable();
             $table->date('out_date')->nullable();
             $table->timestamps();

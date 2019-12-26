@@ -468,7 +468,8 @@ class StoreRoomController extends Controller
             'receiver'      =>  'required',
             'description'   =>  'required',
             'transport'     =>  'required',
-            'status'        =>  'required'
+            'status'        =>  'required',
+            'pejak'         =>  'required | unique:store_rooms'
 
         ],[
             'date.required'             =>  'تاریخ را وارد کنید',
@@ -479,7 +480,9 @@ class StoreRoomController extends Controller
             'receiver.required'         =>  'گیرنده را انتخاب کنید',
             'description.required'      =>  'توضیحاتی یادداشت نشده',
             'transport.required'        =>  'وسیله ارسالی را مشخص کنید',
-            'status.required'           =>  'وضعیت را مشخص کنید'
+            'status.required'           =>  'وضعیت را مشخص کنید',
+            'pejak.unique'              =>  'این شماره بیجک قبلا در سیستم ثبت شده',
+            'pejak.required'            =>  'شماره بیجک را وارد کنید'         
         ]);
        
         $storageStatus = 'App\Storage'::where([
@@ -522,19 +525,20 @@ class StoreRoomController extends Controller
             $storage->update(['number'=>$number]);
             /* create storeRoom for fundWarehouse out */
             $storeRoom = StoreRoom::create([
-                'user_id'       =>  auth()->user()->id,
-                'warehouse_id'  =>  2,
-                'storage_id'    =>  $storage->id,
-                'sender_id'     =>  2,
-                'receiver_id'   =>  $request->receiver,
-                'product_id'    =>  $request->product,
-                'transport_id'  =>  $request->transport,
-                'number'        =>  $request->number,
-                'description'   =>  $request->description,
-                'status'        =>  $request->status,
-                'image'         =>  $image,
-                'in_out'        =>  7,
-                'out_date'       =>  $request->date
+                'user_id'           =>  auth()->user()->id,
+                'warehouse_id'      =>  2,
+                'storage_id'        =>  $storage->id,
+                'sender_id'         =>  2,
+                'receiver_id'       =>  $request->receiver,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'image'             =>  $image,
+                'in_out'            =>  7,
+                'out_date'          =>  $request->date,
+                'pejak'             =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -549,7 +553,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date
+                'in_date'       =>  $request->date,
+                'pejak'         =>  $request->pejak
             ]);
             $message = 'کالای '.$storeRoom->product->name.' به انبار نماینده افزوده شد ';
             return redirect()->route('storeRooms.index')->with('message',$message);
@@ -570,7 +575,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  7,
-                'out_date'      =>  $request->date
+                'out_date'      =>  $request->date,
+                'pejak'         =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -585,7 +591,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date
+                'in_date'       =>  $request->date,
+                'pejak'         =>  $request->pejak
             ]);
             /* update storage for this houseware  */
             $number = $storage->number - $request->number;
@@ -805,8 +812,13 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnToFundForm(){
-        $products = 'App\Product'::latest()->get();
-        return view('Admin.StoreRoom.Agent.returnToFund',compact('products'));
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $storages = 'App\Storage'::Where([
+            ['agent_id','=',$user->id],
+            ['number','>',0]
+        ])->get();
+        
+        return view('Admin.StoreRoom.Agent.returnToFund',compact('storages'));
     }
     /*
     |--------------------------------------------------------------------------
