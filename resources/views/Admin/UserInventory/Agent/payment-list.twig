@@ -77,10 +77,19 @@
             {% endif %}
             <td>{{payment.billDesc}}</td>
             <td>
-                
+              {% if payment.confirmDate is null %}
+              <a title="حذف" class="text-danger m-1" 
+                href="{{route('userInventory.AgentPaymentDelete',payment.id)}}">
+                <i class="far fa-trash-alt crud-icon"></i>
+              </a>
+              <a title="ویرایش" class="text-warning m-1" 
+                data-toggle="modal" data-target="#edit{{payment.id}}">
+                <i class="far fa-edit crud-icon"></i>
+              </a>
+              {% endif %}
               <a title="جزئیات" class="text-secondary m-1" 
-              data-toggle="modal" data-target="#detail{{payment.id}}">
-              <i class="fas fa-info-circle crud-icon"></i>
+                data-toggle="modal" data-target="#detail{{payment.id}}">
+                <i class="fas fa-info-circle crud-icon"></i>
               </a>
               {# <a title="پذیرفتن" class="text-secondary m-1" 
               href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
@@ -110,13 +119,24 @@
 
 
 
+  <!--
+  ##### Payment Detail Modal
+  -->
+  {% include 'Admin/Master/Repetitive/UserInventory/payment-details-modal' %}
+  <!--
+  ##### Payment Detail Modal
+  -->
 
-
-{% for payment in payments %}
-
+  <!--
+  ##### Payment Edit Modal
+  -->
+  {% for payment in payments %}
     <!-- Modal -->
-    <div class="modal fade right" id="detail{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <form  action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
+    method="POST" enctype="multipart/form-data"
+    class="modal fade right" id="edit{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
+    <input name="_token" value="{{csrf_token()}}">
         <div class="modal-dialog modal-side modal-bottom-left" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -138,48 +158,49 @@
                             {{payment.user.state.name}}
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <div>مبلغ:</div>
-                        <div>
-                        {{payment.bill | number_format}}
-                        عدد
-                        </div>
+                    <div class="col-sm-6 mt-3">
+                      <label for="bill">مبلغ-تومان
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input class="form-control comma" type="text" name="bill" value="{{payment.bill}}" required>
                     </div>
-                     <div class="d-flex">
-                        <div>توضیحات:</div>
-                        <div>
-                        {% if payment.billDesc is not null %}
-                            {{payment.billDesc|raw}}
-                        {% else %}
-                            {{'ندارد'}}
-                        {% endif %}
-                        </div>
+                    <div class="col-sm-6 mt-3">
+                      <label for="bill">توضیحات
+                        <span class="text-danger">*</span>
+                      </label>
+                      <textarea  name="desc" cols="30" rows="2">{{payment.billDesc|raw}}</textarea>
                     </div>
+                    
                     <div class="d-flex">
                         <div>تاریخ واریز:</div>
-                        <div>{{payment.billDate }}</div>
+                        <div class="justDate">{{payment.billDate }}</div>
                     </div>
                     <div class="col-sm-12">
                         <div>تصویر :</div>
+                        <input type="file" name="image" />
                         <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
                     </div>
-                 {# <a  class="btn btn-success btn-sm text-dark"
-                    href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
-                    <strong class="h6">
-                        تایید 
-                    </strong>
-                    <i class="fas fa-check crud-icon"></i>
-                </a> #}
+                 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                
-            </div>
+              <div class="col-sm-6 mt-3">
+                <button type="submit" class="btn-success btn-sm">
+                  <strong class="h6 text-dark">
+                    ویرایش  
+                  </strong>
+                </button>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                  
+              </div>
             </div>
         </div>
-    </div>
+    </form>
 {% endfor %}
-
+  <!--
+  ##### Payment Edit Modal
+  -->
 
 
 <!-- Pay orders modal -->

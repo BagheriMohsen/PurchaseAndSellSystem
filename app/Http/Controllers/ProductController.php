@@ -172,7 +172,6 @@ class ProductController extends Controller
         $status = 'App\ProductOff'::where([
             ['product_id','=',$request->product_id],
             ['numberOfProduct','=',$request->numberOfProduct],
-            ['offPrice','=',$request->offPrice]
         ])->exists();
 
         if($status == false){
@@ -186,7 +185,7 @@ class ProductController extends Controller
             ->with('message','تخفیف با موفقیت برای این کالا ثبت شد');
         }else{
             return redirect()->route('products.off',$product->slug)
-            ->with('error','این تعداد تخفیف با همین میزان تخفیف برای این کالا قبلا ثبت شده است');
+            ->with('error','تخفیف برای این تعداد کالا قبلا در سیستم ثبت شده است');
         }
     }
         /*

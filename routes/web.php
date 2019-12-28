@@ -209,6 +209,8 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::get('AgentCurrentBills','MoneyCirculationController@AgentCurrentBills')->name('AgentCurrentBills');
       Route::get('AgentPaymentOrders','MoneyCirculationController@AgentPaymentOrders')->name('AgentPaymentOrders');
       Route::get('AgentPaymentList','MoneyCirculationController@AgentPaymentList')->name('AgentPaymentList');
+      Route::get('AgentPaymentDelete/{id}','MoneyCirculationController@AgentPaymentDelete')->name('AgentPaymentDelete');
+      Route::post('AgentPaymentListUpdate/{id}','MoneyCirculationController@AgentPaymentListUpdate')->name('AgentPaymentListUpdate');
       Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
       Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
       Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');

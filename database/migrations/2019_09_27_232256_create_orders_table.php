@@ -89,6 +89,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->integer('count');
             $table->integer('off');
+            $table->boolean('collected')->default(0);
+            $table->boolean('cancelled')->default(0);
             $table->timestamps();
             
             $table->foreign('order_id')->references('id')->on('orders')

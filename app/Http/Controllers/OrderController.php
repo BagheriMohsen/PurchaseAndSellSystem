@@ -486,6 +486,8 @@ class OrderController extends Controller
                 $order = Order::findOrFail($item['id']);
                 // foreach for check product exist in storage or not
                 foreach($order->products as $order_product){
+                    
+                  
                     $count = $order_product->count;
                     $user_id = $user->id;
                     $product_id = $order_product->product_id;
@@ -550,7 +552,7 @@ class OrderController extends Controller
                             'in_out'            =>  14,
                             'out_date'          =>  Carbon::now()
                         ]);
-                    
+                        $order_product->update(['collected'=>True]);
                     echo $this->UserInventoryCalculated($user,$order_product,$order);
 
 

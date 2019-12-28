@@ -32,7 +32,7 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell crud-icon"></i>
           <span class="badge badge-secondary navbar-badge" style="font-size:12px;">
-            {{notifs + orderNotif + AgentReturnedProduct}}
+            {{notifs + orderNotif + AgentReturnedProduct + Agentpayments}}
           </span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -54,6 +54,8 @@
                 {% include 'Admin.Master.HeaderNotif.FollowUpManager' %}
               {% elseif role.name == "mainWarehouser" %}
                 {% include 'Admin.Master.HeaderNotif.MainWareHouser' %}
+              {% elseif role.name == "admin" %}
+                {% include 'Admin.Master.HeaderNotif.Admin' %}
               {% endif %}
               {#
               --------------------------------------------------------------------------
@@ -61,7 +63,7 @@
               --------------------------------------------------------------------------
               #}
               
-              {% set notifCount = orderNotif + notifs + AgentReturnedProduct %}
+              {% set notifCount = orderNotif + notifs + AgentReturnedProduct + Agentpayments %}
               {% if  notifCount <= 0 %}
                   <div class="text-center text-muted">
                     چیزی برای نمایش وجود ندارد

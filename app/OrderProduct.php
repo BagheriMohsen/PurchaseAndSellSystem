@@ -13,7 +13,9 @@ class OrderProduct extends Model
         'product_id',
         'product_type',
         'count',
-        'off'
+        'off',
+        'collected',
+        'cancelled'
     ];
 
     /*

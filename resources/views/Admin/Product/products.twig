@@ -77,6 +77,9 @@
                         </a>
                         <a  title="تخفیفات" class="text-primary" href="{{route('products.off',product.slug)}}">
                           <i class="fas fa-tags crud-icon"></i>
+                          <sub class="text-primary">
+                            {{product.offs.count()}}
+                          </sub>
                         </a>
 
                         {# Form Delete #}

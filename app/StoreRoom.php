@@ -24,7 +24,8 @@ class StoreRoom extends Model
       'in_date',
       'out_date',
       'image',
-      'customerName'
+      'customerName',
+      'pejak'
     ];
     /*
     |--------------------------------------------------------------------------
