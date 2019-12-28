@@ -91,6 +91,7 @@ class CreateTableMoneyCirculations extends Migration
             $table->integer('bill');
             $table->Date('billDate');
             $table->Date('confirmDate')->nullable();
+            $table->Date('OnconfirmDate')->nullable();
             $table->string('trackingCode',256);
             $table->string('paymentMethod');
             $table->text('billDesc')->nullable();

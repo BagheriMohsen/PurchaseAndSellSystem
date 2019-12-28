@@ -80,6 +80,46 @@ class MoneyCirculationController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
+    | Agent Payment Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPaymentDelete($id){
+        $payment = 'App\PaymentCirculation'::findOrFail($id);
+
+        if(!is_null($payment->confirmDate)){
+            return back()->with('info','متاسفانه شما دیر اقدام کردید');
+        }
+
+        'App\PaymentCirculation'::destroy($id);
+        return back()->with('message','پرداخت مورد نظر از لیست پرداخت های شما پاک گردید');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Payment List Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPaymentListUpdate(Request $request,$id){
+        $payment = 'App\PaymentCirculation'::findOrFail($id);
+
+        if(!is_null($payment->confirmDate)){
+            return back()->with('info','متاسفانه شما دیر اقدام کردید');
+        }
+
+        if($request->hasFile('image')){
+            Storage::disk('public')->delete($payment->receiptImage);
+            $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
+        }else{
+            $image = $payment->image; 
+        }
+        $payment->update([
+            'receiptImage'  =>  $image,
+            'bill'          =>  (float) str_replace(',', '', $request->bill),
+            'billDesc'      =>  $request->desc
+        ]);
+        return back()->with('message','اطلاعات پرداخت به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Agent Costs List
     |--------------------------------------------------------------------------
     |*/
