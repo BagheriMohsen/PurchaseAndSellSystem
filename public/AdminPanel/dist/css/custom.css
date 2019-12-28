@@ -136,3 +136,10 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 td,th{
     vertical-align: middle!important;
 }
+/* .modal .modal-dialog.modal-bottom-left{
+    top:0;
+} */
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
