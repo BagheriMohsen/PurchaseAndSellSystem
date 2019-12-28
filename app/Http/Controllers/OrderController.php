@@ -559,28 +559,38 @@ class OrderController extends Controller
                }     
 
 
-            //Cancelled Status
-            }elseif($item['statue'] == 13 || $item['statue'] == 16){
+            
+            }
+
+            /*############## Cancelled Status ############# */
+
+            if($item['statue'] == 13 || $item['statue'] == 16){
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'cancelled_Date'=>Carbon::now()
                     ]);
-            //Suspended Status
+
+            /*########## Suspended Status ###############*/
+
             }elseif($item['statue'] == 14){
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'suspended_Date'=>Carbon::now(),
                     ]);
-            //Return To Seller_Date Status
+
+            /*#######Return To Seller_Date Status###########*/
+
             }elseif($item['statue'] == 6){
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'returnToSeller_Date'=>Carbon::now(),
                     ]);
-            //Other Statuses
+
+            /*########## Other Statuses #############*/
+            
             }else{
                 $order = 'App\Order'::findOrFail($item['id']);
                 $order->update([

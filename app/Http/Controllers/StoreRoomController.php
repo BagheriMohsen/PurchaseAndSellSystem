@@ -1069,7 +1069,7 @@ class StoreRoomController extends Controller
         $storeRooms = StoreRoom::where([
             ['receiver_id','=',$id],
             ['in_out','=',11]
-        ])->latest()->paginate(10);
+        ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
     }
     /*
@@ -1081,7 +1081,7 @@ class StoreRoomController extends Controller
         $id = auth()->user()->id;
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$id],
-            ['in_out','=',13]
+            ['in_out','=',14]
         ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
@@ -1179,6 +1179,109 @@ class StoreRoomController extends Controller
         ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Destroy Row from store_rooms table
+    |--------------------------------------------------------------------------
+    |*/
+    public function delete($id){
+        
+        $storeRoom = StoreRoom::findOrFail($id);
+
+        /** Agent To Agent with FundHouseWare */
+        if($storeRoom->in_out == 8 && is_null($storeRoom->in_date) ){
+            
+            return $this->AgentToAgentDelete($storeRoom,$id);
+
+        /** Agent In OnConfirm */
+        }elseif($storeRoom->in_out == 12 && is_null($storeRoom->in_date) ){
+            
+            $pre_id = $id - 1;
+            $pre_id2 = $id - 2;
+            $pre2_storeRoom = StoreRoom::find($pre_id2);
+
+            if(is_null($pre2_storeRoom)){
+
+                return $this->NormalDelete($storeRoom,$id);
+
+            }elseif($pre2_storeRoom->in_out == 8){
+                $pre_storeRoom = StoreRoom::findOrFail($pre_id);
+                $pre2_storeRoom = StoreRoom::findOrFail($pre_id2);
+                /** storage */
+                $storage = 'App\Storage'::findOrFail($storeRoom->storage_id);
+                $number = $storage->number + $storeRoom->number;
+                $storage->update(['number'=>$number]);
+                $pre_storeRoom->delete();
+                $pre2_storeRoom->delete();
+                $storeRoom->delete();
+
+                return back()->with('message','با موفقیت حدف شد و موجودی به انبار بازگشت داده شد');
+                
+            }else{
+
+                return $this->NormalDelete($storeRoom,$id);
+
+            }
+            
+        /** send To Agent */
+        }elseif($storeRoom->in_out == 7 && is_null($storeRoom->in_date) ){
+
+            return $this->NormalDelete($storeRoom,$id);
+
+        /** send To FundHouseWare */
+        }elseif($storeRoom->in_out == 2 && is_null($storeRoom->out_date)){
+            
+            return $this->NormalDelete($storeRoom,$id);
+
+        /** return To MainHouseWare */
+        }elseif($storeRoom->in_out == 9 && is_null($storeRoom->in_date)){
+
+            return $this->NormalDelete($storeRoom,$id);
+
+        }else{
+            return back()->with('info','متاسفانه دیر اقدام کردید این قابلیت از کار افتاده است');
+        }
+
+        
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Normal Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function NormalDelete($storeRoom,$id){
+        $storage = 'App\Storage'::findOrFail($storeRoom->storage_id);
+        $number = $storage->number + $storeRoom->number;
+        $storage->update(['number'=>$number]);
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** delete store room */
+        $storeRoom->delete();
+        /** delete next store room */
+        $next_storeRoom->delete();
+        return back()->with('message','با موفقیت حذف شد و موجودی به انبار بازگشت داده شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent To Agent Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentDelete($storeRoom,$id){
+        $next_id    = $id + 1;
+        $next_id2   = $id + 2;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        $next2_storeRoom = StoreRoom::findOrFail($next_id2);
+        /** delete store room */
+        $storeRoom->delete();
+        /** delete next store room */
+        $next_storeRoom->delete();
+        /** delete next 2 store room */
+        $next2_storeRoom->delete();
+        $storage = 'App\Storage'::findOrFail($next2_storeRoom->storage_id);
+        $number = $storage->number + $storeRoom->number;
+        $storage->update(['number'=>$number]);
+        return back()->with('message','با موفقیت حدف شد و موجودی به انبار نماینده بازگشت داده شد');
     }
 
 }

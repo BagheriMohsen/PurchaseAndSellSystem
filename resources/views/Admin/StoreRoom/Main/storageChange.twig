@@ -19,7 +19,7 @@
 {% block content %}
 
     {% include 'Messages/message' %}
-
+    {% include 'Messages/info' %}
     <table  id="storageChangeTable" class="table table-striped table-bordered table-sm" cellspacing="0"
                 width="100%">
                   <thead>
@@ -32,6 +32,7 @@
                     <th>تاریخ ارسال</th>
                     <th>تاریخ دریافت</th>
                     <th >جمع(تومان)</th>
+                    <th >عملیات</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -50,6 +51,21 @@
                       {% endif %}
                       {% set price = storeRoom.product.price * storeRoom.number %}
                       <td>{{ price|number_format}}</td>
+
+                      {% if storeRoom.out_date is null %}
+                        <td>
+                          <a href="{{route('storeRooms.delete',storeRoom.id)}}" title="حذف" type="submit">
+                            <i class="far fa-trash-alt text-danger crud-icon"></i>
+                          </a>
+                        </td>
+                      {% else %}
+                        <td>
+                          <a title="از کار افتاده" type="submit">
+                            <i class="fas fa-trash-alt crud-icon"></i>
+                          </a>
+                        </td>
+                      {% endif %}
+
                     </tr>
                   {% endfor %}
                   </tbody>

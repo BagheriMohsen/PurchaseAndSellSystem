@@ -65,7 +65,7 @@
                         {% endif %}
                       <td>{{product.price | number_format }}</td>
                       <td>{{product.buyPrice | number_format }}</td>
-                      <td class="d-flex justify-content-around">
+                      <td class=" justify-content-around">
                         <a title="انواع" class="text-success" data-toggle="modal" href="#types{{product.id}}">
                           <sub class="text-success" id="typeCounter{{product.id}}">
                             {{product.types.count()}}
