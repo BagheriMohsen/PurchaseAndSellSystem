@@ -869,6 +869,7 @@ $(document).ready(function(){
         var form = $(this);
         form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
         var orderArray = [];
+        var product_id_array =[];
         // form.find('input[name="HBD_Date"]').val(isoDate);
         $('.orderList .row').each(function(index,value){
             var orderObject = {};
@@ -877,6 +878,9 @@ $(document).ready(function(){
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
             orderArray.push(orderObject);
+            if(!product_id_array.includes(value.querySelector('.productSelect').value)){
+                product_id_array.push(value.querySelector('.productSelect').value);
+            }
         });
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
@@ -917,7 +921,9 @@ $(document).ready(function(){
             instant:instant,
             sellerDescription:sellerDescription,
             deliverDescription:deliverDescription,
-            orderArray:orderArray
+            orderArray:orderArray,
+            product_id_array:product_id_array
+
         }
         $.ajax({
             url:actionUrl,
