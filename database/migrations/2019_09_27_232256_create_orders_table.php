@@ -33,10 +33,10 @@ class CreateOrdersTable extends Migration
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
             $table->string('paymentMethod')->nullable();
-            $table->integer('shippingCost')->nullable();
-            $table->integer('prePayment')->nullable();
-            $table->integer('cashPrice')->nullable();
-            $table->integer('chequePrice')->nullable();
+            $table->integer('shippingCost')->default(0);
+            $table->integer('prePayment')->default(0);
+            $table->integer('cashPrice')->default(0);
+            $table->integer('chequePrice')->default(0);
             $table->text('sellerDescription')->nullable();
             $table->text('sendDescription')->nullable();
             $table->text('statusDescription')->nullable();

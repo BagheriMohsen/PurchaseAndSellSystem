@@ -348,7 +348,7 @@ class UserController extends Controller
         $TopStoreRooms =  'App\OrderProduct'::with('product')->select('product_id')
         ->groupBy('product_id')
         ->orderByRaw('COUNT(*) DESC')
-        ->limit(5)
+        ->limit(10)
         ->get();
 
         $topProductToday = array();
@@ -378,7 +378,26 @@ class UserController extends Controller
         
 
         $DebtorAgents = 'App\UserInventory'::where('agent_id','!=',null)
-        ->latest('balance')->skip(0)->take(5)->get();
+        ->latest('balance')->skip(0)->take(10)->get();
+
+        $agents = array();
+        foreach($DebtorAgents as $DebtorItem){
+            $agent_id   =   $DebtorItem->agent_id;
+            $agent      =   'App\User'::findOrFail($agent_id);
+            $price      =   'App\Order'::where([
+                ['collected_Date','!=',Null],
+                ['agent_id','=',$agent_id]
+            ])->sum('cashPrice');
+               
+            $agents[] = [
+                'name'          =>  $agent->name.' '.$agent->family,
+                'state_city'    =>  $agent->state->name.'-'.$agent->city->name,
+                'price'         =>  $price - $DebtorItem->balance 
+            ];
+             
+        }
+
+        asort($agents);
         
         return view('Admin/index',compact(
             'OrderCreatedByCallcenterToday',
@@ -391,7 +410,7 @@ class UserController extends Controller
             'OrderReturnedInMonth',
             'TopProductsToday',
             'topProduct',
-            'DebtorAgents',
+            'agents',
             'todayProducts'
 
         ));

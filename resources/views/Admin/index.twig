@@ -177,18 +177,16 @@
       </tr>
     </thead>
     <tbody>
-      {% for DebtorAgent in DebtorAgents %}
+      {% for agent in agents %}
       <tr>
         <td class="d-flex">
             <div class="col-9 mx-auto">
-              {{ DebtorAgent.agent.name }}
-              {{' '}}
-              {{ DebtorAgent.agent.family }}
+              {{agent.name}}
               {{'/'}}
-              {{ DebtorAgent.agent.city.name }}
+              {{agent.state_city}}
             </div>
             <div class="col-3 mx-auto">
-                {{ DebtorAgent.balance | number_format }}
+                {{ agent.price }}
             </div>
         </td>
       </tr>
@@ -209,12 +207,12 @@
     <tbody>
       <tr>
         <td class="d-flex">
-            <div class="col-7 mx-auto">
+            {# <div class="col-7 mx-auto">
               -
             </div>
             <div class="col-5 mx-auto">
                 -
-            </div>
+            </div> #}
         </td>
       </tr>
      
