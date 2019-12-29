@@ -306,6 +306,18 @@ $(document).ready(function(){
            
         ],
     });
+    //Search result table
+    $('#searchResult').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [
+            {
+                extend: 'excelHtml5',
+            },
+           
+        ],
+    });
 
     // End setup tables 
 
@@ -1096,6 +1108,20 @@ $(document).ready(function(){
     $('.timestamp').each(function(index,value){
         var jalaliTime = convertTimeStampToJalali(value.innerHTML)
         value.innerHTML = (jalaliTime);
+    });
+    $('.paginate_button').on('click',function(){
+        $('.timestamp').each(function(index,value){
+            var jalaliTime = convertTimeStampToJalali(value.innerHTML)
+            value.innerHTML = (jalaliTime);
+        });
+        $('.justDate').each(function(index,value){
+            if(value.innerHTML){
+                var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
+                var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+                value.innerHTML = jalaliDate;
+            }
+    
+        });
     });
     $('.justDate').each(function(index,value){
         if(value.innerHTML){
