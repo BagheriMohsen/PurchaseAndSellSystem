@@ -71,11 +71,18 @@
                   <a href="{{route('storeRooms.delete',storeRoom.id)}}" title="حذف" type="submit">
                     <i class="far fa-trash-alt text-danger crud-icon"></i>
                   </a>
+                  <a title="ویرایش" class="text-warning m-1" 
+                    data-toggle="modal" data-target="#editStoreRoom{{storeRoom.id}}">
+                    <i class="far fa-edit crud-icon"></i>
+                  </a>
                 </td>
               {% else %}
                 <td>
                   <a title="از کار افتاده" type="submit">
                     <i class="fas fa-trash-alt crud-icon"></i>
+                  </a>
+                  <a title="از کار افتاده" >
+                    <i class="fas fa-edit crud-icon"></i>
                   </a>
                 </td>
               {% endif %}
@@ -84,6 +91,14 @@
           </tbody>
         </table>
 
+
+        {# 
+        ###### store room edit modal  
+        #}
+        {% include 'Admin/Master/Repetitive/StoreRoom/edit-modal' %}
+        {# 
+        ###### store room edit modal  
+        #}
                 
                 
 {% endblock %}

@@ -187,8 +187,11 @@ Route::group(['middleware'=>'auth','as'=>'storeRooms.','prefix'=>'/storeRooms'],
       Route::get('AgensStorageIn/{agent_id}','StoreRoomController@AgensStorageIn')->name('AgensStorageIn');
       Route::get('AgensStorageOut/{agent_id}','StoreRoomController@AgensStorageOut')->name('AgensStorageOut');
       Route::get('AgensDeliveryToCustomers/{agent_id}','StoreRoomController@AgensDeliveryToCustomers')->name('AgensDeliveryToCustomers');
-      /** Delete Row From Store_rooms table  */
+      /** Delete Rows From Store_rooms table  */
       Route::get('/delete/{id}','StoreRoomController@delete')->name('delete');
+      /** Update Rows From Store_rooms table  */
+      Route::post('/storeRoomsUpdate/{id}','StoreRoomController@storeRoomsUpdate')->name('storeRoomsUpdate');
+
     });
 
 /*

@@ -1283,5 +1283,202 @@ class StoreRoomController extends Controller
         $storage->update(['number'=>$number]);
         return back()->with('message','با موفقیت حدف شد و موجودی به انبار نماینده بازگشت داده شد');
     }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function storeRoomsUpdate(Request $request,$id){
+        $storeRoom = StoreRoom::findOrFail($id);
+        
+        if($storeRoom->in_out == 8 && is_null($storeRoom->in_date) ){
+            
+            return $this->AgentToAgentFund($storeRoom,$id,$request);
+
+        /** Agent In OnConfirm */
+        }elseif($storeRoom->in_out == 12 && is_null($storeRoom->in_date) ){
+            
+            $pre_id = $id - 1;
+            $pre_id2 = $id - 2;
+            $pre2_storeRoom = StoreRoom::find($pre_id2);
+
+            if(is_null($pre2_storeRoom)){
+
+                return $this->NormalUpdate($storeRoom,$id,$request);
+
+            }elseif($pre2_storeRoom->in_out == 8){
+
+                return $this->AgentToAgentOut($storeRoom,$id,$request,$pre_id,$pre_id2);
+                
+            }else{
+
+                return $this->NormalUpdate($storeRoom,$id,$request);
+
+            }
+            
+        /** send To Agent */
+        }elseif($storeRoom->in_out == 7 && is_null($storeRoom->in_date) ){
+
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        /** send To FundHouseWare */
+        }elseif($storeRoom->in_out == 2 && is_null($storeRoom->out_date)){
+            
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        /** return To MainHouseWare */
+        }elseif($storeRoom->in_out == 9 && is_null($storeRoom->in_date)){
+
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        }else{
+            return back()->with('info','متاسفانه دیر اقدام کردید این قابلیت از کار افتاده است');
+        }
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Normal Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function NormalUpdate($storeRoom,$id,$request){
+        $storage = 'App\Storage'::findOrFail($storeRoom->storage_id);
+
+        
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update next store room */
+        $next_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Agent To Agent Update-Agent
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentOut($storeRoom,$id,$request,$pre_id,$pre_id2){
+        $storage = 'App\Storage'::findOrFail($storeRoom->storage_id);
+       
+        $pre_storeRoom = StoreRoom::findOrFail($pre_id);
+       
+        $pre2_storeRoom = StoreRoom::findOrFail($pre_id2);
+        
+        
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $storeRoom = StoreRoom::findOrFail($id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update pre store room */
+        $pre_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update pre 2 store room */
+        $pre2_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Agent To Agent Update-Fund
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentFund($storeRoom,$id,$request){
+        
+        $next_id    = $id + 1;
+        $next_id2   = $id + 2;
+       
+        $next_storeRoom     = StoreRoom::findOrFail($next_id);
+        $next2_storeRoom    = StoreRoom::findOrFail($next_id2);
+        $storage = 'App\Storage'::findOrFail($next2_storeRoom->storage_id);
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update next store room */
+        $next_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+
 
 }

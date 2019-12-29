@@ -148,5 +148,26 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | Set Role variable for admin sidebar
+        |--------------------------------------------------------------------------
+        |*/
+        view()->composer('Admin.Master.Repetitive.StoreRoom.edit-modal',function($view){
+            if(auth()->check()){
+                // find user detail
+                $user       = 'App\User'::find(auth()->user()->id);
+                // find role name
+                $roleName   = $user->getRoleNames()->first();
+                // find role all detail
+                $role = Role::where('name',$roleName)->firstOrFail();
+                // find Storage
+                $products = 'App\Product'::latest()->get();
+                
+                $view ->with(compact('products'));
+            }
+        });
+
+
     }
 }
