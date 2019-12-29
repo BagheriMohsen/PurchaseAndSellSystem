@@ -41,6 +41,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
     Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
     /* Agent Chief Dashboard */
     Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
+    Route::get('AgentListsForAgentChief','UserController@AgentListsForAgentChief')->name('AgentListsForAgentChief');
     /* Seller Dashboard */
     Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
     /* CallCenter */

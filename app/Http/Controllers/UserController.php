@@ -853,6 +853,19 @@ class UserController extends Controller
         return Response()->json('با موفقیت ثبت سفارش تغییر کرد',
         200,[],JSON_UNESCAPED_UNICODE);
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Lists For Agent Chief
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentListsForAgentChief(){
+        $user_id    =   auth()->user()->id;
+        $user       =   'App\User'::findOrFail($user_id);
+
+        $users      =   'App\User'::where('agent_id',$user_id)->latest()->get();
+        
+        return view('Admin.User.AgentChief.agents-list',compact('users'));
+    }
 
 
 }
