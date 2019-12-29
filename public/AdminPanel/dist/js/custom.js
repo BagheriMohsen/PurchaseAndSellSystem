@@ -59,9 +59,9 @@ $(document).ready(function(){
 
         // enabled tariff inputs when agent and agent manager roles selected in create&edit user page
         if(user_value == '2'){
-            $('#tariff_internal,#tariff_locally,#tariff_village').parent().removeClass('d-none');
+            $('#tariff_internal,#tariff_locally,#tariff_village,#factorCal').parent().removeClass('d-none');
         }else{
-            $('#tariff_internal,#tariff_locally,#tariff_village').parent().addClass('d-none');
+            $('#tariff_internal,#tariff_locally,#tariff_village,#factorCal').parent().addClass('d-none');
         }
         // enabled commission input when seller role selected in create&edit user page
         if(user_value == '4'){
@@ -95,12 +95,22 @@ $(document).ready(function(){
         }else{
             $('#backToSeller').parents('.col-sm-4').addClass('d-none');
         }
-        
     };
-
+    function checkCalType(){
+        console.log($('#calType').prop('checked'));
+        if($('#calType').prop('checked') == true){
+            $('#factorCal').prop('disabled',false);
+        }else{
+            $('#factorCal').prop('disabled',true);
+        }
+    }
 
     checkUserRole();
+    checkCalType();
+
     $('#user_role').on('change', checkUserRole);
+    $('.CalTypeBox').on('click', checkCalType);
+   
 
     //Updating product types via ajax in product type modal in products page
     var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){

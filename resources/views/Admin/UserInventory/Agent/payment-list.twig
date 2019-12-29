@@ -132,7 +132,7 @@
   -->
   {% for payment in payments %}
     <!-- Modal -->
-    <form  action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
+    <form class="paymentEditForm"  action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
     method="POST" enctype="multipart/form-data"
     class="modal fade right" id="edit{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">

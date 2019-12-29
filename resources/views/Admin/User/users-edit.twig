@@ -181,16 +181,22 @@
         </div>
         {# end auto send #}
         {# auto send #}
-        <div class="col-sm-4 mb-4 d-none">
-          <h6>نوع محاسبه هزینه کالا
-          </h6>
-          <input id="calType" type="checkbox"
+        <div class="col-sm-4 mb-4 d-none CalTypeBox">
+          <div>
+            <h6>نوع محاسبه هزینه کالا
+            </h6>
+            <input id="calType" type="checkbox"
 
-            data-toggle="switchbutton"
-            data-onstyle="success"
-            data-offstyle="info"
-            data-onlabel="مبلغ فاکتور"
-            data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}>
+              data-toggle="switchbutton"
+              data-onstyle="success"
+              data-offstyle="info"
+              data-onlabel="مبلغ فاکتور"
+              data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}>
+          </div>
+          <div class="md-form d-none">
+            <input type="text" id="factorCal" class="form-control comma" name="factorCal" value="">
+            <label for="factorCal"> مبلغ محاسبه مبلغ فاکتور</label>
+          </div>
         </div>
         {# end auto send #}
         {# Back to follow manager #}
