@@ -59,6 +59,7 @@ class AppServiceProvider extends ServiceProvider
                 $AgentReturnedProduct = 0;
                 $orderNotif = 0;
                 $Agentpayments = 0;
+                $Agentcosts =   0;
                 if($roleName == "agent" || $roleName == "agentChief"){
                     $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
@@ -83,6 +84,9 @@ class AppServiceProvider extends ServiceProvider
                 }elseif($roleName == "admin"){
                     $Agentpayments = 'App\PaymentCirculation'::where('status_id',1)
                     ->latest()->count();
+
+                    $Agentcosts   =   'App\AgentCost'::where('confirmDate',null)
+                    ->latest()->count();
                 }else{
                     //
                 }
@@ -92,7 +96,8 @@ class AppServiceProvider extends ServiceProvider
                     'notifs',
                     'orderNotif',
                     'AgentReturnedProduct',
-                    'Agentpayments'
+                    'Agentpayments',
+                    'Agentcosts'
                 
                 ));
             }

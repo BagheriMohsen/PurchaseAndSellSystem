@@ -36,180 +36,93 @@ class RajabiStartSeeder extends Seeder
         |*/
         #1.create user for admin site
         'App\User'::create([
-            'name'          =>  'حمیدرضا',
-            'family'        =>  'رجبی',
-            'sex'           =>  1,
-            'username'      =>  'admin',
-            'password'      =>  Hash::make('admin2020'),
-            'mobile'        =>  '09106769465',
-            'status'        =>  'on',
-            'city_id'       =>  1,
-            'state_id'      =>  1,
-            'address'       =>  'Qom',
-            'uploadCS'      =>  'some file',
-            'level'         =>  null,
-            'sendAuto'      =>  null,
-            'backToWareHouse'    =>  null,
-            'callCenter'    =>  null,
-            'agent_id'      =>  null,
+          'name'          =>  'حمیدرضا',
+          'family'        =>  'رجبی',
+          'sex'           =>  1,
+          'username'      =>  'admin',
+          'password'      =>  Hash::make('admin2020'),
+          'mobile'        =>  '09106769465',
+          'status'        =>  'on',
+          'city_id'       =>  1,
+          'state_id'      =>  1,
+          'address'       =>  'Qom',
+          'uploadCS'      =>  'some file',
+          'level'         =>  null,
+          'sendAuto'      =>  null,
+          'backToWareHouse'    =>  null,
+          'callCenter'    =>  null,
+          'agent_id'      =>  null,
+        
+          'percent'       =>  null,
+         
+        ]);
+      #2.create user for followUpManger
+      'App\User'::create([
+          'name'          =>  'حمیدرضا',
+          'family'        =>  'رجبی',
+          'sex'           =>  1,
+          'username'      =>  'peygiri.sh',
+          'password'      =>  Hash::make('admin2020'),
+          'mobile'        =>  '09106769465',
+          'status'        =>  'on',
+          'city_id'       =>  1,
+          'state_id'      =>  1,
+          'address'       =>  'Qom',
+          'uploadCS'      =>  'some file',
+          'level'         =>  null,
+          'sendAuto'      =>  null,
+          'backToWareHouse'    =>  null,
+          'callCenter'    =>  null,
+          'agent_id'      =>  null,
+   
+          'percent'       =>  null,
           
-            'percent'       =>  null,
-           
-          ]);
-        #2.create user for followUpManger
+        ]);
+        #3.create user for mainWareHouse
         'App\User'::create([
-            'name'          =>  'حمیدرضا',
-            'family'        =>  'رجبی',
-            'sex'           =>  1,
-            'username'      =>  'peygiri.sh',
-            'password'      =>  Hash::make('admin2020'),
-            'mobile'        =>  '09106769465',
-            'status'        =>  'on',
-            'city_id'       =>  1,
-            'state_id'      =>  1,
-            'address'       =>  'Qom',
-            'uploadCS'      =>  'some file',
-            'level'         =>  null,
-            'sendAuto'      =>  null,
-            'backToWareHouse'    =>  null,
-            'callCenter'    =>  null,
-            'agent_id'      =>  null,
+          'name'          =>  'حمیدرضا',
+          'family'        =>  'رجبی',
+          'sex'           =>  1,
+          'username'      =>  'anbar.m',
+          'password'      =>  Hash::make('admin2020'),
+          'mobile'        =>  '09106769465',
+          'status'        =>  'on',
+          'city_id'       =>  1,
+          'state_id'      =>  1,
+          'address'       =>  'Qom',
+          'uploadCS'      =>  'some file',
+          'level'         =>  null,
+          'sendAuto'      =>  null,
+          'backToWareHouse'    =>  null,
+          'callCenter'    =>  null,
+          'agent_id'      =>  null,
      
-            'percent'       =>  null,
-            
-          ]);
-          #3.create user for mainWareHouse
-          'App\User'::create([
-            'name'          =>  'حمیدرضا',
-            'family'        =>  'رجبی',
-            'sex'           =>  1,
-            'username'      =>  'anbar.m',
-            'password'      =>  Hash::make('admin2020'),
-            'mobile'        =>  '09106769465',
-            'status'        =>  'on',
-            'city_id'       =>  1,
-            'state_id'      =>  1,
-            'address'       =>  'Qom',
-            'uploadCS'      =>  'some file',
-            'level'         =>  null,
-            'sendAuto'      =>  null,
-            'backToWareHouse'    =>  null,
-            'callCenter'    =>  null,
-            'agent_id'      =>  null,
+          'percent'       =>  null,
+          
+        ]);
+        #4.create user for fundWareHouse
+        'App\User'::create([
+          'name'          =>  'حمیدرضا',
+          'family'        =>  'رجبی',
+          'sex'           =>  1,
+          'username'      =>  'anbar.t',
+          'password'      =>  Hash::make('admin2020'),
+          'mobile'        =>  '09106769465',
+          'status'        =>  'on',
+          'city_id'       =>  1,
+          'state_id'      =>  1,
+          'address'       =>  'Qom',
+          'uploadCS'      =>  'some file',
+          'level'         =>  null,
+          'sendAuto'      =>  null,
+          'backToWareHouse'    =>  null,
+          'callCenter'    =>  null,
+          'agent_id'      =>  null,
+         
+          'percent'       =>  null,
        
-            'percent'       =>  null,
-            
-          ]);
-          #4.create user for fundWareHouse
-          'App\User'::create([
-            'name'          =>  'حمیدرضا',
-            'family'        =>  'رجبی',
-            'sex'           =>  1,
-            'username'      =>  'anbar.t',
-            'password'      =>  Hash::make('admin2020'),
-            'mobile'        =>  '09106769465',
-            'status'        =>  'on',
-            'city_id'       =>  1,
-            'state_id'      =>  1,
-            'address'       =>  'Qom',
-            'uploadCS'      =>  'some file',
-            'level'         =>  null,
-            'sendAuto'      =>  null,
-            'backToWareHouse'    =>  null,
-            'callCenter'    =>  null,
-            'agent_id'      =>  null,
-           
-            'percent'       =>  null,
-         
-          ]); 
-          #5.create agentChief
-        //   'App\User'::create([
-        //     'name'          =>  'حمیدرضا',
-        //     'family'        =>  'رجبی',
-        //     'sex'           =>  1,
-        //     'username'      =>  'agentChief',
-        //     'password'      =>  Hash::make('admin2020'),
-        //     'mobile'        =>  '09106769465',
-        //     'status'        =>  'on',
-        //     'city_id'       =>  1,
-        //     'state_id'      =>  1,
-        //     'address'       =>  'Qom',
-        //     'uploadCS'      =>  'some file',
-        //     'level'         =>  null,
-        //     'sendAuto'      =>  null,
-        //     'backToWareHouse'    =>  null,
-        //     'callCenter'    =>  null,
-        //     'agent_id'      =>  null,
-          
-        //     'percent'       =>  null,
-            
-        //   ]);
-          #6.create agent
-        //   'App\User'::create([
-        //     'name'          =>  'حمیدرضا',
-        //     'family'        =>  'رجبی',
-        //     'sex'           =>  1,
-        //     'username'      =>  'agent',
-        //     'password'      =>  Hash::make('admin2020'),
-        //     'mobile'        =>  '09106769465',
-        //     'status'        =>  'on',
-        //     'city_id'       =>  1,
-        //     'state_id'      =>  1,
-        //     'address'       =>  'Qom',
-        //     'uploadCS'      =>  'some file',
-        //     'level'         =>  'S',
-        //     'sendAuto'      =>  'on',
-        //     'backToWareHouse'    =>  null,
-        //     'callCenter'    =>  null,
-        //     'agent_id'      =>  5,
-         
-        //     'percent'       =>  null,
-          
-        //   ]);
-          #7.create seller
-        //   'App\User'::create([
-        //     'name'          =>  'حمیدرضا',
-        //     'family'        =>  'رجبی',
-        //     'sex'           =>  1,
-        //     'username'      =>  'seller',
-        //     'password'      =>  Hash::make('admin2020'),
-        //     'mobile'        =>  '09106769465',
-        //     'status'        =>  'on',
-        //     'city_id'       =>  1,
-        //     'state_id'      =>  1,
-        //     'address'       =>  'Qom',
-        //     'uploadCS'      =>  'some file',
-        //     'level'         =>  null,
-        //     'sendAuto'      =>  null,
-        //     'backToWareHouse'    =>  null,
-        //     'callCenter'    =>  null,
-        //     'agent_id'      =>  null,
-        //     'porsantSeller' =>  1000,
-        //     'percent'       =>  null,
-           
-        //   ]);
-          #8.create callCenter
-        //   'App\User'::create([
-        //     'name'          =>  'حمیدرضا',
-        //     'family'        =>  'رجبی',
-        //     'sex'           =>  1,
-        //     'username'      =>  'callCenter',
-        //     'password'      =>  Hash::make('admin2020'),
-        //     'mobile'        =>  '09106769465',
-        //     'status'        =>  'on',
-        //     'city_id'       =>  1,
-        //     'state_id'      =>  1,
-        //     'address'       =>  'Qom',
-        //     'uploadCS'      =>  'some file',
-        //     'level'         =>  null,
-        //     'sendAuto'      =>  null,
-        //     'backToWareHouse'    =>  null,
-        //     'callCenter'    =>  null,
-        //     'agent_id'      =>  null,
-           
-        //     'percent'       =>  null,
-           
-        //   ]);
+        ]);
+        
         /*
         |--------------------------------------------------------------------------
         | Create WareHouse
@@ -253,15 +166,7 @@ class RajabiStartSeeder extends Seeder
       'App\Transport'::create(['name'=>"باربری",]);
       'App\Transport'::create(['name'=>"تاکسیرانی",]);
       'App\Transport'::create(['name'=>"تحویل به نماینده",]);
-      // 'App\Transport'::create(['name'=>"پیک",]);
-      // 'App\Transport'::create(['name'=>"شکوه مهر",]);
-      // 'App\Transport'::create(['name'=>"چابک",]);
-      // 'App\Transport'::create(['name'=>"فارس پست",]);
-      // 'App\Transport'::create(['name'=>"فلوکس",]);
-      // 'App\Transport'::create(['name'=>"فروتل",]);
-      // 'App\Transport'::create(['name'=>"سپیده ماهان",]);
-      // 'App\Transport'::create(['name'=>"گیتوی پست",]);
-      // 'App\Transport'::create(['name'=>"لجیتو",]);
+     
       /*
       |--------------------------------------------------------------------------
       | Create Order Status

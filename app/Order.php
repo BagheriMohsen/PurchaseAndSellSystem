@@ -40,7 +40,8 @@ class Order extends Model
     'delivary_Date',
     'collected_Date',
     'cancelled_Date',
-    'returnToSeller_Date'
+    'returnToSeller_Date',
+    'product_array'
    ];
     /*
     |--------------------------------------------------------------------------

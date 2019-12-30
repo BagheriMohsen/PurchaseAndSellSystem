@@ -96,6 +96,7 @@ class UserController extends Controller
             'locallyPrice'          =>  (float) str_replace(',', '', $request->locally),
             'internalPrice'         =>  (float) str_replace(',', '', $request->internal),
             'villagePrice'          =>  (float) str_replace(',', '', $request->village),
+            'factorPrice'           =>  (float) str_replace(',', '', $request->factorPrice),
             'allowNumber'           =>  $request->allowNumber,
             'backToSeller'          =>  $request->backToSeller,
             'allowNumberEdit'       =>  $request->allowNumberEdit,
@@ -194,6 +195,7 @@ class UserController extends Controller
        'locallyPrice'       =>  (float) str_replace(',', '', $request->locally),
        'internalPrice'      =>  (float) str_replace(',', '', $request->internal),
        'villagePrice'       =>  (float) str_replace(',', '', $request->village),
+       'factorPrice'        =>  (float) str_replace(',', '', $request->factorPrice),
        'callCenterType'     =>  $request->callCenterType,
        'allowNumber'        =>  $request->allowNumber,
        'backToSeller'       =>  $request->backToSeller,
@@ -408,7 +410,6 @@ class UserController extends Controller
             'OrderCollectedInMonth',
             'OrderReturnedToday',
             'OrderReturnedInMonth',
-            'TopProductsToday',
             'topProduct',
             'agents',
             'todayProducts'

@@ -35,7 +35,7 @@ class CreateTableMoneyCirculations extends Migration
             $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->bigInteger('seller_id')->unsigned()->nullable();
             $table->bigInteger('order_status_id')->unsigned()->nullable();
-            $table->bigInteger('order_product_id')->unsigned();
+            // $table->bigInteger('order_product_id')->unsigned();
             $table->bigInteger('order_id')->unsigned();
             $table->integer('amount');
             $table->integer('sharedSpecialAmount')->nullable();
@@ -49,8 +49,8 @@ class CreateTableMoneyCirculations extends Migration
             $table->foreign('user_inventory_id')->references('id')->on('users_inventory')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('order_product_id')->references('id')->on('order_product')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('order_product_id')->references('id')->on('order_product')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('seller_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');

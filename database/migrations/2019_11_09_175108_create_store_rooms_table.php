@@ -35,11 +35,11 @@ class CreateStoreRoomsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->foreign('state_id')->references('id')->on('states')
-            ->onDelete('cascade')->onUpdate('set null');
+            // $table->foreign('state_id')->references('id')->on('states')
+            // ->onDelete('cascade')->onUpdate('set null');
 
-            $table->foreign('city_id')->references('id')->on('cities')
-            ->onDelete('cascade')->onUpdate('set null');
+            // $table->foreign('city_id')->references('id')->on('cities')
+            // ->onDelete('cascade')->onUpdate('set null');
         });
         /*
         |--------------------------------------------------------------------------

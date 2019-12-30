@@ -41,6 +41,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // return response()->json(implode(",",$request->product_id_array));
         /*###################IF###################*/
             $city = 'App\City'::where('id',$request->city_id)->first();
             
@@ -94,7 +95,8 @@ class OrderController extends Controller
         //         'HBD_Date'      =>  $request->HBD_Date
         //     ]);
         // }
-
+        
+        $product_id_array = implode(",",$request->product_id_array);
         /*##################ENDIF##################*/
         $trackingCode = uniqid(rand(), true);
         $order = Order::create([
@@ -106,6 +108,7 @@ class OrderController extends Controller
             'status'            =>      7,
             'lastStatus'        =>      1,
             'transport_id'      =>      4,
+            'product_array'     =>      $product_id_array,
             'trackingCode'      =>      $trackingCode,
             'mobile'            =>      $request->mobile,
             'telephone'         =>      $request->telephone,
@@ -217,7 +220,7 @@ class OrderController extends Controller
             $status = 'App\Customer'::query()
             ->where('fullName', 'LIKE', "%{$request->fullName}%") 
             ->exists();
-
+        $product_id_array = implode(",",$request->product_id_array);
         /*##################ENDIF##################*/
         $order = Order::findOrFail($id);
         $order->update([
@@ -229,6 +232,7 @@ class OrderController extends Controller
             'status'            =>      $order->status,
             'lastStatus'        =>      $order->lastStatus,
             'transport_id'      =>      4,
+            'product_array'     =>      $product_id_array,
             'mobile'            =>      $request->mobile,
             'telephone'         =>      $request->telephone,
             'fullName'          =>      $request->fullName,
@@ -477,6 +481,7 @@ class OrderController extends Controller
     |*/
     public function AgentChangeOrderStatus(Request $request){
         $user = 'App\User'::findOrFail(auth()->user()->id);
+        
         $items = $request->orderNumbers;
         foreach($items as $item){
 
@@ -484,81 +489,30 @@ class OrderController extends Controller
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-                // foreach for check product exist in storage or not
-                foreach($order->products as $order_product){
-                    
-                  
-                    $count = $order_product->count;
-                    $user_id = $user->id;
-                    $product_id = $order_product->product_id;
-                    
-                    $storage_status = 'App\Storage'::where([
-                        ['agent_id','=',$user->id],
-                        ['product_id','=',$order_product->product_id]
-                    ])->exists();
-                    // if product not exist
-                    if($storage_status != True){
-                        $result = ['message' => ' کالای  '.
-                        $order_product->product->name.
-                        ' در انبار وجود ندارد ','status' => 0];
-                        return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
-                    // else product less than order->count 
-                    }else{
-                        $storage = 'App\Storage'::where([
-                            ['agent_id','=',$user_id],
-                            ['product_id','=',$product_id]
-                        ])->firstOrFail(); 
 
-                        if($storage->number < $count){
-                            $result = ['message' => ' کالای  '.
-                            $order_product->product->name.
-                            ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
-                            return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
-                        }
-                    }
-                   
-                }
-
-
-                    foreach($order->products as $order_product){
+                /** foreach for check product exist in storage or not */
                 
-                        
-                        $storage = 'App\Storage'::where([
-                            ['agent_id','=',$user->id],
-                            ['product_id','=',$order_product->product_id]
-                        ])->firstOrFail();
+                $status = $this->checkStoreRoomForInventory($order,$user);
+                return response()->json($status);
+                /** foreach for store Room collected */
 
-                        // Change Order Status To Collected 
-                        $order = 'App\Order'::findOrFail($item['id']);
-                        $order->update([
-                            'status'            =>  $item['statue'],
-                            'collected_Date'    =>  Carbon::now()
-                            ]);
-                        // Discount count of product in Agent Storage
-                        $number = $storage->number - $order_product->count;
-                        $storage->update(['number'=>$number]);
+                echo $this->orderStoreRoomCollected($order,$user,$item);
+                
+                
+                $agent = 'App\User'::findOrFail($order->agent_id);
+                $product_id_array = explode(",",$order->product_array);
+                $status = $item['statue'];
+                if(is_null($user->calType)){
 
-                        // Create OutPut store room for Agent
-                        'App\StoreRoom'::create([
-                            'user_id'           =>  $user->id,
-                            'storage_id'        =>  $storage->id,
-                            'sender_id'         =>  $user->id,
-                            'customerName'      =>  $order->fullName,
-                            'product_id'        =>  $order_product->product_id,
-                            'transport_id'      =>  null,
-                            'number'            =>  $order_product->count,
-                            'description'       =>  'تحویل به مشتری',
-                            'status'            =>  'به مشتری تحویل داده شد',
-                            'in_out'            =>  14,
-                            'out_date'          =>  Carbon::now()
-                        ]);
-                        $order_product->update(['collected'=>True]);
-                    echo $this->UserInventoryCalculated($user,$order_product,$order);
+                    return $this->AgentSharedPriceForEachProduct($product_id_array,$agent,$status,$order);
 
+                }else{
 
-               }     
+                    return $this->AgentPriceForEachFactor($agent,$order);
 
-
+                }
+               
+                // return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
             
             }
 
@@ -602,6 +556,303 @@ class OrderController extends Controller
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
         
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | check Store Room For Inventory
+    |--------------------------------------------------------------------------
+    |*/
+    public function checkStoreRoomForInventory($order,$user){
+
+        foreach($order->products as $order_product){
+                    
+                  
+            $count = $order_product->count;
+            $user_id = $user->id;
+            $product_id = $order_product->product_id;
+            
+            $storage_status = 'App\Storage'::where([
+                ['agent_id','=',$user->id],
+                ['product_id','=',$order_product->product_id]
+            ])->exists();
+            // if product not exist
+            if($storage_status != True){
+                $result = ['message' => ' کالای  '.
+                $order_product->product->name.
+                ' در انبار وجود ندارد ','status' => 0];
+                return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+            // else product less than order->count 
+            }else{
+                $storage = 'App\Storage'::where([
+                    ['agent_id','=',$user_id],
+                    ['product_id','=',$product_id]
+                ])->firstOrFail(); 
+
+                if($storage->number < $count){
+                    $result = ['message' => ' کالای  '.
+                    $order_product->product->name.
+                    ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                }
+            }
+           
+        }
+      
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | order Store Room Collected
+    |--------------------------------------------------------------------------
+    |*/
+    public function orderStoreRoomCollected($order,$user,$item){
+
+        foreach($order->products as $order_product){
+                
+                        
+            $storage = 'App\Storage'::where([
+                ['agent_id','=',$user->id],
+                ['product_id','=',$order_product->product_id]
+            ])->firstOrFail();
+
+            // Change Order Status To Collected 
+            $order = 'App\Order'::findOrFail($item['id']);
+            $order->update([
+                'status'            =>  $item['statue'],
+                'collected_Date'    =>  Carbon::now()
+                ]);
+            // Discount count of product in Agent Storage
+            $number = $storage->number - $order_product->count;
+            $storage->update(['number'=>$number]);
+
+            // Create OutPut store room for Agent
+            'App\StoreRoom'::create([
+                'user_id'           =>  $user->id,
+                'storage_id'        =>  $storage->id,
+                'sender_id'         =>  $user->id,
+                'customerName'      =>  $order->fullName,
+                'product_id'        =>  $order_product->product_id,
+                'transport_id'      =>  null,
+                'number'            =>  $order_product->count,
+                'description'       =>  'تحویل به مشتری',
+                'status'            =>  'به مشتری تحویل داده شد',
+                'in_out'            =>  14,
+                'out_date'          =>  Carbon::now()
+            ]);
+            $order_product->update(['collected'=>True]);
+          
+
+
+        }  
+        return response()
+        ->json(['message' => 'از موجودی انبار شما کم شد','status' => 1]); 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Shared Price For Each Product
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentSharedPriceForEachProduct($product_id_array,$agent,$status,$order){
+
+       
+        $AgentStatus  = 'App\UserInventory'::where('agent_id',$agent->id)->exists();
+        $trackingCode = uniqid();
+        foreach($product_id_array as $product_id){
+            $product        = 'App\Product'::findOrFail($product_id);
+            $count  = 'App\OrderProduct'::where([
+                ['order_id','=',$order->id],
+                ['product_id','=',$product->id]
+            ])->sum('count');
+            /* Agent */
+            // if agent has row in users-inventory table
+            if($AgentStatus == True){
+                $Agent = 'App\User'::findOrFail($agent->id);
+                $AgentInventory         =   'App\UserInventory'::where('agent_id',$agent->id)->firstOrFail();
+                $specialSharedStatus    =   'App\SpecialTariff'::where([
+                    ['user_id','=',$agent->id],
+                    ['product_id','=',$product_id]
+                ])->exists();
+                // if agent has special shared
+                if($specialSharedStatus == True){
+                    $specialShared    =   'App\SpecialTariff'::where([
+                        ['user_id','=',$agent->id],
+                        ['product_id','=',$product_id]
+                    ])->firstOrFail();
+                    
+                    $balance        =   $AgentInventory->balance + $specialShared->price;
+                    $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                    'App\MoneyCirculation'::create([
+                        'user_inventory_id'     =>  $AgentInventory->id,
+                        'agent_id'              =>  $Agent->id,
+                        'seller_id'             =>  null,
+                        'order_status_id'       =>  $order->status,
+                        'order_id'              =>  $order->id,
+                        'amount'                =>  $product->price * $count,
+                        'sharedSpecialAmount'   =>  $specialShared->price,
+                        'trackingCode'          =>  $trackingCode,
+                    ]);
+                }else{
+                    $Agent = 'App\User'::findOrFail($order->agent_id);
+                    $placeNumber = $status;
+
+                    switch ($placeNumber){
+                        case 10:
+                            $price = $Agent->internalPrice;
+                            break;
+                        case 11:
+                            $price = $Agent->locallyPrice;
+                            break;
+                        case 12:
+                            $price = $Agent->villagePrice;
+                            break;
+                        default:
+                            $price = 0;
+                            break;
+                    }
+                    $balance        =   $AgentInventory->balance + $price;
+                    $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                    'App\MoneyCirculation'::create([
+                        'user_inventory_id'     =>  $AgentInventory->id,
+                        'agent_id'              =>  $agent->id,
+                        'seller_id'             =>  null,
+                        'order_status_id'       =>  $order->status,
+                        'order_id'              =>  $order->id,
+                        'amount'                =>  $product->price * $count,
+                        'sharedSpecialAmount'   =>  $price,
+                        'trackingCode'          =>  $trackingCode,
+                    ]);
+                }
+            // agent collected for first time
+            }else{
+                
+                $Agent = 'App\User'::findOrFail($agent->id);
+                $specialSharedStatus    =   'App\SpecialTariff'::where([
+                    ['user_id','=',$order->agent_id],
+                    ['product_id','=',$product_id]
+                ])->exists();
+
+                if($specialSharedStatus == True){
+
+                        $specialShared    =   'App\SpecialTariff'::where([
+                            ['user_id','=',$agent->id],
+                            ['product_id','=',$product_id]
+                        ])->firstOrFail();
+        
+                        $balance    =   $specialShared->price;
+                        if($AgentStatus == False){
+                            $userInventory = 'App\UserInventory'::create([
+                                'agent_id'  =>      $agent->id,
+                                'balance'   =>      $balance,
+                                'debtor'    =>      1
+                            ]);
+                        }else{
+                            $AgentInventory='App\UserInventory'::where('agent_id',$agent->id)->firstOrFail();
+                            $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                        }
+            
+                    'App\MoneyCirculation'::create([
+                        'user_inventory_id'     =>  $userInventory->id,
+                        'agent_id'              =>  $agent->id,
+                        'seller_id'             =>  null,
+                        'order_status_id'       =>  $order->status,
+                        'order_id'              =>  $order->id,
+                        'amount'                =>  $product->price * $count,
+                        'sharedSpecialAmount'   =>  $balance,
+                        'trackingCode'          =>  $trackingCode,
+                    ]);
+
+                    
+                }else{
+                    $Agent = 'App\User'::findOrFail($agent->id);
+                    $placeNumber = $status;
+                    $balance = 0;
+                    switch ($placeNumber){
+                        case 10:
+                            $balance = $Agent->internalPrice;
+                            break;
+                        case 11:
+                            $balance = $Agent->locallyPrice;
+                            break;
+                        case 12:
+                            $balance = $Agent->villagePrice;
+                            break;
+                    }
+
+                    
+                    $userInventory = 'App\UserInventory'::create([
+                        'agent_id'  =>      $Agent->id,
+                        'balance'   =>      $balance,
+                        'debtor'    =>  1
+                    ]);
+                    'App\MoneyCirculation'::create([
+                        'user_inventory_id'     =>  $userInventory->id,
+                        'agent_id'              =>  $agent->id,
+                        'seller_id'             =>  null,
+                        'order_status_id'       =>  $order->status,
+                        'order_id'              =>  $order->id,
+                        'amount'                =>  $product->price * $count,
+                        'sharedSpecialAmount'   =>  $balance,
+                        'trackingCode'          =>  $trackingCode,
+                    ]);
+                }
+
+
+            }         
+            
+            return response()
+            ->json(['message' => 'موفقیت آمیز بود-مبلغ مشارکت','status' => 1]);
+
+        }
+
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Price For Each Factor 
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPriceForEachFactor($agent,$order){
+
+        $AgentStatus = 'App\UserInventory'::where('agent_id',$agent->id)->exists();
+
+        if($AgentStatus){
+            $AgentInventory  =   'App\UserInventory'::where('agent_id',$agent->id)
+            ->firstOrFail();
+            $balance  =  $AgentInventory->balance + $agent->factorPrice;
+                $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
+                'App\MoneyCirculation'::create([
+                    'user_inventory_id'     =>  $AgentInventory->id,
+                    'agent_id'              =>  $Agent->id,
+                    'order_product_id'      =>  $order_product->id,
+                    'seller_id'             =>  null,
+                    'order_status_id'       =>  $order->status,
+                    'order_id'              =>  $order->id,
+                    'amount'                =>  $order_product->product->price * $order_product->count,
+                    'sharedSpecialAmount'   =>  0,
+                    'trackingCode'          =>  $trackingCode,
+                ]);
+
+        }else{
+            $userInventory = 'App\UserInventory'::create([
+                'agent_id'  =>      $Agent->id,
+                'balance'   =>      $agent->factorPrice,
+                'debtor'    =>  1
+            ]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $userInventory->id,
+                'agent_id'              =>  $Agent->id,
+                'order_product_id'      =>  $order_product->id,
+                'seller_id'             =>  null,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order_product->product->price * $order_product->count,
+                'sharedSpecialAmount'   =>  0,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+        }
+
+        return response()->json(['message' => 'موفقیت آمیز بود-مبلغ فاکتور','status' => 1]);
+
     }
     /*
     |--------------------------------------------------------------------------

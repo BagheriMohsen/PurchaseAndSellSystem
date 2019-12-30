@@ -7,3 +7,12 @@
         {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
     </a>
 {% endif %}
+{% if Agentpayments > 0 %}
+    <a 
+        href="{{route('userInventory.AgentUnverifiedCosts')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{Agentpayments}}
+        عدد هزینه تایید نشده-نماینده ها
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

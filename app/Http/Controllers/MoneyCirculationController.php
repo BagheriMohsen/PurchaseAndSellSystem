@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use DB;
 class MoneyCirculationController extends Controller
 {
     /*
@@ -124,8 +125,86 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCostsList(){
-        return view('Admin.UserInventory.Agent.costs-list');
+        $user       =   'App\User'::findOrFail(auth()->user()->id);
+        $costs   =   DB::table('agent_costs')->where('user_id',$user->id)
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.Agent.costs-list',compact('costs'));
 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Store
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsStore(Request $request){
+      
+        $user = 'App\User'::findOrFail(auth()->user()->id);
+
+        DB::table('agent_costs')->insert([
+            'create_date'   =>  $request->date,
+            'trackingCode'  =>  uniqid(),
+            'user_id'       =>  $user->id,
+            'price'         =>  (float) str_replace(',', '', $request->price),
+            'desc'          =>  $request->desc,
+            'created_at'    =>  Carbon::now(),
+            'updated_at'    =>  Carbon::now()
+        ]);
+
+        return back()->with('message','هزینه با موفقیت ثبت شد');
+    }
+     /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsDelete($id){
+        
+        DB::table('agent_costs')->where('id',$id)->delete();
+
+        return back()->with('message','با موفقیت پاک شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsUpdate(Request $request,$id){
+       
+        DB::table('agent_costs')->where('id',$id)->update([
+            'create_date'   =>  $request->date,
+            'price'         =>  (float) str_replace(',', '', $request->price),
+            'desc'          =>  $request->desc,
+            'updated_at'    =>  Carbon::now()
+        ]);
+
+        return back()->with('message','با موفقیت به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostConfirm($id){
+
+        DB::table('agent_costs')->where('id',$id)->update([
+            'confirmDate'    =>  Carbon::now()
+        ]);
+
+        return back()->with('message','هزینه تایید شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentUnverifiedCosts(){
+        
+        
+        $costs   =   'App\AgentCost'::where('confirmDate',null)
+        ->latest()->paginate(15);
+
+        return view('Admin.UserInventory.Admin.unverfied-agent-costs',compact('costs'));
     }
     /*
     |--------------------------------------------------------------------------

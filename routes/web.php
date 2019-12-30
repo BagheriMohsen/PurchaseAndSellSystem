@@ -217,18 +217,24 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
       Route::get('AgentPaymentDelete/{id}','MoneyCirculationController@AgentPaymentDelete')->name('AgentPaymentDelete');
       Route::post('AgentPaymentListUpdate/{id}','MoneyCirculationController@AgentPaymentListUpdate')->name('AgentPaymentListUpdate');
       Route::get('AgentCostsList','MoneyCirculationController@AgentCostsList')->name('AgentCostsList');
+      Route::post('AgentCostsStore','MoneyCirculationController@AgentCostsStore')->name('AgentCostsStore');      
+      Route::post('AgentCostsUpdate/{id}','MoneyCirculationController@AgentCostsUpdate')->name('AgentCostsUpdate');      
+      Route::get('AgentCostsDelete/{id}','MoneyCirculationController@AgentCostsDelete')->name('AgentCostsDelete');
       Route::get('AgentPaybackList','MoneyCirculationController@AgentPaybackList')->name('AgentPaybackList');
       Route::get('AgentpaymentSettlement ','MoneyCirculationController@AgentpaymentSettlement')->name('AgentpaymentSettlement');
       Route::post('cartStore','MoneyCirculationController@cartStore')->name('cartStore');
       Route::get('cartSetDefaultStore/{id}','MoneyCirculationController@cartSetDefault')->name('cartSetDefault');
       Route::get('cartDelete/{id}','MoneyCirculationController@cartDelete')->name('cartDelete');
       Route::post('AgentPayMoney','MoneyCirculationController@AgentPayMoney')->name('AgentPayMoney');
-       /* Agent Chief */
+      /* Agent Chief */
       Route::get('AgentsMoneyCirculation','MoneyCirculationController@AgentsMoneyCirculation')->name('AgentsMoneyCirculation');
       Route::get('AgentsPaymentList/{agent_id}','MoneyCirculationController@AgentsPaymentList')->name('AgentsPaymentList');
       /* Admin */
       Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
       Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');
+      Route::get('AgentUnverifiedCosts','MoneyCirculationController@AgentUnverifiedCosts')->name('AgentUnverifiedCosts');
+      Route::get('AgentCostConfirm/{id}','MoneyCirculationController@AgentCostConfirm')->name('AgentCostConfirm');
+
     });
 
 /*

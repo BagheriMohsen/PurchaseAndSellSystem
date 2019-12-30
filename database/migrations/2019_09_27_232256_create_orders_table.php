@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('followUpManager_id')->unsigned()->nullable();
             $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
+            $table->string('product_array')->nullable();
             $table->char('trackingCode',250);
             $table->string('mobile');
             $table->string('telephone')->nullable();
@@ -66,11 +67,11 @@ class CreateOrdersTable extends Migration
             $table->foreign('followUpManager_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('city_id')->references('id')->on('cities')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('city_id')->references('id')->on('cities')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('state_id')->references('id')->on('states')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('state_id')->references('id')->on('states')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             
 

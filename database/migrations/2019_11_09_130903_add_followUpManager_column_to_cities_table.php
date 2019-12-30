@@ -13,12 +13,12 @@ class AddFollowUpManagerColumnToCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->bigInteger('followUpManager')->unsigned()->nullable();
+        // Schema::table('states', function (Blueprint $table) {
+        //     $table->bigInteger('followUpManager')->unsigned()->nullable();
 
-            $table->foreign('followUpManager')->references('id')->on('users')
-            ->onUpdate('cascade')->onDelete('set null');
-        });
+        //     $table->foreign('followUpManager')->references('id')->on('users')
+        //     ->onUpdate('cascade')->onDelete('set null');
+        // });
     }
 
     /**
@@ -28,8 +28,8 @@ class AddFollowUpManagerColumnToCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->dropColumn('followUpManager');
-        });
+        // Schema::table('states', function (Blueprint $table) {
+        //     $table->dropColumn('followUpManager');
+        // });
     }
 }

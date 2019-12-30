@@ -57,6 +57,7 @@ class User extends Authenticatable implements HasMedia
         'forceOrder',
         'callCenterType',
         'allowNumberEdit',
+        'factorPrice',
         'calTypeCallCenter'
     ];
 
@@ -206,6 +207,14 @@ class User extends Authenticatable implements HasMedia
     */
     public function payment_circulations(){
         return $this->hasMany('App\PaymentCirculation','bank_account_id','id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function agent_costs(){
+        return $this->hasMany('App\AgentCost');
     }
     /*
     |--------------------------------------------------------------------------
