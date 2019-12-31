@@ -28,12 +28,58 @@ class MoneyCirculationController extends Controller
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])->sum('bill');
+
+        $today = 'Carbon\Carbon'::now();
+        $yesterday = 'Carbon\Carbon'::now()->subDays(1);
+        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+
+        $totalDebtor = 'App\Order'::where([
+            ['agent_id','=',$user->id],
+            ['collected_Date','!=',null]
+        ])->sum('cashPrice');
+        $totalCreditor = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['confirmDate','!=',null]
+        ])
+        ->sum('bill');
+        
         return view('Admin.UserInventory.Agent.current-bills',compact(
             'AllSell',
             'AllSpecialShared',
             'TotalSettle',
-            'user'
+            'user',
+            'totalDebtor',
+            'totalCreditor'
         ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | current Bills Debtor
+    |--------------------------------------------------------------------------
+    |*/
+    public function currentBillsDebtor($user_id){
+        
+        $totalDebtor = 'App\Order'::where([
+            ['agent_id','=',$user_id],
+            ['collected_Date','!=',null]
+        ])->latest()->get(['id','collected_Date','cashPrice']);
+
+        return Response()->json([$totalDebtor],200,[],JSON_UNESCAPED_UNICODE);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | current Bills Creditor
+    |--------------------------------------------------------------------------
+    |*/
+    public function currentBillsCreditor($user_id){
+        
+        $totalCreditor = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user_id],
+            ['confirmDate','!=',null]
+        ])
+        ->latest()->get(['id','type','billDate','bill']);
+
+        return Response()->json([$totalCreditor],200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
@@ -126,7 +172,10 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsList(){
         $user       =   'App\User'::findOrFail(auth()->user()->id);
-        $costs   =   DB::table('agent_costs')->where('user_id',$user->id)
+        $costs   =   'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['type','=','cost']
+        ])
         ->latest()->paginate(15);
         
         return view('Admin.UserInventory.Agent.costs-list',compact('costs'));
@@ -141,14 +190,13 @@ class MoneyCirculationController extends Controller
       
         $user = 'App\User'::findOrFail(auth()->user()->id);
 
-        DB::table('agent_costs')->insert([
-            'create_date'   =>  $request->date,
+        'App\PaymentCirculation'::create([
+            'billDate'      =>  $request->date,
+            'type'          =>  'cost',
             'trackingCode'  =>  uniqid(),
             'user_id'       =>  $user->id,
-            'price'         =>  (float) str_replace(',', '', $request->price),
-            'desc'          =>  $request->desc,
-            'created_at'    =>  Carbon::now(),
-            'updated_at'    =>  Carbon::now()
+            'bill'          =>  (float) str_replace(',', '', $request->price),
+            'billDesc'      =>  $request->desc,
         ]);
 
         return back()->with('message','هزینه با موفقیت ثبت شد');
@@ -160,7 +208,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsDelete($id){
         
-        DB::table('agent_costs')->where('id',$id)->delete();
+        'App\PaymentCirculation'::where('id',$id)->delete();
 
         return back()->with('message','با موفقیت پاک شد');
     }
@@ -171,11 +219,10 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsUpdate(Request $request,$id){
        
-        DB::table('agent_costs')->where('id',$id)->update([
-            'create_date'   =>  $request->date,
-            'price'         =>  (float) str_replace(',', '', $request->price),
-            'desc'          =>  $request->desc,
-            'updated_at'    =>  Carbon::now()
+        'App\PaymentCirculation'::where('id',$id)->update([
+            'billDate'      =>  $request->date,
+            'bill'          =>  (float) str_replace(',', '', $request->price),
+            'billDesc'      =>  $request->desc,
         ]);
 
         return back()->with('message','با موفقیت به روز رسانی شد');
@@ -201,7 +248,10 @@ class MoneyCirculationController extends Controller
     public function AgentUnverifiedCosts(){
         
         
-        $costs   =   'App\AgentCost'::where('confirmDate',null)
+        $costs   =   'App\PaymentCirculation'::where([
+            ['confirmDate','=',null],
+            ['type','=','cost']
+        ])
         ->latest()->paginate(15);
 
         return view('Admin.UserInventory.Admin.unverfied-agent-costs',compact('costs'));

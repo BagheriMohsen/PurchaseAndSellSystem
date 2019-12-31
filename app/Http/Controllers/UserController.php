@@ -470,10 +470,10 @@ class UserController extends Controller
             ->get();
             $subsendedCharts = $subsendedCharts->toArray();
             $charts[] =[
-                'Date' => $today->toDateString(),
-                'subsended'   =>  count($subsendedCharts),
-                'cancelled'   =>  count($cancelledCharts),
-                'collected'   =>  count($collectedCharts)
+                'Date'          =>  $today->toDateString(),
+                'subsended'     =>  count($subsendedCharts),
+                'cancelled'     =>  count($cancelledCharts),
+                'collected'     =>  count($collectedCharts)
             ]; 
          
             $today->subDays(1);

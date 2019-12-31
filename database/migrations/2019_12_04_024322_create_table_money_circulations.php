@@ -87,7 +87,8 @@ class CreateTableMoneyCirculations extends Migration
             $table->bigInteger('bank_account_id')->unsigned()->nullable();
             $table->string('receiptImage')->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->bigInteger('status_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned()->nullable();
+            $table->string('type')->default('payment');
             $table->integer('bill');
             $table->Date('billDate');
             $table->Date('confirmDate')->nullable();

@@ -82,11 +82,18 @@ class AppServiceProvider extends ServiceProvider
                     $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>3,'agent_id'=>null])
                     ->count();
                 }elseif($roleName == "admin"){
-                    $Agentpayments = 'App\PaymentCirculation'::where('status_id',1)
+                    $Agentpayments = 'App\PaymentCirculation'::where([
+                        ['confirmDate','=',null],
+                        ['type','=','payment']
+                    ])
                     ->latest()->count();
 
-                    $Agentcosts   =   'App\AgentCost'::where('confirmDate',null)
+                    $Agentcosts   =   'App\PaymentCirculation'::where([
+                        ['confirmDate','=',null],
+                        ['type','=','cost']
+                    ])
                     ->latest()->count();
+                  
                 }else{
                     //
                 }

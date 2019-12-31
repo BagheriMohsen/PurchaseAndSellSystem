@@ -17,7 +17,8 @@ class PaymentCirculation extends Model
         'confirmDate',
         'trackingCode',
         'paymentMethod',
-        'billDesc'
+        'billDesc',
+        'type'
     ];
     /*
     |--------------------------------------------------------------------------

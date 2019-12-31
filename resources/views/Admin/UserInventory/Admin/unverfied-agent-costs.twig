@@ -25,14 +25,7 @@
 <div class="row">
   <div class="card col-sm-12 p-3">
 
-      <div class="row p-4">
-        <button class="btn btn-info btn-sm" type="button" data-toggle="modal" href="#cost">
-            <strong class="text-dark h6">
-              ثبت هزینه
-            </strong>
-          </button>
-      </div>
-
+      
 
       <table   class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
         <thead>
@@ -53,16 +46,13 @@
           <tr>
             <td>{{cost.user.name}}{{' '}}{{cost.user.family}}</td>
             <td>{{cost.user.state.name}}{{'-'}}{{cost.user.city.name}}</td>
-            <td class="justDate">{{cost.create_date}}</td>
-            <td>{{cost.price | number_format}}</td>
-            <td>{{cost.desc}}</td>
+            <td class="justDate">{{cost.billDate}}</td>
+            <td>{{cost.bill | number_format}}</td>
+            <td>{{cost.billDesc}}</td>
             <td>
-                <a  class="btn btn-success btn-sm text-dark"
+                <a  title="پذیرفتن" class="text-success"
                     href="{{route('userInventory.AgentCostConfirm',cost.id)}}">
-                    <strong class="h6">
-                        تایید 
-                    </strong>
-                    <i class="fas fa-check crud-icon"></i>
+                    <i class="far fa-check-square text-success crud-icon"></i>
                 </a>
             </td>
           </tr>

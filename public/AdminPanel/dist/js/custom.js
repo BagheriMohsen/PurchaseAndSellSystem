@@ -1201,6 +1201,11 @@ $(document).ready(function(){
         $(this).find('input[name="date"]').val(isoDate);
         $(this)[0].submit();
     });
+    $('#costForm').submit(function(event){
+        event.preventDefault();
+        $(this).find('input[name="date"]').val(isoDate);
+        $(this)[0].submit();
+     });
     
     //Get State and cities array via ajax for user_create and user_edit 
     var statesCityArray;

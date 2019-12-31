@@ -83,21 +83,26 @@
                 <i class="far fa-trash-alt crud-icon"></i>
               </a>
               <a title="ویرایش" class="text-warning m-1" 
-                data-toggle="modal" data-target="#edit{{payment.id}}">
+                data-toggle="modal" data-target="#paymentedit{{payment.id}}">
                 <i class="far fa-edit crud-icon"></i>
               </a>
+              {% else %}
+
+              <a title="از کار افتاده" class="m-1">
+                <i class="far fa-trash-alt crud-icon"></i>
+              </a> 
+
+               <a title="از کار افتاده" href="">
+                <i class="far fa-edit crud-icon"></i>
+              </a> 
               {% endif %}
+
               <a title="جزئیات" class="text-secondary m-1" 
                 data-toggle="modal" data-target="#detail{{payment.id}}">
                 <i class="fas fa-info-circle crud-icon"></i>
               </a>
-              {# <a title="پذیرفتن" class="text-secondary m-1" 
-              href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
-                <i class="far fa-check-square text-success crud-icon"></i>
-              </a> #}
-              {# <a title="نپذیرفتن" class="text-danger m-1" href="">
-                <i class="far fa-window-close crud-icon"></i>
-              </a> #}
+
+
             </td>
           </tr>
           {% endfor %}
@@ -119,13 +124,7 @@
 
 
 
-  <!--
-  ##### Payment Detail Modal
-  -->
-  {% include 'Admin/Master/Repetitive/UserInventory/payment-details-modal' %}
-  <!--
-  ##### Payment Detail Modal
-  -->
+
 
   <!--
   ##### Payment Edit Modal
@@ -134,7 +133,7 @@
     <!-- Modal -->
     <form class="paymentEditForm"  action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
     method="POST" enctype="multipart/form-data"
-    class="modal fade right" id="edit{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    class="modal fade right" id="paymentedit{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <input name="_token" value="{{csrf_token()}}">
         <div class="modal-dialog modal-side modal-bottom-left" role="document">
@@ -147,39 +146,39 @@
                 
             </div>
             <div class="modal-body">
-                    {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
-                    <div class="d-flex mt-3">
-                        <div>نام:</div>
-                        <div>
-                            {{payment.user.name}}{{' '}}{{payment.user.family}}
-                            {{'/'}}
-                            {{payment.user.city.name}}
-                            {{'-'}}
-                            {{payment.user.state.name}}
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mt-3">
-                      <label for="bill">مبلغ-تومان
-                        <span class="text-danger">*</span>
-                      </label>
-                      <input class="form-control comma" type="text" name="bill" value="{{payment.bill}}" required>
-                    </div>
-                    <div class="col-sm-6 mt-3">
-                      <label for="bill">توضیحات
-                        <span class="text-danger">*</span>
-                      </label>
-                      <textarea  name="desc" cols="30" rows="2">{{payment.billDesc|raw}}</textarea>
-                    </div>
-                    
-                    <div class="d-flex">
-                        <div>تاریخ واریز:</div>
-                        <div class="justDate">{{payment.billDate }}</div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div>تصویر :</div>
-                        <input type="file" name="image" />
-                        <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
-                    </div>
+              {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
+              <div class="d-flex mt-3">
+                  <div>نام:</div>
+                  <div>
+                      {{payment.user.name}}{{' '}}{{payment.user.family}}
+                      {{'/'}}
+                      {{payment.user.city.name}}
+                      {{'-'}}
+                      {{payment.user.state.name}}
+                  </div>
+              </div>
+              <div class="col-sm-6 mt-3">
+                <label for="bill">مبلغ-تومان
+                  <span class="text-danger">*</span>
+                </label>
+                <input class="form-control comma" type="text" name="bill" value="{{payment.bill}}" required>
+              </div>
+              <div class="col-sm-6 mt-3">
+                <label for="bill">توضیحات
+                  <span class="text-danger">*</span>
+                </label>
+                <textarea  name="desc" cols="30" rows="2">{{payment.billDesc|raw}}</textarea>
+              </div>
+              
+              <div class="d-flex">
+                  <div>تاریخ واریز:</div>
+                  <div class="justDate">{{payment.billDate }}</div>
+              </div>
+              <div class="col-sm-12">
+                  <div>تصویر :</div>
+                  <input type="file" name="image" />
+                  <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
+              </div>
                  
             </div>
               <div class="col-sm-6 mt-3">
@@ -284,6 +283,14 @@
   </div>
   
 
+
+  <!--
+  ##### Payment Detail Modal
+  -->
+  {% include 'Admin/Master/Repetitive/UserInventory/payment-details-modal' %}
+  <!--
+  ##### Payment Detail Modal
+  -->
 <!-- Extra payment list modal -->
 {% endblock %}
 

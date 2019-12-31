@@ -53,15 +53,15 @@
         {% for cost in costs %}
           <tr>
             {# <td>{{cost.trackingCode}}</td> #}
-            <td class="justDate">{{cost.create_date}}</td>
+            <td class="justDate">{{cost.billDate}}</td>
             {% if cost.confirmDate is null %}
               <td class="text-danger">{{'تایید نشده'}}</td>
             {% else %}
               <td class="justDate">{{cost.confirmDate}}</td>
             {% endif %}
             
-            <td>{{cost.price | number_format}}</td>
-            <td>{{cost.desc}}</td>
+            <td>{{cost.bill | number_format}}</td>
+            <td>{{cost.billDesc | raw }}</td>
             <td>
               {% if cost.confirmDate is null %}
                 <a title="حذف" class="text-danger m-1" 
@@ -116,7 +116,7 @@
           <span aria-hidden="true" class="white-text">&times;</span>
         </button>
         <span class="p-1  text-dark">
-          <div class="justDate">{{cost.create_date}}</div>
+          <div class="justDate">{{cost.billDate}}</div>
         </span>
       </div>
 
@@ -131,7 +131,7 @@
             <label for="price">مبلغ-تومان
               <span class="text-danger">*</span>
             </label>
-            <input class="form-control comma" type="text" name="price" value="{{cost.price | number_format}}" required>
+            <input class="form-control comma" type="text" name="price" value="{{cost.bill | number_format}}" required>
           </div>
           <div class="col-sm-6 mt-3">
             <label for="date">تاریخ
@@ -145,7 +145,7 @@
             <label for="desc">توضیحات
               <span class="text-danger">*</span>
             </label>
-            <textarea class="form-control" type="text"  name="desc" value="" required>{{cost.desc | raw }}</textarea>
+            <textarea class="form-control" type="text"  name="desc" value="" required>{{cost.billDesc | raw }}</textarea>
           </div>
           <div class="col-12 mt-3 text-center">
            <button class="btn btn-primary" type="submit" name="button">
@@ -187,7 +187,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="container">
-         <form action="{{route('userInventory.AgentCostsStore')}}" 
+         <form id="costForm" action="{{route('userInventory.AgentCostsStore')}}" 
          class="row label-light" method="POST" id="payOrderList" 
          enctype="multipart/form-data">
           <input name="_token" type="hidden" value="{{ csrf_token() }}" />
@@ -201,8 +201,8 @@
             <label for="date">تاریخ
               <span class="text-danger">*</span>
             </label>
-            <input class="form-control persianDatePicker" type="text" value="" required autocomplete="off">
-            <input type="hidden" name="date">
+            <input name="date" class="form-control persianDatePicker" type="text" value="" required autocomplete="off">
+           
           </div>
           <div class="col-sm-12 mt-3">
             <label for="desc">توضیحات
