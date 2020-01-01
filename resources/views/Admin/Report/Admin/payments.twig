@@ -19,7 +19,10 @@
 {% block content %}
 
 
-<div class="row pt-2 pb-2">
+<form action="{{route('report.payments_filter')}}" method="post" class="row pt-2 pb-2">
+
+  <input type="hidden" name="_token" value="{{csrf_token()}}" >
+
     <div class="col-sm-3 mx-auto">
         <label for="from">از تاریخ</label>
         <input class="form-control" type="date" name="from">
@@ -31,9 +34,14 @@
     <div class="col-sm-3 mx-auto">
         <label for="agents">نمایندگان</label>
         <select class="form-control" name="agents" id="">
-            <option value="">همه</option>
-            <option value="">محسن</option>
-            <option value="">مرتضی</option>
+          <option value="{{null}}">همه</option>
+          {% for agent in agents %}
+            <option value="{{agent.id}}">
+              {{agent.name}}{{' '}}{{agent.family}}
+              {{'/'}}
+              {{agent.state.name}}{{'-'}}{{agent.city.name}}
+            </option>
+          {% endfor %}
         </select>
     </div>
 
@@ -41,7 +49,7 @@
       <label for="report_status">نوع گزارش</label>
       <!-- Group of default radios - option 2 -->
       <div class="custom-control custom-radio">
-        <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample1" checked>
+        <input name="report_status" value="2" type="radio" class="custom-control-input" id="defaultGroupExample1" checked>
         <label class="custom-control-label" for="defaultGroupExample1">پرداخت های تایید شده</label>
       </div>
     </div>
@@ -54,7 +62,7 @@
             </strong>
         </button>
     </div>
-</div>
+</form>
 
 
 {% endblock %}
