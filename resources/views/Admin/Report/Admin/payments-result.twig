@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  پرداخت های تایید نشده نماینده
+  مشاهده بایگانی پرداخت
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'پرداخت های تایید نشده نماینده'} %}
+  {% include 'Admin/Master/path' with {'title':'مشاهده بایگانی پرداخت'} %}
 {% endblock %}
 
 {% block content %}
@@ -77,17 +77,19 @@
               data-toggle="modal" data-target="#detail{{payment.id}}">
               <i class="fas fa-info-circle crud-icon"></i>
               </a>
+              {% if payment.status_id != 2 %}
               <a title="پذیرفتن" class="text-secondary m-1" 
               href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
                 <i class="far fa-check-square text-success crud-icon"></i>
               </a>
+              {% endif %}
+              {% if payment.status_id != 3 %}
               <a  title="نپذیرفتن" class="text-success"
                   href="{{route('userInventory.RejectPayment',payment.id)}}">
                   <i class="far fa-window-close text-danger crud-icon"></i>
               </a>
-              {# <a title="نپذیرفتن" class="text-danger m-1" href="">
-                <i class="far fa-window-close crud-icon"></i>
-              </a> #}
+              {% endif %}
+            
             </td>
           </tr>
           {% endfor %}
@@ -163,13 +165,16 @@
                         <div>تصویر :</div>
                         <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
                     </div>
-                 <a  class="btn btn-success btn-sm text-dark"
-                    href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
-                    <strong class="h6">
-                        تایید 
-                    </strong>
-                    <i class="fas fa-check crud-icon"></i>
-                </a>
+                {% if payment.status_id != 2 %}
+                  <a  class="btn btn-success btn-sm text-dark"
+                      href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
+                      <strong class="h6">
+                          تایید 
+                      </strong>
+                      <i class="fas fa-check crud-icon"></i>
+                  </a>
+                {% endif %}
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>

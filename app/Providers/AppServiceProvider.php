@@ -84,13 +84,13 @@ class AppServiceProvider extends ServiceProvider
                 }elseif($roleName == "admin"){
                     $Agentpayments = 'App\PaymentCirculation'::where([
                         ['confirmDate','=',null],
-                        ['type','=','payment']
+                        ['status_id','=',1]
                     ])
                     ->latest()->count();
 
                     $Agentcosts   =   'App\PaymentCirculation'::where([
                         ['confirmDate','=',null],
-                        ['type','=','cost']
+                        ['status_id','=',4]
                     ])
                     ->latest()->count();
                   

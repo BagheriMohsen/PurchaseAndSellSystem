@@ -40,11 +40,10 @@
             {# <th>کد پیگیری</th> #}
         
             <th>تاریخ</th>
-            <th>تاریخ تایید</th>
+            <th>تاریخ تایید-رد</th>
             <th>مبلغ</th>
-            {# <th>نوع پرداخت</th> #}
-            {# <th>صورت حساب</th> #}
             <th>توضیحات</th>
+       
             <th>عملیات </th>
           </tr>
         </thead>
@@ -54,16 +53,20 @@
           <tr>
             {# <td>{{cost.trackingCode}}</td> #}
             <td class="justDate">{{cost.billDate}}</td>
-            {% if cost.confirmDate is null %}
-              <td class="text-danger">{{'تایید نشده'}}</td>
+            {% if cost.OnconfirmDate is not null %}
+              <td title="تایید نشده" class="justDate text-danger">{{cost.OnconfirmDate}}</td>
+            {% elseif cost.confirmDate is null %}
+              <td class="text-warning">{{'بررسی نشده'}}</td>
             {% else %}
-              <td class="justDate">{{cost.confirmDate}}</td>
+              <td title="تایید شده" class="justDate text-primary">{{cost.confirmDate}}</td>
             {% endif %}
             
             <td>{{cost.bill | number_format}}</td>
             <td>{{cost.billDesc | raw }}</td>
+        
+
             <td>
-              {% if cost.confirmDate is null %}
+              {% if cost.status_id == 4 %}
                 <a title="حذف" class="text-danger m-1" 
                   href="{{route('userInventory.AgentCostsDelete',cost.id)}}">
                   <i class="far fa-trash-alt crud-icon"></i>

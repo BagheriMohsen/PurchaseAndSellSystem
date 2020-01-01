@@ -15,6 +15,7 @@ class PaymentCirculation extends Model
         'bill',
         'billDate',
         'confirmDate',
+        'OnconfirmDate',
         'trackingCode',
         'paymentMethod',
         'billDesc',
