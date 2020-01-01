@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var baseUrl = 'http://localhost:8000/';
+    var baseUrl = 'http://127.0.0.1:8000/';
 
     // Global variables
 
@@ -1181,32 +1181,49 @@ $(document).ready(function(){
     $('#tankhahExit').on('change', calculateCargoValue);
     $('#returnToFund').on('change', calculateCargoValue);
 
-    $('#sendToAgentForm').submit(function(event){
-       event.preventDefault();
-       $(this).find('input[name="date"]').val(isoDate);
-       console.log($(this).find('input[name="date"]').val());
-    //    $(this)[0].submit();
-    });
-    $('#storeToStoreAgents').submit(function(event){
+
+    // $('#searchForm').submit(function(event){
+    //     event.preventDefault();
+    //     $('.persianDatePicker').each(function(index,item){
+    //         var jalali_date = $(this).val();
+    //         if(jalali_date){
+    //             m = moment(jalali_date, 'jYYYY/jM/jD');
+    //             $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+    //         }
+    //     });
+    //     $(this)[0].submit();
+    // });
+    $('#sendToAgentForm,#storeToStoreAgents,#tankhahExit,#returnToFund,#costForm,#searchForm,#payOrderList,#agent_report_form').submit(function(event){
         event.preventDefault();
-        $(this).find('input[name="date"]').val(isoDate);
-        $(this)[0].submit();
+        $('.persianDatePicker').each(function(index,item){
+            var jalali_date = $(this).val();
+            if(jalali_date){
+                m = moment(jalali_date, 'jYYYY/jM/jD');
+                $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+            }
+        });
+       $(this)[0].submit();
     });
-    $('#tankhahExit').submit(function(event){
-        event.preventDefault();
-        $(this).find('input[name="date"]').val(isoDate);
-        $(this)[0].submit();
-    });
-    $('#returnToFund').submit(function(event){
-        event.preventDefault();
-        $(this).find('input[name="date"]').val(isoDate);
-        $(this)[0].submit();
-    });
-    $('#costForm').submit(function(event){
-        event.preventDefault();
-        $(this).find('input[name="date"]').val(isoDate);
-        $(this)[0].submit();
-     });
+    // $('#storeToStoreAgents').submit(function(event){
+    //     event.preventDefault();
+    //     $(this).find('input[name="date"]').val(isoDate);
+    //     $(this)[0].submit();
+    // });
+    // $('#tankhahExit').submit(function(event){
+    //     event.preventDefault();
+    //     $(this).find('input[name="date"]').val(isoDate);
+    //     $(this)[0].submit();
+    // });
+    // $('#returnToFund').submit(function(event){
+    //     event.preventDefault();
+    //     $(this).find('input[name="date"]').val(isoDate);
+    //     $(this)[0].submit();
+    // });
+    // $('#costForm').submit(function(event){
+    //     event.preventDefault();
+    //     $(this).find('input[name="date"]').val(isoDate);
+    //     $(this)[0].submit();
+    //  });
     
     //Get State and cities array via ajax for user_create and user_edit 
     var statesCityArray;
@@ -1695,28 +1712,28 @@ $(document).ready(function(){
         console.log($(this).val());
         // $(this).siblings('.georgian_date').val()
     });
-    $('#searchForm').submit(function(event){
-        event.preventDefault();
-        $('.persianDatePicker').each(function(index,item){
-            var jalali_date = $(this).val();
-            if(jalali_date){
-                m = moment(jalali_date, 'jYYYY/jM/jD');
-                $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
-            }
-        });
-        // $(this)[0].submit();
-    });
-    $('#agent_report_form').submit(function(event){
-        event.preventDefault();
-        $('.persianDatePicker').each(function(index,item){
-            var jalali_date = $(this).val();
-            if(jalali_date){
-                m = moment(jalali_date, 'jYYYY/jM/jD');
-                $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
-            }
-        });
-        // $(this)[0].submit();
-    });
+    // $('#searchForm').submit(function(event){
+    //     event.preventDefault();
+    //     $('.persianDatePicker').each(function(index,item){
+    //         var jalali_date = $(this).val();
+    //         if(jalali_date){
+    //             m = moment(jalali_date, 'jYYYY/jM/jD');
+    //             $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+    //         }
+    //     });
+    //     $(this)[0].submit();
+    // });
+    // $('#agent_report_form').submit(function(event){
+    //     event.preventDefault();
+    //     $('.persianDatePicker').each(function(index,item){
+    //         var jalali_date = $(this).val();
+    //         if(jalali_date){
+    //             m = moment(jalali_date, 'jYYYY/jM/jD');
+    //             $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+    //         }
+    //     });
+    //     $(this)[0].submit();
+    // });
     //Adding comma to numbers in tables 
     $.fn.digits = function(){ 
         return this.each(function(){ 
@@ -1726,11 +1743,11 @@ $(document).ready(function(){
     $(".number").digits();
 
     // AgentPaymentList page turn jalali to georgian
-    $('#payOrderList').submit(function(event){
-        event.preventDefault();
-        $(this).find('input[name="date"]').val(isoDate);
-        $(this)[0].submit();
-     });
+    // $('#payOrderList').submit(function(event){
+    //     event.preventDefault();
+    //     $(this).find('input[name="date"]').val(isoDate);
+    //     $(this)[0].submit();
+    //  });
      //Order edit page, get order products
     function getOrderList(){
         

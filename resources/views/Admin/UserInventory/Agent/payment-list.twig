@@ -131,22 +131,25 @@
   -->
   {% for payment in payments %}
     <!-- Modal -->
-    <form class="paymentEditForm"  action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
-    method="POST" enctype="multipart/form-data"
-    class="modal fade right" id="paymentedit{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <input name="_token" value="{{csrf_token()}}">
-        <div class="modal-dialog modal-side modal-bottom-left" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                مشخصات
-                {# {{' '}}{{storeRoom.product.name}} #}
-                </h5>
-                
-            </div>
-            <div class="modal-body">
-              {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
+    <div class="modal fade" id="paymentedit{{payment.id}}">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header bg-info space-content-between flex-row-reverse p-2">
+            <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" class="white-text">&times;</span>
+            </button>
+            <span class="p-1">مشخصات</span>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form class="paymentEditForm" 
+              action="{{route('userInventory.AgentPaymentListUpdate',payment.id)}}" 
+              method="POST" enctype="multipart/form-data"
+              >
+              <input name="_token" value="{{csrf_token()}}">
+                {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
               <div class="d-flex mt-3">
                   <div>نام:</div>
                   <div>
@@ -169,7 +172,6 @@
                 </label>
                 <textarea  name="desc" cols="30" rows="2">{{payment.billDesc|raw}}</textarea>
               </div>
-              
               <div class="d-flex">
                   <div>تاریخ واریز:</div>
                   <div class="justDate">{{payment.billDate }}</div>
@@ -179,8 +181,6 @@
                   <input type="file" name="image" />
                   <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
               </div>
-                 
-            </div>
               <div class="col-sm-6 mt-3">
                 <button type="submit" class="btn-success btn-sm">
                   <strong class="h6 text-dark">
@@ -188,14 +188,15 @@
                   </strong>
                 </button>
               </div>
-
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                  
-              </div>
-            </div>
+          
+            </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
 {% endfor %}
   <!--
   ##### Payment Edit Modal
