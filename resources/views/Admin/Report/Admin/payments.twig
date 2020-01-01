@@ -24,12 +24,14 @@
   <input type="hidden" name="_token" value="{{csrf_token()}}" >
 
     <div class="col-sm-3 mx-auto">
-        <label for="from">از تاریخ</label>
-        <input class="form-control" type="date" name="from">
+      <label for="from">از تاریخ</label>
+      <input class="form-control persianDatePicker" type="text">
+      <input class="georgian_date" type="hidden" name="from">
     </div>
     <div class="col-sm-3 mx-auto">
-        <label for="to">تا تاریخ</label>
-        <input class="form-control" type="date" name="to">
+      <label for="to">تا تاریخ</label>
+      <input class="form-control persianDatePicker" type="text">
+      <input class="georgian_date" type="hidden" name="to">
     </div>
     <div class="col-sm-3 mx-auto">
         <label for="agents">نمایندگان</label>
