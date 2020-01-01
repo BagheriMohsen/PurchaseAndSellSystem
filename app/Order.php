@@ -41,6 +41,9 @@ class Order extends Model
     'collected_Date',
     'cancelled_Date',
     'returnToSeller_Date',
+    'edit_Date',
+    'send_seller_Date',
+    'send_callcenter_Date',
     'product_array'
    ];
     /*

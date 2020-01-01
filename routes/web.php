@@ -256,7 +256,10 @@ Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(
 |*/
 Route::group(['middleware'=>'auth','prefix'=>'report/','as'=>'report.'],function(){
 
-  Route::get('AgentsReport','ReportController@AgentsReport')->name('AgentsReport');
+  Route::get('Costs','ReportController@Costs')->name('Costs');
+  Route::get('Orders','ReportController@Orders')->name('Orders');
+  Route::get('Payments','ReportController@Payments')->name('Payments');
+
   
 });
 
