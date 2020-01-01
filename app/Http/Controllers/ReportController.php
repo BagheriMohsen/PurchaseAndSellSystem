@@ -6,7 +6,28 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function AgentsReport(){
-        return view('Admin.Report.Admin.agents');
+    /*
+    |--------------------------------------------------------------------------
+    | Costs report page
+    |--------------------------------------------------------------------------
+    |*/
+    public function Costs(){
+        return view('Admin.Report.Admin.costs');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Orders report page
+    |--------------------------------------------------------------------------
+    |*/
+    public function Orders(){
+        return view('Admin.Report.Admin.orders');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Payment report page
+    |--------------------------------------------------------------------------
+    |*/
+    public function Payments(){
+        return view('Admin.Report.Admin.payments');
     }
 }

@@ -1,0 +1,64 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  پرداخت ها و عودت وجه
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'پرداخت ها و عودت وجه'} %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row pt-2 pb-2">
+    <div class="col-sm-3 mx-auto">
+        <label for="from">از تاریخ</label>
+        <input class="form-control" type="date" name="from">
+    </div>
+    <div class="col-sm-3 mx-auto">
+        <label for="to">تا تاریخ</label>
+        <input class="form-control" type="date" name="to">
+    </div>
+    <div class="col-sm-3 mx-auto">
+        <label for="agents">نمایندگان</label>
+        <select class="form-control" name="agents" id="">
+            <option value="">همه</option>
+            <option value="">محسن</option>
+            <option value="">مرتضی</option>
+        </select>
+    </div>
+
+    <div class="col-sm-3">
+      <label for="report_status">نوع گزارش</label>
+      <!-- Group of default radios - option 2 -->
+      <div class="custom-control custom-radio">
+        <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample1" checked>
+        <label class="custom-control-label" for="defaultGroupExample1">پرداخت های تایید شده</label>
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-5">
+        
+        <button class="btn btn-success btn-sm text-dark">
+            <strong class="h6">
+                مشاهده
+            </strong>
+        </button>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

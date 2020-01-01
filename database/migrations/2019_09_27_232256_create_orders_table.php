@@ -50,6 +50,9 @@ class CreateOrdersTable extends Migration
             $table->Date('delivary_Date')->nullable();
             $table->Date('collected_Date')->nullable();
             $table->Date('cancelled_Date')->nullable();
+            $table->Date('edit_Date')->nullable();
+            $table->Date('send_seller_Date')->nullable();
+            $table->Date('send_callcenter_Date')->nullable();
             $table->Date('returnToSeller_Date')->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
