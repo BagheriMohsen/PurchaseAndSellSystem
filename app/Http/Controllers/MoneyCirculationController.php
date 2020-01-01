@@ -340,13 +340,15 @@ class MoneyCirculationController extends Controller
         }else{
             $image = null;
         }
+  
+        $date = Carbon::parse($request->date);
         
         'App\PaymentCirculation'::create([
                 'receiptImage'  =>  $image,
                 'user_id'       =>  $user->id,
                 'status_id'     =>  1,
                 'bill'          =>  (float) str_replace(',', '', $request->bill),
-                'billDate'      =>  $request->date,
+                'billDate'      =>  $date,
                 'trackingCode'  =>  (float) str_replace(',', '', $request->trackingCode),
                 'paymentMethod' =>  $request->paymentMethod,
                 'billDesc'      =>  $request->billDesc
