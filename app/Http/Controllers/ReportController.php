@@ -38,20 +38,24 @@ class ReportController extends Controller
     |*/
     public function costs_filter(Request $request){
 
-        $from   =   $request->from;
-        $to     =   $request->to;
-        $agent  =   $request->agents;
-        $costs = 'App\Order'::query()
+        $from       =   $request->from;
+        $to         =   $request->to;
+        $agent      =   $request->agents;
+        $status_id  =   5;
+        $costs = 'App\PaymentCirculation'::query()
         ->when($from,function($query,$from){
             return $query->where('updated_at','>=',$from);
         })
         ->when($to,function($query,$to){
             return $query->where('updated_at', '<=',$to);
         })
+        ->when($status_id,function($query,$status_id){
+            return $query->where('status_id', '=',$status_id);
+        })
         ->when($agent,function($query,$agent){
-            return $query->where('agent_id', '<=',$agent);
+            return $query->where('user_id', '=',$agent);
         })->latest()->paginate(15);
-
-        return view('Admin.Report.Admin.costs-result');
+        
+        return view('Admin.Report.Admin.costs-result',compact('costs'));
     }
 }
