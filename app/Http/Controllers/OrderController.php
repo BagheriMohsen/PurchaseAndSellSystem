@@ -492,8 +492,40 @@ class OrderController extends Controller
 
                 /** foreach for check product exist in storage or not */
                 
-                $status = $this->checkStoreRoomForInventory($order,$user);
-                return response()->json($status);
+                foreach($order->products as $order_product){
+                    
+                  
+                    $count = $order_product->count;
+                    $user_id = $user->id;
+                    $product_id = $order_product->product_id;
+                    
+                    $storage_status = 'App\Storage'::where([
+                        ['agent_id','=',$user->id],
+                        ['product_id','=',$order_product->product_id]
+                    ])->exists();
+                    // if product not exist
+                    if($storage_status != True){
+                        $result = ['message' => ' کالای  '.
+                        $order_product->product->name.
+                        ' در انبار وجود ندارد ','status' => 0];
+                        return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                    // else product less than order->count 
+                    }else{
+                        $storage = 'App\Storage'::where([
+                            ['agent_id','=',$user_id],
+                            ['product_id','=',$product_id]
+                        ])->firstOrFail(); 
+        
+                        if($storage->number < $count){
+                            $result = ['message' => ' کالای  '.
+                            $order_product->product->name.
+                            ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                            return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                        }
+                    }
+                   
+                }
+              
                 /** foreach for store Room collected */
 
                 echo $this->orderStoreRoomCollected($order,$user,$item);
@@ -509,10 +541,9 @@ class OrderController extends Controller
                 }else{
 
                     return $this->AgentPriceForEachFactor($agent,$order);
-
                 }
                
-                // return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+                return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
             
             }
 
@@ -683,7 +714,7 @@ class OrderController extends Controller
                     $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                     'App\MoneyCirculation'::create([
                         'user_inventory_id'     =>  $AgentInventory->id,
-                        'agent_id'              =>  $Agent->id,
+                        'agent_id'              =>  $agent->id,
                         'seller_id'             =>  null,
                         'order_status_id'       =>  $order->status,
                         'order_id'              =>  $order->id,
@@ -814,7 +845,7 @@ class OrderController extends Controller
     public function AgentPriceForEachFactor($agent,$order){
 
         $AgentStatus = 'App\UserInventory'::where('agent_id',$agent->id)->exists();
-
+        $trackingCode = uniqid();
         if($AgentStatus){
             $AgentInventory  =   'App\UserInventory'::where('agent_id',$agent->id)
             ->firstOrFail();
@@ -822,30 +853,30 @@ class OrderController extends Controller
                 $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                 'App\MoneyCirculation'::create([
                     'user_inventory_id'     =>  $AgentInventory->id,
-                    'agent_id'              =>  $Agent->id,
-                    'order_product_id'      =>  $order_product->id,
+                    'agent_id'              =>  $agent->id,
+                 
                     'seller_id'             =>  null,
                     'order_status_id'       =>  $order->status,
                     'order_id'              =>  $order->id,
-                    'amount'                =>  $order_product->product->price * $order_product->count,
+                    'amount'                =>  $order->cashPrice,
                     'sharedSpecialAmount'   =>  0,
                     'trackingCode'          =>  $trackingCode,
                 ]);
 
         }else{
             $userInventory = 'App\UserInventory'::create([
-                'agent_id'  =>      $Agent->id,
+                'agent_id'  =>      $agent->id,
                 'balance'   =>      $agent->factorPrice,
                 'debtor'    =>  1
             ]);
             'App\MoneyCirculation'::create([
                 'user_inventory_id'     =>  $userInventory->id,
-                'agent_id'              =>  $Agent->id,
-                'order_product_id'      =>  $order_product->id,
+                'agent_id'              =>  $agent->id,
+       
                 'seller_id'             =>  null,
                 'order_status_id'       =>  $order->status,
                 'order_id'              =>  $order->id,
-                'amount'                =>  $order_product->product->price * $order_product->count,
+                'amount'                =>  $order->cashPrice,
                 'sharedSpecialAmount'   =>  0,
                 'trackingCode'          =>  $trackingCode,
             ]);

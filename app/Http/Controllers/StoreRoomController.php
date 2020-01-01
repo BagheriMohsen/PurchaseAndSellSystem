@@ -495,7 +495,7 @@ class StoreRoomController extends Controller
             return redirect()->back()->with('info',$message);
         }
         
-
+       
         $status = 'App\Storage'::where([
             ['agent_id','=',$request->receiver],
             ['product_id','=',$request->product_id]
@@ -505,13 +505,14 @@ class StoreRoomController extends Controller
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
         ])->first();
-
+       
         if($storage->number < $request->number){
             $message = ' این میزان موجودی در انبار وجود ندارد.موجودی این کالا  '.$storage->number.' عدد در انبار است';
             return redirect()->back()->with('info',$message);
         }
         $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
         /* IF this product is exist in agent storage */
+        $date = Carbon::parse($request->date)->toDateString();
         if($status == True){
             /* update storage for this houseware  */
             $number = $storage->number - $request->number;
@@ -524,6 +525,7 @@ class StoreRoomController extends Controller
             $number = $storage->number + $request->number;
             $storage->update(['number'=>$number]);
             /* create storeRoom for fundWarehouse out */
+           
             $storeRoom = StoreRoom::create([
                 'user_id'           =>  auth()->user()->id,
                 'warehouse_id'      =>  2,
@@ -537,7 +539,7 @@ class StoreRoomController extends Controller
                 'status'            =>  $request->status,
                 'image'             =>  $image,
                 'in_out'            =>  7,
-                'out_date'          =>  $request->date,
+                'out_date'          =>  $date,
                 'pejak'             =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
@@ -553,7 +555,7 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date,
+                'in_date'       =>  $date,
                 'pejak'         =>  $request->pejak
             ]);
             $message = 'کالای '.$storeRoom->product->name.' به انبار نماینده افزوده شد ';
@@ -575,7 +577,7 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  7,
-                'out_date'      =>  $request->date,
+                'out_date'      =>  $date,
                 'pejak'         =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
@@ -591,7 +593,7 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date,
+                'in_date'       =>  $date,
                 'pejak'         =>  $request->pejak
             ]);
             /* update storage for this houseware  */
@@ -641,7 +643,7 @@ class StoreRoomController extends Controller
        
         $agent = 'App\User'::findOrFail($request->sender);
        
-        
+        $date = Carbon::parse($request->date)->toDateString();
         if($status == True){
             /* IF storage number less than request number */
             if($sender_storage->number < $request->number){
@@ -671,7 +673,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  8,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for receiver agent
             StoreRoom::create([
@@ -685,7 +687,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  10,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for sender_id agent
             StoreRoom::create([
@@ -699,7 +701,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  12,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             
             
@@ -736,6 +738,7 @@ class StoreRoomController extends Controller
             ['product_id','=',$request->product],
             ['warehouse_id','=',1]
         ])->first();
+        $date = Carbon::parse($request->date)->toDateString();
         if($fundWarestorage->number > $request->number){
             
             // create store room for fundWareHouse
@@ -750,7 +753,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  9,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for mainWareHouse
             StoreRoom::create([
@@ -764,7 +767,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  15,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // FundWareHouse Storage 
             $numberInFundHouse = $fundWarestorage->number - $request->number;
@@ -845,7 +848,7 @@ class StoreRoomController extends Controller
             ['product_id','=',$request->product],
             ['agent_id','=',$id]
         ])->first();
-       
+        $date = Carbon::parse($request->date)->toDateString();
         if($AgentStorage->number > $request->number){
             
             // create store room for AgentStorage
@@ -860,7 +863,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  12,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             $FundWareStorage = 'App\Storage'::where([
                 ['product_id','=',$request->product],
@@ -878,7 +881,7 @@ class StoreRoomController extends Controller
                 'description'           =>  $request->description,
                 'status'                =>  $request->status,
                 'in_out'                =>  16,
-                'out_date'              =>  $request->date
+                'out_date'              =>  $date
             ]);
             // AgentWareHouse Storage 
             $numberInAgent = $AgentStorage->number - $request->number;

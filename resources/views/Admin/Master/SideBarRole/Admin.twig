@@ -7,6 +7,37 @@
         </p>
     </a>
 </li>
+{#  Report #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="far fa-folder-open"></i>
+    <p>
+        بایگانی
+    <i class="fa fa-angle-left right"></i> 
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('report.Orders')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>سفارشات</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('report.Payments')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>پرداخت ها و عودت وجه</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('report.Costs')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>هزینه ها</p>
+            </a>
+        </li>
+    </ul>
+</li>
+{#  Report #}
 {# products #}
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
@@ -109,40 +140,7 @@
     </ul>
 </li>
 {#  user-inventory #}
-{#  user-inventory #}
-<li class="nav-item has-treeview">
-    <a href="#" class="nav-link">
-        <i class="far fa-folder-open"></i>
-    <p>
-        بایگانی
-    <i class="fa fa-angle-left right"></i> 
-    </p>
-    </a>
-    <ul class="nav nav-treeview">
-        <li class="nav-item">
-            <a href="{{route('report.Orders')}}" class="nav-link">
-            <i class="fas fa-chevron-circle-left"></i>
-            <p>سفارشات</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{route('report.Payments')}}" class="nav-link">
-            <i class="fas fa-chevron-circle-left"></i>
-            <p>پرداخت ها و عودت وجه</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{route('report.Costs')}}" class="nav-link">
-            <i class="fas fa-chevron-circle-left"></i>
-            <p>هزینه ها</p>
-            </a>
-        </li>
-      
-        
-       
-    </ul>
-</li>
-{#  user-inventory #}
+
 {# Citites #}
 <li class="nav-item">
     <a href="{{route('states.index')}}" class="nav-link">

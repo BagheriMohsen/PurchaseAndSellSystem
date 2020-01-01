@@ -368,7 +368,7 @@
     <div class="col-sm-5  mt-5">
       <label for="state">استان
       </label>
-      <select id="state" class="form-control"  name="state">
+      <select id="state" class="form-control"  name="state" required>
         <option value="{{null}}">استان را انتخاب کنید</option>
         {% for state in states %}
           <option {% if old('state') == state.id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
@@ -379,7 +379,7 @@
     <div class="col-sm-5  mt-5">
       <label for="city">شهر
       </label>
-      <select id="city" class="form-control" name="city">
+      <select id="city" class="form-control" name="city" required>
         <option value="{{null}}">شهر را انتخاب کنید</option>
           {% for city in cities %}
             <option {% if old('city') == city.id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>
