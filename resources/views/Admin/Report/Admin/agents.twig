@@ -19,14 +19,16 @@
 {% block content %}
 
 
-<div class="row pt-2 pb-2">
+<form id="agent_report_form" class="row pt-2 pb-2">
     <div class="col-sm-3 mx-auto">
         <label for="from">از تاریخ</label>
-        <input class="form-control" type="date" name="from">
+        <input class="form-control persianDatePicker" type="text">
+        <input class="georgian_date" type="hidden" name="from">
     </div>
     <div class="col-sm-3 mx-auto">
         <label for="to">تا تاریخ</label>
-        <input class="form-control" type="date" name="to">
+        <input class="form-control persianDatePicker" type="text">
+        <input class="georgian_date" type="hidden" name="to">
     </div>
     <div class="col-sm-3 mx-auto">
         <label for="to">نمایندگان</label>
@@ -45,7 +47,7 @@
             </strong>
         </button>
     </div>
-</div>
+</form>
 
 
 {% endblock %}

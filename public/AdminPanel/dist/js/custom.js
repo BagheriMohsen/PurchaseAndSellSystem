@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    var baseUrl = 'http://localhost:8000/';
 
     // Global variables
 
@@ -97,7 +98,6 @@ $(document).ready(function(){
         }
     };
     function checkCalType(){
-        console.log($('#calType').prop('checked'));
         if($('#calType').prop('checked') == true){
             $('#factorCal').prop('disabled',false);
         }else{
@@ -134,7 +134,7 @@ $(document).ready(function(){
                     <a  class="editTypeButton text-warning btn-sm d-none" href="#">
                         <i class="far fa-edit crud-icon"></i>
                     </a>
-                    <form class="pt-1" action="http://localhost:8000/types/${value.id}"  method="POST">
+                    <form class="pt-1" action="${baseUrl}/types/${value.id}"  method="POST">
                         <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                         <input type="hidden" name="_method" value="UPDATE" />
                         <input type="hidden" name="product" value="${value.product_id}">
@@ -145,7 +145,7 @@ $(document).ready(function(){
                     <a  class="cancelEdit text-danger btn-sm d-none" href="#">
                         <i class="far fa-window-close crud-icon"></i>
                     </a>
-                        <form class="pt-1" action="http://localhost:8000/types/${value.id}"  method="POST">
+                        <form class="pt-1" action="${baseUrl}/types/${value.id}"  method="POST">
                             <input type="hidden" name="_token"  value="${CSRF_TOKEN}" />
                             <input type="hidden" name="_method" value="DELETE" />
                             <input type="hidden" name="product" value="${value.product_id}">
@@ -395,7 +395,7 @@ $(document).ready(function(){
     var getProductTypes = function(product_id,CSRF_TOKEN){
 
         $.ajax({
-            url:'http://localhost:8000/types/'+ product_id,
+            url:baseUrl+'/types/'+ product_id,
             type:'Get',
             success:function(response){
                 updateProductTypes(response,product_id,CSRF_TOKEN);
@@ -535,7 +535,7 @@ $(document).ready(function(){
         <th>${numberWithCommas(newSpecial.price)}</th>
         <th>${newSpecial.place}</th>
         <td>
-          <form  action="http://localhost:8000/special-tariffs/${newSpecial.id}" method="post" >
+          <form  action="${baseUrl}/special-tariffs/${newSpecial.id}" method="post" >
               <input type="hidden" name="_token" value="${CSRF_TOKEN}" />
               <input type="hidden" name="_method" value="DELETE" />
               <input type="hidden" name="user_id" value="${user_id}">
@@ -580,7 +580,7 @@ $(document).ready(function(){
     //Getting special tariff table data
     var getSpecialTariff = function(user_id,CSRF_TOKEN,product_name){
         $.ajax({
-            url:'http://localhost:8000/special-tariffs-index/'+ user_id,
+            url:baseUrl+'/special-tariffs-index/'+ user_id,
             type:'Get',
             success:function(response){
                 updateSpecialTariff(response,user_id,CSRF_TOKEN,product_name);
@@ -747,7 +747,7 @@ $(document).ready(function(){
         var element_id = 'agent_sell_chart'; 
         var userId = $('#userId').val();
         $.ajax({
-            url:'http://localhost:8000/users/Agent-Dashboard-Chart-API/' + userId,
+            url:baseUrl+'/users/Agent-Dashboard-Chart-API/' + userId,
             type:'Get',
             success:function(response){ 
                 configureChart(response[0],element_id);
@@ -758,7 +758,7 @@ $(document).ready(function(){
     if(document.querySelector('#admin_sell_chart')){
         var element_id = 'admin_sell_chart';
         $.ajax({
-            url:'http://localhost:8000/users/Admin-Dashboard-Chart-API',
+            url:baseUrl+'/users/Admin-Dashboard-Chart-API',
             type:'Get',
             success:function(response){ 
                 configureChart(response[0],element_id);
@@ -818,7 +818,7 @@ $(document).ready(function(){
     if(document.querySelector('#orderForm')){
         // Getting product list for seller order table 
         $.ajax({
-            url:'http://localhost:8000/admin/orders/ProductList',
+            url:baseUrl+'/admin/orders/ProductList',
             type:'GET',
             success:function(response){
                 productList = response;
@@ -971,7 +971,7 @@ $(document).ready(function(){
         if(city.value){
             var cityName = city.selectedOptions[0].innerText;
             $.ajax({
-                url:'http://localhost:8000/admin/orders/AgentExistInState/' + cityName,
+                url:baseUrl+'/admin/orders/AgentExistInState/' + cityName,
                 type:'Get',
                 success:function(response){
                     $('#agentStatue').val(response.state);
@@ -1162,7 +1162,7 @@ $(document).ready(function(){
         var product_id = $(this).find('select[name="product"]').val();
         if(product_id){
             $.ajax({
-                url:'http://localhost:8000/admin/orders/ProductList',
+                url:baseUrl+'/admin/orders/ProductList',
                 type:'GET',
                 success:function(response){
                     var price = parseInt(getProductPrice(response,product_id));
@@ -1184,7 +1184,8 @@ $(document).ready(function(){
     $('#sendToAgentForm').submit(function(event){
        event.preventDefault();
        $(this).find('input[name="date"]').val(isoDate);
-       $(this)[0].submit();
+       console.log($(this).find('input[name="date"]').val());
+    //    $(this)[0].submit();
     });
     $('#storeToStoreAgents').submit(function(event){
         event.preventDefault();
@@ -1211,7 +1212,7 @@ $(document).ready(function(){
     var statesCityArray;
     if($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length || $('#warehouseForm')){
         $.ajax({
-            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            url:baseUrl+'/states/AllStatesAndCitiesName',
             type:'Get',
             success:function(response){
                 statesCityArray = response;
@@ -1238,7 +1239,7 @@ $(document).ready(function(){
     }
     if($('#orderForm').length){
         $.ajax({
-            url:'http://localhost:8000/states/AllStatesAndCitiesName',
+            url:baseUrl+'/states/AllStatesAndCitiesName',
             type:'Get',
             success:function(response){
                 console.log(response);
@@ -1674,7 +1675,7 @@ $(document).ready(function(){
         }
         var user_id = $('#user_id').val();
         $.ajax({
-            url:'http://localhost:8000/users/callCenterAddNewOrderChange/'+ user_id,
+            url:baseUrl+'/users/callCenterAddNewOrderChange/'+ user_id,
             type:'get',
             data: {
                 allowNewOrder: allowNewOrder
@@ -1685,10 +1686,10 @@ $(document).ready(function(){
         });
     });
     // Before submitting search form
-    $('#searchForm').submit(function(event){
-        event.preventDefault();
+    // $('#searchForm').submit(function(event){
+    //     event.preventDefault();
 
-    });
+    // });
  
     $('.persianDatePicker').on('change paste keyup select',function(){
         console.log($(this).val());
@@ -1703,7 +1704,18 @@ $(document).ready(function(){
                 $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
             }
         });
-        $(this)[0].submit();
+        // $(this)[0].submit();
+    });
+    $('#agent_report_form').submit(function(event){
+        event.preventDefault();
+        $('.persianDatePicker').each(function(index,item){
+            var jalali_date = $(this).val();
+            if(jalali_date){
+                m = moment(jalali_date, 'jYYYY/jM/jD');
+                $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+            }
+        });
+        // $(this)[0].submit();
     });
     //Adding comma to numbers in tables 
     $.fn.digits = function(){ 
@@ -1724,7 +1736,7 @@ $(document).ready(function(){
         
         var order_id = $('input[name="order_id"]').val();
         $.ajax({
-            url:'http://localhost:8000/admin/orders/OrdersProductForEditPage/'+ order_id,
+            url:baseUrl+'/admin/orders/OrdersProductForEditPage/'+ order_id,
             type:'get',
             success:function(response){
                 console.log('edit',response);
@@ -1781,5 +1793,42 @@ $(document).ready(function(){
         });
         setOverAllPrice();
     }
+    //Setup current bill table for agents in current-bills page
+    if($('#current_bill_form').length){
+        var user_id = $('input[name="user_id"]').val();
+        var debts = [];
+        var credits = [];
+        //Get debts array
+        $.ajax({
+            url: baseUrl + '/user-inventory/currentBillsDebtor/' + user_id,
+            type:'get',
+            success:function(response){
+               console.log(response);
+               debts = response;
+            }
+        });
+        //Get credits array
+        $.ajax({
+            url: baseUrl + '/user-inventory/currentBillsCreditor/' + user_id,
+            type:'get',
+            success:function(response){
+               console.log(response);
+               credits = response;
+            }
+        });
+    }
+
+    //In Report agent page change persian to georgian date before submit
+    // $('#agent_report_form').submit(function(event){
+    //     event.preventDefault();
+    //     $('.persianDatePicker').each(function(index,item){
+    //         var jalali_date = $(this).val();
+    //         if(jalali_date){
+    //             m = moment(jalali_date, 'jYYYY/jM/jD');
+    //             $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
+    //         }
+    //     });
+    //     $(this)[0].submit();
+    // });
 });
 
