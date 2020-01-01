@@ -64,10 +64,12 @@
               {{payment.user.state.name}}
             </td> #}
             <td class="justDate">{{ payment.billDate}}</td>
-            {% if payment.confirmDate is not null %}
-              <td class="justDate">{{ payment.confirmDate | date('Y-m-d')}}</td>
+            {% if payment.OnconfirmDate is not null %}
+              <td title="تایید نشده" class="justDate text-danger">{{ payment.OnconfirmDate | date('Y-m-d')}}</td>
+            {% elseif payment.confirmDate is not null %}
+              <td title="تایید شده" class="justDate text-primary">{{ payment.confirmDate | date('Y-m-d')}}</td>
             {% else %}
-              <td class="text-danger">تایید نشده</td>
+              <td class="text-warning">بررسی نشده</td>
             {% endif %}
               <td>{{ payment.bill | number_format}}</td>
             {% if payment.paymentMethod == "card" %}
@@ -77,7 +79,7 @@
             {% endif %}
             <td>{{payment.billDesc}}</td>
             <td>
-              {% if payment.confirmDate is null %}
+              {% if payment.status_id == 1 %}
               <a title="حذف" class="text-danger m-1" 
                 href="{{route('userInventory.AgentPaymentDelete',payment.id)}}">
                 <i class="far fa-trash-alt crud-icon"></i>

@@ -88,13 +88,12 @@ class CreateTableMoneyCirculations extends Migration
             $table->string('receiptImage')->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('status_id')->unsigned()->nullable();
-            $table->string('type')->default('payment');
             $table->integer('bill');
             $table->Date('billDate');
             $table->Date('confirmDate')->nullable();
             $table->Date('OnconfirmDate')->nullable();
             $table->string('trackingCode',256);
-            $table->string('paymentMethod');
+            $table->string('paymentMethod')->nullable();
             $table->text('billDesc')->nullable();
             $table->timestamps();
 

@@ -234,8 +234,10 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
     /* Admin */
     Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
     Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');
+    Route::get('RejectPayment/{id}','MoneyCirculationController@RejectPayment')->name('RejectPayment');
     Route::get('AgentUnverifiedCosts','MoneyCirculationController@AgentUnverifiedCosts')->name('AgentUnverifiedCosts');
     Route::get('AgentCostConfirm/{id}','MoneyCirculationController@AgentCostConfirm')->name('AgentCostConfirm');
+    Route::get('RejectCost/{id}','MoneyCirculationController@RejectCost')->name('RejectCost');
 
   });
 
@@ -257,6 +259,7 @@ Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(
 Route::group(['middleware'=>'auth','prefix'=>'report/','as'=>'report.'],function(){
 
   Route::get('Costs','ReportController@Costs')->name('Costs');
+  Route::post('Costs-Filter','ReportController@costs_filter')->name('costs_filter');
   Route::get('Orders','ReportController@Orders')->name('Orders');
   Route::get('Payments','ReportController@Payments')->name('Payments');
 

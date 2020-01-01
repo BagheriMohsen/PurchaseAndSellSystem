@@ -1,7 +1,7 @@
 {% extends 'Admin/Master/layout' %}
 
 {% block title %}
-  لیست هزینه ها
+  مشاهده بایگانی هزینه ها
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'لیست هزینه ها'} %}
+  {% include 'Admin/Master/path' with {'title':'مشاهده بایگانی هزینه ها'} %}
 {% endblock %}
 
 {% block content %}
@@ -34,8 +34,6 @@
             <th>استان-شهر</th>
             <th>تاریخ</th>
             <th>مبلغ</th>
-            {# <th>نوع پرداخت</th> #}
-            {# <th>صورت حساب</th> #}
             <th>توضیحات</th>
             <th>عملیات </th>
           </tr>
@@ -50,14 +48,10 @@
             <td>{{cost.bill | number_format}}</td>
             <td>{{cost.billDesc}}</td>
             <td>
-                <a  title="پذیرفتن" class="text-success"
-                    href="{{route('userInventory.AgentCostConfirm',cost.id)}}">
-                    <i class="far fa-check-square text-success crud-icon"></i>
-                </a>
-                <a  title="نپذیرفتن" class="text-success"
-                    href="{{route('userInventory.RejectCost',cost.id)}}">
-                    <i class="far fa-window-close text-danger crud-icon"></i>
-                </a>
+              <a  title="نپذیرفتن" class="text-success"
+                href="{{route('userInventory.RejectCost',cost.id)}}">
+                <i class="far fa-window-close text-danger crud-icon"></i>
+              </a>
             </td>
           </tr>
           {% endfor %}

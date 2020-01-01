@@ -77,7 +77,7 @@ class MoneyCirculationController extends Controller
             ['user_id','=',$user_id],
             ['confirmDate','!=',null]
         ])
-        ->latest()->get(['id','type','billDate','bill']);
+        ->latest()->get(['id','status_id','billDate','bill']);
 
         return Response()->json([$totalCreditor],200,[],JSON_UNESCAPED_UNICODE);
     }
@@ -114,11 +114,15 @@ class MoneyCirculationController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $payments = 'App\PaymentCirculation'::where([
             ['user_id','=',$user->id],
-            ['status_id','=',2]
+            ['status_id','=',1]
         ])
         ->orWhere([
             ['user_id','=',$user->id],
-            ['status_id','=',1],
+            ['status_id','=',2],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',3],
         ])
         ->latest()->paginate(15);
         
@@ -174,7 +178,15 @@ class MoneyCirculationController extends Controller
         $user       =   'App\User'::findOrFail(auth()->user()->id);
         $costs   =   'App\PaymentCirculation'::where([
             ['user_id','=',$user->id],
-            ['type','=','cost']
+            ['status_id','=',4],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',5],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',6],
         ])
         ->latest()->paginate(15);
         
@@ -189,10 +201,10 @@ class MoneyCirculationController extends Controller
     public function AgentCostsStore(Request $request){
       
         $user = 'App\User'::findOrFail(auth()->user()->id);
-
+        $date = Carbon::parse($request->date)->toDateString();
         'App\PaymentCirculation'::create([
-            'billDate'      =>  $request->date,
-            'type'          =>  'cost',
+            'billDate'      =>  $date,
+            'status_id'     =>  4,
             'trackingCode'  =>  uniqid(),
             'user_id'       =>  $user->id,
             'bill'          =>  (float) str_replace(',', '', $request->price),
@@ -234,7 +246,9 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostConfirm($id){
 
-        DB::table('agent_costs')->where('id',$id)->update([
+        $cost = 'App\PaymentCirculation'::findOrFail($id);
+        $cost->update([
+            'status_id'      =>  5,
             'confirmDate'    =>  Carbon::now()
         ]);
 
@@ -250,7 +264,7 @@ class MoneyCirculationController extends Controller
         
         $costs   =   'App\PaymentCirculation'::where([
             ['confirmDate','=',null],
-            ['type','=','cost']
+            ['status_id','=',4]
         ])
         ->latest()->paginate(15);
 
@@ -280,7 +294,10 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentUnverifiedPayment(){
-        $payments = 'App\PaymentCirculation'::where('status_id',1)
+        $payments = 'App\PaymentCirculation'::where([
+            ['status_id','=',1],
+            ['OnconfirmDate','=',null]
+        ])
         ->latest()->paginate(15);
         return view('Admin.UserInventory.Admin.unverified-payment',compact('payments'));
     }
@@ -370,7 +387,11 @@ class MoneyCirculationController extends Controller
 
         return back()->with('message','فیش واریزی تایید و در حساب جاری نماینده اعمال شد');
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Money Circulation
+    |--------------------------------------------------------------------------
+    |*/
     public function AgentsMoneyCirculation(){
 
         $user = 'App\User'::findOrFail(auth()->user()->id);
@@ -379,7 +400,11 @@ class MoneyCirculationController extends Controller
         
         return view('Admin.UserInventory.AgentChief.agents-money-circulation',compact('agents'));
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Payment List
+    |--------------------------------------------------------------------------
+    |*/
     public function AgentsPaymentList($agent_id){
 
         $user = 'App\User'::findOrFail(auth()->user()->id);
@@ -401,6 +426,39 @@ class MoneyCirculationController extends Controller
         ->latest()->paginate(15);
         
         return view('Admin.UserInventory.AgentChief.agents-payment-list',compact('payments'));
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Reject Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function RejectPayment($id){
+        $payment = 'App\PaymentCirculation'::findOrFaIL($id);
+
+        $payment->update([
+            'status_id'     =>  3,
+            'OnconfirmDate' =>  Carbon::now()
+        ]);
+
+        return back()->with('message','پرداخت مورد نظر پذیرفته نشد');
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Reject Cost
+    |--------------------------------------------------------------------------
+    |*/
+    public function RejectCost($id){
+
+        $payment = 'App\PaymentCirculation'::findOrFaIL($id);
+
+        $payment->update([
+            'status_id'     =>  6,
+            'OnconfirmDate' =>  Carbon::now()
+        ]);
+
+        return back()->with('message','هزینه مورد نظر پذیرفته نشد');
 
     }
 

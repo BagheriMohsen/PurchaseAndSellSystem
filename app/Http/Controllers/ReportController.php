@@ -12,7 +12,8 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Costs(){
-        return view('Admin.Report.Admin.costs');
+        $agents = 'App\User'::Role('agent')->latest()->get();
+        return view('Admin.Report.Admin.costs',compact('agents'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -29,5 +30,28 @@ class ReportController extends Controller
     |*/
     public function Payments(){
         return view('Admin.Report.Admin.payments');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Cost Model Data Filter
+    |--------------------------------------------------------------------------
+    |*/
+    public function costs_filter(Request $request){
+
+        $from   =   $request->from;
+        $to     =   $request->to;
+        $agent  =   $request->agents;
+        $costs = 'App\Order'::query()
+        ->when($from,function($query,$from){
+            return $query->where('updated_at','>=',$from);
+        })
+        ->when($to,function($query,$to){
+            return $query->where('updated_at', '<=',$to);
+        })
+        ->when($agent,function($query,$agent){
+            return $query->where('agent_id', '<=',$agent);
+        })->latest()->paginate(15);
+
+        return view('Admin.Report.Admin.costs-result');
     }
 }

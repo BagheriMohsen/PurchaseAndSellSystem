@@ -19,7 +19,10 @@
 {% block content %}
 
 
-<div class="row pt-2 pb-2">
+<form action="{{route('report.costs_filter')}}" method="post" class="row pt-2 pb-2">
+    
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+
     <div class="col-sm-3 mx-auto">
         <label for="from">از تاریخ</label>
         <input class="form-control" type="date" name="from">
@@ -31,9 +34,15 @@
     <div class="col-sm-3 mx-auto">
         <label for="to">نمایندگان</label>
         <select class="form-control" name="agents" id="">
-            <option value="">همه</option>
-            <option value="">محسن</option>
-            <option value="">مرتضی</option>
+          <option value="{{null}}">همه</option>
+          {% for agent in agents %}
+            <option value="{{agent.id}}">
+              {{agent.name}}{{' '}}{{agent.family}}
+              {{'/'}}
+              {{agent.state.name}}{{'-'}}{{agent.city.name}}
+            
+            </option>
+          {% endfor %}
         </select>
     </div>
 
@@ -45,7 +54,7 @@
             </strong>
         </button>
     </div>
-</div>
+</form>
 
 
 {% endblock %}

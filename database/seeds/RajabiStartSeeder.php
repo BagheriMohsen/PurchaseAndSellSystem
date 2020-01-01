@@ -155,8 +155,12 @@ class RajabiStartSeeder extends Seeder
       | Create Payment Status
       |--------------------------------------------------------------------------
       |*/
-      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید نشده",]);
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-بررسی نشده",]);
       'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید شده",]);
+      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید نشده",]);
+      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-بررسی نشده",]);
+      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-تایید شده",]);
+      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-تایید نشده",]);
       /*
       |--------------------------------------------------------------------------
       | Create Transport
