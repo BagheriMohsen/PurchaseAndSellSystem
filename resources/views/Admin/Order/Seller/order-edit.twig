@@ -55,7 +55,7 @@
           <label for="city">استان
             <span class="text-danger">*</span>
           </label>
-          <select id="state" class="form-control bg-sec"  name="state" required>
+          <select id="state" class="form-control bg-sec"  name="state" required disabled>
             <option value="{{null}}">استان را انتخاب کنید</option>
             {% for state in states %}
             <option {% if order.state_id == state.id %} selected {% endif %}
@@ -69,7 +69,7 @@
           <label for="state">شهر
             <span class="text-danger">*</span>
           </label>
-          <select id="city" class="form-control bg-sec" name="city" >
+          <select id="city" class="form-control bg-sec" name="city" disabled>
             <option value="{{null}}">شهر را انتخاب کنید</option>
             {% for city in cities %}
             <option {% if order.city_id == city.id %} selected {% endif %}

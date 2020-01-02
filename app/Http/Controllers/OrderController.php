@@ -76,29 +76,28 @@ class OrderController extends Controller
                 }
             }
 
-            $status = 'App\Customer'::query()
-            ->where('fullName', 'LIKE', "%{$request->fullName}%") 
-            ->exists();
+        $status = 'App\Customer'::where('mobile',$request->mobile) 
+        ->exists();
 
-        // if($status == False){
-        //     // Create Customer details
-        //     $UserID = uniqid(rand(), true);
-        //     $customer = 'App\Customer'::create([
-        //         'state_id'      =>  $request->state_id,
-        //         'city_id'       =>  $request->city_id,
-        //         'UserID'        =>  $UserID,
-        //         'fullName'      =>  $request->fullName,
-        //         'mobile'        =>  $request->mobile,
-        //         'telephone'     =>  $request->telephone,
-        //         'postalCode'    =>  $request->postalCode,
-        //         'address'       =>  $request->address,
-        //         'HBD_Date'      =>  $request->HBD_Date
-        //     ]);
-        // }
+        if(!$status){
+            // Create Customer details
+            $UserID = uniqid(rand(), true);
+            $customer = 'App\Customer'::create([
+                'state_id'      =>  $request->state_id,
+                'city_id'       =>  $request->city_id,
+                'UserID'        =>  $UserID,
+                'fullName'      =>  $request->fullName,
+                'mobile'        =>  $request->mobile,
+                'telephone'     =>  $request->telephone,
+                'postalCode'    =>  $request->postalCode,
+                'address'       =>  $request->address,
+                'HBD_Date'      =>  $request->HBD_Date
+            ]);
+        }
         
         $product_id_array = implode(",",$request->product_id_array);
         $status = 7;
-        if($agent_id == null){
+        if(is_null($agent_id)){
             $status = 3;
         }
         /*##################ENDIF##################*/
@@ -128,8 +127,13 @@ class OrderController extends Controller
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
             'HBD_Date'          =>      $request->HBD_Date,
-            'delivary_Date'     =>      Carbon::now()
+            
         ]);
+
+        if(!is_null($agent_id)){
+            $order->update(['delivary_Date'=>Carbon::now()]);
+        }
+
         $items = $request->orderArray;
         foreach($items as $item){
             'App\OrderProduct'::create([
@@ -187,8 +191,9 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $order = Order::findOrFail($id);
         /*###################IF###################*/
-        $city = 'App\City'::where('id',$request->city_id)->first();
+        $city = 'App\City'::where('id',$order->city_id)->first();
             
         // Find Agent In This City if agent send auto is not null
         $userSendAuto = 'App\User'::where([
@@ -226,10 +231,10 @@ class OrderController extends Controller
             ->exists();
         $product_id_array = implode(",",$request->product_id_array);
         /*##################ENDIF##################*/
-        $order = Order::findOrFail($id);
+        
         $order->update([
-            'city_id'           =>      $request->city_id,
-            'state_id'          =>      $request->state_id,
+            'city_id'           =>      $order->city_id,
+            'state_id'          =>      $order->state_id,
             'agent_id'          =>      $agent_id,
             'followUpManager_id'=>      $followUpManager_id,
             'seller_id'         =>      auth()->user()->id,
@@ -250,9 +255,14 @@ class OrderController extends Controller
             'sendDescription'   =>      $request->deliverDescription,
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
-            'HBD_Date'          =>      $request->HBD_Date,
+            'HBD_Date'          =>      $order->HBD_Date,
             
         ]);
+
+        foreach($order->products as $order_product){
+            'App\OrderProduct'::destroy($order_product->id);
+        }
+
         $items = $request->orderArray;
         foreach($items as $item){
             'App\OrderProduct'::create([
@@ -263,7 +273,7 @@ class OrderController extends Controller
                 'product_type'  =>  $item['type']
             ]);
         }
-        return Response()->json('سفارش با موفقیت ثبت شد',200,[],JSON_UNESCAPED_UNICODE);
+        return Response()->json('سفارش با موفقیت ویرایش شد',200,[],JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -1185,7 +1195,7 @@ class OrderController extends Controller
         /*## Agent ## */
         $orders = Order::where([
             ['followUpManager_id','=',$user->id],
-            ['status','=',7],
+            ['status','=',3],
             ['agent_id','=',null]
             ])->latest()->get();
         return view('Admin.Order.FollowUpManager.unverified-orders',compact(
@@ -1264,6 +1274,8 @@ class OrderController extends Controller
             $order->update([
                 'status'        =>      7,
                 'agent_id'      =>      $item['agent_id'],
+                'delivary_Date' =>      Carbon::now()
+
                 ]);
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
