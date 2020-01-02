@@ -493,7 +493,7 @@ class OrderController extends Controller
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-
+                $user = 'App\User'::findOrFail($order->agent_id);
                 /** foreach for check product exist in storage or not */
                 
                 foreach($order->products as $order_product){
@@ -504,7 +504,7 @@ class OrderController extends Controller
                     $product_id = $order_product->product_id;
                     
                     $storage_status = 'App\Storage'::where([
-                        ['agent_id','=',$user->id],
+                        ['agent_id','=',$order->agent_id],
                         ['product_id','=',$order_product->product_id]
                     ])->exists();
                     // if product not exist
@@ -516,7 +516,7 @@ class OrderController extends Controller
                     // else product less than order->count 
                     }else{
                         $storage = 'App\Storage'::where([
-                            ['agent_id','=',$user_id],
+                            ['agent_id','=',$order->agent_id],
                             ['product_id','=',$product_id]
                         ])->firstOrFail(); 
         
@@ -1240,7 +1240,7 @@ class OrderController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
-
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
         $orders = 'App\Order'::where('agent_id',$user->id);
 
         foreach($agents as $agent){
@@ -1249,9 +1249,13 @@ class OrderController extends Controller
                 ['status','=',7]
             ]);
         }
-        $orders = $orders->latest()->paginate(15);
+        $orders = $orders->latest()->get();
     
-        return view('Admin.Order.AgentChief.agents-orders',compact('orders'));
+        return view('Admin.Order.AgentChief.agents-orders',compact(
+            'orders',
+            'bottom_statuses'
+        
+        ));
 
     
     }

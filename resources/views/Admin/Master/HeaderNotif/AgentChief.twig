@@ -1,0 +1,9 @@
+{% if agents_order > 0 %}
+    <a 
+        href="{{route('orders.AgentsDelivaryOrders')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{agents_order}}
+        عدد سفارش در انتظار تحویل نمایندگان
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

@@ -60,12 +60,28 @@ class AppServiceProvider extends ServiceProvider
                 $orderNotif = 0;
                 $Agentpayments = 0;
                 $Agentcosts =   0;
-                if($roleName == "agent" || $roleName == "agentChief"){
+                $agents_order = 0;
+                if($roleName == "agent"){
                     $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
               
                     $orderNotif = 'App\Order'::where(['agent_id'=>$user->id,'status'=>7])
                     ->count();
+                }elseif($roleName == "agentChief"){
+
+                    $user = 'App\User'::findOrFail(auth()->user()->id);
+                    $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+
+                    $orders = 'App\Order'::where('agent_id',$user->id);
+
+                    foreach($agents as $agent){
+                        $orders->Orwhere([
+                            ['agent_id','=',$agent->id],
+                            ['status','=',7]
+                        ]);
+                    }
+                    $agents_order = $orders->count();
+
                 }elseif($roleName == "fundWarehouser"){
                     $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>5])
                     ->count();
@@ -104,7 +120,8 @@ class AppServiceProvider extends ServiceProvider
                     'orderNotif',
                     'AgentReturnedProduct',
                     'Agentpayments',
-                    'Agentcosts'
+                    'Agentcosts',
+                    'agents_order'
                 
                 ));
             }
