@@ -19,7 +19,7 @@
 {% block content %}
 
 
-<form action="{{route('report.orders_filter')}}" method="post" class="row pt-2 pb-2">
+<form id="reportOrderForm" action="{{route('report.orders_filter')}}" method="post" class="row pt-2 pb-2">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
 
     <div class="col-12">
