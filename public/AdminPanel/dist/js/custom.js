@@ -1193,7 +1193,7 @@ $(document).ready(function(){
     //     });
     //     $(this)[0].submit();
     // });
-    $('#sendToAgentForm,#storeToStoreAgents,#tankhahExit,#returnToFund,#costForm,#searchForm,#payOrderList,#agent_report_form').submit(function(event){
+    $('#costReportForm,#paymentReportForm,#reportOrderForm,#sendToAgentForm,#storeToStoreAgents,#tankhahExit,#returnToFund,#costForm,#searchForm,#payOrderList').submit(function(event){
         event.preventDefault();
         $('.persianDatePicker').each(function(index,item){
             var jalali_date = $(this).val();
