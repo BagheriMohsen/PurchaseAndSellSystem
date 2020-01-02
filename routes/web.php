@@ -261,6 +261,7 @@ Route::group(['middleware'=>'auth','prefix'=>'report/','as'=>'report.'],function
   Route::get('Costs','ReportController@Costs')->name('Costs');
   Route::post('Costs-Filter','ReportController@costs_filter')->name('costs_filter');
   Route::get('Orders','ReportController@Orders')->name('Orders');
+  Route::post('orders-Filter','ReportController@orders_filter')->name('orders_filter');
   Route::get('Payments','ReportController@Payments')->name('Payments');
   Route::post('Payments-Filter','ReportController@payments_filter')->name('payments_filter');
 

@@ -97,6 +97,10 @@ class OrderController extends Controller
         // }
         
         $product_id_array = implode(",",$request->product_id_array);
+        $status = 7;
+        if($agent_id == null){
+            $status = 3;
+        }
         /*##################ENDIF##################*/
         $trackingCode = uniqid(rand(), true);
         $order = Order::create([
@@ -105,7 +109,7 @@ class OrderController extends Controller
             'agent_id'          =>      $agent_id,
             'followUpManager_id'=>      $followUpManager_id,
             'seller_id'         =>      auth()->user()->id,
-            'status'            =>      7,
+            'status'            =>      $status,
             'lastStatus'        =>      1,
             'transport_id'      =>      4,
             'product_array'     =>      $product_id_array,
