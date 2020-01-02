@@ -534,6 +534,8 @@ class OrderController extends Controller
 
                 echo $this->orderStoreRoomCollected($order,$user,$item);
                 
+
+                echo $this->sellerPorsantCal($order);
                 
                 $agent = 'App\User'::findOrFail($order->agent_id);
                 $product_id_array = explode(",",$order->product_array);
@@ -547,7 +549,9 @@ class OrderController extends Controller
                     return $this->AgentPriceForEachFactor($agent,$order);
                 }
                
-                return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+                // return response()
+                // ->json(['message' => 'موفقیت آمیز بود','status' => 1,
+                // 200,[],JSON_UNESCAPED_UNICODE]);
             
             }
 
@@ -589,7 +593,9 @@ class OrderController extends Controller
 
             
         }
-        return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+        return response()
+        ->json(['message' => 'موفقیت آمیز بود','status' => 1,
+        200,[],JSON_UNESCAPED_UNICODE]);
         
     }
     /*
@@ -679,8 +685,8 @@ class OrderController extends Controller
 
 
         }  
-        return response()
-        ->json(['message' => 'از موجودی انبار شما کم شد','status' => 1]); 
+        // return response()
+        // ->json(['message' => 'از موجودی انبار شما کم شد','status' => 1]); 
     }
     /*
     |--------------------------------------------------------------------------
@@ -835,7 +841,8 @@ class OrderController extends Controller
             }         
             
             return response()
-            ->json(['message' => 'موفقیت آمیز بود-مبلغ مشارکت','status' => 1]);
+            ->json(['message' => 'موفقیت آمیز بود ','status' => 1]
+            ,200,[],JSON_UNESCAPED_UNICODE);
 
         }
 
@@ -886,8 +893,52 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'موفقیت آمیز بود-مبلغ فاکتور','status' => 1]);
+        return response()
+        ->json(['message' => 'موفقیت آمیز بود','status' => 1]
+        ,200,[],JSON_UNESCAPED_UNICODE);
 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Seller PorsantCal
+    |--------------------------------------------------------------------------
+    |*/
+    public function sellerPorsantCal($order){
+        $trackingCode   =   uniqid();
+        $SellerStatus   =   'App\UserInventory'::where('seller_id',$order->seller_id)->exists();
+        /* Seller */
+        if($SellerStatus == True){
+            $Seller             =   'App\User'::findOrFail($order->seller_id);
+            $SellerInventory    =   'App\UserInventory'::where('seller_id',$order->seller_id)->firstOrFail();
+            $balance            =   $SellerInventory->balance + $Seller->porsantSeller;
+            $SellerInventory->update(['balance'=>$balance,'debtor'=>1]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $SellerInventory->id,
+                'agent_id'              =>  null,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order->cashPrice,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+        }else{
+            $Seller            =   'App\User'::findOrFail($order->seller_id);
+            $userInventory = 'App\UserInventory'::create([
+                'seller_id' =>  $Seller->id,
+                'balance'   =>  $Seller->porsantSeller,
+                'debtor'    =>  1
+            ]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $userInventory->id,
+                'agent_id'              =>  null,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order->cashPrice,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+            
+        }
     }
     /*
     |--------------------------------------------------------------------------
