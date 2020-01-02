@@ -21,7 +21,24 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Orders(){
-        return view('Admin.Report.Admin.orders');
+        $statuses   =   'App\OrderStatus'::where([
+            ['id','!=',1],
+           
+
+        ])->get();
+        $agents             =   'App\User'::Role('agent')->get();
+        $callCenters        =   'App\User'::Role('callcenter')->get();
+        $sellers            =   'App\User'::Role('seller')->get();   
+        $followUpManagers   =   'App\User'::Role('followUpManager')->get();
+        $products           =   'App\Product'::latest()->get();
+        return view('Admin.Report.Admin.orders',compact(
+            'statuses',
+            'agents',
+            'sellers',
+            'callCenters',
+            'followUpManagers',
+            'products'
+        ));
     }
     /*
     |--------------------------------------------------------------------------
@@ -86,5 +103,53 @@ class ReportController extends Controller
         })->latest()->get();
        
         return view('Admin.Report.Admin.payments-result',compact('payments'));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Order Data Filter
+    |--------------------------------------------------------------------------
+    |*/
+    public function orders_filter(Request $request){
+
+        $from               =   $request->from;
+        $to                 =   $request->to;
+        $callCenter         =   $request->callcenter;
+        $followUpManager    =   $request->follow_manager;
+        $agent              =   $request->agent;
+        $status             =   $request->status;
+        $seller             =   $request->seller;
+        $product            =   $request->product;
+        $date_status        =   $request->date_status;
+       
+      
+        $orders = 'App\Order'::query()
+     
+        ->when($from,function($query,$from,$date_status){
+            return $query->where($date_status,'>=',$from);
+        })->when($to,function($query,$to,$date_status){
+            return $query->where($date_status, '<=',$to);
+        })
+        ->when($followUpManager,function($query,$followUpManager){
+            return $query->where('followUpManager_id','=',$followUpManager);
+        })
+        ->when($agent,function($query,$agent){
+            return $query->where('agent_id','=',$agent) ;         
+        })
+        ->when($status,function($query,$status){
+            return $query->where('status','=',$status);
+        })
+        ->when($callCenter,function($query,$callCenter){
+            return $query->where('callCenter_id','=',$callCenter);
+        })
+        ->when($seller,function($query,$seller){
+            return $query->where('seller_id','=',$seller);
+        })
+        ->latest()->get();
+        
+        return view('Admin.Report.Admin.orders-result',compact(
+            'orders',
+            'status'
+        
+        ));
     }
 }

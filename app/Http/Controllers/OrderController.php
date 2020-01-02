@@ -97,6 +97,10 @@ class OrderController extends Controller
         // }
         
         $product_id_array = implode(",",$request->product_id_array);
+        $status = 7;
+        if($agent_id == null){
+            $status = 3;
+        }
         /*##################ENDIF##################*/
         $trackingCode = uniqid(rand(), true);
         $order = Order::create([
@@ -105,7 +109,7 @@ class OrderController extends Controller
             'agent_id'          =>      $agent_id,
             'followUpManager_id'=>      $followUpManager_id,
             'seller_id'         =>      auth()->user()->id,
-            'status'            =>      7,
+            'status'            =>      $status,
             'lastStatus'        =>      1,
             'transport_id'      =>      4,
             'product_array'     =>      $product_id_array,
@@ -489,7 +493,7 @@ class OrderController extends Controller
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-
+                $user = 'App\User'::findOrFail($order->agent_id);
                 /** foreach for check product exist in storage or not */
                 
                 foreach($order->products as $order_product){
@@ -500,7 +504,7 @@ class OrderController extends Controller
                     $product_id = $order_product->product_id;
                     
                     $storage_status = 'App\Storage'::where([
-                        ['agent_id','=',$user->id],
+                        ['agent_id','=',$order->agent_id],
                         ['product_id','=',$order_product->product_id]
                     ])->exists();
                     // if product not exist
@@ -512,7 +516,7 @@ class OrderController extends Controller
                     // else product less than order->count 
                     }else{
                         $storage = 'App\Storage'::where([
-                            ['agent_id','=',$user_id],
+                            ['agent_id','=',$order->agent_id],
                             ['product_id','=',$product_id]
                         ])->firstOrFail(); 
         
@@ -530,6 +534,8 @@ class OrderController extends Controller
 
                 echo $this->orderStoreRoomCollected($order,$user,$item);
                 
+
+                echo $this->sellerPorsantCal($order);
                 
                 $agent = 'App\User'::findOrFail($order->agent_id);
                 $product_id_array = explode(",",$order->product_array);
@@ -543,7 +549,9 @@ class OrderController extends Controller
                     return $this->AgentPriceForEachFactor($agent,$order);
                 }
                
-                return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+                // return response()
+                // ->json(['message' => 'موفقیت آمیز بود','status' => 1,
+                // 200,[],JSON_UNESCAPED_UNICODE]);
             
             }
 
@@ -585,7 +593,9 @@ class OrderController extends Controller
 
             
         }
-        return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
+        return response()
+        ->json(['message' => 'موفقیت آمیز بود','status' => 1,
+        200,[],JSON_UNESCAPED_UNICODE]);
         
     }
     /*
@@ -675,8 +685,8 @@ class OrderController extends Controller
 
 
         }  
-        return response()
-        ->json(['message' => 'از موجودی انبار شما کم شد','status' => 1]); 
+        // return response()
+        // ->json(['message' => 'از موجودی انبار شما کم شد','status' => 1]); 
     }
     /*
     |--------------------------------------------------------------------------
@@ -831,7 +841,8 @@ class OrderController extends Controller
             }         
             
             return response()
-            ->json(['message' => 'موفقیت آمیز بود-مبلغ مشارکت','status' => 1]);
+            ->json(['message' => 'موفقیت آمیز بود ','status' => 1]
+            ,200,[],JSON_UNESCAPED_UNICODE);
 
         }
 
@@ -882,8 +893,52 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'موفقیت آمیز بود-مبلغ فاکتور','status' => 1]);
+        return response()
+        ->json(['message' => 'موفقیت آمیز بود','status' => 1]
+        ,200,[],JSON_UNESCAPED_UNICODE);
 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Seller PorsantCal
+    |--------------------------------------------------------------------------
+    |*/
+    public function sellerPorsantCal($order){
+        $trackingCode   =   uniqid();
+        $SellerStatus   =   'App\UserInventory'::where('seller_id',$order->seller_id)->exists();
+        /* Seller */
+        if($SellerStatus == True){
+            $Seller             =   'App\User'::findOrFail($order->seller_id);
+            $SellerInventory    =   'App\UserInventory'::where('seller_id',$order->seller_id)->firstOrFail();
+            $balance            =   $SellerInventory->balance + $Seller->porsantSeller;
+            $SellerInventory->update(['balance'=>$balance,'debtor'=>1]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $SellerInventory->id,
+                'agent_id'              =>  null,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order->cashPrice,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+        }else{
+            $Seller            =   'App\User'::findOrFail($order->seller_id);
+            $userInventory = 'App\UserInventory'::create([
+                'seller_id' =>  $Seller->id,
+                'balance'   =>  $Seller->porsantSeller,
+                'debtor'    =>  1
+            ]);
+            'App\MoneyCirculation'::create([
+                'user_inventory_id'     =>  $userInventory->id,
+                'agent_id'              =>  null,
+                'seller_id'             =>  $Seller->id,
+                'order_status_id'       =>  $order->status,
+                'order_id'              =>  $order->id,
+                'amount'                =>  $order->cashPrice,
+                'trackingCode'          =>  $trackingCode,
+            ]);
+            
+        }
     }
     /*
     |--------------------------------------------------------------------------
@@ -1236,7 +1291,7 @@ class OrderController extends Controller
         $user = 'App\User'::findOrFail(auth()->user()->id);
         $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
-
+        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
         $orders = 'App\Order'::where('agent_id',$user->id);
 
         foreach($agents as $agent){
@@ -1245,9 +1300,13 @@ class OrderController extends Controller
                 ['status','=',7]
             ]);
         }
-        $orders = $orders->latest()->paginate(15);
+        $orders = $orders->latest()->get();
     
-        return view('Admin.Order.AgentChief.agents-orders',compact('orders'));
+        return view('Admin.Order.AgentChief.agents-orders',compact(
+            'orders',
+            'bottom_statuses'
+        
+        ));
 
     
     }
