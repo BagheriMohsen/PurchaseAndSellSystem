@@ -1360,12 +1360,13 @@ $(document).ready(function(){
                     console.log(response);
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
-                    if(response.status == 0){
-                        toastr["error"](response.message);
-                        
-                    }else{
+                    if(response.status == 1){
                         orderTable.rows('.selected').remove().draw( false );
                         toastr["success"](response.message);
+                        
+                        
+                    }else{
+                        toastr["error"](response.message);
                     }
                    
                 }
@@ -1815,24 +1816,87 @@ $(document).ready(function(){
         var user_id = $('input[name="user_id"]').val();
         var debts = [];
         var credits = [];
-        //Get debts array
-        $.ajax({
-            url: baseUrl + '/user-inventory/currentBillsDebtor/' + user_id,
-            type:'get',
-            success:function(response){
-               console.log(response);
-               debts = response;
-            }
-        });
-        //Get credits array
+        var all = [];
+        
+        //Get credits and debts array
         $.ajax({
             url: baseUrl + '/user-inventory/currentBillsCreditor/' + user_id,
             type:'get',
+            dataType:'json',
             success:function(response){
-               console.log(response);
-               credits = response;
+                console.log(response);
+                credits = response[0].map(function(value){
+                    var element = {}
+                    element.id = value.id;
+                    element.title = value.status_id;
+                    element.date = moment(value.billDate, 'YYYY-MM-DD').locale('fa').format('YYYY-MM-DD');
+                    element.debt = 0;
+                    element.credit = value.bill;
+                    element.contribute = 0;
+                    return element;
+                });
+                console.log(credits);
+                $.ajax({
+                    url: baseUrl + '/user-inventory/currentBillsDebtor/' + user_id,
+                    type:'get',
+                    success:function(response){
+                        console.log(response);
+                        debts = response[0].map(function(value){
+                            var element = {}
+                            element.id = value.id;
+                            element.title = 'فاکتور فروش' + value.id;
+                            element.date = moment(value.collected_Date, 'YYYY-MM-DD').locale('fa').format('YYYY-MM-DD');
+                            element.debt = value.cashPrice;
+                            element.credit = 0;
+                            element.contribute = 0;
+                            return element;
+                        });
+                        all = [...debts,...credits];
+                        console.log('all',all);
+                        $('#current_bill_form').DataTable({
+                            "paging":   false,
+                            'searching':false,
+                            'info':false,
+                            'ordering':false,
+                            data:all,
+                            columns:[
+                                {'data':'date'},
+                                {'data':'title','render':function(data,row){
+                                    if(data == 2){
+                                        title =  'واریز نقدی';
+                                    }else if(data == 5){
+                                        title = 'ثبت هزینه';
+                                    }else{
+                                        title = data;
+                                    }
+                                    return title;
+                                }},
+                                {'data':'debt'},
+                                {'data':'credit'},
+                                {'data':'contribute'},
+                                {'data':null,'render':function(data,type,row){
+                                    return row.debt - row.credit;
+                                },'className':'remain'}
+                            ],
+                            "order": [[ 0, "desc" ]]
+                        });
+                        calculateRemain();
+                    }
+                });
             }
         });
+    }
+     
+    
+   
+    function calculateRemain(){
+        var sum_remain = 0;
+        $('.remain').each(function(index,item){
+            if(index != 0){
+                sum_remain = parseInt(item.innerText) + sum_remain;
+                item.innerText = sum_remain;
+            }
+        })
     }
 
     //In Report agent page change persian to georgian date before submit
