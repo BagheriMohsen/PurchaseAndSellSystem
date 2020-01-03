@@ -38,7 +38,7 @@ class CreateTableMoneyCirculations extends Migration
             // $table->bigInteger('order_product_id')->unsigned();
             $table->bigInteger('order_id')->unsigned();
             $table->integer('amount');
-            $table->integer('sharedSpecialAmount')->nullable();
+            $table->integer('sharedSpecialAmount')->default(0);
             
             $table->string('code',100)->nullable();
             $table->char('trackingCode',100)->nullable();

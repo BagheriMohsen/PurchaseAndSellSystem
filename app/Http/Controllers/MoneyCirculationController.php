@@ -59,7 +59,11 @@ class MoneyCirculationController extends Controller
     |*/
     public function currentBillsDebtor($user_id){
         
-        $totalDebtor = 'App\Order'::where([
+        $totalDebtor = 'App\Order'::with(array('MoneyCirculations'=>function($query)use($user_id){
+            $query->select('id','order_id','sharedSpecialAmount')
+            ->where('agent_id',$user_id)
+            ->sum('sharedSpecialAmount');
+        }))->where([
             ['agent_id','=',$user_id],
             ['collected_Date','!=',null]
         ])->latest()->get(['id','collected_Date','cashPrice']);

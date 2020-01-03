@@ -113,22 +113,72 @@ class ReportController extends Controller
 
         $from               =   $request->from;
         $to                 =   $request->to;
+        $date_status        =   $request->date_status;
+
+        $from_updated_at    =   null;
+        $to_updated_at      =   null;              
+        $from_edit_Date     =   null;
+        $to_edit_Date       =   null;              
+        $from_delivary_Date =   null;
+        $to_delivary_Date   =   null;                 
+        $from_created_at    =   null;
+        $to_created_at      =   null; 
+
+
+        if($date_status == 'updated_at'){
+            $from_updated_at = $from ;
+            $to_updated_at  =  $to;              
+        }elseif($date_status == 'edit_Date'){
+            $from_edit_Date = $from ;
+            $to_edit_Date   =  $to;              
+        }elseif($date_status == 'delivary_Date'){
+            $from_delivary_Date = $from ;
+            $to_delivary_Date   =  $to;                 
+        }else{
+            $from_created_at    = $from ;
+            $to_created_at      =  $to;              
+        }
+
+
         $callCenter         =   $request->callcenter;
         $followUpManager    =   $request->follow_manager;
         $agent              =   $request->agent;
         $status             =   $request->status;
         $seller             =   $request->seller;
         $product            =   $request->product;
-        $date_status        =   $request->date_status;
+       
+       
        
       
         $orders = 'App\Order'::query()
      
-        ->when($from,function($query,$from,$date_status){
-            return $query->where($date_status,'>=',$from);
-        })->when($to,function($query,$to,$date_status){
-            return $query->where($date_status, '<=',$to);
+        ->when($from_created_at,function($query,$from_created_at){
+            return $query->where('created_at','>=',$from_created_at);
+        })->when($to_created_at,function($query,$to_created_at){
+            return $query->where('created_at', '<=',$to_created_at);
         })
+
+        ->when($from_updated_at,function($query,$from_updated_at){
+            return $query->where('updated_at','>=',$from_updated_at);
+        })->when($to_updated_at,function($query,$to_updated_at){
+            return $query->where('updated_at', '<=',$to_updated_at);
+        })
+
+
+        ->when($from_edit_Date,function($query,$from_edit_Date){
+            return $query->where('edit_Date','>=',$from_edit_Date);
+        })->when($to_edit_Date,function($query,$to_edit_Date){
+            return $query->where('edit_Date', '<=',$to_edit_Date);
+        })
+
+
+        ->when($from_delivary_Date,function($query,$from_delivary_Date){
+            return $query->where('delivary_Date','>=',$from_delivary_Date);
+        })->when($to_delivary_Date,function($query,$to_delivary_Date){
+            return $query->where('delivary_Date', '<=',$to_delivary_Date);
+        })
+
+
         ->when($followUpManager,function($query,$followUpManager){
             return $query->where('followUpManager_id','=',$followUpManager);
         })
@@ -145,7 +195,7 @@ class ReportController extends Controller
             return $query->where('seller_id','=',$seller);
         })
         ->latest()->get();
-        
+       
         return view('Admin.Report.Admin.orders-result',compact(
             'orders',
             'status'
