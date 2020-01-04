@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var baseUrl = 'http://localhost:8000/';
+    var baseUrl = 'http://127.0.0.1:8000/';
 
     // Global variables
 
@@ -1848,7 +1848,7 @@ $(document).ready(function(){
                             element.date = moment(value.collected_Date, 'YYYY-MM-DD').locale('fa').format('YYYY-MM-DD');
                             element.debt = value.cashPrice;
                             element.credit = 0;
-                            element.contribute = 0;
+                            element.contribute = value.money_circulations[0].sharedSpecialAmount;
                             return element;
                         });
                         all = [...debts,...credits];
