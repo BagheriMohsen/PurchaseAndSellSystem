@@ -185,9 +185,17 @@
               {{'/'}}
               {{agent.state_city}}
             </div>
-            <div class="col-3 mx-auto">
+            {% if agent.price >= 0 %}
+              <div title="نماینده بدهکار است" class="col-3 mx-auto">
                 {{ agent.price | number_format }}
-            </div>
+              </div>
+            {% else %}
+              <div title="نماینده طلب دارد" class="col-3 mx-auto text-danger">
+                {{ agent.price | abs | number_format }}
+              </div>
+            {% endif %}
+                
+            
         </td>
       </tr>
       {% endfor %}

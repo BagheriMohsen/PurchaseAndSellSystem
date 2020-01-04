@@ -23,8 +23,8 @@ class ReportController extends Controller
     public function Orders(){
         $statuses   =   'App\OrderStatus'::where([
             ['id','!=',1],
-           
-
+            ['id','!=',15],
+            ['id','!=',9],
         ])->get();
         $agents             =   'App\User'::Role('agent')->get();
         $callCenters        =   'App\User'::Role('callcenter')->get();

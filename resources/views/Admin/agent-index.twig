@@ -140,14 +140,17 @@
                       <tr>
                         <th scope="row">مجموع واریزی</th>
                         <th scope="col">
-                            {{ TotalSettle | number_format }}
+                            {{ payments | number_format }}
                             تومان
                         </th>
                       </tr>
-                      {# <tr>
-                          <th scope="row">هزینه حمل</th>
-                          <td>10000</td>
-                      </tr> #}
+                      <tr>
+                          <th scope="row">هزینه  ها</th>
+                          <td>
+                            {{ costs | number_format}}
+                            تومان
+                          </td>
+                      </tr>
                       {# <tr>
                           <th scope="row">مجموع چک ها</th>
                           <td>10000</td>
@@ -199,9 +202,10 @@
                       <tr>
                           <th scope="row">مجموع بدهی شما</th>
                           <td>
-                            {% set AllDebtor = AllSell - TotalSettle - AllSpecialShared %}
+                            {% set AllDebtor = AllSell - (payments + AllSpecialShared + costs) %}
                             {{ AllDebtor | number_format}}
                             تومان
+                            
                           </td>
                       </tr>
                       {# <tr>
@@ -214,12 +218,33 @@
                       </tr> #}
                       <tr>
                         <th scope="row">مانده حساب</th>
-                        <td>
+                        
                           {% set balance = AllDebtor - user.gift %}
-                          {{ balance | number_format }}
-                          تومان
-                        </td>
+
+                          {% if balance >= 0 %}
+                            <td class="text-danger">
+                            {{ balance | number_format }}
+                            تومان
+                            </td>
+                          {% else %}
+                            <td class="text-primary">
+                            {{ balance | abs | number_format }}
+                            تومان
+                            </td>
+                          {% endif %}
                       </tr>
+                      {% if balance < 0 %}
+                      <tfoot>
+                        <tr class="text-center bg-success pt-2 pb-2">
+                          <td colspan="2">
+                            <i class="fas fa-info"></i>
+                            نماینده عزیز شما مبلغ
+                            {{ balance | abs | number_format }}
+                            تومان را از سیستم طلب دارید
+                          </td>
+                      {% endif %}
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                   <!-- /.card-body -->

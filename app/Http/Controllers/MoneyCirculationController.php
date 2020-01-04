@@ -43,13 +43,56 @@ class MoneyCirculationController extends Controller
         ])
         ->sum('bill');
         
+        $AllSell =   'App\Order'::where([
+            ['collected_Date','!=',Null],
+            ['agent_id','=',$user->id]
+        ])->sum('cashPrice');
+
+        $costs = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])->sum('bill');
+
+        $payments = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])->sum('bill');
+
+        $AllSpecialShared = 'App\UserInventory'::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+
+
+        $Allpayments = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])
+        ->get();
+
+        $AllOrders = 'App\Order'::where([
+            ['collected_Date','!=',Null],
+            ['agent_id','=',$user->id]
+        ])->get();
+        $Allpayments = $Allpayments->toArray();
+        $AllOrders = $AllOrders->toArray();
+        $transaction = array_merge($AllOrders,$Allpayments);
+
+       
+
         return view('Admin.UserInventory.Agent.current-bills',compact(
             'AllSell',
             'AllSpecialShared',
+            'payments',
+            'costs',
             'TotalSettle',
             'user',
             'totalDebtor',
-            'totalCreditor'
+            'totalCreditor',
+            'transaction'
         ));
     }
     /*

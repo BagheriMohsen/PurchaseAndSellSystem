@@ -390,11 +390,23 @@ class UserController extends Controller
                 ['collected_Date','!=',Null],
                 ['agent_id','=',$agent_id]
             ])->sum('cashPrice');
-               
+            
+            $sharedPrice = $DebtorItem->balance;
+
+            $costs = 'App\PaymentCirculation'::where([
+                ['user_id','=',$agent->id],
+                ['status_id','=',5]
+            ])->sum('bill');
+
+            $payment = 'App\PaymentCirculation'::where([
+                ['user_id','=',$agent->id],
+                ['status_id','=',2]
+            ])->sum('bill');
+
             $agents[] = [
                 'name'          =>  $agent->name.' '.$agent->family,
                 'state_city'    =>  $agent->state->name.'-'.$agent->city->name,
-                'price'         =>  $price - $DebtorItem->balance 
+                'price'         =>  $price  - ($sharedPrice + $payment + $costs)
             ];
              
         }
@@ -646,19 +658,28 @@ class UserController extends Controller
         $yesterday  = 'Carbon\Carbon'::now()->subDays(1);
         $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
 
-        $AllSell = 
-        'App\MoneyCirculation'::where('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)->sum('amount');
+      
             
-        $AllSpecialShared = 'App\UserInventory'::where([
+
+        $AllSell =   'App\Order'::where([
+            ['collected_Date','!=',Null],
             ['agent_id','=',$user->id]
-        ])->sum('balance');
-            
-        $TotalSettle = 'App\PaymentCirculation'::where([
+        ])->sum('cashPrice');
+
+        $costs = 'App\PaymentCirculation'::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])->sum('bill');
+
+        $payments = 'App\PaymentCirculation'::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])->sum('bill');
+
+        $AllSpecialShared = 'App\UserInventory'::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+ 
 
         return view('Admin.agent-index',compact(
             'WaitingForDelivery',
@@ -669,7 +690,9 @@ class UserController extends Controller
             'user',
             'AllSell',
             'AllSpecialShared',
-            'TotalSettle'
+            'costs',
+            'payments',
+      
          
         
         ));
