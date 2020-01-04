@@ -82,9 +82,11 @@ class WarehouseController extends Controller
     {
         $users = 'App\User'::Role(['followUpManager','mainWarehouser'])->get();
         $cities = 'App\City'::latest()->get();
+        $states = 'App\State'::latest()->get();
         $warehouse = Warehouse::findOrFail($id);
         return view('Admin.WareHouse.warehouse-edit',compact(
             'warehouse',
+            'states',
             'cities',
             'users'
         ));
@@ -102,13 +104,14 @@ class WarehouseController extends Controller
         $request->validate([
             'name'      =>  'required',
             'city'      =>  'required',
+            'state'     =>  'required',
             'address'   =>  'required'
         ],[
             'name.required'     =>      'نام انبار الزامی ست',
             'city.required'     =>      'شهر انتخاب نشده',
             'address.required'  =>      'لطفا فیلد آدرس را پر کنید'
         ]);
-      
+        
         $warehouse = Warehouse::findOrFail($id);
         $warehouse->update([
             'user_id'       =>  auth()->user()->id,
