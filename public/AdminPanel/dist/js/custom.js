@@ -1848,7 +1848,11 @@ $(document).ready(function(){
                             element.date = moment(value.collected_Date, 'YYYY-MM-DD').locale('fa').format('YYYY-MM-DD');
                             element.debt = value.cashPrice;
                             element.credit = 0;
-                            element.contribute = value.money_circulations[0].sharedSpecialAmount;
+                            element.contribute = 0;
+                            value.money_circulations.forEach(function(item){
+                                element.contribute += item.sharedSpecialAmount;
+                            })
+                            // element.contribute = value.money_circulations[0].sharedSpecialAmount;
                             return element;
                         });
                         all = [...debts,...credits];
