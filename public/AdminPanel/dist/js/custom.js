@@ -1875,12 +1875,25 @@ $(document).ready(function(){
                                     }
                                     return title;
                                 }},
-                                {'data':'debt'},
-                                {'data':'credit'},
-                                {'data':'contribute'},
-                                {'data':null,'render':function(data,type,row){
-                                    return row.debt - row.credit;
-                                },'className':'remain'}
+                                {
+                                    'data':'debt',
+                                    'render':$.fn.dataTable.render.number( ',', '.')
+                                },
+                                {
+                                    'data':'credit',
+                                    'render':$.fn.dataTable.render.number( ',', '.')
+                                },
+                                {
+                                    'data':'contribute',
+                                    'render':$.fn.dataTable.render.number( ',', '.')
+                                },
+                                {
+                                    'data':null,
+                                    'render':function(data,type,row){
+                                        return row.debt - row.credit - row.contribute;
+                                    },
+                                    'className':'remain'
+                                }
                             ],
                             "order": [[ 0, "desc" ]]
                         });
@@ -1892,7 +1905,7 @@ $(document).ready(function(){
     }
      
     
-   
+    
     function calculateRemain(){
         var sum_remain = 0;
         $('.remain').each(function(index,item){
@@ -1900,6 +1913,12 @@ $(document).ready(function(){
                 sum_remain = parseInt(item.innerText) + sum_remain;
                 item.innerText = sum_remain;
             }
+        });
+        $('.remain').each(function(index,item){
+            if(index != 0){
+                item.innerText = numberWithCommas(parseInt(item.innerText));
+            }
+            
         })
     }
 
