@@ -44,6 +44,7 @@
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
                       <th>نام خریدار</th>
+                      <th>آدرس مشتری</th>
                       <th>همراه-ثابت</th>
                       <th>نوع پرداخت</th>
                       <th>کالسنتر</th>
@@ -71,6 +72,7 @@
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
                         <td>{{order.fullName}}</td>
+                        <td>{{order.address}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
                         {% if order.paymentMethod == 'cash' %}
                           <td>{{'نقدی'}}</td>
