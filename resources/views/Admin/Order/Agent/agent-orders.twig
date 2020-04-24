@@ -30,32 +30,41 @@
      
                 
                 <!-- /.card-header -->
-                <div class="card-body col-12 mx-auto">
+                <div class="card-body col-12 mx-auto table-responsive">
                 
                   <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
                 width="100%">
                     <thead>
                     <tr>
                       <th></th>
-                      <th>شماره<br> سفارش</th>
-                      <th>محصولات</th>
                       <th>تاریخ ثبت</th>
                       <th>تاریخ تخصیص</th>
                       <th>استان-شهر</th>
-                      <th>کد پستی</th>
-                      <th>نام خریدار</th>
                       <th>آدرس مشتری</th>
+                      <th>نام خریدار</th>
                       <th>همراه-ثابت</th>
+                      <th>محصولات</th>
+                      <th>مبلغ قابل پرداخت</th>
+                      <th>پیش پرداخت</th>
+                      <th>تعداد اقلام سفارش</th>
+                      <th>جمع تعداد کالا</th>
+                      <th>تخفیف</th>
                       <th>نوع پرداخت</th>
-                      <th>کالسنتر</th>
-                      <th>عملیات</th>
+                      <th>توضیحات فروشنده</th>
+                      <th>توضیحات ارسال</th>
+                      <th>جزئیات</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for order in orders %}
                       <tr>
                         <td></td>
-                        <td>{{order.id}}</td>
+                        <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
+                        <td class="timestamp">{{order.allotment_Date | date('Y-m-d')}}</td>
+                        <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+                        <td>{{order.address}}</td>
+                        <td>{{order.fullName}}</td>
+                        <td>{{order.mobile}}<br>{{order.telephone}}</td>
                         <td>
                           {% for ProductItem in order.products %}
                           <span>
@@ -67,19 +76,19 @@
                           </span>
                           {% endfor %}
                         </td>
-                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        <td>{{'-'}}</td>
-                        <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
-                        <td>{{order.postalCode}}</td>
-                        <td>{{order.fullName}}</td>
-                        <td>{{order.address}}</td>
-                        <td>{{order.mobile}}<br>{{order.telephone}}</td>
+                        <td>{{order.cashPrice | number_format}}</td>
+                        <td>{{order.prePayment | number_format}}</td>
+                        <td>{{order.products.count}}</td>
+                        <td>{{order.products.sum("count")}}</td>
+                        <td>{{order.products.sum("off")}}</td>
                         {% if order.paymentMethod == 'cash' %}
                           <td>{{'نقدی'}}</td>
                         {% else %}
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
-                        <td>{{''}}</td>
+                        <td>{{ order.sellerDescription }}</td>
+                        <td>{{ order.sendDescription }}</td>
+
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
@@ -110,48 +119,50 @@
           </div>
 
       <div class="row">
-        <div class="col-6">
-          <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
-            <input type="hidden" name="_token" value="{{csrf_token()}}" />
-            <label for="status">
-              تعیین وضعیت تحویل
-              <span class="text-danger">*</span>
-            </label>
-            <select class="p-2 pb-2 form-control col-sm-6" name="status">
-              <option value="">گزینه ای انتخاب نشده</option>
-              {% for bot_status in bottom_statuses %}
-                <option value="{{bot_status.id}}">{{bot_status.name}}</option>
-              {% endfor %}
-         
-            </select>
-            <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
-              <strong class="h6">
-                ذخیره
-              </strong>
-            </button>
-          </form>
-          <hr>
-          
-            {% set user = auth_user() %}
-            {% if user.backToFollowManager != null %} 
-            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
-              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
-                <strong class="h6">
-                  برگشت به مدیر پیگیری
-                </strong>
-              </button>
-              <input name="status" type="hidden"  value="8" />
-            </form>
-            {% else %}
-              <button onclick="alert('این ویژگی برای شما در دسترس نیست')" title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
-                <strong class="h6">
-                    <i class="fas fa-lock crud-icon"></i>
-                  برگشت به مدیر پیگیری
-                </strong>
-              </button>
-            {% endif %}
 
-         </div>
+          <div class="col-sm-6">
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
+              <input type="hidden" name="_token" value="{{csrf_token()}}" />
+              <label for="status">
+                تعیین وضعیت تحویل
+                <span class="text-danger">*</span>
+              </label>
+              <select class="p-2 pb-2 form-control col-sm-6" name="status">
+                <option value="">گزینه ای انتخاب نشده</option>
+                {% for bot_status in bottom_statuses %}
+                  <option value="{{bot_status.id}}">{{bot_status.name}}</option>
+                {% endfor %}
+          
+              </select>
+              <button class="col-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  ذخیره
+                </strong>
+              </button>
+            </form>
+          </div>
+          
+          <div class="col-sm-6 mt-4">
+              {% set user = auth_user() %}
+              {% if user.backToFollowManager != null %} 
+              <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
+                <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
+                  <strong class="h6">
+                    برگشت به مدیر پیگیری
+                  </strong>
+                </button>
+                <input name="status" type="hidden"  value="8" />
+              </form>
+              {% else %}
+                <button onclick="alert('این ویژگی برای شما در دسترس نیست')" title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
+                  <strong class="h6">
+                      <i class="fas fa-lock crud-icon"></i>
+                    برگشت به مدیر پیگیری
+                  </strong>
+                </button>
+              {% endif %}
+          </div>
+
         
       </div>
      

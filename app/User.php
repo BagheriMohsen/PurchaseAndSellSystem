@@ -10,6 +10,22 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Notifications\Notifiable;
 
+
+
+
+
+use App\Order;
+use App\User;
+use App\State;
+use App\StoreRoom;
+use App\City;
+use App\SpecialTariff;
+use App\MoneyCirculation;
+use App\UserInventory;
+use App\BankAccount;
+use App\PaymentCirculation;
+use App\AgentCost;
+
 class User extends Authenticatable implements HasMedia
 {
     use Notifiable;
@@ -84,72 +100,92 @@ class User extends Authenticatable implements HasMedia
     |--------------------------------------------------------------------------
     */
     public function orderSeller(){
-        return $this->hasMany('App\Order');
+        return $this->hasMany(Order::class);
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Releation with Order Model
     |--------------------------------------------------------------------------
     */
     public function orderAgent(){
-        return $this->hasMany('App\Order');
+        return $this->hasMany(Order::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with User Model
     |--------------------------------------------------------------------------
     */
     public function orderFollowUpManager(){
-        return $this->hasMany('App\User','followUpManager_id','id');
+        return $this->hasMany(User::class,'followUpManager_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with User Model
     |--------------------------------------------------------------------------
     */
     public function orderCallCenter(){
-        return $this->hasMany('App\User','callCenter_id','id');
+        return $this->hasMany(User::class,'callCenter_id','id');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Releation with User Model
+    |--------------------------------------------------------------------------
+    */
+    public function callcenter(){
+        return $this->belongsTo(User::class, 'callCenter');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
     public function statesUnderControl(){
-        return $this->hasMany('App\State','followUpManager','id');
+        return $this->hasMany(State::class,'followUpManager','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with StoreRoom Model
     |--------------------------------------------------------------------------
     */
     public function receives(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany(StoreRoom::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with StoreRoom Model
     |--------------------------------------------------------------------------
     */
     public function sends(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany(StoreRoom::class);
     }
+
+    
+
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model
     |--------------------------------------------------------------------------
     */
     public function state(){
-      return $this->belongsTo('App\State');
+      return $this->belongsTo(State::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
     public function city(){
-        return $this->belongsTo('App\City');
+        return $this->belongsTo(City::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releate with ItSelf
@@ -159,13 +195,14 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsTo(User::class, 'agent_id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releate with SpecialTariff
     |--------------------------------------------------------------------------
     */
     public function tariffs(){
-      return $this->hasMany('App\SpecialTariff');
+      return $this->hasMany(SpecialTariff::class);
     }
    
     /*
@@ -174,31 +211,34 @@ class User extends Authenticatable implements HasMedia
     |--------------------------------------------------------------------------
     */
     public function MoneyCirculations(){
-        return $this->hasMany('App\MoneyCirculation','user_id','id');
+        return $this->hasMany(MoneyCirculation::class,'user_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releate with UserInventory - agent
     |--------------------------------------------------------------------------
     */
     public function agentInventories(){
-        return $this->hasMany('App\UserInventory','agent_id','id');
+        return $this->hasMany(UserInventory::class,'agent_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releate with UserInventory - seller
     |--------------------------------------------------------------------------
     */
     public function sellerInventories(){
-        return $this->hasMany('App\UserInventory','seller_id','id');
+        return $this->hasMany(UserInventory::class,'seller_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with BankAccount Model
     |--------------------------------------------------------------------------
     */
     public function bank_accounts(){
-        return $this->hasMany('App\BankAccount');
+        return $this->hasMany(BankAccount::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -206,16 +246,18 @@ class User extends Authenticatable implements HasMedia
     |--------------------------------------------------------------------------
     */
     public function payment_circulations(){
-        return $this->hasMany('App\PaymentCirculation','bank_account_id','id');
+        return $this->hasMany(PaymentCirculation::class,'bank_account_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with User Model
     |--------------------------------------------------------------------------
     */
     public function agent_costs(){
-        return $this->hasMany('App\AgentCost');
+        return $this->hasMany(AgentCost::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Conversion image with Media Model

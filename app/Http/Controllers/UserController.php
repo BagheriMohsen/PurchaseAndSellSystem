@@ -512,7 +512,7 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function sellers(){
-      $users = User::Role(['seller'])->get();
+      $users = User::with("callCenter")->Role(['seller'])->get();
       return view('Admin.User.users-sellers',compact('users'));
     }
     /*

@@ -14,7 +14,9 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::latest()->paginate(15);
+        $cities = City::with("state")
+        ->latest()
+        ->paginate(15);
         $states = State::latest()->get();
         return view('Admin.City&State.cities',compact('states','cities'));
     }

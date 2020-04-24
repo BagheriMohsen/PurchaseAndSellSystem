@@ -27,6 +27,7 @@
                   <tr class="text-center">
                     <th>نام-نام خانوادگی</th>
                     <th>نقش</th>
+                    <th>کالسنتر</th>
                     <th>استان-شهر</th>
                     <th >وضعیت</th>
                     <th >تایید مدارک</th>
@@ -37,7 +38,6 @@
                   {% for user in users %}
                     <tr class="text-center">
                       <td>{{user.name}}{{' '}}{{user.family}}</td>
-                     
                       <td>
                       {% set role = user.getRoleNames().first() %}
                       {% if role == 'admin' %}
@@ -82,6 +82,7 @@
                           
                       {% endif %}
                       </td>
+                      <td>{{user.callcenter.name}}{{" "}}{{ user.callcenter.family}}</td>
                       <td>{{user.state.name}}{{'-'}}{{user.city.name}}</td>
                       {% if user.status != null %}
                       <td class="text-success">  {{'فعال'}} </td>

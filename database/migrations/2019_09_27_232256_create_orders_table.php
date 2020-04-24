@@ -54,6 +54,8 @@ class CreateOrdersTable extends Migration
             $table->Date('send_seller_Date')->nullable();
             $table->Date('send_callcenter_Date')->nullable();
             $table->Date('returnToSeller_Date')->nullable();
+            $table->Date('returnToManager_Date')->nullable();
+            $table->Date('allotment_Date')->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
             $table->timestamps();

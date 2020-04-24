@@ -899,7 +899,7 @@ $(document).ready(function(){
         var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
-        var deliverDescription = form.find('textarea[name="deliverDescription"]').val();
+        var sendDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
         m = moment(HBD_Date, 'jYYYY/jM/jD');
         var formData = {
@@ -920,7 +920,7 @@ $(document).ready(function(){
             chequePrice:chequePrice,
             instant:instant,
             sellerDescription:sellerDescription,
-            deliverDescription:deliverDescription,
+            sendDescription:sendDescription,
             orderArray:orderArray,
             product_id_array:product_id_array
 

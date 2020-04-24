@@ -109,7 +109,16 @@ class SearchController extends Controller
         ->when($city,function($query,$city){
             return $query->where('city_id','=',$city); 
         })
-        ->latest()->paginate(10);
+        ->with([
+            "products",
+            "seller",
+            "callCenter",
+            "followUpManager",
+            "OrderStatus",
+            "agent"
+        ])
+        ->latest()
+        ->paginate(10);
         
         return view('Admin.Search.Admin.search-result',compact('orders'));
 

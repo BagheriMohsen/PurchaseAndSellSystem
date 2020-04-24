@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Order;
 use PDF;
-use Carbon\Carbon;
 use DB;
+use Carbon\Carbon;
+
+
+use App\Order;
+use App\User;
+use App\State;
+use App\Customer;
+use App\OrderProduct;
+use App\City;
+use App\OrderStatus;
+use App\UserInventory;
+use App\SpecialTariff;
+use App\MoneyCirculation;
+
 class OrderController extends Controller
 {
     /**
@@ -28,8 +40,8 @@ class OrderController extends Controller
     {   
         $products   = 'App\Product'::latest()->get();
         
-        $cities     = 'App\City'::latest()->get();
-        $states     = 'App\State'::latest()->get();
+        $cities     = City::latest()->get();
+        $states     = State::latest()->get();
         return view('Admin.Order.Seller.order-create',compact('cities','states','products'));
     }
 
@@ -41,12 +53,14 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // return response()->json(implode(",",$request->product_id_array));
+
+        $data = $request->all();
+
         /*###################IF###################*/
-            $city = 'App\City'::where('id',$request->city_id)->first();
+            $city = City::where('id',$request->city_id)->first();
             
             // Find Agent In This City if agent send auto is not null
-            $userSendAuto = 'App\User'::where([
+            $userSendAuto = User::where([
                 ['city_id','=',$city->id],
                 ['sendAuto','!=',Null]
             ])->first();
@@ -54,45 +68,35 @@ class OrderController extends Controller
             if($userSendAuto != null){
                 $agent_id = $userSendAuto->id;
                
-                $state = 'App\State'::where('id',$city->state->id)->first();
+                $state = State::where('id',$city->state->id)->first();
                 $followUpManager_id = $state->followUpManager;
 
                 if($followUpManager_id == null){
-                    $user = 'App\User'::role('followUpManager')->first();
+                    $user = User::role('followUpManager')->first();
                     $followUpManager_id = $user->id;
-                   
                 }
                 
             }else{
                
                 $agent_id = null;
-                $state = 'App\State'::where('id',$city->state->id)->first();
+                $state = State::where('id',$city->state->id)->first();
                 $followUpManager_id = $state->followUpManager;
 
                 if($followUpManager_id == null){
-                    $user = 'App\User'::role('followUpManager')->first();
+                    $user = User::role('followUpManager')->first();
                     $followUpManager_id = $user->id;
                    
                 }
             }
 
-        $status = 'App\Customer'::where('mobile',$request->mobile) 
+        $status = Customer::where('mobile',$request->mobile) 
         ->exists();
 
         if(!$status){
             // Create Customer details
             $UserID = uniqid(rand(), true);
-            $customer = 'App\Customer'::create([
-                'state_id'      =>  $request->state_id,
-                'city_id'       =>  $request->city_id,
-                'UserID'        =>  $UserID,
-                'fullName'      =>  $request->fullName,
-                'mobile'        =>  $request->mobile,
-                'telephone'     =>  $request->telephone,
-                'postalCode'    =>  $request->postalCode,
-                'address'       =>  $request->address,
-                'HBD_Date'      =>  $request->HBD_Date
-            ]);
+            $data['UserID'] = $UserID;
+            $customer = Customer::create($data);
         }
         
         $product_id_array = implode(",",$request->product_id_array);
@@ -100,35 +104,20 @@ class OrderController extends Controller
         if(is_null($agent_id)){
             $status = 3;
         }
+
         /*##################ENDIF##################*/
-        $trackingCode = uniqid(rand(), true);
-        $order = Order::create([
-            'city_id'           =>      $request->city_id,
-            'state_id'          =>      $request->state_id,
-            'agent_id'          =>      $agent_id,
-            'followUpManager_id'=>      $followUpManager_id,
-            'seller_id'         =>      auth()->user()->id,
-            'status'            =>      $status,
-            'lastStatus'        =>      1,
-            'transport_id'      =>      4,
-            'product_array'     =>      $product_id_array,
-            'trackingCode'      =>      $trackingCode,
-            'mobile'            =>      $request->mobile,
-            'telephone'         =>      $request->telephone,
-            'fullName'          =>      $request->fullName,
-            'paymentMethod'     =>      $request->paymentMethod,
-            'shippingCost'      =>      $request->shippingCost,
-            'prePayment'        =>      $request->prePayment,
-            'cashPrice'         =>      $request->cashPrice,
-            'chequePrice'       =>      $request->chequePrice,
-            'instant'           =>      $request->instant,
-            'sellerDescription' =>      $request->sellerDescription,
-            'sendDescription'   =>      $request->deliverDescription,
-            'postalCode'        =>      $request->postalCode,
-            'address'           =>      $request->address,
-            'HBD_Date'          =>      $request->HBD_Date,
-            
-        ]);
+        if(!is_null($agent_id)){
+            $data["allotment_Date"] = Carbon::now();
+        }
+        $data['product_array']      =   $product_id_array;
+        $data["trackingCode"]       =   uniqid(rand(), true);
+        $data["lastStatus"]         =   1;
+        $data["transport_id"]       =   4;
+        $data["agent_id"]           =   $agent_id;
+        $data["followUpManager_id"] =   $followUpManager_id;
+        $data["seller_id"]          =   auth()->user()->id;
+        $data["status"]             =   $status;
+        $order = Order::create($data);
 
         if(!is_null($agent_id)){
             $order->update(['delivary_Date'=>Carbon::now()]);
@@ -136,7 +125,7 @@ class OrderController extends Controller
 
         $items = $request->orderArray;
         foreach($items as $item){
-            'App\OrderProduct'::create([
+            OrderProduct::create([
                 'order_id'      =>  $order->id,
                 'product_id'    =>  $item['product_id'],
                 'count'         =>  $item['count'],
@@ -167,13 +156,13 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::findOrFail($id);
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
         if($user->id != $order->seller_id){
             return abort(404);
         }
-        $states = 'App\State'::latest()->get();
-        $cities = 'App\City'::latest()->get();
+        $states = State::latest()->get();
+        $cities = City::latest()->get();
        
         return view('Admin.Order.Seller.order-edit',compact(
             'order',
@@ -193,10 +182,10 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         /*###################IF###################*/
-        $city = 'App\City'::where('id',$order->city_id)->first();
+        $city = City::where('id',$order->city_id)->first();
             
         // Find Agent In This City if agent send auto is not null
-        $userSendAuto = 'App\User'::where([
+        $userSendAuto = User::where([
             ['city_id','=',$city->id],
             ['sendAuto','!=',Null]
         ])->first();
@@ -204,11 +193,11 @@ class OrderController extends Controller
         if($userSendAuto != null){
             $agent_id = $userSendAuto->id;
         
-            $state = 'App\State'::where('id',$city->state->id)->first();
+            $state = State::where('id',$city->state->id)->first();
             $followUpManager_id = $state->followUpManager;
 
             if($followUpManager_id == null){
-                $user = 'App\User'::role('followUpManager')->first();
+                $user = User::role('followUpManager')->first();
                 $followUpManager_id = $user->id;
             
             }
@@ -216,17 +205,17 @@ class OrderController extends Controller
         }else{
         
             $agent_id = null;
-            $state = 'App\State'::where('id',$city->state->id)->first();
+            $state = State::where('id',$city->state->id)->first();
             $followUpManager_id = $state->followUpManager;
 
             if($followUpManager_id == null){
-                $user = 'App\User'::role('followUpManager')->first();
+                $user = User::role('followUpManager')->first();
                 $followUpManager_id = $user->id;
             
             }
         }
 
-            $status = 'App\Customer'::query()
+            $status = Customer::query()
             ->where('fullName', 'LIKE', "%{$request->fullName}%") 
             ->exists();
         $product_id_array = implode(",",$request->product_id_array);
@@ -260,12 +249,12 @@ class OrderController extends Controller
         ]);
 
         foreach($order->products as $order_product){
-            'App\OrderProduct'::destroy($order_product->id);
+            OrderProduct::destroy($order_product->id);
         }
 
         $items = $request->orderArray;
         foreach($items as $item){
-            'App\OrderProduct'::create([
+            OrderProduct::create([
                 'order_id'      =>  $order->id,
                 'product_id'    =>  $item['product_id'],
                 'count'         =>  $item['count'],
@@ -293,7 +282,7 @@ class OrderController extends Controller
     |*/
     public function OrdersForEdit(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['seller_id','=',$user->id],
             ['agent_id','=',null]//order in FollowUpManager Panel
@@ -325,7 +314,7 @@ class OrderController extends Controller
 
     public function OrdersProductForEditPage($id){
         $order = Order::findOrFail($id);
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         
 
         if($order->seller_id != $user->id){
@@ -364,8 +353,8 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderLists(){
-        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['status','=',7],// Waiting For Delivary
             ['agent_id','=',$user->id]
@@ -378,8 +367,8 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderCollectedlist(){
-        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
                 ['status','=',10],//Collected in City
                 ['agent_id','=',$user->id]
@@ -405,10 +394,10 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderCanceledList(){
-        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
+        $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
         $CustomerCancelled = 13;//Customer cancelled
         $CustomerFinalCancelled = 16;//Customer Final Cancelled
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['status','=',13],//Customer cancelled
             ['agent_id','=',$user->id]
@@ -431,8 +420,8 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentOrderSuspendedList(){
-        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
+        $user = User::findOrFail(auth()->user()->id);
         $Orders_Status = 14;// Order Suspended
         $orders = Order::where([
             ['status','=',14],// Order Suspended
@@ -460,12 +449,12 @@ class OrderController extends Controller
     |*/
     public function AgentExistInState($CityName){
         
-        $city = 'App\City'::where('name',$CityName)->exists();
+        $city = City::where('name',$CityName)->exists();
    
         if($city == True){
-            $city = 'App\City'::where('name',$CityName)->get()->first();
+            $city = City::where('name',$CityName)->get()->first();
           
-            $user = 'App\User'::where('city_id',$city->id)->Role(['agent','agentChief'])->get();
+            $user = User::where('city_id',$city->id)->Role(['agent','agentChief'])->get();
            
             if($user->toArray() != false){
                 $result = ['message'=>'سیستم ارسال در این شهر دارای نماینده است','state'=>'2'];
@@ -494,16 +483,17 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentChangeOrderStatus(Request $request){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         
         $items = $request->orderNumbers;
-        foreach($items as $item){
+        return response()->json($items);
 
+        foreach($items as $item){
             
             if($item['statue'] == 10 || $item['statue'] == 11 || $item['statue'] == 12){
                 
                 $order = Order::findOrFail($item['id']);
-                $user = 'App\User'::findOrFail($order->agent_id);
+                $user = User::findOrFail($order->agent_id);
                 /** foreach for check product exist in storage or not */
                 
                 foreach($order->products as $order_product){
@@ -542,12 +532,12 @@ class OrderController extends Controller
               
                 /** foreach for store Room collected */
 
-                echo $this->orderStoreRoomCollected($order,$user,$item);
+                $this->orderStoreRoomCollected($order,$user,$item);
                 
 
-                echo $this->sellerPorsantCal($order);
+                $this->sellerPorsantCal($order);
                 
-                $agent = 'App\User'::findOrFail($order->agent_id);
+                $agent = User::findOrFail($order->agent_id);
                 $product_id_array = explode(",",$order->product_array);
                 $status = $item['statue'];
                 if(is_null($user->calType)){
@@ -568,7 +558,7 @@ class OrderController extends Controller
             /*############## Cancelled Status ############# */
 
             if($item['statue'] == 13 || $item['statue'] == 16){
-                $order = 'App\Order'::findOrFail($item['id']);
+                $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'cancelled_Date'=>Carbon::now()
@@ -577,7 +567,7 @@ class OrderController extends Controller
             /*########## Suspended Status ###############*/
 
             }elseif($item['statue'] == 14){
-                $order = 'App\Order'::findOrFail($item['id']);
+                $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'suspended_Date'=>Carbon::now(),
@@ -586,7 +576,7 @@ class OrderController extends Controller
             /*#######Return To Seller_Date Status###########*/
 
             }elseif($item['statue'] == 6){
-                $order = 'App\Order'::findOrFail($item['id']);
+                $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     'returnToSeller_Date'=>Carbon::now(),
@@ -594,8 +584,14 @@ class OrderController extends Controller
 
             /*########## Other Statuses #############*/
             
+            }elseif($item['statue'] == 8){
+                $order = Order::findOrFail($item['id']);
+                $order->update([
+                    'status'=>$item['statue'],
+                    'returnToManager_Date'=>Carbon::now()
+                ]);
             }else{
-                $order = 'App\Order'::findOrFail($item['id']);
+                $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
                     ]);
@@ -667,7 +663,7 @@ class OrderController extends Controller
             ])->firstOrFail();
 
             // Change Order Status To Collected 
-            $order = 'App\Order'::findOrFail($item['id']);
+            $order = Order::findOrFail($item['id']);
             $order->update([
                 'status'            =>  $item['statue'],
                 'collected_Date'    =>  Carbon::now()
@@ -706,33 +702,33 @@ class OrderController extends Controller
     public function AgentSharedPriceForEachProduct($product_id_array,$agent,$status,$order){
 
        
-        $AgentStatus  = 'App\UserInventory'::where('agent_id',$agent->id)->exists();
+        $AgentStatus  = UserInventory::where('agent_id',$agent->id)->exists();
         $trackingCode = uniqid();
         foreach($product_id_array as $product_id){
             $product        = 'App\Product'::findOrFail($product_id);
-            $count  = 'App\OrderProduct'::where([
+            $count  = OrderProduct::where([
                 ['order_id','=',$order->id],
                 ['product_id','=',$product->id]
             ])->sum('count');
             /* Agent */
             // if agent has row in users-inventory table
             if($AgentStatus == True){
-                $Agent = 'App\User'::findOrFail($agent->id);
-                $AgentInventory         =   'App\UserInventory'::where('agent_id',$agent->id)->firstOrFail();
-                $specialSharedStatus    =   'App\SpecialTariff'::where([
+                $Agent = User::findOrFail($agent->id);
+                $AgentInventory         =   UserInventory::where('agent_id',$agent->id)->firstOrFail();
+                $specialSharedStatus    =   SpecialTariff::where([
                     ['user_id','=',$agent->id],
                     ['product_id','=',$product_id]
                 ])->exists();
                 // if agent has special shared
                 if($specialSharedStatus == True){
-                    $specialShared    =   'App\SpecialTariff'::where([
+                    $specialShared    =   SpecialTariff::where([
                         ['user_id','=',$agent->id],
                         ['product_id','=',$product_id]
                     ])->firstOrFail();
                     
                     $balance        =   $AgentInventory->balance + $specialShared->price;
                     $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
-                    'App\MoneyCirculation'::create([
+                    MoneyCirculation::create([
                         'user_inventory_id'     =>  $AgentInventory->id,
                         'agent_id'              =>  $agent->id,
                         'seller_id'             =>  null,
@@ -743,7 +739,7 @@ class OrderController extends Controller
                         'trackingCode'          =>  $trackingCode,
                     ]);
                 }else{
-                    $Agent = 'App\User'::findOrFail($order->agent_id);
+                    $Agent = User::findOrFail($order->agent_id);
                     $placeNumber = $status;
 
                     switch ($placeNumber){
@@ -762,7 +758,7 @@ class OrderController extends Controller
                     }
                     $balance        =   $AgentInventory->balance + $price;
                     $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
-                    'App\MoneyCirculation'::create([
+                    MoneyCirculation::create([
                         'user_inventory_id'     =>  $AgentInventory->id,
                         'agent_id'              =>  $agent->id,
                         'seller_id'             =>  null,
@@ -776,32 +772,32 @@ class OrderController extends Controller
             // agent collected for first time
             }else{
                 
-                $Agent = 'App\User'::findOrFail($agent->id);
-                $specialSharedStatus    =   'App\SpecialTariff'::where([
+                $Agent = User::findOrFail($agent->id);
+                $specialSharedStatus    =   SpecialTariff::where([
                     ['user_id','=',$order->agent_id],
                     ['product_id','=',$product_id]
                 ])->exists();
 
                 if($specialSharedStatus == True){
 
-                        $specialShared    =   'App\SpecialTariff'::where([
+                        $specialShared    =   SpecialTariff::where([
                             ['user_id','=',$agent->id],
                             ['product_id','=',$product_id]
                         ])->firstOrFail();
         
                         $balance    =   $specialShared->price;
                         if($AgentStatus == False){
-                            $userInventory = 'App\UserInventory'::create([
+                            $userInventory = UserInventory::create([
                                 'agent_id'  =>      $agent->id,
                                 'balance'   =>      $balance,
                                 'debtor'    =>      1
                             ]);
                         }else{
-                            $AgentInventory='App\UserInventory'::where('agent_id',$agent->id)->firstOrFail();
+                            $AgentInventory=UserInventory::where('agent_id',$agent->id)->firstOrFail();
                             $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                         }
             
-                    'App\MoneyCirculation'::create([
+                    MoneyCirculation::create([
                         'user_inventory_id'     =>  $userInventory->id,
                         'agent_id'              =>  $agent->id,
                         'seller_id'             =>  null,
@@ -814,7 +810,7 @@ class OrderController extends Controller
 
                     
                 }else{
-                    $Agent = 'App\User'::findOrFail($agent->id);
+                    $Agent = User::findOrFail($agent->id);
                     $placeNumber = $status;
                     $balance = 0;
                     switch ($placeNumber){
@@ -830,12 +826,12 @@ class OrderController extends Controller
                     }
 
                     
-                    $userInventory = 'App\UserInventory'::create([
+                    $userInventory = UserInventory::create([
                         'agent_id'  =>      $Agent->id,
                         'balance'   =>      $balance,
                         'debtor'    =>  1
                     ]);
-                    'App\MoneyCirculation'::create([
+                    MoneyCirculation::create([
                         'user_inventory_id'     =>  $userInventory->id,
                         'agent_id'              =>  $agent->id,
                         'seller_id'             =>  null,
@@ -865,14 +861,14 @@ class OrderController extends Controller
     |*/
     public function AgentPriceForEachFactor($agent,$order){
 
-        $AgentStatus = 'App\UserInventory'::where('agent_id',$agent->id)->exists();
+        $AgentStatus = UserInventory::where('agent_id',$agent->id)->exists();
         $trackingCode = uniqid();
         if($AgentStatus){
-            $AgentInventory  =   'App\UserInventory'::where('agent_id',$agent->id)
+            $AgentInventory  =   UserInventory::where('agent_id',$agent->id)
             ->firstOrFail();
             $balance  =  $AgentInventory->balance + $agent->factorPrice;
                 $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
-                'App\MoneyCirculation'::create([
+                MoneyCirculation::create([
                     'user_inventory_id'     =>  $AgentInventory->id,
                     'agent_id'              =>  $agent->id,
                  
@@ -885,12 +881,12 @@ class OrderController extends Controller
                 ]);
 
         }else{
-            $userInventory = 'App\UserInventory'::create([
+            $userInventory = UserInventory::create([
                 'agent_id'  =>      $agent->id,
                 'balance'   =>      $agent->factorPrice,
                 'debtor'    =>  1
             ]);
-            'App\MoneyCirculation'::create([
+            MoneyCirculation::create([
                 'user_inventory_id'     =>  $userInventory->id,
                 'agent_id'              =>  $agent->id,
        
@@ -921,14 +917,14 @@ class OrderController extends Controller
     |*/
     public function sellerPorsantCal($order){
         $trackingCode   =   uniqid();
-        $SellerStatus   =   'App\UserInventory'::where('seller_id',$order->seller_id)->exists();
+        $SellerStatus   =   UserInventory::where('seller_id',$order->seller_id)->exists();
         /* Seller */
         if($SellerStatus == True){
-            $Seller             =   'App\User'::findOrFail($order->seller_id);
-            $SellerInventory    =   'App\UserInventory'::where('seller_id',$order->seller_id)->firstOrFail();
+            $Seller             =   User::findOrFail($order->seller_id);
+            $SellerInventory    =   UserInventory::where('seller_id',$order->seller_id)->firstOrFail();
             $balance            =   $SellerInventory->balance + $Seller->porsantSeller;
             $SellerInventory->update(['balance'=>$balance,'debtor'=>1]);
-            'App\MoneyCirculation'::create([
+            MoneyCirculation::create([
                 'user_inventory_id'     =>  $SellerInventory->id,
                 'agent_id'              =>  null,
                 'seller_id'             =>  $Seller->id,
@@ -938,13 +934,13 @@ class OrderController extends Controller
                 'trackingCode'          =>  $trackingCode,
             ]);
         }else{
-            $Seller            =   'App\User'::findOrFail($order->seller_id);
-            $userInventory = 'App\UserInventory'::create([
+            $Seller            =   User::findOrFail($order->seller_id);
+            $userInventory = UserInventory::create([
                 'seller_id' =>  $Seller->id,
                 'balance'   =>  $Seller->porsantSeller,
                 'debtor'    =>  1
             ]);
-            'App\MoneyCirculation'::create([
+            MoneyCirculation::create([
                 'user_inventory_id'     =>  $userInventory->id,
                 'agent_id'              =>  null,
                 'seller_id'             =>  $Seller->id,
@@ -963,16 +959,16 @@ class OrderController extends Controller
     |*/
     public function UserInventoryCalculated($user,$order_product,$order){
         $trackingCode   =   uniqid();
-        $SellerStatus   =   'App\UserInventory'::where('seller_id',$order->seller_id)->exists();
-        $AgentStatus    =   'App\UserInventory'::where('agent_id',$order->agent_id)->exists();
+        $SellerStatus   =   UserInventory::where('seller_id',$order->seller_id)->exists();
+        $AgentStatus    =   UserInventory::where('agent_id',$order->agent_id)->exists();
 
         /* Seller */
         if($SellerStatus == True){
-            $Seller             =   'App\User'::findOrFail($order->seller_id);
-            $SellerInventory    =   'App\UserInventory'::where('seller_id',$order->seller_id)->firstOrFail();
+            $Seller             =   User::findOrFail($order->seller_id);
+            $SellerInventory    =   UserInventory::where('seller_id',$order->seller_id)->firstOrFail();
             $balance            =   $SellerInventory->balance + $Seller->porsantSeller;
             $SellerInventory->update(['balance'=>$balance,'debtor'=>1]);
-            'App\MoneyCirculation'::create([
+            MoneyCirculation::create([
                 'user_inventory_id'     =>  $SellerInventory->id,
                 'agent_id'              =>  null,
                 'order_product_id'      =>  $order_product->id,
@@ -983,13 +979,13 @@ class OrderController extends Controller
                 'trackingCode'          =>  $trackingCode,
             ]);
         }else{
-            $Seller            =   'App\User'::findOrFail($order->seller_id);
-            $userInventory = 'App\UserInventory'::create([
+            $Seller            =   User::findOrFail($order->seller_id);
+            $userInventory = UserInventory::create([
                 'seller_id' =>  $Seller->id,
                 'balance'   =>  $Seller->porsantSeller,
                 'debtor'    =>  1
             ]);
-            'App\MoneyCirculation'::create([
+            MoneyCirculation::create([
                 'user_inventory_id'     =>  $userInventory->id,
                 'agent_id'              =>  null,
                 'order_product_id'      =>  $order_product->id,
@@ -1004,22 +1000,22 @@ class OrderController extends Controller
         /* Agent */
         // if agent has row in users-inventory table
         if($AgentStatus == True){
-            $Agent = 'App\User'::findOrFail($order->agent_id);
-            $AgentInventory         =   'App\UserInventory'::where('agent_id',$order->agent_id)->firstOrFail();
-            $specialSharedStatus    =   'App\SpecialTariff'::where([
+            $Agent = User::findOrFail($order->agent_id);
+            $AgentInventory         =   UserInventory::where('agent_id',$order->agent_id)->firstOrFail();
+            $specialSharedStatus    =   SpecialTariff::where([
                 ['user_id','=',$order->agent_id],
                 ['product_id','=',$order_product->product_id]
             ])->exists();
             // if agent has special shared
             if($specialSharedStatus == True){
-                $specialShared    =   'App\SpecialTariff'::where([
+                $specialShared    =   SpecialTariff::where([
                     ['user_id','=',$order->agent_id],
                     ['product_id','=',$order_product->product_id]
                 ])->firstOrFail();
                 
                 $balance        =   $AgentInventory->balance + $specialShared->price;
                 $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
-                'App\MoneyCirculation'::create([
+                MoneyCirculation::create([
                     'user_inventory_id'     =>  $AgentInventory->id,
                     'agent_id'              =>  $Agent->id,
                     'order_product_id'      =>  $order_product->id,
@@ -1031,7 +1027,7 @@ class OrderController extends Controller
                     'trackingCode'          =>  $trackingCode,
                 ]);
             }else{
-                $Agent = 'App\User'::findOrFail($order->agent_id);
+                $Agent = User::findOrFail($order->agent_id);
                 $placeNumber = $order->status;
 
                 switch ($placeNumber){
@@ -1047,7 +1043,7 @@ class OrderController extends Controller
                 }
                 $balance        =   $AgentInventory->balance + $price;
                 $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
-                'App\MoneyCirculation'::create([
+                MoneyCirculation::create([
                     'user_inventory_id'     =>  $AgentInventory->id,
                     'agent_id'              =>  $Agent->id,
                     'order_product_id'      =>  $order_product->id,
@@ -1062,32 +1058,32 @@ class OrderController extends Controller
         // agent collected for first time
         }else{
             
-            $Agent = 'App\User'::findOrFail($order->agent_id);
-            $specialSharedStatus    =   'App\SpecialTariff'::where([
+            $Agent = User::findOrFail($order->agent_id);
+            $specialSharedStatus    =   SpecialTariff::where([
                 ['user_id','=',$order->agent_id],
                 ['product_id','=',$order_product->product_id]
             ])->exists();
 
             if($specialSharedStatus == True){
 
-                    $specialShared    =   'App\SpecialTariff'::where([
+                    $specialShared    =   SpecialTariff::where([
                         ['user_id','=',$order->agent_id],
                         ['product_id','=',$order_product->product_id]
                     ])->firstOrFail();
     
                     $balance    =   $specialShared->price;
                     if($AgentStatus == False){
-                        $userInventory = 'App\UserInventory'::create([
+                        $userInventory = UserInventory::create([
                             'agent_id'  =>      $Agent->id,
                             'balance'   =>      $balance,
                             'debtor'    =>      1
                         ]);
                     }else{
-                        $AgentInventory='App\UserInventory'::where('agent_id',$order->agent_id)->firstOrFail();
+                        $AgentInventory=UserInventory::where('agent_id',$order->agent_id)->firstOrFail();
                         $AgentInventory->update(['balance'=>$balance,'debtor'=>1]);
                     }
          
-                'App\MoneyCirculation'::create([
+                MoneyCirculation::create([
                     'user_inventory_id'     =>  $userInventory->id,
                     'agent_id'              =>  $Agent->id,
                     'order_product_id'      =>  $order_product->id,
@@ -1101,7 +1097,7 @@ class OrderController extends Controller
 
                 
             }else{
-                $Agent = 'App\User'::findOrFail($order->agent_id);
+                $Agent = User::findOrFail($order->agent_id);
                 $placeNumber = $order->status;
 
                 switch ($placeNumber){
@@ -1117,12 +1113,12 @@ class OrderController extends Controller
                 }
 
                 
-                $userInventory = 'App\UserInventory'::create([
+                $userInventory = UserInventory::create([
                     'agent_id'  =>      $Agent->id,
                     'balance'   =>      $balance,
                     'debtor'    =>  1
                 ]);
-                'App\MoneyCirculation'::create([
+                MoneyCirculation::create([
                     'user_inventory_id'     =>  $userInventory->id,
                     'agent_id'              =>  $Agent->id,
                     'order_product_id'      =>  $order_product->id,
@@ -1147,7 +1143,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Factor($id){
-        $order = 'App\Order'::findOrFail($id);
+        $order = Order::findOrFail($id);
         $settings       = DB::table('settings');
         $Factor         = $settings->skip(0)->take(1)->get();
         $FactorStatus   = $settings->skip(0)->take(1)->exists();  
@@ -1163,7 +1159,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function sellerNoActionOrders(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['seller_id','=',$user->id],
             ['status','=',7],
@@ -1177,14 +1173,14 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function UnverifiedOrderList(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         
         /*## Agent ## */
         // $agents = array();
         // foreach($user->statesUnderControl as $state){
             
         //     foreach($state->cities as $city){
-        //         $agents[] = 'App\User'::with('city')
+        //         $agents[] = User::with('city')
         //         ->where('city_id',$city->id)
         //         ->Role('agent')->get();
         //     }
@@ -1195,7 +1191,7 @@ class OrderController extends Controller
         // }else{
         //     $agents = null; 
         // }
-        $agents = 'App\User'::where([
+        $agents = User::where([
             ['status','=','on']
         ])->Role('agent')->latest()->get();
         /*## Agent ## */
@@ -1217,7 +1213,7 @@ class OrderController extends Controller
     |*/
     public function sellerOrderCallBack(){
      
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['seller_id','=',$user->id],
             ['status','=',13],//Customer Cancelled
@@ -1233,14 +1229,14 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function receiveOrderFromAgent(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
        
         /*####### Agent ####### */
         // $agents = array();
         // foreach($user->statesUnderControl as $state){
             
         //     foreach($state->cities as $city){
-        //         $agents[] = 'App\User'::with('city')
+        //         $agents[] = User::with('city')
         //         ->where('city_id',$city->id)
         //         ->Role('agent')->get();
         //     }
@@ -1251,7 +1247,7 @@ class OrderController extends Controller
         // }else{
         //     $agents = null; 
         // }
-        $agents = 'App\User'::where([
+        $agents = User::where([
             ['status','=','on']
         ])->Role('agent')->latest()->get();
         /*####### Agent ####### */
@@ -1273,16 +1269,15 @@ class OrderController extends Controller
     |*/
     public function chooseAgentForDelivary(Request $request){
      
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $items = $request->orderNumbers;
         foreach($items as $item){
-            $order = 'App\Order'::findOrFail($item['id']);
+            $order = Order::findOrFail($item['id']);
             $order->update([
                 'status'        =>      7,
                 'agent_id'      =>      $item['agent_id'],
-                'delivary_Date' =>      Carbon::now()
-
-                ]);
+                'allotment_Date'=>      Carbon::now()
+            ]);
         }
         return response()->json(['message' => 'موفقیت آمیز بود','status' => 1]);
     }
@@ -1292,7 +1287,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function receiveOrderFromFollowUpManager(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
             ['seller_id','=',$user->id],
             ['status','=',6],//Receive Order From FollowUpManager
@@ -1306,11 +1301,11 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentsDelivaryOrders(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
-        $bottom_statuses = 'App\OrderStatus'::skip(9)->take(5)->get();
-        $orders = 'App\Order'::where('agent_id',$user->id);
+        $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
+        $orders = Order::where('agent_id',$user->id);
 
         foreach($agents as $agent){
             $orders->Orwhere([
@@ -1335,11 +1330,11 @@ class OrderController extends Controller
     |*/
     public function AgentsCollectedOrders(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
 
-        $orders = 'App\Order'::where('agent_id',$user->id);
+        $orders = Order::where('agent_id',$user->id);
 
         foreach($agents as $agent){
             $orders->Orwhere([
@@ -1364,11 +1359,11 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentsCancelledOrders(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
 
-        $orders = 'App\Order'::where('agent_id',$user->id);
+        $orders = Order::where('agent_id',$user->id);
 
         foreach($agents as $agent){
             $orders->Orwhere([
@@ -1390,11 +1385,11 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentsSuspendedOrders(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->get();
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->get();
         
 
-        $orders = 'App\Order'::where('agent_id',$user->id);
+        $orders = Order::where('agent_id',$user->id);
 
         foreach($agents as $agent){
             $orders->Orwhere([

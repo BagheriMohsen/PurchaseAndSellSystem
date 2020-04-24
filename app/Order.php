@@ -4,6 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+use App\OrderProduct;
+use App\OrderStatus;
+use App\City;
+use App\State;
+use App\User;
+use App\MoneyCirculation;
+
 class Order extends Model
 {
    protected $fillable = [
@@ -44,6 +52,8 @@ class Order extends Model
     'edit_Date',
     'send_seller_Date',
     'send_callcenter_Date',
+    'returnToManager_Date',
+    'allotment_Date',
     'product_array'
    ];
     /*
@@ -52,23 +62,25 @@ class Order extends Model
     |--------------------------------------------------------------------------
     |*/
     public function products(){
-        return $this->hasMany('App\OrderProduct');
+        return $this->hasMany(OrderProduct::class);
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Releation with ProductStatus Model
     |--------------------------------------------------------------------------
     */
     public function OrderStatus(){
-        return $this->belongsTo('App\OrderStatus','status','id');
+        return $this->belongsTo(OrderStatus::class,'status','id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with City Model
     |--------------------------------------------------------------------------
     */
     public function city(){
-        return $this->belongsTo('App\City');
+        return $this->belongsTo(City::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +88,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function state(){
-        return $this->belongsTo('App\State');
+        return $this->belongsTo(State::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +96,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function seller(){
-        return $this->belongsTo('App\User','seller_id','id');
+        return $this->belongsTo(User::class,'seller_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -92,7 +104,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function agent(){
-        return $this->belongsTo('App\User','agent_id','id');
+        return $this->belongsTo(User::class,'agent_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -100,7 +112,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function followUpManager(){
-        return $this->belongsTo('App\User','followUpManager_id','id');
+        return $this->belongsTo(User::class,'followUpManager_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -108,7 +120,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
     public function callCenter(){
-        return $this->belongsTo('App\User','callCenter_id','id');
+        return $this->belongsTo(User::class,'callCenter_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -116,7 +128,7 @@ class Order extends Model
     |--------------------------------------------------------------------------
     |*/
     public function MoneyCirculations(){
-        return $this->hasMany('App\MoneyCirculation');
+        return $this->hasMany(MoneyCirculation::class);
     }
 
 }
