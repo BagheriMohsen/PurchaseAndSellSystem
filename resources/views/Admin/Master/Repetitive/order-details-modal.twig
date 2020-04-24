@@ -20,10 +20,10 @@
       </div>
 
       <!-- Modal body -->
-      <div class="modal-body text-center  ">
-        <table  class="table pt-2 pb-2 text-center">
+      <div class="modal-body   ">
+        <table  class="table pt-2 pb-2 ">
           <tbody>
-            <tr class="text-center">
+            <tr class="">
               <th>نام و نام خانوادگی</th>
               <th>شماره موبایل</th>
               <th>شماره تلفن</th>
@@ -39,13 +39,16 @@
               <td>{{order.state.name}}</td>
               <td>{{order.city.name}}</td>
             </tr>
-            <tr class="text-center">
+            <tr class="">
               <th>کد پستی</th>
+              <th colspan="5">آدرس</th>
               {# <th>کد پیگیری</th> #}
               {# <th>مبلغ مشارکت پایه</th> #}
             </tr>
             <tr>
               <td>{{ order.postalCode }}</td>
+              <td colspan="5">{{ order.address }}</td>
+
               {# <td>{{ order.trackingCode }}</td> #}
               {# <td>
                     <span>
@@ -65,12 +68,10 @@
             </tr>
           </tbody>
         </table>
-        <strong>آدرس:</strong>
-        {{order.address}}
         <hr>
-        <table  class="table pt-2 pb-2 text-center">
+        <table  class="table pt-2 pb-2">
           <tbody>
-            <tr class="text-center">
+            <tr>
               <th>محصول</th>
               <th>نوع</th>
               <th>مبلغ</th>
@@ -80,7 +81,7 @@
               <th>جمع</th>
             </tr>
             {% for item in order.products %}
-              <tr class="text-center">
+              <tr>
 
                 <td>{{ item.product.name }}</td>
                 {% if item.product_type is null %}
@@ -124,15 +125,15 @@
         #########
        -->
        <hr>
-       <table  class="table pt-2 pb-2 text-center">
+       <table  class="table pt-2 pb-2">
         <tbody>
-          <tr class="text-center">
+          <tr>
             <th>نوع پرداخت</th>
             <th>مبلغ پرداخت نقدی</th>
             <th>مبلغ پرداخت چکی</th>
             <th>پیش پرداخت</th>
           </tr>
-          <tr class="text-center">
+          <tr>
             {% if order.paymentMethod == "cash" %}
               <td>{{ 'نقدی' }}</td>
             {% else %}
@@ -142,12 +143,12 @@
             <td class="number">{{ order.chequePrice | number_format }}</td>
             <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
           </tr>
-          <tr class="text-center">
+          <tr>
             <th>هزینه ارسال</th>
             <th>مبلغ مشارکت</th>
             <th>قابل پرداخت</th>
           </tr>
-          <tr class="text-center">
+          <tr>
             <td class="post_price number">{{order.shippingCost | number_format}}</td>
             <td class="number">0</td>
             <td class="total number"></td>
@@ -155,14 +156,14 @@
         </tbody>
         </table>
         <hr>
-      <table  class="table bg-white pt-2 pb-2 text-center">
+      <table  class="table bg-white pt-2 pb-2">
       <tbody>
-          <tr class="text-center">
+          <tr>
             <th>توضیحات ارسال</th>
             <th>توضیحات فروشنده</th>
           </tr>
           
-              <tr class="text-center">
+              <tr>
                 <td>{{order.sendDescription}}</td>
                 <td>{{ order.sellerDescription }}</td>
               </tr>

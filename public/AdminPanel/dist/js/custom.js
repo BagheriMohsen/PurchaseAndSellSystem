@@ -40,6 +40,19 @@ $(document).ready(function(){
     
     //Defining functions
 
+    $('.justDate').each(function(index,value){
+        if(value.innerHTML){
+            var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+            value.innerHTML = jalaliDate;
+        }
+    });
+
+    $('.timestamp').each(function(index,value){
+        var jalaliTime = convertTimeStampToJalali(value.innerHTML)
+        value.innerHTML = (jalaliTime);
+    });
+
     //Check user role in create user page
     var checkUserRole = function(){
         var user_value = $('#user_role').val();
@@ -179,10 +192,7 @@ $(document).ready(function(){
             className: 'select-checkbox',
             targets:   0
         } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
+        select: true,
         order: [[ 1, 'asc' ]],
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
@@ -200,10 +210,7 @@ $(document).ready(function(){
             className: 'select-checkbox',
             targets:   0
         } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
+        select: true,
         order: [[ 1, 'asc' ]],
     });
     var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
@@ -222,10 +229,7 @@ $(document).ready(function(){
             className: 'select-checkbox',
             targets:   0
         } ],
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
+        select: true,
         order: [[ 1, 'asc' ]],
     });
     $('#productTable').DataTable( {
@@ -235,9 +239,9 @@ $(document).ready(function(){
         buttons: [
             {
                 extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [2,3,4,5,6,7 ]
-                }
+                // exportOptions: {
+                //     columns: [2,3,4,5,6,7]
+                // }
             },
            
         ]
@@ -291,7 +295,6 @@ $(document).ready(function(){
             {
                 extend: 'excelHtml5',
             },
-           
         ],
     });
     //Warehouse tables
@@ -454,7 +457,6 @@ $(document).ready(function(){
                 name:name
             },
             success:function(response){
-                console.log(response);
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
                 self.find('button[type="submit"]').attr('disabled',false);
                 toastr["info"](response);
@@ -573,7 +575,6 @@ $(document).ready(function(){
                 }
             });
             var special_type_counter_id = '#specialCounter'+user_id;
-            console.log($(this).parents('table').find('tr'));
             $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
             });
     };
@@ -603,7 +604,6 @@ $(document).ready(function(){
         var product_name = $(this).find('select[name="product_id"] option:selected').html();
         var tariff_place = $(this).find('select[name="tariff_place"]').val();
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
-        console.log(tariff_price);
         $(this).trigger('reset');
         $.ajax({
             url:actionUrl,
@@ -653,7 +653,7 @@ $(document).ready(function(){
             }
         });
         var special_type_counter_id = '#specialCounter'+user_id;
-        console.log($(this).parents('table').find('tr'));
+        // console.log($(this).parents('table').find('tr'));
         $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
 
     });
@@ -680,7 +680,6 @@ $(document).ready(function(){
         chartData.forEach(function(element){
             cancelled.push(element.cancelled);
         });
-        console.log(dates,suspended,collected,cancelled);
         var config = {
             type: 'line',
             data: {
@@ -822,7 +821,6 @@ $(document).ready(function(){
             type:'GET',
             success:function(response){
                 productList = response;
-                console.log(response);
                 if($('.orderEditForm').length){
                     getOrderList();
                     
@@ -942,7 +940,7 @@ $(document).ready(function(){
     // Calculating order overall price
     function setOverAllPrice(){
         var overallPrice = null;
-        console.log($('.orderList .row'));
+        // console.log($('.orderList .row'));
         $('.orderList .row').each(function(index,value){
             var rowPrice = null;
             var count = value.querySelector('input[name="count"]').value;
@@ -951,7 +949,6 @@ $(document).ready(function(){
             rowPrice = (count*price) - off;
             overallPrice += rowPrice;
         });
-        console.log('overall',overallPrice);
         $('#overallPrice').html(numberWithCommas(overallPrice));
         var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
         $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(overallPrice) + parseInt(deliveryPrice)));
@@ -960,7 +957,6 @@ $(document).ready(function(){
     $('#orderForm input[name="shippingCost"]').on('change keyup',function(){
         var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
         var productsPrice = $('#overallPrice').html().replace(/\,/g,'',10);
-        console.log('sum',productsPrice+deliveryPrice);
         $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(productsPrice) + parseInt(deliveryPrice)));
     });
 
@@ -1111,32 +1107,14 @@ $(document).ready(function(){
         }
         return result;
     }
-    $('.timestamp').each(function(index,value){
-        var jalaliTime = convertTimeStampToJalali(value.innerHTML)
-        value.innerHTML = (jalaliTime);
-    });
+    
     $('.paginate_button').on('click',function(){
         $('.timestamp').each(function(index,value){
             var jalaliTime = convertTimeStampToJalali(value.innerHTML)
             value.innerHTML = (jalaliTime);
         });
-        $('.justDate').each(function(index,value){
-            if(value.innerHTML){
-                var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
-                var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
-                value.innerHTML = jalaliDate;
-            }
-    
-        });
     });
-    $('.justDate').each(function(index,value){
-        if(value.innerHTML){
-            var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
-            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
-            value.innerHTML = jalaliDate;
-        }
 
-    });
     $('.inputDateToJalali').each(function(index,value){
         if(value.value){
             var dateArray = value.value.replace(/\-/g,' ').split(' ');
@@ -1259,7 +1237,6 @@ $(document).ready(function(){
             url:baseUrl+'/states/AllStatesAndCitiesName',
             type:'Get',
             success:function(response){
-                console.log(response);
                 statesCityArray = response;
             }
         });
@@ -1348,7 +1325,6 @@ $(document).ready(function(){
             // var formData = [];
             // formData.status = condition;
             // formData.orders = orderNumbers;
-            console.log(orderNumbers);
             $.ajax({
                 url:actionUrl,
                 type:'get',
@@ -1357,7 +1333,6 @@ $(document).ready(function(){
                     orderNumbers:orderNumbers
                 },
                 success:function(response){
-                    console.log(response);
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
                     form.find('button').attr('disabled',false);
                     if(response.status == 1){
@@ -1386,7 +1361,6 @@ $(document).ready(function(){
             var orderId = {'id': parseInt(value[1]),'statue': status};
             orderNumbers.push(orderId);
         });
-        console.log(orderNumbers);
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
         }else{
@@ -1408,8 +1382,6 @@ $(document).ready(function(){
                     }else{
                         toastr["danger"](response.message);
                     }
-                    
-                    console.log(response);
                 }
             });
         }
@@ -1427,7 +1399,6 @@ $(document).ready(function(){
             var orderId = {'id': parseInt(value[1]),'agent_id': agent_id};
             orderNumbers.push(orderId);
         });
-        console.log(orderNumbers);
         if(!orderNumbers.length){
             alert('سفارشی انتخاب نشده است');
         }else if(!agent_id){
@@ -1451,8 +1422,6 @@ $(document).ready(function(){
                     }else{
                         toastr["danger"](response.message);
                     }
-                    
-                    console.log(response);
                 }
             });
         }
@@ -1470,7 +1439,6 @@ $(document).ready(function(){
             var orderId = {'id': parseInt(value[1]),'statue': statue};
             orderNumbers.push(orderId);
         });
-        console.log(orderNumbers);
         if(false){
             alert('سفارشی انتخاب نشده است');
         }else{
@@ -1492,8 +1460,6 @@ $(document).ready(function(){
                     }else{
                         toastr["danger"](response.message);
                     }
-                    
-                    console.log(response);
                 }
             });
         }
@@ -1511,7 +1477,6 @@ $(document).ready(function(){
             var orderId = {'id': parseInt(value[1]),'statue': statue};
             orderNumbers.push(orderId);
         });
-        console.log(orderNumbers);
         if(false){
             alert('سفارشی انتخاب نشده است');
         }else{
@@ -1533,8 +1498,6 @@ $(document).ready(function(){
                     }else{
                         toastr["danger"](response.message);
                     }
-                    
-                    console.log(response);
                 }
             });
         }
@@ -1552,7 +1515,6 @@ $(document).ready(function(){
             var orderId = {'id': parseInt(value[1]),'statue': statue};
             orderNumbers.push(orderId);
         });
-        console.log(orderNumbers);
         if(false){
             alert('سفارشی انتخاب نشده است');
         }else{
@@ -1574,8 +1536,6 @@ $(document).ready(function(){
                     }else{
                         toastr["danger"](response.message);
                     }
-                    
-                    console.log(response);
                 }
             });
         }
@@ -1633,7 +1593,6 @@ $(document).ready(function(){
         var dueDate = form.find('input[name="dueDate"]').val();
         var cancel = form.find('input[name="cancel"]').val();
         var cancelDesc = form.find('textarea[name="cancelDesc"]').val();
-        console.log(actionUrl,CSRF_TOKEN,condition,waitingDeliveryDesc,suspend,dueDate,cancel,cancelDesc);
         $.ajax({
             url:actionUrl,
             type:'get',
@@ -1649,7 +1608,6 @@ $(document).ready(function(){
             success:function(response){
                 form.find('button').html('<strong class="h6">ذخیره</strong>');
                 form.find('button').attr('disabled',false);
-                console.log(response);
             }
         });
     });
@@ -1663,7 +1621,6 @@ $(document).ready(function(){
         $('.row_total').each(function(index,value){
             total_without_off += parseInt(value.innerHTML);
         });
-        console.log(total_without_off,post_price,pre_payment);
         
         $('.total').html( total_without_off + post_price - pre_payment);
         
@@ -1710,7 +1667,6 @@ $(document).ready(function(){
     // });
  
     $('.persianDatePicker').on('change paste keyup select',function(){
-        console.log($(this).val());
         // $(this).siblings('.georgian_date').val()
     });
     // $('#searchForm').submit(function(event){
@@ -1757,7 +1713,7 @@ $(document).ready(function(){
             url:baseUrl+'/admin/orders/OrdersProductForEditPage/'+ order_id,
             type:'get',
             success:function(response){
-                console.log('edit',response);
+                // console.log('edit',response);
                 setOrderList(response);
             }
         });
@@ -1824,7 +1780,6 @@ $(document).ready(function(){
             type:'get',
             dataType:'json',
             success:function(response){
-                console.log(response);
                 credits = response[0].map(function(value){
                     var element = {}
                     element.id = value.id;
@@ -1835,12 +1790,10 @@ $(document).ready(function(){
                     element.contribute = 0;
                     return element;
                 });
-                console.log(credits);
                 $.ajax({
                     url: baseUrl + '/user-inventory/currentBillsDebtor/' + user_id,
                     type:'get',
                     success:function(response){
-                        console.log(response);
                         debts = response[0].map(function(value){
                             var element = {}
                             element.id = value.id;
@@ -1856,7 +1809,6 @@ $(document).ready(function(){
                             return element;
                         });
                         all = [...debts,...credits];
-                        console.log('all',all);
                         $('#current_bill_form').DataTable({
                             "paging":   false,
                             'searching':false,
