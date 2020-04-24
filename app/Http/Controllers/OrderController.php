@@ -1291,7 +1291,7 @@ class OrderController extends Controller
         $orders = Order::where([
             ['seller_id','=',$user->id],
             ['status','=',6],//Receive Order From FollowUpManager
-            ])->latest()->get();
+        ])->latest()->get();
 
             return view('Admin.Order.Seller.receive-order-fromFollowUpManager',compact('orders'));
     }
