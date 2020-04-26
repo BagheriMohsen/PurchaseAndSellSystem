@@ -42,7 +42,7 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
   /* Agent Chief Dashboard */
   Route::get('AgentChief-Dashboard/','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
   Route::get('AgentListsForAgentChief/','UserController@AgentListsForAgentChief')->name('AgentListsForAgentChief');
-  Route::get('Agent-Dashboard-Chart-API/','UserController@AgentChiefDashboardChartApi')->name('AgentChiefDashboardChartApi');
+  Route::get('Agent-Chief-Dashboard-Chart-API/','UserController@AgentChiefDashboardChartApi')->name('AgentChiefDashboardChartApi');
 
   /* Seller Dashboard */
   Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
