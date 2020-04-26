@@ -166,8 +166,6 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(StoreRoom::class);
     }
 
-    
-
     /*
     |--------------------------------------------------------------------------
     | Releation with State Model
@@ -240,6 +238,7 @@ class User extends Authenticatable implements HasMedia
     public function bank_accounts(){
         return $this->hasMany(BankAccount::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Releation with Payment Circulation Model
@@ -275,6 +274,7 @@ class User extends Authenticatable implements HasMedia
             ->width(250)
             ->height(250);
     }
+
     /*
     |--------------------------------------------------------------------------
     | Relate with Media Model
@@ -283,6 +283,7 @@ class User extends Authenticatable implements HasMedia
     public function avatarImage(){
         return $this->hasOne(Media::class,'id','image_id');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Call Card url in view page
@@ -291,6 +292,7 @@ class User extends Authenticatable implements HasMedia
     public function getCardUrlAttribute(){
         return $this->avatarImage->getUrl('card');
     }
+
     /*
     |--------------------------------------------------------------------------
     | Call Thumb url in view page
