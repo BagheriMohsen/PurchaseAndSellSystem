@@ -767,6 +767,18 @@ $(document).ready(function(){
         });
     };
 
+    //Sell and orders Chart Setup for agent chief
+    if(document.querySelector('#agentChief_sell_chart')){
+        var element_id = 'agentChief_sell_chart';
+        $.ajax({
+            url:baseUrl+'/users/Agent-Chief-Dashboard-Chart-API',
+            type:'Get',
+            success:function(response){ 
+                configureChart(response,element_id);
+            }
+        });
+    };
+
 
     var productList;
     var orderListTable = document.querySelector('.orderList');
