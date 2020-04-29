@@ -41,7 +41,7 @@
                     <thead>
                     <tr>
                       <th></th>
-                      <th>شماره<br> سفارش</th>
+                      <th class="d-none">شماره<br> سفارش</th>
                       <th>تاریخ اقدام</th>
                       {# <th>تاریخ تخصیص</th> #}
                       <th>استان-شهر</th>
@@ -58,7 +58,7 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
-                        <td>{{order.id}}</td>
+                        <td class="d-none">{{order.id}}</td>
                         <td>{{'-'}}</td>
                         {# <td>{{'-'}}</td> #}
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>

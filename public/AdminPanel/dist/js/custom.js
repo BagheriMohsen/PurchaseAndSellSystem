@@ -192,7 +192,9 @@ $(document).ready(function(){
             className: 'select-checkbox',
             targets:   0
         } ],
-        select: true,
+        select: {
+            style:'multi'
+        },
         order: [[ 1, 'asc' ]],
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
