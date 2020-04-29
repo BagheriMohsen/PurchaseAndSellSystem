@@ -109,7 +109,10 @@
           <select id="callcenter_id" class="form-control"  name="callCenter">
               <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
             {% for callCenter in callCenters %}
-              <option  {% if old('callCenter') == callCenter.id %} selected {% endif %} value="{{callCenter.id}}">{{callCenter.username}}</option>
+              <option  {% if old('callCenter') == callCenter.id %} selected {% endif %} 
+              value="{{callCenter.id}}">
+                {{callCenter.name}}{{" "}}{{ callCenter.family }}
+              </option>
             {% endfor %}
           </select>
         </div>

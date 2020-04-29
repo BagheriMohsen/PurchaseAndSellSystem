@@ -69,6 +69,13 @@
                         {% endif %}
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         <td>
+
+                          <div class="mx-auto">
+                            <a href="{{route('orders.edit',order.id)}}" title="ویرایش سفارش" class="mx-auto text-secondary" >
+                                <i class="far fa-edit crud-icon"></i>
+                            </a>
+                          </div>
+
                           {% if order.paymentMethod != 'cash' %}
                             <a title="جزئیات چک" class="text-secondary" >
                                 <i class="fas fa-money-bill crud-icon"></i>

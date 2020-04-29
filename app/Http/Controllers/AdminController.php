@@ -11,7 +11,7 @@ class AdminController extends Controller
 
     public function index(){
 
-      $user = 'App\User'::find(auth()->user()->id);
+      $user = User::find(auth()->user()->id);
       $role = $user->getRoleNames()->first();
      
       /*------------------Gate For Role Index Page------------------ */

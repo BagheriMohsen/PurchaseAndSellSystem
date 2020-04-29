@@ -7,11 +7,14 @@ use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
+
 class Product extends Model implements HasMedia
 {
 
     use HasMediaTrait;
     use Sluggable;
+
+    
     protected $fillable = [
       'user_id',
       'name',
@@ -81,6 +84,7 @@ class Product extends Model implements HasMedia
     public function tariffs(){
       return $this->hasMany('App\SpecialTariff');
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Conversion image with Media Model

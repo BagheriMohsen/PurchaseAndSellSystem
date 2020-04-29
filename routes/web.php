@@ -40,8 +40,10 @@ Route::group(['middleware'=>'auth','prefix'=>'users/','as'=>'users.'],function()
   Route::get('Agent-Dashboard','UserController@AgentDashboard')->name('AgentDashboard');
   Route::get('Agent-Dashboard-Chart-API/{userID}','UserController@AgentDashboardChartApi')->name('AgentDashboardChartApi');
   /* Agent Chief Dashboard */
-  Route::get('AgentChief-Dashboard','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
-  Route::get('AgentListsForAgentChief','UserController@AgentListsForAgentChief')->name('AgentListsForAgentChief');
+  Route::get('AgentChief-Dashboard/','UserController@AgentChiefDashboard')->name('AgentChiefDashboard');
+  Route::get('AgentListsForAgentChief/','UserController@AgentListsForAgentChief')->name('AgentListsForAgentChief');
+  Route::get('Agent-Chief-Dashboard-Chart-API/','UserController@AgentChiefDashboardChartApi')->name('AgentChiefDashboardChartApi');
+
   /* Seller Dashboard */
   Route::get('Seller-Dashboard','UserController@SellerDashboard')->name('SellerDashboard');
   /* CallCenter */
@@ -79,6 +81,7 @@ Route::middleware('auth')->get('types/{id}','ProductTypeController@index')->name
 Route::middleware('auth')->resource('types','ProductTypeController',['except'=>[
   'index'
 ]]);
+
 /*
 |--------------------------------------------------------------------------
 | Orders Routes
@@ -118,6 +121,7 @@ Route::get('order-change','OrderController@change_it');
 Route::middleware('auth')->resource('orders','OrderController',['except' => [
   'update',
 ]]);
+
 /*
 |--------------------------------------------------------------------------
 | States Routes
@@ -127,6 +131,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/states/','as'=>'states.'],functi
     Route::get('AllStatesAndCitiesName','StateController@AllStatesAndCitiesName')->name('AllStatesAndCitiesName');
 });
 Route::middleware('auth')->resource('states','StateController');
+
 /*
 |--------------------------------------------------------------------------
 | Cities Routes
@@ -136,6 +141,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/cities/','as'=>'cities.'],functi
   Route::get('search','CityController@search')->name('search');
 });
 Route::middleware('auth')->resource('cities','CityController');
+
 /*
 |--------------------------------------------------------------------------
 | SpecialTariff Routes
@@ -145,6 +151,7 @@ Route::get('special-tariffs-index/{id}','SpecialTariffController@index')->name('
 Route::middleware('auth')->resource('special-tariffs','SpecialTariffController',['except'=>[
   'index'
 ]]);
+
 /*
 |--------------------------------------------------------------------------
 | Store Room Routes
@@ -241,7 +248,7 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
     Route::get('AgentCostConfirm/{id}','MoneyCirculationController@AgentCostConfirm')->name('AgentCostConfirm');
     Route::get('RejectCost/{id}','MoneyCirculationController@RejectCost')->name('RejectCost');
 
-  });
+});
 
 /*
 |--------------------------------------------------------------------------
