@@ -41,6 +41,7 @@
                     <thead>
                     <tr>
                       <th></th>
+                      <th class="d-none">شماره<br> سفارش</th>
                       <th>تاریخ ثبت</th>
                       <th>تاریخ تخصیص</th>
                       <th>استان-شهر</th>
@@ -63,6 +64,7 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
+                        <td class="d-none">{{order.id}}</td>
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         <td class="timestamp">{{order.allotment_Date | date('Y-m-d')}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>

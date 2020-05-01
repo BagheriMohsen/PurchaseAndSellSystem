@@ -37,6 +37,7 @@
                     <thead>
                     <tr>
                       <th></th>
+                      <th class="d-none">شماره<br> سفارش</th>
                       <th>عنوان سفارش</th>
                       <th>نام خریدار</th>
                       <th>استان - شهر</th>
@@ -55,6 +56,7 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
+                        <td class="d-none">{{order.id}}</td>
                         <td>
                           {% for ProductItem in order.products %}
                           <span>
