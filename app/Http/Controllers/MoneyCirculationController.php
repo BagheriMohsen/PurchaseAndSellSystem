@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
+
+use App\Order;
+use App\PaymentCirculation;
+use App\User;
+use App\MoneyCirculation;
+use App\BankAccount;
+
 class MoneyCirculationController extends Controller
 {
     /*
@@ -14,9 +21,9 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCurrentBills(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $AllSell = 
-        'App\MoneyCirculation'::where('agent_id',$user->id)
+        MoneyCirculation::where('agent_id',$user->id)
         ->orWhere('agent_id',$user->id)
         ->orWhere('agent_id',$user->id)->sum('amount');
             
@@ -24,36 +31,47 @@ class MoneyCirculationController extends Controller
             ['agent_id','=',$user->id]
         ])->sum('balance');
             
-        $TotalSettle = 'App\PaymentCirculation'::where([
+        $TotalSettle = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])->sum('bill');
 
-        $today = 'Carbon\Carbon'::now();
-        $yesterday = 'Carbon\Carbon'::now()->subDays(1);
-        $ThirtyDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+        $today = Carbon::now();
+        $yesterday = Carbon::now()->subDays(1);
+        $ThirtyDaysAgo = Carbon::now()->subDays(30);
 
-        $totalDebtor = 'App\Order'::where([
+        $totalDebtor = Order::where([
             ['agent_id','=',$user->id],
             ['collected_Date','!=',null]
         ])->sum('cashPrice');
-        $totalCreditor = 'App\PaymentCirculation'::where([
+        $totalCreditor = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['confirmDate','!=',null]
         ])
         ->sum('bill');
         
-        $AllSell =   'App\Order'::where([
+        $AllSell =   Order::where([
             ['collected_Date','!=',Null],
             ['agent_id','=',$user->id]
         ])->sum('cashPrice');
 
-        $costs = 'App\PaymentCirculation'::where([
+        $orders = Order::with("products")->where([
+            ["collected_Date","!=", Null],
+            ["agent_id","=", $user->id]
+        ])->get();
+        
+        $Discount = 0;
+        foreach( $orders as $order ) {
+            $Discount += $order->products->sum("off");
+        }
+
+   
+        $costs = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',5]
         ])->sum('bill');
 
-        $payments = 'App\PaymentCirculation'::where([
+        $payments = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])->sum('bill');
@@ -63,7 +81,7 @@ class MoneyCirculationController extends Controller
         ])->sum('balance');
 
 
-        $Allpayments = 'App\PaymentCirculation'::where([
+        $Allpayments = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])
@@ -73,7 +91,7 @@ class MoneyCirculationController extends Controller
         ])
         ->get();
 
-        $AllOrders = 'App\Order'::where([
+        $AllOrders = Order::where([
             ['collected_Date','!=',Null],
             ['agent_id','=',$user->id]
         ])->get();
@@ -92,7 +110,8 @@ class MoneyCirculationController extends Controller
             'user',
             'totalDebtor',
             'totalCreditor',
-            'transaction'
+            'transaction',
+            'Discount'
         ));
     }
     /*
@@ -102,7 +121,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function currentBillsDebtor($user_id){
         
-        $totalDebtor = 'App\Order'::with(array('MoneyCirculations'=>function($query)use($user_id){
+        $totalDebtor = Order::with(array('MoneyCirculations'=>function($query)use($user_id){
             $query->select('id','order_id','sharedSpecialAmount')
             ->where('agent_id',$user_id)
             ->sum('sharedSpecialAmount');
@@ -120,7 +139,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function currentBillsCreditor($user_id){
         
-        $totalCreditor = 'App\PaymentCirculation'::where([
+        $totalCreditor = PaymentCirculation::where([
             ['user_id','=',$user_id],
             ['confirmDate','!=',null]
         ])
@@ -135,9 +154,9 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentPaymentOrders(){
         
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $carts = 'App\BankAccount'::where('user_id',$user->id)->latest()->get();
-        $orders = 'App\Order'::where([
+        $user = User::findOrFail(auth()->user()->id);
+        $carts = BankAccount::where('user_id',$user->id)->latest()->get();
+        $orders = Order::where([
             ['agent_id','=',$user->id],
             ['status','=',10]
         ])
@@ -158,8 +177,8 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentList(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $payments = 'App\PaymentCirculation'::where([
+        $user = User::findOrFail(auth()->user()->id);
+        $payments = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',1]
         ])
@@ -182,13 +201,13 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentDelete($id){
-        $payment = 'App\PaymentCirculation'::findOrFail($id);
+        $payment = PaymentCirculation::findOrFail($id);
 
         if(!is_null($payment->confirmDate)){
             return back()->with('info','متاسفانه شما دیر اقدام کردید');
         }
 
-        'App\PaymentCirculation'::destroy($id);
+        PaymentCirculation::destroy($id);
         return back()->with('message','پرداخت مورد نظر از لیست پرداخت های شما پاک گردید');
     }
     /*
@@ -197,7 +216,7 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentListUpdate(Request $request,$id){
-        $payment = 'App\PaymentCirculation'::findOrFail($id);
+        $payment = PaymentCirculation::findOrFail($id);
 
         if(!is_null($payment->confirmDate)){
             return back()->with('info','متاسفانه شما دیر اقدام کردید');
@@ -222,8 +241,8 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCostsList(){
-        $user       =   'App\User'::findOrFail(auth()->user()->id);
-        $costs   =   'App\PaymentCirculation'::where([
+        $user       =   User::findOrFail(auth()->user()->id);
+        $costs   =   PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',4],
         ])
@@ -247,9 +266,9 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsStore(Request $request){
       
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $date = Carbon::parse($request->date)->toDateString();
-        'App\PaymentCirculation'::create([
+        PaymentCirculation::create([
             'billDate'      =>  $date,
             'status_id'     =>  4,
             'trackingCode'  =>  uniqid(),
@@ -267,7 +286,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsDelete($id){
         
-        'App\PaymentCirculation'::where('id',$id)->delete();
+        PaymentCirculation::where('id',$id)->delete();
 
         return back()->with('message','با موفقیت پاک شد');
     }
@@ -278,7 +297,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostsUpdate(Request $request,$id){
        
-        'App\PaymentCirculation'::where('id',$id)->update([
+        PaymentCirculation::where('id',$id)->update([
             'billDate'      =>  $request->date,
             'bill'          =>  (float) str_replace(',', '', $request->price),
             'billDesc'      =>  $request->desc,
@@ -293,7 +312,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentCostConfirm($id){
 
-        $cost = 'App\PaymentCirculation'::findOrFail($id);
+        $cost = PaymentCirculation::findOrFail($id);
         $cost->update([
             'status_id'      =>  5,
             'confirmDate'    =>  Carbon::now()
@@ -309,7 +328,7 @@ class MoneyCirculationController extends Controller
     public function AgentUnverifiedCosts(){
         
         
-        $costs   =   'App\PaymentCirculation'::where([
+        $costs   =   PaymentCirculation::where([
             ['confirmDate','=',null],
             ['status_id','=',4]
         ])
@@ -341,7 +360,7 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentUnverifiedPayment(){
-        $payments = 'App\PaymentCirculation'::where([
+        $payments = PaymentCirculation::where([
             ['status_id','=',1],
             ['OnconfirmDate','=',null]
         ])
@@ -355,7 +374,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function cartStore(Request $request){
         
-        'App\BankAccount'::create([
+        BankAccount::create([
             'name'          =>  $request->name,
             'user_id'       =>  auth()->user()->id,
             'cartNumber'    =>  $request->cartNumber,
@@ -371,10 +390,10 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function cartSetDefault(Request $request,$id){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        'App\BankAccount'::where('user_id',$user->id)->update(['default'=>0]);
+        $user = User::findOrFail(auth()->user()->id);
+        BankAccount::where('user_id',$user->id)->update(['default'=>0]);
 
-        $cart = 'App\BankAccount'::findOrFail($id);
+        $cart = BankAccount::findOrFail($id);
         $cart->update(['default'=>1]);
 
         return back()->with('message',' کارت مورد نظر به عنوان کارت پیش فرض انتخاب شد');
@@ -387,7 +406,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function cartDelete($id){
 
-        $cart = 'App\BankAccount'::destroy($id);
+        $cart = BankAccount::destroy($id);
         return back()->with('message','کارت مورد نظر از لیست حذف شد');
     }
     /*
@@ -397,7 +416,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentPayMoney(Request $request){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
        
         if($request->hasFile('image')){
             $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
@@ -407,7 +426,7 @@ class MoneyCirculationController extends Controller
   
         $date = Carbon::parse($request->date);
         
-        'App\PaymentCirculation'::create([
+        PaymentCirculation::create([
                 'receiptImage'  =>  $image,
                 'user_id'       =>  $user->id,
                 'status_id'     =>  1,
@@ -426,7 +445,7 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AdminAcceptAgentPayment($id){
-        $pay = 'App\PaymentCirculation'::findOrFail($id);
+        $pay = PaymentCirculation::findOrFail($id);
         $pay->update([
             'status_id'     =>  2,
             'confirmDate'   =>  Carbon::now()
@@ -441,9 +460,9 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentsMoneyCirculation(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
         
         return view('Admin.UserInventory.AgentChief.agents-money-circulation',compact('agents'));
     }
@@ -454,15 +473,15 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentsPaymentList($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
         }
 
-        $payments = 'App\PaymentCirculation'::where([
+        $payments = PaymentCirculation::where([
             ['user_id','=',$agent_id],
             ['status_id','=',2]
         ])
@@ -481,7 +500,7 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function RejectPayment($id){
-        $payment = 'App\PaymentCirculation'::findOrFaIL($id);
+        $payment = PaymentCirculation::findOrFaIL($id);
 
         $payment->update([
             'status_id'     =>  3,
@@ -498,7 +517,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function RejectCost($id){
 
-        $payment = 'App\PaymentCirculation'::findOrFaIL($id);
+        $payment = PaymentCirculation::findOrFaIL($id);
 
         $payment->update([
             'status_id'     =>  6,

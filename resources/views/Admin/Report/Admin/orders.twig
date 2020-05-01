@@ -54,12 +54,12 @@
   
         <!-- Group of default radios - option 3 -->
         <div class="custom-control custom-radio">
-          <input value="delivary_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample3" >
+          <input value="allotment_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample3" >
           <label class="custom-control-label" for="defaultGroupExample3">تاریخ تخصیص سفارش به نماینده</label>
         </div>
         <!-- Group of default radios - option 3 -->
         <div class="custom-control custom-radio">
-          <input value="updated_at" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample4" >
+          <input value="action_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample4" >
           <label class="custom-control-label" for="defaultGroupExample4">تاریخ اقدام نماینده روی سفارش</label>
         </div>
       </div>
@@ -138,8 +138,7 @@
                 {{ seller.name }}
                 {{' '}}
                 {{ seller.family }}
-                {{'/'}}
-                {{ seller.state.name }}{{'-'}}{{seller.city.name}}
+               
               </option>
             {% endfor %}
           </select>
@@ -153,8 +152,7 @@
                 {{ callCenter.name }}
                 {{' '}}
                 {{ callCenter.family }}
-                {{'/'}}
-                {{ callCenter.state.name }}{{'-'}}{{callCenter.city.name}}
+              
               </option>
             {% endfor %}
           </select>
@@ -168,8 +166,7 @@
                 {{ followUpManager.name }}
                 {{' '}}
                 {{ followUpManager.family }}
-                {{'/'}}
-                {{ followUpManager.state.name }}{{'-'}}{{followUpManager.city.name}}
+      
               </option>
             {% endfor %}
               

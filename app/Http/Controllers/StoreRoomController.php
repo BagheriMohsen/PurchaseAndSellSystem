@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\StoreRoom;
 use Carbon\Carbon;
+
+
+use App\User;
+use App\Product;
+
 class StoreRoomController extends Controller
 {
     /**
@@ -15,7 +20,7 @@ class StoreRoomController extends Controller
      */
     public function index()
     {   
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
@@ -40,7 +45,7 @@ class StoreRoomController extends Controller
      */
     public function create()
     {
-        $products = 'App\Product'::where('status','active')->latest()->get();
+        $products = Product::where('status','active')->latest()->get();
         return view('Admin.StoreRoom.Main.storeRoom-create',compact('products'));
     }
 
@@ -165,7 +170,7 @@ class StoreRoomController extends Controller
 
             }
 
-            $product = 'App\Product'::findOrFail($request->product);
+            $product = Product::findOrFail($request->product);
            
             $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد به انبار مادر افزوده شد ';
             
@@ -228,7 +233,7 @@ class StoreRoomController extends Controller
         }
 
 
-        $product = 'App\Product'::findOrFail($request->product);
+        $product = Product::findOrFail($request->product);
             
         $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد از انبار خارج شد ';
         
@@ -300,7 +305,7 @@ class StoreRoomController extends Controller
         }else{
             return back()->with('info','این کالا در انبار موجود نیست');
         }
-        $product = 'App\Product'::findOrFail($request->product);
+        $product = Product::findOrFail($request->product);
             
         $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد به انبار تنخواه منتقل شد ';
         
@@ -324,7 +329,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function inStorage(Request $request){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
@@ -350,7 +355,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function outStorage(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
@@ -370,7 +375,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function storageManage(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
        
         if($role == "mainWarehouser"){
@@ -448,9 +453,9 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentExchangesForm(){
-        $products   =   'App\Product'::latest()->get();
+        $products   =   Product::latest()->get();
         $transports =   'App\Transport'::latest()->get();
-        $agents     =   'App\User'::role(['agent'])->get();
+        $agents     =   User::role(['agent'])->get();
         return view('Admin.StoreRoom.Fund.AgentExchanges',compact('products','transports','agents'));
     }
     /*
@@ -641,7 +646,7 @@ class StoreRoomController extends Controller
             ['agent_id','=',$request->sender]
         ])->first();
        
-        $agent = 'App\User'::findOrFail($request->sender);
+        $agent = User::findOrFail($request->sender);
        
         $date = Carbon::parse($request->date)->toDateString();
         if($status == True){
@@ -815,7 +820,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnToFundForm(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storages = 'App\Storage'::Where([
             ['agent_id','=',$user->id],
             ['number','>',0]
@@ -830,7 +835,7 @@ class StoreRoomController extends Controller
     |*/
     public function returnToFund(Request $request){
         $id = auth()->user()->id;
-        $user = 'App\User'::findOrFail($id);
+        $user = User::findOrFail($id);
 
         if($user->backToWareHouse == null){
             return back()->with('info','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
@@ -967,7 +972,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentReceive(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storeRooms = StoreRoom::where(['receiver_id'=>$user->id,'in_out'=>10])->latest()->paginate(10);
         return view('Admin.StoreRoom.Agent.AgentReceive',compact('storeRooms'));
     }
@@ -978,7 +983,7 @@ class StoreRoomController extends Controller
     |*/
     public function acceptFundReceive(Request $request,$id){
        
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storeRoom = StoreRoom::findOrFail($id); // this storeRoom
         $pre_id = $id - 1 ; // previous id for find previous storeRoom
         $pre_storeRoom = StoreRoom::findOrFail($pre_id); //previous storeRoom
@@ -1044,7 +1049,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentIndexWarehouse(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storages = 'App\Storage'::where('agent_id',$user->id)->latest()->paginate(10);
         $allProduct = 'App\Storage'::where('agent_id',$user->id)->sum('number');
         return view('Admin.StoreRoom.Agent.index',compact('storages','allProduct'));
@@ -1096,9 +1101,9 @@ class StoreRoomController extends Controller
     |*/
     public function AgentsListForCheckStorage(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
         
         return view('Admin.StoreRoom.AgentChief.check-agents-storage-list',compact('agents'));
     
@@ -1110,9 +1115,9 @@ class StoreRoomController extends Controller
     |*/
     public function AgensStorageWareHoouse($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
@@ -1120,7 +1125,7 @@ class StoreRoomController extends Controller
 
         $storages = 'App\Storage'::where('agent_id',$agent_id)->latest()->get();
         $allProduct = 'App\Storage'::where('agent_id',$agent_id)->sum('number');
-        return view('Admin.StoreRoom.AgentChief.agents-storage',compact('storages','allProduct'));
+        return view('Admin.StoreRoom.AgentChief.agents-storage',compact('storages','allProduct', 'user'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -1128,9 +1133,9 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgensStorageIn($agent_id){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
@@ -1141,6 +1146,7 @@ class StoreRoomController extends Controller
         ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agens Storage Out
@@ -1148,9 +1154,9 @@ class StoreRoomController extends Controller
     |*/
     public function AgensStorageOut($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
@@ -1158,9 +1164,14 @@ class StoreRoomController extends Controller
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$agent_id],
             ['in_out','=',12]
+        ])
+        ->orWhere([
+            ['sender_id','=',$agent_id],
+            ['in_out','=',12]
         ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentOut',compact('storeRooms'));
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Agens Delivery To Customers
@@ -1168,9 +1179,9 @@ class StoreRoomController extends Controller
     |*/
     public function AgensDeliveryToCustomers($agent_id){
        
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);

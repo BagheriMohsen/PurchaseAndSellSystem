@@ -241,7 +241,7 @@ class OrderController extends Controller
             'chequePrice'       =>      $request->chequePrice,
             'instant'           =>      $request->instant,
             'sellerDescription' =>      $request->sellerDescription,
-            'sendDescription'   =>      $request->deliverDescription,
+            'sendDescription'   =>      $request->sendDescription,
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
             'HBD_Date'          =>      $order->HBD_Date,
@@ -486,7 +486,7 @@ class OrderController extends Controller
         $user = User::findOrFail(auth()->user()->id);
         
         $items = $request->orderNumbers;
-        return response()->json($items);
+     
 
         foreach($items as $item){
             
@@ -548,7 +548,7 @@ class OrderController extends Controller
 
                     return $this->AgentPriceForEachFactor($agent,$order);
                 }
-               
+                $order->update(['action_Date'=>Carbon::now()]);
                 // return response()
                 // ->json(['message' => 'موفقیت آمیز بود','status' => 1,
                 // 200,[],JSON_UNESCAPED_UNICODE]);
@@ -594,11 +594,12 @@ class OrderController extends Controller
                 $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
-                    ]);
+                ]);
             }
 
             
         }
+        $order->update(['action_Date'=>Carbon::now()]);
         return response()
         ->json(['message' => 'موفقیت آمیز بود','status' => 1,
         200,[],JSON_UNESCAPED_UNICODE]);

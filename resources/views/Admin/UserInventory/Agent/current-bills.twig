@@ -38,7 +38,8 @@
                         <tr>
                             <th scope="row">مجموع کل فروش</th>
                             <th scope="col">
-                              {{ AllSell | number_format }}
+                              {% set all_sell = AllSell + Discount %}
+                              {{ all_sell | number_format }}
                               تومان
                             </th>
                         </tr>
@@ -94,9 +95,9 @@
                     <div class="card-body col-12 mx-auto">
                       <table class="table table-sm text-center no-border">
                         <tr>
-                          <th scope="row">جایزه</th>
+                          <th scope="row">تخفیف</th>
                           <td>
-                            {{ user.gift | number_format }}
+                            {{ Discount | number_format }}
                             تومان
                           </td>
                         </tr>
@@ -107,7 +108,15 @@
                         <tr>
                             <th scope="row">مجموع بدهی شما</th>
                             <td>
-                              {% set AllDebtor = AllSell - (payments + AllSpecialShared + costs) %}
+                             
+                              {% set AllDebtor = all_sell  - (payments + AllSpecialShared + costs) %}
+
+                              {% if AllDebtor > 0 %}
+                                {% set AllDebtor = AllDebtor - Discount %}
+                              {% else %}
+                                {% set AllDebtor = AllDebtor + Discount %}
+                              {% endif %}
+
                               {{ AllDebtor | number_format}}
                               تومان
                               

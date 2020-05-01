@@ -54,6 +54,7 @@ class Order extends Model
     'send_callcenter_Date',
     'returnToManager_Date',
     'allotment_Date',
+    'action_Date',
     'product_array'
    ];
     /*

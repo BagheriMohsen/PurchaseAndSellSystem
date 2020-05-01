@@ -40,7 +40,7 @@
                       <th>تاریخ ثبت</th>
                       <th>تاریخ تخصیص</th>
                       <th>استان-شهر</th>
-                      <th>آدرس مشتری</th>
+                      <th>آدرس</th>
                       <th>نام خریدار</th>
                       <th>همراه-ثابت</th>
                       <th>محصولات</th>
@@ -59,7 +59,7 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
-                        <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
+                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
                         <td class="timestamp">{{order.allotment_Date | date('Y-m-d')}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.address}}</td>

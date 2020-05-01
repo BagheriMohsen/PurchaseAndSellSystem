@@ -26,7 +26,7 @@ class ReportController extends Controller
             ['id','!=',15],
             ['id','!=',9],
         ])->get();
-        $agents             =   'App\User'::Role('agent')->get();
+        $agents             =   'App\User'::with(["state","city"])->Role('agent')->get();
         $callCenters        =   'App\User'::Role('callcenter')->get();
         $sellers            =   'App\User'::Role('seller')->get();   
         $followUpManagers   =   'App\User'::Role('followUpManager')->get();
@@ -125,13 +125,13 @@ class ReportController extends Controller
         $to_created_at      =   null; 
 
 
-        if($date_status == 'updated_at'){
+        if($date_status == 'action_Date'){
             $from_updated_at = $from ;
             $to_updated_at  =  $to;              
         }elseif($date_status == 'edit_Date'){
             $from_edit_Date = $from ;
             $to_edit_Date   =  $to;              
-        }elseif($date_status == 'delivary_Date'){
+        }elseif($date_status == 'allotment_Date'){
             $from_delivary_Date = $from ;
             $to_delivary_Date   =  $to;                 
         }else{
@@ -159,9 +159,9 @@ class ReportController extends Controller
         })
 
         ->when($from_updated_at,function($query,$from_updated_at){
-            return $query->where('updated_at','>=',$from_updated_at);
+            return $query->where('action_Date','>=',$from_updated_at);
         })->when($to_updated_at,function($query,$to_updated_at){
-            return $query->where('updated_at', '<=',$to_updated_at);
+            return $query->where('action_Date', '<=',$to_updated_at);
         })
 
 
@@ -173,9 +173,9 @@ class ReportController extends Controller
 
 
         ->when($from_delivary_Date,function($query,$from_delivary_Date){
-            return $query->where('delivary_Date','>=',$from_delivary_Date);
+            return $query->where('allotment_Date','>=',$from_delivary_Date);
         })->when($to_delivary_Date,function($query,$to_delivary_Date){
-            return $query->where('delivary_Date', '<=',$to_delivary_Date);
+            return $query->where('allotment_Date', '<=',$to_delivary_Date);
         })
 
 
@@ -194,6 +194,7 @@ class ReportController extends Controller
         ->when($seller,function($query,$seller){
             return $query->where('seller_id','=',$seller);
         })
+        ->with(["agent","seller","followUpManager","OrderStatus","products"])
         ->latest()->get();
        
         return view('Admin.Report.Admin.orders-result',compact(

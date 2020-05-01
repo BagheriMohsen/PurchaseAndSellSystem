@@ -37,15 +37,17 @@
                     <thead>
                     <tr>
                       <th></th>
-                      <th>شماره<br> سفارش</th>
-                      <th>محصولات</th>
-                      <th>تاریخ ثبت</th>
-                      <th>استان-شهر</th>
+                      <th>عنوان سفارش</th>
                       <th>نام خریدار</th>
-                      <th>نوع پرداخت</th>
-                      <th>نماینده</th>
+                      <th>استان - شهر</th>
+                      <th>همراه-ثابت</th>
+                      <th>جمع کل سفارش</th>
+                      <th>تخفیف</th>
+                      <th>تاریخ ثبت</th>
                       <th>فروشنده</th>
-                      <th>کالسنتر</th>
+                      <th>نماینده</th>
+                      <th>مدیر پیگیری</th>
+                      <th>وضعیت</th>
                       <th>عملیات</th>
                     </tr>
                     </thead>
@@ -53,7 +55,6 @@
                     {% for order in orders %}
                       <tr>
                         <td></td>
-                        <td>{{order.id}}</td>
                         <td>
                           {% for ProductItem in order.products %}
                           <span>
@@ -65,26 +66,25 @@
                           </span>
                           {% endfor %}
                         </td>
-                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-              
-                        <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.fullName}}</td>
-                        {% if order.paymentMethod == 'cash' %}
-                          <td>{{'نقدی'}}</td>
-                        {% else %}
-                          <td>{{'غیر نقدی'}}</td>
-                        {% endif %}
+                        <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+                        <td>{{ order.mobile }}{{"-"}}{{ order.telephone }}</td>
+                        {% set all_money = order.prePayment + order.cashPrice %}
+                        <td>{{ all_money | number_format}}</td>
+                        <td>{{ order.products.sum("off") }}</td>
+                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+                        <td>
+                          {{order.seller.name}}{{' '}}{{order.seller.family}}
+                        </td>
                         <td>
                           {{order.agent.name}}{{' '}}{{order.agent.family}}
                           {{'/'}}
                           {{order.agent.state.name}}{{'-'}}{{order.agent.city.name}}
                         </td>
                         <td>
-                          {{order.seller.name}}{{' '}}{{order.seller.family}}
-                          {{'/'}}
-                          {{order.seller.state.name}}{{'-'}}{{order.seller.city.name}}
+                          {{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}
                         </td>
-                        <td>{{''}}</td>
+                        <td>{{ order.OrderStatus.name }}</td>
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
