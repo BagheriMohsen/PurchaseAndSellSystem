@@ -7,11 +7,12 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
 
-use App\Order;
-use App\PaymentCirculation;
-use App\User;
-use App\MoneyCirculation;
-use App\BankAccount;
+use App\Models\Order;
+use App\Models\PaymentCirculation;
+use App\Models\User;
+use App\Models\MoneyCirculation;
+use App\Models\BankAccount;
+use App\Models\UserInventory;
 
 class MoneyCirculationController extends Controller
 {
@@ -27,7 +28,7 @@ class MoneyCirculationController extends Controller
         ->orWhere('agent_id',$user->id)
         ->orWhere('agent_id',$user->id)->sum('amount');
             
-        $AllSpecialShared = 'App\UserInventory'::where([
+        $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
         ])->sum('balance');
             
@@ -76,7 +77,7 @@ class MoneyCirculationController extends Controller
             ['status_id','=',2]
         ])->sum('bill');
 
-        $AllSpecialShared = 'App\UserInventory'::where([
+        $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
         ])->sum('balance');
 

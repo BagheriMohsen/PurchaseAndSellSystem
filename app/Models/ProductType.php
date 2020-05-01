@@ -1,8 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Product;
+use App\Models\OrderProduct;
 
 class ProductType extends Model
 {
@@ -13,18 +16,19 @@ class ProductType extends Model
     ];
     /*
     |--------------------------------------------------------------------------
-    | Releation with product model
+    | Relation with product model
     |--------------------------------------------------------------------------
     |*/
     public function product(){
-      return $this->belongsTo('App\Product');
+      return $this->belongsTo(Product::class);
     }
+    
     /*
     |--------------------------------------------------------------------------
-    | Releate to OrderProduct Type table
+    | Relation to OrderProduct Type table
     |--------------------------------------------------------------------------
     |*/
     public function type(){
-      return $this->hasMany('App\OrderProduct','product_type','id');
+      return $this->hasMany(OrderProduct::class, 'product_type','id');
   }
 }

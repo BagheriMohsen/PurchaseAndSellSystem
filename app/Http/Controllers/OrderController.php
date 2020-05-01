@@ -8,18 +8,19 @@ use DB;
 use Carbon\Carbon;
 
 
-use App\Order;
-use App\User;
-use App\State;
-use App\Customer;
-use App\OrderProduct;
-use App\City;
-use App\OrderStatus;
-use App\UserInventory;
-use App\SpecialTariff;
-use App\MoneyCirculation;
-use App\StoreRoom;
-#in ths file exists => App\Storage;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\State;
+use App\Models\Customer;
+use App\Models\OrderProduct;
+use App\Models\City;
+use App\Models\OrderStatus;
+use App\Models\UserInventory;
+use App\Models\SpecialTariff;
+use App\Models\MoneyCirculation;
+use App\Models\StoreRoom;
+use App\Models\Product;
+#in ths file exists => App\Models\Storage;
 
 class OrderController extends Controller
 {
@@ -40,7 +41,7 @@ class OrderController extends Controller
      */
     public function create()
     {   
-        $products   = 'App\Product'::latest()->get();
+        $products   = Product::latest()->get();
         
         $cities     = City::latest()->get();
         $states     = State::latest()->get();
@@ -441,7 +442,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function ProductList(){
-        $products = 'App\Product'::with('types')->where('status','active')->get();
+        $products = Product::with('types')->where('status','active')->get();
         return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
@@ -505,7 +506,7 @@ class OrderController extends Controller
                     $user_id = $user->id;
                     $product_id = $order_product->product_id;
                     
-                    $storage_status = 'App\Storage'::where([
+                    $storage_status = 'App\Models\Storage'::where([
                         ['agent_id','=',$order->agent_id],
                         ['product_id','=',$order_product->product_id]
                     ])->exists();
@@ -517,7 +518,7 @@ class OrderController extends Controller
                         return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
                     // else product less than order->count 
                     }else{
-                        $storage = 'App\Storage'::where([
+                        $storage = 'App\Models\Storage'::where([
                             ['agent_id','=',$order->agent_id],
                             ['product_id','=',$product_id]
                         ])->firstOrFail(); 
@@ -621,7 +622,7 @@ class OrderController extends Controller
             $user_id = $user->id;
             $product_id = $order_product->product_id;
             
-            $storage_status = 'App\Storage'::where([
+            $storage_status = 'App\Models\Storage'::where([
                 ['agent_id','=',$user->id],
                 ['product_id','=',$order_product->product_id]
             ])->exists();
@@ -633,7 +634,7 @@ class OrderController extends Controller
                 return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
             // else product less than order->count 
             }else{
-                $storage = 'App\Storage'::where([
+                $storage = 'App\Models\Storage'::where([
                     ['agent_id','=',$user_id],
                     ['product_id','=',$product_id]
                 ])->firstOrFail(); 
@@ -660,7 +661,7 @@ class OrderController extends Controller
         foreach($order->products as $order_product){
                 
                         
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['agent_id','=',$user->id],
                 ['product_id','=',$order_product->product_id]
             ])->firstOrFail();
@@ -708,7 +709,7 @@ class OrderController extends Controller
         $AgentStatus  = UserInventory::where('agent_id',$agent->id)->exists();
         $trackingCode = uniqid();
         foreach($product_id_array as $product_id){
-            $product        = 'App\Product'::findOrFail($product_id);
+            $product        = Product::findOrFail($product_id);
             $count  = OrderProduct::where([
                 ['order_id','=',$order->id],
                 ['product_id','=',$product->id]
@@ -1458,7 +1459,7 @@ class OrderController extends Controller
             foreach( $order->products as $order_product ) {
 
                 $agent_id = $order->agent_id;
-                $storage = 'App\Storage'::where([
+                $storage = 'App\Models\Storage'::where([
                     ['user_id', "=", $agent_id],
                     ['product_id', "=", $order_product->product_id]
                 ])->firstOrFail();

@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Carbon\Carbon;
-use App\User;
-use App\OrderStatus;
-use App\Product;
-use App\PaymentCirculation;
-use App\Order;
+
+use App\Models\User;
+use App\Models\OrderStatus;
+use App\Models\Product;
+use App\Models\PaymentCirculation;
+use App\Models\Order;
 
 
 class ReportController extends Controller

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,20 +11,16 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Notifications\Notifiable;
 
 
-
-
-
-use App\Order;
-use App\User;
-use App\State;
-use App\StoreRoom;
-use App\City;
-use App\SpecialTariff;
-use App\MoneyCirculation;
-use App\UserInventory;
-use App\BankAccount;
-use App\PaymentCirculation;
-use App\AgentCost;
+use App\Models\Order;
+use App\Models\State;
+use App\Models\StoreRoom;
+use App\Models\City;
+use App\Models\SpecialTariff;
+use App\Models\MoneyCirculation;
+use App\Models\UserInventory;
+use App\Models\BankAccount;
+use App\Models\PaymentCirculation;
+use App\Models\AgentCost;
 
 class User extends Authenticatable implements HasMedia
 {

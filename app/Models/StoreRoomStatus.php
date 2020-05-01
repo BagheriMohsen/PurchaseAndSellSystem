@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\StoreRoom;
 
 class StoreRoomStatus extends Model
 {
@@ -15,7 +17,7 @@ class StoreRoomStatus extends Model
     |--------------------------------------------------------------------------
     */
     public function storeRooms(){
-        return $this->hasMany('App\StoreRoom','in_out','id');
+        return $this->hasMany(StoreRoom::class, 'in_out','id');
     }
 
 }

@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use App\Models\OrderStatus;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Product;
+use App\Models\Order;
+
 class SearchController extends Controller
 {
     /*
@@ -12,18 +19,18 @@ class SearchController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AdminAdvancedSearchPage(){
-        $agents             =   'App\User'::Role('agent')->get();
-        $callCenters        =   'App\User'::Role('callcenter')->get();
-        $sellers            =   'App\User'::Role('seller')->get();   
-        $followUpManagers   =   'App\User'::Role('followUpManager')->get();
-        $statuses           =   'App\OrderStatus'::where([
+        $agents             =   User::Role('agent')->get();
+        $callCenters        =   User::Role('callcenter')->get();
+        $sellers            =   User::Role('seller')->get();   
+        $followUpManagers   =   User::Role('followUpManager')->get();
+        $statuses           =   OrderStatus::where([
             ['id','!=',1],
             ['id','!=',3],
             ['id','!=',4],
         ])->get();
-        $states     =   'App\State'::latest()->get();
-        $cities     =   'App\City'::latest()->get();
-        $products   =   'App\Product'::latest()->get();
+        $states     =   State::latest()->get();
+        $cities     =   City::latest()->get();
+        $products   =   Product::latest()->get();
         return view('Admin.Search.Admin.index',compact(
             'agents',
             'callCenters',
@@ -61,7 +68,7 @@ class SearchController extends Controller
         $state              =   $request->state;
         $city               =   $request->city;
        
-        $orders = 'App\Order'::query()
+        $orders = Order::query()
         ->when($from_register,function($query,$from_register){
             return $query->where('created_at','>=',$from_register);
         })->when($to_register,function($query,$to_register){

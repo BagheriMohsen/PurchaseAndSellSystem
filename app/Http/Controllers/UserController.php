@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 
-use App\User;
-use App\Order;
-use App\State;
-use App\City;
-use App\Product;
-use App\OrderProduct;
-use App\PaymentCirculation;
-use App\UserInventory;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Product;
+use App\Models\OrderProduct;
+use App\Models\PaymentCirculation;
+use App\Models\UserInventory;
 
 class UserController extends Controller
 {

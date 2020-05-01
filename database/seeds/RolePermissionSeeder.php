@@ -3,6 +3,9 @@
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+
+use App\Models\User;
+
 class RolePermissionSeeder extends Seeder
 {
     /**
@@ -121,19 +124,19 @@ class RolePermissionSeeder extends Seeder
         $permissionEdit->assignRole($role);
         $permissionDelete->assignRole($role); 
         #1.admin site
-        $user = 'App\User'::findOrFail(1);
+        $user = User::findOrFail(1);
         $user->assignRole($role->name);
         #2.followUpManager
         $role  = Role::create(['name'=>'followUpManager','persianName'=>'مدیر پیگیری']);
-        $user = 'App\User'::findOrFail(2);
+        $user = User::findOrFail(2);
         $user->assignRole($role->name);
         #3.mainwarehouser
         $role  = Role::create(['name'=>'mainWarehouser','persianName'=>'انبار مادر']);
-        $user = 'App\User'::findOrFail(3);
+        $user = User::findOrFail(3);
         $user->assignRole($role->name);
         #4.fundwarehouser
         $role  = Role::create(['name'=>'fundWarehouser','persianName'=>'انبار تنخواه']);
-        $user = 'App\User'::findOrFail(4);
+        $user = User::findOrFail(4);
         $user->assignRole($role->name);
 
     }

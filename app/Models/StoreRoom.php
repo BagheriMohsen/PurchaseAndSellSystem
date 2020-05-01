@@ -1,8 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\StoreRoomStatus;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Warehouse;
+use App\Models\Storage;
 
 
 class StoreRoom extends Model
@@ -41,7 +47,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function sender(){
-        return $this->belongsTo('App\User','sender_id','id');
+        return $this->belongsTo(User::class, 'sender_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +55,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function receiver(){
-        return $this->belongsTo('App\User','receiver_id','id');
+        return $this->belongsTo(User::class, 'receiver_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +63,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function product(){
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo(Product::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +71,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function Warehouse(){
-        return $this->belongsTo('App\Warehouse');
+        return $this->belongsTo('');
     }
     /*
     |--------------------------------------------------------------------------
@@ -73,7 +79,7 @@ class StoreRoom extends Model
     |--------------------------------------------------------------------------
     */
     public function storage(){
-        return $this->belongsTo('App\Storage');
+        return $this->belongsTo(Storage::class);
     }
    
 }

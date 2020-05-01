@@ -1,16 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 
-use App\OrderProduct;
-use App\OrderStatus;
-use App\City;
-use App\State;
-use App\User;
-use App\MoneyCirculation;
+use App\Models\OrderProduct;
+use App\Models\OrderStatus;
+use App\Models\City;
+use App\Models\State;
+use App\Models\User;
+use App\Models\MoneyCirculation;
 
 class Order extends Model
 {

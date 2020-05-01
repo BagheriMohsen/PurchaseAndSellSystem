@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Warehouse;
+
+use App\Models\Warehouse;
+use App\Models\City;
+use App\Models\User;
+use App\Models\State;
+use App\Models\StoreRoom;
+
 
 class WarehouseController extends Controller
 {
@@ -25,7 +31,7 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        $cities = 'App\City'::latest()->get();
+        $cities = City::latest()->get();
         return view('Admin.WareHouse.warehouse-create',compact('cities'));
     }
 
@@ -80,9 +86,9 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
-        $users = 'App\User'::Role(['followUpManager','mainWarehouser'])->get();
-        $cities = 'App\City'::latest()->get();
-        $states = 'App\State'::latest()->get();
+        $users = User::Role(['followUpManager','mainWarehouser'])->get();
+        $cities = City::latest()->get();
+        $states = State::latest()->get();
         $warehouse = Warehouse::findOrFail($id);
         return view('Admin.WareHouse.warehouse-edit',compact(
             'warehouse',
@@ -150,7 +156,7 @@ class WarehouseController extends Controller
         $warehouse  = Warehouse::where('slug',$slug)->firstOrFail();
         
         if($warehouse->id == 1){
-            $storeRooms = 'App\StoreRoom'::where('warehouse_id',$warehouse->id)
+            $storeRooms = StoreRoom::where('warehouse_id',$warehouse->id)
             ->orWhere([
                 ['in_out','=',4],
             ])
@@ -160,7 +166,7 @@ class WarehouseController extends Controller
             ->latest()->paginate(15);
             return view('Admin.WareHouse.Maininout',compact('storeRooms','warehouse'));
         }else{
-            $storeRooms = 'App\StoreRoom'::where([
+            $storeRooms = StoreRoom::where([
                 ['warehouse_id','=',$warehouse->id],
                 ['in_out','!=',8]
             ])
@@ -185,8 +191,8 @@ class WarehouseController extends Controller
     |*/
     public function storage($id){
         $warehouse  = Warehouse::where('id',$id)->firstOrFail();
-        $storages = 'App\Storage'::where('warehouse_id',$id)->get();
-        $allProduct = 'App\Storage'::where('warehouse_id',$id)->sum('number');
+        $storages = 'App\Models\Storage'::where('warehouse_id',$id)->get();
+        $allProduct = 'App\Models\Storage'::where('warehouse_id',$id)->sum('number');
         return view('Admin.WareHouse.storeRoom-index',compact(
             'storages',
             'allProduct',

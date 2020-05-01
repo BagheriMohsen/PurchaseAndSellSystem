@@ -1,9 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+
+
+use App\Models\StoreRoom;
+use App\Models\City;
+use App\Models\State;
+use App\Models\User;
+
 class Warehouse extends Model
 {
     use Sluggable;
@@ -33,7 +40,7 @@ class Warehouse extends Model
     |--------------------------------------------------------------------------
     */
     public function storeRooms(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany(StoreRoom::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +48,7 @@ class Warehouse extends Model
     |--------------------------------------------------------------------------
     */
     public function city(){
-        return $this->belongsTo('App\City','city_id','id');
+        return $this->belongsTo(City::class, 'city_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +56,7 @@ class Warehouse extends Model
     |--------------------------------------------------------------------------
     */
     public function state(){
-        return $this->belongsTo('App\State','state_id','id');
+        return $this->belongsTo(State::class, 'state_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -57,6 +64,6 @@ class Warehouse extends Model
     |--------------------------------------------------------------------------
     */
     public function user(){
-        return $this->hasOne('App\User','id','user_id');
+        return $this->hasOne(User::class, 'id','user_id');
     }
 }

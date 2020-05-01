@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+
+use App\Models\User;
+
 class StartingSeeder extends Seeder
 {
     /**
@@ -35,7 +38,7 @@ class StartingSeeder extends Seeder
         |--------------------------------------------------------------------------
         |*/
         #1.create user for admin site
-        'App\User'::create([
+        User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -57,7 +60,7 @@ class StartingSeeder extends Seeder
            
           ]);
         #2.create user for followUpManger
-        'App\User'::create([
+        User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -79,7 +82,7 @@ class StartingSeeder extends Seeder
             
           ]);
           #3.create user for mainWareHouse
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -101,7 +104,7 @@ class StartingSeeder extends Seeder
             
           ]);
           #4.create user for fundWareHouse
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -123,7 +126,7 @@ class StartingSeeder extends Seeder
          
           ]); 
           #5.create agentChief
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -145,7 +148,7 @@ class StartingSeeder extends Seeder
             
           ]);
           #6.create agent
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -167,7 +170,7 @@ class StartingSeeder extends Seeder
           
           ]);
           #7.create seller
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,
@@ -189,7 +192,7 @@ class StartingSeeder extends Seeder
            
           ]);
           #8.create callCenter
-          'App\User'::create([
+          User::create([
             'name'          =>  'حمیدرضا',
             'family'        =>  'رجبی',
             'sex'           =>  1,

@@ -1,8 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Order;
+use App\Models\MoneyCirculation;
 
 class OrderStatus extends Model
 {
@@ -13,18 +16,19 @@ class OrderStatus extends Model
     ];
     /*
     |--------------------------------------------------------------------------
-    | Releation with Order Model
+    | Relation with Order Model
     |--------------------------------------------------------------------------
     */
     public function orders(){
-        return $this->hasMany('App\Order','status','id');
+        return $this->hasMany(Order::class, 'status','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate with MoneyCirculation Model
+    | Relation with MoneyCirculation Model
     |--------------------------------------------------------------------------
     |*/
     public function MoneyCirculation(){
-        return $this->hasMany('App\MoneyCirculation','order_status_id','id');
+        return $this->hasMany(MoneyCirculation::class, 'order_status_id','id');
     }
 }
