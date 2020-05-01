@@ -275,9 +275,29 @@
            
           
         </div>
+      {% elseif status == 10 or status == 11 or status == 13 %}
+
+      <div class="col-sm-6">
+        <form class="" action="{{route('orders.ReverseOrderStatusChanges')}}" id="conditionForm">
+          <input type="hidden" name="_token" value="{{csrf_token()}}" />
+          <label for="status">
+            تعیین وضعیت تحویل
+            <span class="text-danger">*</span>
+          </label>
+          <select class="p-2 pb-2 form-control col-sm-6" name="status">
+            <option value="{{7}}">{{ "در انتظار تحویل" }}</option>
+          </select>
+          <button class="col-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
+            <strong class="h6">
+              ذخیره
+            </strong>
+          </button>
+        </form>
+      </div>
+
       {% endif %}
 
-
+      
       {# 
       ######### ORDERS START MODAL  
       #}

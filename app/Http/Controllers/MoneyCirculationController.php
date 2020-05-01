@@ -99,7 +99,13 @@ class MoneyCirculationController extends Controller
         $AllOrders = $AllOrders->toArray();
         $transaction = array_merge($AllOrders,$Allpayments);
 
-       
+        $payback = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id', '=', 8],
+            ['confirmDate','!=', null]
+        ])
+        ->sum("bill");
+            
 
         return view('Admin.UserInventory.Agent.current-bills',compact(
             'AllSell',
@@ -111,7 +117,8 @@ class MoneyCirculationController extends Controller
             'totalDebtor',
             'totalCreditor',
             'transaction',
-            'Discount'
+            'Discount',
+            'payback'
         ));
     }
     /*
@@ -342,7 +349,21 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaybackList(){
-        return view('Admin.UserInventory.Agent.payback-list');
+        $user = auth()->user();
+
+        $payments = PaymentCirculation::where([
+            ['status_id','=', 7],
+            ['user_id','=', $user->id]
+        ])
+        ->orWhere([
+            ['status_id','=', 8],
+            ['user_id','=', $user->id] 
+        ])
+        ->latest()->paginate(15);
+
+        return view('Admin.UserInventory.Agent.payback-list',compact(
+            'payments'
+        ));
 
     }
     /*
@@ -435,10 +456,11 @@ class MoneyCirculationController extends Controller
                 'trackingCode'  =>  (float) str_replace(',', '', $request->trackingCode),
                 'paymentMethod' =>  $request->paymentMethod,
                 'billDesc'      =>  $request->billDesc
-            ]);
+        ]);
         return back()->with('message','اطلاعات به درستی ارسال شد.پس از تایید مدیریت در حساب جاری شما اعمال میشود');
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | Admin Accept Agent Payment
@@ -448,8 +470,9 @@ class MoneyCirculationController extends Controller
         $pay = PaymentCirculation::findOrFail($id);
         $pay->update([
             'status_id'     =>  2,
-            'confirmDate'   =>  Carbon::now()
-            ]);
+            'confirmDate'   =>  Carbon::now(),
+            'OnconfirmDate' =>  Null
+        ]);
 
         return back()->with('message','فیش واریزی تایید و در حساب جاری نماینده اعمال شد');
     }
@@ -504,7 +527,8 @@ class MoneyCirculationController extends Controller
 
         $payment->update([
             'status_id'     =>  3,
-            'OnconfirmDate' =>  Carbon::now()
+            'OnconfirmDate' =>  Carbon::now(),
+            'confirmDate'   =>  Null,
         ]);
 
         return back()->with('message','پرداخت مورد نظر پذیرفته نشد');
@@ -526,6 +550,85 @@ class MoneyCirculationController extends Controller
 
         return back()->with('message','هزینه مورد نظر پذیرفته نشد');
 
+    }
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Payment List
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminPaymentList() {
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::with(["state", "city"])->Role("agent")->get();
+        $payments = PaymentCirculation::with("user")
+        ->where('status_id', 7)
+        ->orWhere('status_id', 8)
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.Admin.payment-list',compact(
+            'payments',
+            'agents'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Payment Create
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminPaymentCreate(Request $req) {
+       
+        if($req->hasFile('image')){
+            $image = Storage::disk('public')->put('AgentPaymentImage',$req->image);
+        }else{
+            $image = null;
+        }
+  
+        $date = Carbon::parse($req->date);
+        
+        PaymentCirculation::create([
+                'receiptImage'  =>  $image,
+                'user_id'       =>  $req->agent_id,
+                'status_id'     =>  7,
+                'bill'          =>  (float) str_replace(',', '', $req->bill),
+                'billDate'      =>  $date,
+                'trackingCode'  =>  (float) str_replace(',', '', $req->trackingCode),
+                'paymentMethod' =>  $req->paymentMethod,
+                'billDesc'      =>  $req->billDesc
+        ]);
+        return back()->with('message','اطلاعات به درستی ارسال شد.');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Accept Agent Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentAcceptAgentPayment($id){
+        $pay = PaymentCirculation::findOrFail($id);
+        $pay->update([
+            'status_id'     =>  8,
+            'confirmDate'   =>  Carbon::now(),
+            'OnconfirmDate' =>  Null
+        ]);
+
+        return back()->with('message','فیش واریزی تایید و در حساب جاری شما اعمال شد');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Accept Agent Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentRejectAgentPayment($id){
+        $pay = PaymentCirculation::findOrFail($id);
+        $pay->update([
+            'status_id'     =>  7,
+            'confirmDate'   =>  Null,
+            'OnconfirmDate' =>  Carbon::now()
+        ]);
+
+        return back()->with('message','فیش واریزی پذیرفته نشد');
     }
 
    

@@ -105,6 +105,7 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
   Route::get('AgentOrderCanceledList','OrderController@AgentOrderCanceledList')->name('AgentOrderCanceledList');
   Route::get('AgentOrderSuspendedList','OrderController@AgentOrderSuspendedList')->name('AgentOrderSuspendedList');
   Route::get('AgentChangeOrderStatus','OrderController@AgentChangeOrderStatus')->name('AgentChangeOrderStatus');
+  Route::get('AgentChangeOrderStatusDesc/{order_id}','OrderController@AgentChangeOrderStatusDesc')->name('AgentChangeOrderStatusDesc');
   //FollowUpManager 
   Route::get('UnverifiedOrderList','OrderController@UnverifiedOrderList')->name('UnverifiedOrderList');
   Route::get('receiveOrderFromAgent','OrderController@receiveOrderFromAgent')->name('receiveOrderFromAgent');
@@ -114,8 +115,12 @@ Route::group(['middlware'=>['auth'],'prefix'=>'/admin/orders/','as'=>'orders.'],
   Route::get('AgentsCollectedOrders','OrderController@AgentsCollectedOrders')->name('AgentsCollectedOrders');
   Route::get('AgentsCancelledOrders','OrderController@AgentsCancelledOrders')->name('AgentsCancelledOrders');
   Route::get('AgentsSuspendedOrders','OrderController@AgentsSuspendedOrders')->name('AgentsSuspendedOrders');
+  
   //Factor
   Route::get('Factor/{id}','OrderController@Factor')->name('Factor');
+
+  //Admin
+  Route::get('ReverseOrderStatusChanges','OrderController@ReverseOrderStatusChanges')->name('ReverseOrderStatusChanges');
 });
 Route::get('order-change','OrderController@change_it');
 Route::middleware('auth')->resource('orders','OrderController',['except' => [
@@ -240,6 +245,8 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
     /* Agent Chief */
     Route::get('AgentsMoneyCirculation','MoneyCirculationController@AgentsMoneyCirculation')->name('AgentsMoneyCirculation');
     Route::get('AgentsPaymentList/{agent_id}','MoneyCirculationController@AgentsPaymentList')->name('AgentsPaymentList');
+    Route::get('AgentAcceptAgentPayment/{id}','MoneyCirculationController@AgentAcceptAgentPayment')->name('AgentAcceptAgentPayment');
+    Route::get('AgentRejectAgentPayment/{id}','MoneyCirculationController@AgentRejectAgentPayment')->name('AgentRejectAgentPayment');
     /* Admin */
     Route::get('AgentUnverifiedPayment','MoneyCirculationController@AgentUnverifiedPayment')->name('AgentUnverifiedPayment');
     Route::get('AdminAcceptAgentPayment/{id}','MoneyCirculationController@AdminAcceptAgentPayment')->name('AdminAcceptAgentPayment');
@@ -247,6 +254,8 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
     Route::get('AgentUnverifiedCosts','MoneyCirculationController@AgentUnverifiedCosts')->name('AgentUnverifiedCosts');
     Route::get('AgentCostConfirm/{id}','MoneyCirculationController@AgentCostConfirm')->name('AgentCostConfirm');
     Route::get('RejectCost/{id}','MoneyCirculationController@RejectCost')->name('RejectCost');
+    Route::get('AdminPaymentList','MoneyCirculationController@AdminPaymentList')->name('AdminPaymentList');
+    Route::post('AdminPaymentCreate','MoneyCirculationController@AdminPaymentCreate')->name('AdminPaymentCreate');
 
 });
 

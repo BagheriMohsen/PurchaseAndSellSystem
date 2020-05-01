@@ -91,7 +91,6 @@
           <select id="agent_id" class="form-control"  name="agent_id">
             <option selected value="{{null}}">بدون مدیر نماینده</option>
             {% for chief in agentChiefs %}
-            {{dump(chief)}}
               <option {% if old('agent_id') == chief.id %} selected {% endif %}
                value="{{chief.id}}">
                {{chief.name}}{{' '}}{{chief.family}}

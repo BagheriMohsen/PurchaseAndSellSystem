@@ -53,10 +53,11 @@
                         <tr>
                             <th scope="row">هزینه  ها</th>
                             <td>
-                              {{ costs | number_format}}
+                              {{ costs | number_format }}
                               تومان
                             </td>
                         </tr>
+                        
                         {# <tr>
                             <th scope="row">مجموع چک ها</th>
                             <td>10000</td>
@@ -101,6 +102,13 @@
                             تومان
                           </td>
                         </tr>
+                        <tr>
+                            <th scope="row">عودت‌ وجه</th>
+                            <td>
+                              {{ payback | number_format }}
+                              تومان
+                            </td>
+                        </tr>
                         {# <tr>
                             <th scope="row">امتیاز</th>
                             <td>10000</td>
@@ -109,7 +117,7 @@
                             <th scope="row">مجموع بدهی شما</th>
                             <td>
                              
-                              {% set AllDebtor = all_sell  - (payments + AllSpecialShared + costs) %}
+                              {% set AllDebtor = all_sell  - (payments + AllSpecialShared + costs - payback) %}
 
                               {% if AllDebtor > 0 %}
                                 {% set AllDebtor = AllDebtor - Discount %}

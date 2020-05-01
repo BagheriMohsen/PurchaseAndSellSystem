@@ -18,6 +18,8 @@ use App\OrderStatus;
 use App\UserInventory;
 use App\SpecialTariff;
 use App\MoneyCirculation;
+use App\StoreRoom;
+#in ths file exists => App\Storage;
 
 class OrderController extends Controller
 {
@@ -674,7 +676,7 @@ class OrderController extends Controller
             $storage->update(['number'=>$number]);
 
             // Create OutPut store room for Agent
-            'App\StoreRoom'::create([
+            StoreRoom::create([
                 'user_id'           =>  $user->id,
                 'storage_id'        =>  $storage->id,
                 'sender_id'         =>  $user->id,
@@ -1406,5 +1408,100 @@ class OrderController extends Controller
     
         return view('Admin.Order.AgentChief.agents-suspended-orders',compact('orders'));
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reverse Order Status Changes
+    |--------------------------------------------------------------------------
+    |*/
+    public function ReverseOrderStatusChanges(Request $req) {
+
+        $user = User::findOrFail(auth()->user()->id);
+        
+        $items = $req->orderNumbers;
+
+        // change every incomming item
+        foreach( $items as $item ) {
+
+            $order = Order::findOrFail($item["id"]);
+
+            //return money circulation into users inventory and delete circulation
+            foreach( $order->MoneyCirculations as $circulation ) {
+
+                if( !is_null($circulation->agent_id) ) {
+
+                    $shared_money   =   $circulation->sharedSpecialAmount;
+                    $agent_id       =   $circulation->agent_id;
+                    $inventory      =   UserInventory::where("agent_id", $agent_id)->firstOrFail();
+                    $agent_money    =   $inventory->balance;
+                    $balance        =   $agent_money - $shared_money; 
+                    $inventory->update([ 'balance'=> $balance ]);
+
+                }else { 
+                    $seller_id      =   $circulation->seller_id;
+                    $seller         =   User::findOrFail($seller_id);
+                    $shared_money   =   $seller->porsantSeller;
+                    $inventory      =   UserInventory::where("seller_id", $seller_id)->firstOrFail();
+                    $seller_money   =   $inventory->balance;
+                    $balance        =   $seller_money - $shared_money; 
+                    $inventory->update([ 'balance'=> $balance ]);
+                }
+
+                $circulation->delete();
+                
+
+            }
+            
+
+            // return product into users storage 
+            foreach( $order->products as $order_product ) {
+
+                $agent_id = $order->agent_id;
+                $storage = 'App\Storage'::where([
+                    ['user_id', "=", $agent_id],
+                    ['product_id', "=", $order_product->product_id]
+                ])->firstOrFail();
+                $count = $storage->number + $order_product->count;
+                $storage->update([ 'number' => $count ]);
+            }
+
+            //update order status
+            $order->update([ 
+                "status"            =>  $item["statue"],
+                "collected_Date"    =>  Null   
+            ]);
+
+        }
+
+        return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
+
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Change Order Status Desc
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentChangeOrderStatusDesc(Request $req, $order_id) {
+
+        $order = Order::findOrFail($order_id);
+
+   
+
+        $order->update([
+            'status'        =>  $req->condition,
+            'status_desc'   =>  $req->status_desc
+        ]); 
+
+        return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
+
+        
+
+
+    }
+
+
     
 }

@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 use App\User;
 use App\Product;
+// in this file exists App\Storage
 
 class StoreRoomController extends Controller
 {
@@ -1159,16 +1160,13 @@ class StoreRoomController extends Controller
         $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
-            return abort(404);
+            return abort(403);
         }
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$agent_id],
             ['in_out','=',12]
         ])
-        ->orWhere([
-            ['sender_id','=',$agent_id],
-            ['in_out','=',12]
-        ])->latest()->paginate(15);
+        ->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentOut',compact('storeRooms'));
     }
     
@@ -1184,12 +1182,12 @@ class StoreRoomController extends Controller
         $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
-            return abort(404);
+            return abort(403);
         }
 
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$agent_id],
-            ['in_out','=',13]
+            ['in_out','=',14]
         ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));

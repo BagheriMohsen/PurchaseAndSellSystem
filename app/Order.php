@@ -55,11 +55,13 @@ class Order extends Model
     'returnToManager_Date',
     'allotment_Date',
     'action_Date',
-    'product_array'
+    'product_array',
+    'status_desc'
    ];
+
     /*
     |--------------------------------------------------------------------------
-    | Releate to pivot order and product table
+    | Relation to pivot order and product table
     |--------------------------------------------------------------------------
     |*/
     public function products(){
@@ -68,7 +70,7 @@ class Order extends Model
     
     /*
     |--------------------------------------------------------------------------
-    | Releation with ProductStatus Model
+    | Relation with ProductStatus Model
     |--------------------------------------------------------------------------
     */
     public function OrderStatus(){
@@ -77,55 +79,61 @@ class Order extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Releation with City Model
+    | Relation with City Model
     |--------------------------------------------------------------------------
     */
     public function city(){
         return $this->belongsTo(City::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with State Model
+    | Relation with State Model
     |--------------------------------------------------------------------------
     */
     public function state(){
         return $this->belongsTo(State::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function seller(){
         return $this->belongsTo(User::class,'seller_id','id');
     }
+    
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function agent(){
         return $this->belongsTo(User::class,'agent_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function followUpManager(){
         return $this->belongsTo(User::class,'followUpManager_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function callCenter(){
         return $this->belongsTo(User::class,'callCenter_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate with MoneyCirculation Model 
+    | Relation with MoneyCirculation Model 
     |--------------------------------------------------------------------------
     |*/
     public function MoneyCirculations(){

@@ -4,6 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+use App\User;
+use App\OrderStatus;
+use App\Product;
+use App\PaymentCirculation;
+use App\Order;
+
+
 class ReportController extends Controller
 {
     /*
@@ -12,7 +20,7 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Costs(){
-        $agents = 'App\User'::Role('agent')->latest()->get();
+        $agents = User::Role('agent')->latest()->get();
         return view('Admin.Report.Admin.costs',compact('agents'));
     }
     /*
@@ -21,16 +29,16 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Orders(){
-        $statuses   =   'App\OrderStatus'::where([
+        $statuses   =   OrderStatus::where([
             ['id','!=',1],
             ['id','!=',15],
             ['id','!=',9],
         ])->get();
-        $agents             =   'App\User'::with(["state","city"])->Role('agent')->get();
-        $callCenters        =   'App\User'::Role('callcenter')->get();
-        $sellers            =   'App\User'::Role('seller')->get();   
-        $followUpManagers   =   'App\User'::Role('followUpManager')->get();
-        $products           =   'App\Product'::latest()->get();
+        $agents             =   User::with(["state","city"])->Role('agent')->get();
+        $callCenters        =   User::Role('callcenter')->get();
+        $sellers            =   User::Role('seller')->get();   
+        $followUpManagers   =   User::Role('followUpManager')->get();
+        $products           =   Product::latest()->get();
         return view('Admin.Report.Admin.orders',compact(
             'statuses',
             'agents',
@@ -46,7 +54,7 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function Payments(){
-        $agents = 'App\User'::Role('agent')->latest()->get();
+        $agents = User::Role('agent')->latest()->get();
         return view('Admin.Report.Admin.payments',compact('agents'));
     }
     /*
@@ -60,7 +68,7 @@ class ReportController extends Controller
         $to         =   $request->to;
         $agent      =   $request->agents;
         $status_id  =   5;
-        $costs = 'App\PaymentCirculation'::query()
+        $costs = PaymentCirculation::query()
         ->when($from,function($query,$from){
             return $query->where('updated_at','>=',$from);
         })
@@ -88,7 +96,7 @@ class ReportController extends Controller
         $agent      =   $request->agents;
         $status_id  =   $request->report_status;
        
-        $payments = 'App\PaymentCirculation'::query()
+        $payments = PaymentCirculation::query()
         ->when($from,function($query,$from){
             return $query->where('updated_at','>=',$from);
         })
@@ -111,8 +119,14 @@ class ReportController extends Controller
     |*/
     public function orders_filter(Request $request){
 
-        $from               =   $request->from;
-        $to                 =   $request->to;
+        $from  =   Carbon::parse($request->from);
+        $to    =   Carbon::parse($request->to);
+
+        if($from == $to) {
+            $from->subDay(1);
+            $to->addDay(1);
+        }
+
         $date_status        =   $request->date_status;
 
         $from_updated_at    =   null;
@@ -150,7 +164,7 @@ class ReportController extends Controller
        
        
       
-        $orders = 'App\Order'::query()
+        $orders = Order::query()
      
         ->when($from_created_at,function($query,$from_created_at){
             return $query->where('created_at','>=',$from_created_at);
