@@ -226,6 +226,12 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentsAllReport() {
+        $user = auth()->user();
+
+        $agents = User::where("agent_id", $user->id)->get();
+
+     
+
         return view("Admin.Report.AgentChief.report-result");
     }
 
