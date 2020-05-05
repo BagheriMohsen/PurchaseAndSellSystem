@@ -66,6 +66,7 @@ class MoneyCirculationController extends Controller
             $Discount += $order->products->sum("off");
         }
 
+        
    
         $costs = PaymentCirculation::where([
             ['user_id','=',$user->id],

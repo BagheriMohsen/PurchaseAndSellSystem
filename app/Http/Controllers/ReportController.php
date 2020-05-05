@@ -113,6 +113,7 @@ class ReportController extends Controller
        
         return view('Admin.Report.Admin.payments-result',compact('payments'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Order Data Filter
@@ -218,4 +219,15 @@ class ReportController extends Controller
         
         ));
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agents All Report
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentsAllReport() {
+        return view("Admin.Report.AgentChief.report-result");
+    }
+
+
 }

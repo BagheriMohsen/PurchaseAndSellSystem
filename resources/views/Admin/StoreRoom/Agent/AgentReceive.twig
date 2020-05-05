@@ -38,7 +38,14 @@
                   <tbody>
                  {% for storeRoom in storeRooms %}
                     <tr class="text-center">
-                      <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
+
+                      <td>
+                        {% if storeRoom.product.image_id is not null %}
+                          <img src="{{storeRoom.product.thumbUrl}}" />
+                        {% else  %}
+                          {{"تصویری پیدا نشد"}}
+                        {% endif %}    
+                      </td>
                       <td>{{storeRoom.product.name}}</td>
                       {% if storeRoom.sender_id == 2 %}
                         <td>{{'انبار تنخواه'}}</td>

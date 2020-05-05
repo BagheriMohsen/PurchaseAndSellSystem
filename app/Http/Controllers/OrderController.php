@@ -278,6 +278,7 @@ class OrderController extends Controller
     {
         //
     }
+
     /*
     |--------------------------------------------------------------------------
     | Orders For Edit
@@ -315,6 +316,11 @@ class OrderController extends Controller
         ));
     }
 
+     /*
+    |--------------------------------------------------------------------------
+    | Orders Product For Edit Page
+    |--------------------------------------------------------------------------
+    |*/
     public function OrdersProductForEditPage($id){
         $order = Order::findOrFail($id);
         $user = User::findOrFail(auth()->user()->id);
@@ -350,6 +356,7 @@ class OrderController extends Controller
 
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Order List
@@ -364,6 +371,7 @@ class OrderController extends Controller
         ])->latest()->get();
         return view('Admin.Order.Agent.agent-orders',compact('orders','bottom_statuses'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Order Collected list
@@ -480,6 +488,7 @@ class OrderController extends Controller
         $orders = Order::latest()->paginate(10);
         return view('Admin.Order.Seller.seller-orders',compact('orders'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Change Order Status
@@ -498,7 +507,7 @@ class OrderController extends Controller
                 $order = Order::findOrFail($item['id']);
                 $user = User::findOrFail($order->agent_id);
                 /** foreach for check product exist in storage or not */
-                
+                // $this->AgentWareHouseCheck($order->products, $user, $order);
                 foreach($order->products as $order_product){
                     
                   
@@ -607,6 +616,49 @@ class OrderController extends Controller
         ->json(['message' => 'موفقیت آمیز بود','status' => 1,
         200,[],JSON_UNESCAPED_UNICODE]);
         
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent WareHouse Check
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentWareHouseCheck($items, $user, $order) {
+
+        foreach($items as $order_product){
+                    
+                  
+            $count = $order_product->count;
+            $user_id = $user->id;
+            $product_id = $order_product->product_id;
+            
+            $storage_status = 'App\Models\Storage'::where([
+                ['agent_id','=',$order->agent_id],
+                ['product_id','=',$order_product->product_id]
+            ])->exists();
+            // if product not exist
+            if($storage_status != True){
+                $result = ['message' => ' کالای  '.
+                $order_product->product->name.
+                ' در انبار وجود ندارد ','status' => 0];
+                return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+            // else product less than order->count 
+            }else{
+                $storage = 'App\Models\Storage'::where([
+                    ['agent_id','=',$order->agent_id],
+                    ['product_id','=',$product_id]
+                ])->firstOrFail(); 
+
+                if($storage->number < $count){
+                    $result = ['message' => ' کالای  '.
+                    $order_product->product->name.
+                    ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                }
+            }
+           
+        }
+
     }
     /*
     |--------------------------------------------------------------------------

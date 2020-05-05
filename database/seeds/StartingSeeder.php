@@ -5,6 +5,18 @@ use Carbon\Carbon;
 
 use App\Models\User;
 
+use App\Models\State;
+use App\Models\City;
+use App\Models\Warehouse;
+use App\Models\PaymentStatus;
+use App\Models\Transport;
+use App\Models\OrderStatus;
+use App\Models\StoreRoomStatus;
+use App\Models\Product;
+use App\Models\ProductType;
+use App\Models\Order;
+use App\Models\OrderProduct;
+
 class StartingSeeder extends Seeder
 {
     /**
@@ -19,7 +31,7 @@ class StartingSeeder extends Seeder
         | Create State
         |--------------------------------------------------------------------------
         |*/
-        'App\State'::create([
+        State::create([
             'name'    =>  'قم',
         ]);
         /*
@@ -27,7 +39,7 @@ class StartingSeeder extends Seeder
         | Create City
         |--------------------------------------------------------------------------
         |*/
-        'App\City'::create([
+        City::create([
             'name'      => 'قم',
             'state_id'  =>  1
           ]);
@@ -219,7 +231,7 @@ class StartingSeeder extends Seeder
         |--------------------------------------------------------------------------
         |*/
         #1
-          'App\Warehouse'::create([
+          Warehouse::create([
             'user_id'       =>  3,
             'name'          =>  "انبار مادر",
             'state_id'       =>  1,
@@ -230,7 +242,7 @@ class StartingSeeder extends Seeder
             'postalCard'    =>  "" 
         ]);
         #2
-        'App\Warehouse'::create([
+        Warehouse::create([
           'user_id'       =>  4,
           'name'          =>  "انبار تنخواه",
           'state_id'       =>  1,
@@ -245,81 +257,81 @@ class StartingSeeder extends Seeder
       | Create Payment Status
       |--------------------------------------------------------------------------
       |*/
-      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-بررسی نشده",]);
-      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید شده",]);
-      'App\PaymentStatus'::create(['name'=>"پرداخت نماینده-تایید نشده",]);
-      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-بررسی نشده",]);
-      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-تایید شده",]);
-      'App\PaymentStatus'::create(['name'=>"هزینه نماینده-تایید نشده",]);
+      PaymentStatus::create(['name'=>"پرداخت نماینده-بررسی نشده",]);
+      PaymentStatus::create(['name'=>"پرداخت نماینده-تایید شده",]);
+      PaymentStatus::create(['name'=>"پرداخت نماینده-تایید نشده",]);
+      PaymentStatus::create(['name'=>"هزینه نماینده-بررسی نشده",]);
+      PaymentStatus::create(['name'=>"هزینه نماینده-تایید شده",]);
+      PaymentStatus::create(['name'=>"هزینه نماینده-تایید نشده",]);
       /*
       |--------------------------------------------------------------------------
       | Create Transport
       |--------------------------------------------------------------------------
       |*/
-      'App\Transport'::create(['name'=>"اتوبوس رانی",]);
-      'App\Transport'::create(['name'=>"باربری",]);
-      'App\Transport'::create(['name'=>"تاکسیرانی",]);
-      'App\Transport'::create(['name'=>"تحویل به نماینده",]);
-      // 'App\Transport'::create(['name'=>"پیک",]);
-      // 'App\Transport'::create(['name'=>"شکوه مهر",]);
-      // 'App\Transport'::create(['name'=>"چابک",]);
-      // 'App\Transport'::create(['name'=>"فارس پست",]);
-      // 'App\Transport'::create(['name'=>"فلوکس",]);
-      // 'App\Transport'::create(['name'=>"فروتل",]);
-      // 'App\Transport'::create(['name'=>"سپیده ماهان",]);
-      // 'App\Transport'::create(['name'=>"گیتوی پست",]);
-      // 'App\Transport'::create(['name'=>"لجیتو",]);
+      Transport::create(['name'=>"اتوبوس رانی",]);
+      Transport::create(['name'=>"باربری",]);
+      Transport::create(['name'=>"تاکسیرانی",]);
+      Transport::create(['name'=>"تحویل به نماینده",]);
+      // Transport::create(['name'=>"پیک",]);
+      // Transport::create(['name'=>"شکوه مهر",]);
+      // Transport::create(['name'=>"چابک",]);
+      // Transport::create(['name'=>"فارس پست",]);
+      // Transport::create(['name'=>"فلوکس",]);
+      // Transport::create(['name'=>"فروتل",]);
+      // Transport::create(['name'=>"سپیده ماهان",]);
+      // Transport::create(['name'=>"گیتوی پست",]);
+      // Transport::create(['name'=>"لجیتو",]);
       /*
       |--------------------------------------------------------------------------
       | Create Order Status
       |--------------------------------------------------------------------------
       |*/
-      'App\OrderStatus'::create(['name'=>'ثبت سفارش']);
-      'App\OrderStatus'::create(['name'=>'ارسال به کالسنتر']);
-      'App\OrderStatus'::create(['name'=>'ارسال به مدیر پیگیری']);
-      'App\OrderStatus'::create(['name'=>'ارسال به فروشنده']);
-      'App\OrderStatus'::create(['name'=>'تماس مجدد']);
-      'App\OrderStatus'::create(['name'=>'برگشت به فروشنده']);
-      'App\OrderStatus'::create(['name'=>'در انتظار تحویل']);
-      'App\OrderStatus'::create(['name'=>'برگشت به مدیر پیگیری']);
-      'App\OrderStatus'::create(['name'=>'غیر قابل ارسال']);
-      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-داخل شهر']);
-      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-حومه شهر']);
-      'App\OrderStatus'::create(['name'=>'تحویل به مشتری-روستا']);
-      'App\OrderStatus'::create(['name'=>'انصراف مشتری']);
-      'App\OrderStatus'::create(['name'=>'معلق']);
-      'App\OrderStatus'::create(['name'=>'وصول شده']);
-      'App\OrderStatus'::create(['name'=>'انصراف نهایی']);
-      'App\OrderStatus'::create(['name'=>'خام']);
+      OrderStatus::create(['name'=>'ثبت سفارش']);
+      OrderStatus::create(['name'=>'ارسال به کالسنتر']);
+      OrderStatus::create(['name'=>'ارسال به مدیر پیگیری']);
+      OrderStatus::create(['name'=>'ارسال به فروشنده']);
+      OrderStatus::create(['name'=>'تماس مجدد']);
+      OrderStatus::create(['name'=>'برگشت به فروشنده']);
+      OrderStatus::create(['name'=>'در انتظار تحویل']);
+      OrderStatus::create(['name'=>'برگشت به مدیر پیگیری']);
+      OrderStatus::create(['name'=>'غیر قابل ارسال']);
+      OrderStatus::create(['name'=>'تحویل به مشتری-داخل شهر']);
+      OrderStatus::create(['name'=>'تحویل به مشتری-حومه شهر']);
+      OrderStatus::create(['name'=>'تحویل به مشتری-روستا']);
+      OrderStatus::create(['name'=>'انصراف مشتری']);
+      OrderStatus::create(['name'=>'معلق']);
+      OrderStatus::create(['name'=>'وصول شده']);
+      OrderStatus::create(['name'=>'انصراف نهایی']);
+      OrderStatus::create(['name'=>'خام']);
       /*
       |--------------------------------------------------------------------------
       | Store Room Status
       |--------------------------------------------------------------------------
       |*/
-      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار مادر']);
-      'App\StoreRoomStatus'::create(['name'=>'ارسال به انبار تنخواه']);
-      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار مادر']);
-      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه']);
-      'App\StoreRoomStatus'::create(['name'=>'ورود از انبار مرکزی-پذیرفته نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'ورود از انبار مرکزی-پذیرفته شده']);
-      'App\StoreRoomStatus'::create(['name'=>'ارسال به نماینده']);
-      'App\StoreRoomStatus'::create(['name'=>'انبار به انبار نماینده']);
-      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار مادر-تایید نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
-      'App\StoreRoomStatus'::create(['name'=>'خروجی از انبار نماینده']);
-      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه-تایید نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'تحویل به مشتری']);
-      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
-      'App\StoreRoomStatus'::create(['name'=>'برگشت به انبار تنخواه-تایید شده']);
+      StoreRoomStatus::create(['name'=>'ورودی به انبار مادر']);
+      StoreRoomStatus::create(['name'=>'ارسال به انبار تنخواه']);
+      StoreRoomStatus::create(['name'=>'خروجی از انبار مادر']);
+      StoreRoomStatus::create(['name'=>'مرجوعی از انبار تنخواه']);
+      StoreRoomStatus::create(['name'=>'ورود از انبار مرکزی-پذیرفته نشده']);
+      StoreRoomStatus::create(['name'=>'ورود از انبار مرکزی-پذیرفته شده']);
+      StoreRoomStatus::create(['name'=>'ارسال به نماینده']);
+      StoreRoomStatus::create(['name'=>'انبار به انبار نماینده']);
+      StoreRoomStatus::create(['name'=>'برگشت به انبار مادر-تایید نشده']);
+      StoreRoomStatus::create(['name'=>'ورودی به انبار نماینده-پذیرفته نشده']);
+      StoreRoomStatus::create(['name'=>'ورودی به انبار نماینده-پذیرفته شده']);
+      StoreRoomStatus::create(['name'=>'خروجی از انبار نماینده']);
+      StoreRoomStatus::create(['name'=>'برگشت به انبار تنخواه-تایید نشده']);
+      StoreRoomStatus::create(['name'=>'تحویل به مشتری']);
+      StoreRoomStatus::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
+      StoreRoomStatus::create(['name'=>'مرجوعی از انبار تنخواه-تایید نشده']);
+      StoreRoomStatus::create(['name'=>'برگشت به انبار تنخواه-تایید شده']);
 
     /*
     |--------------------------------------------------------------------------
     | Store Product
     |--------------------------------------------------------------------------
     |*/
-    'App\Product'::create([
+    Product::create([
       'user_id'       =>  1,
       'name'          =>  'کرم',
       'code'          =>  2501,
@@ -334,12 +346,12 @@ class StartingSeeder extends Seeder
     | Store Product Type
     |--------------------------------------------------------------------------
     |*/
-    'App\ProductType'::create([
+    ProductType::create([
       'user_id'     =>  1,
       'product_id'  =>  1,
       'name'        =>  'شب'
     ]);
-    'App\ProductType'::create([
+    ProductType::create([
       'user_id'     =>  1,
       'product_id'  =>  1,
       'name'        =>  'روز'
@@ -349,7 +361,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -362,7 +374,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-    
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -370,7 +382,7 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-  'App\OrderProduct'::create([
+  OrderProduct::create([
     'order_id'      =>  $order->id,
     'product_id'    =>  1,
     'count'         =>  5,
@@ -382,7 +394,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -395,7 +407,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-      
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -403,7 +415,7 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-    'App\OrderProduct'::create([
+    OrderProduct::create([
       'order_id'      =>  $order->id,
       'product_id'    =>  1,
       'count'         =>  5,
@@ -415,7 +427,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -428,7 +440,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-     
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -436,7 +448,7 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-  'App\OrderProduct'::create([
+  OrderProduct::create([
     'order_id'      =>  $order->id,
     'product_id'    =>  1,
     'count'         =>  5,
@@ -448,7 +460,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -461,7 +473,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-    
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -469,7 +481,7 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-  'App\OrderProduct'::create([
+  OrderProduct::create([
     'order_id'      =>  $order->id,
     'product_id'    =>  1,
     'count'         =>  5,
@@ -481,7 +493,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -494,7 +506,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-     
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -502,7 +514,7 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-  'App\OrderProduct'::create([
+  OrderProduct::create([
     'order_id'      =>  $order->id,
     'product_id'    =>  1,
     'count'         =>  5,
@@ -514,7 +526,7 @@ class StartingSeeder extends Seeder
     | Create Order
     |--------------------------------------------------------------------------
     |*/
-    $order = 'App\Order'::create([
+    $order = Order::create([
       'city_id'           =>      1,
       'state_id'          =>      1,
       'agent_id'          =>      6,
@@ -527,7 +539,7 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
-    
+      'product_array'     =>      array(1),
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
@@ -535,14 +547,14 @@ class StartingSeeder extends Seeder
       'HBD_Date'          =>      null,
       'delivary_Date'    =>      Carbon::now()
   ]);
-    'App\OrderProduct'::create([
+    OrderProduct::create([
       'order_id'      =>  $order->id,
       'product_id'    =>  1,
       'count'         =>  5,
       'off'           =>  400,
       'product_type'  =>  1
   ]);
-  'App\OrderProduct'::create([
+  OrderProduct::create([
     'order_id'      =>  $order->id,
     'product_id'    =>  1,
     'count'         =>  5,

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>عملکرد کلی بر اساس کالا</title>
+  <style>
+    .invoice_details {
+    counter-reset: rowNumber;
+    }
+
+    .invoice_details tbody tr {
+        counter-increment: rowNumber;
+    }
+
+    .invoice_details tbody tr td:first-child::before {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+    }
+  </style>
+
+  {% include 'Admin.Master.styles' %}
+</head>
+<body>
+  <div class="mt-4 mb-3 text-center col-12 h4">
+    {{"عملکرد کلی بر اساس کالا"}}
+  </div>
+<!--End order details modal -->
+<div class="row">
+  <div class="card col-sm-12">
+              
+    <!-- /.card-header -->
+    <div class="card-body col-12 mx-auto table-responsive">
+    
+      <table id="searchResult"  class="table table-striped table-bordered table-sm text-center" 
+      cellspacing="0"  width="100%"
+      >
+        <thead>
+        <tr>
+          <th>نام</th>
+          <th>مدیر نماینده</th>
+          <th>کل سفارشات‌دریافتی</th>
+          <th>کل در انتظار تحویل</th>
+          <th>کل سفارشات وصولی</th>
+          <th>سفارشات وصولی</th>
+          <th>سفارشات معلق</th>
+          <th>سفارشات کنسلی</th>
+          <th>سفارشات انصراف نهایی</th>
+          <th>درصد در انتظار تحویل</th>
+          <th>مجموع در انتظار تحویل</th>
+          <th>جمع تعداد کالا</th>
+          <th>درصد وصول</th>
+          <th>درصد وصول کل</th>
+          <th>درصد معلق کل</th>
+          <th>درصد کنسلی کل</th>
+          <th>درصد انصراف کل</th>
+          <th>انبار دریافتی تایید نشده</th>
+          <th>عودت وجه تایید نشده</th>
+          <th>واریزی تایید نشده</th>
+          <th>موجودی انبار</th>
+        </tr>
+        </thead>
+        <tbody>
+      
+          <tr>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+            <td>{{ "this is text" }}</td>
+
+            
+          </tr>
+      
+        </tbody>
+        
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+</div>
+
+
+
+     
+</body>
+</html>
+ {% include 'Admin/Master/scripts' %}

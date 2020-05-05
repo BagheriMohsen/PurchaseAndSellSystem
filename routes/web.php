@@ -283,6 +283,9 @@ Route::group(['middleware'=>'auth','prefix'=>'report/','as'=>'report.'],function
   Route::get('Payments','ReportController@Payments')->name('Payments');
   Route::post('Payments-Filter','ReportController@payments_filter')->name('payments_filter');
 
+  // AgentChief 
+  Route::get("agent-chief-report-result","ReportController@AgentsAllReport")->name("agentsAllReport");
+
 
   
 });
