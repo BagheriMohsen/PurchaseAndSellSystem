@@ -1,0 +1,53 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  ایجاد گزارش کاربران
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'ایجاد گزارش کاربران'} %}
+{% endblock %}
+
+{% block content %}
+
+
+
+<form id="costReportForm" action="{{route('report.agentsAllReport')}}" method="post" class="row pt-2 pb-2">
+    
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+
+    <div class="col-sm-3 mx-auto">
+        <label for="from">از تاریخ</label>
+        <input class="form-control persianDatePicker" type="text">
+        <input class="georgian_date" type="hidden" name="from_date">
+    </div>
+    <div class="col-sm-3 mx-auto">
+        <label for="to">تا تاریخ</label>
+        <input class="form-control persianDatePicker" type="text">
+        <input class="georgian_date" type="hidden" name="to_date">
+    </div>
+
+    <div class="col-sm-12 mt-5">
+        
+        <button class="btn btn-success btn-sm text-dark">
+            <strong class="h6">
+                مشاهده
+            </strong>
+        </button>
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

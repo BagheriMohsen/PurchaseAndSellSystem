@@ -222,11 +222,31 @@ class ReportController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | AgentChief Reports agent
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentChiefReportsAgent() {
+
+        return view("Admin.Report.AgentChief.report-search");
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Agents All Report
     |--------------------------------------------------------------------------
     |*/
-    public function AgentsAllReport() {
-        $user = auth()->user();
+    public function AgentsAllReport(Request $req) {
+        
+        $user       =   auth()->user();
+        $from_date  =   Carbon::parse($req->from_date);
+        $to_date    =   Carbon::parse($req->to_date);
+        $products   =   Product::all();
+
+        foreach($products as $product) {
+            $order = Order::where("product_array", $product->id)->get();
+            dd($order);
+        }
 
         $agents = User::where("agent_id", $user->id)->get();
 

@@ -377,7 +377,7 @@ class OrderController extends Controller
     | Agent Order Collected list
     |--------------------------------------------------------------------------
     |*/
-    public function AgentOrderCollectedlist(){
+    public function AgentOrderCollectedlist() {
         $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
         $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
@@ -450,7 +450,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function ProductList(){
-        $products = Product::with('types')->where('status','active')->get();
+        $products = Product::with(['types', 'offs'])->where('status','active')->get();
         return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
@@ -552,14 +552,16 @@ class OrderController extends Controller
                 $agent = User::findOrFail($order->agent_id);
                 $product_id_array = explode(",",$order->product_array);
                 $status = $item['statue'];
-                if(is_null($user->calType)){
+
+                if(is_null($user->calType)):
 
                     return $this->AgentSharedPriceForEachProduct($product_id_array,$agent,$status,$order);
 
-                }else{
+                else:
 
                     return $this->AgentPriceForEachFactor($agent,$order);
-                }
+
+                endif;
                 $order->update(['action_Date'=>Carbon::now()]);
                 // return response()
                 // ->json(['message' => 'موفقیت آمیز بود','status' => 1,
@@ -574,7 +576,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'cancelled_Date'=>Carbon::now()
-                    ]);
+                ]);
 
             /*########## Suspended Status ###############*/
 
@@ -583,7 +585,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'suspended_Date'=>Carbon::now(),
-                    ]);
+                ]);
 
             /*#######Return To Seller_Date Status###########*/
 
@@ -592,7 +594,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'returnToSeller_Date'=>Carbon::now(),
-                    ]);
+                ]);
 
             /*########## Other Statuses #############*/
             
