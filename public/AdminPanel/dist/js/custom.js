@@ -834,6 +834,7 @@ $(document).ready(function(){
             url:baseUrl+'/admin/orders/ProductList',
             type:'GET',
             success:function(response){
+                console.log(response)
                 productList = response;
                 if($('.orderEditForm').length){
                     getOrderList();
