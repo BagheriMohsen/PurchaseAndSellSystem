@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ProductType;
+
+
+use App\Models\ProductType;
+use App\Models\Product;
+
 class ProductTypeController extends Controller
 {
     /**
@@ -13,7 +17,7 @@ class ProductTypeController extends Controller
      */
     public function index($id)
     {
-        $product = 'App\Product'::findOrFail($id);
+        $product = Product::findOrFail($id);
        
          return Response()->json($product->types,200,[],JSON_UNESCAPED_UNICODE);
     }
@@ -51,7 +55,7 @@ class ProductTypeController extends Controller
           'product_id'  =>  $request->product,
           'name'        =>  $request->name
         ]);
-        $product = 'App\Product'::findOrFail($request->product);
+        $product = Product::findOrFail($request->product);
         $message = $request->name.' به محصول '.$product->name.' اضافه شد ';
         
         return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
@@ -95,7 +99,7 @@ class ProductTypeController extends Controller
         'product_id'  =>  $request->product,
         'name'        =>  $request->name
       ]);
-      $product = 'App\Product'::findOrFail($request->product);
+      $product = Product::findOrFail($request->product);
       $message = $request->name.' زیر مجموعه محصول '.$product->name.' به روز رسانی شد ';
 
     //   return redirect()->route('products.index')->with('message',$message);
@@ -112,7 +116,7 @@ class ProductTypeController extends Controller
     {
         $productType    = ProductType::findOrFail($id);
         $typeName       =   $productType->name;
-        $product        = 'App\Product'::findOrFail($productType->product_id);
+        $product        = Product::findOrFail($productType->product_id);
         ProductType::destroy($id);
         $message = $typeName.' از زیر مجموعه محصول '.$product->name.' حذف شد ';
         // return redirect()->route('products.index')->with('message',$message);

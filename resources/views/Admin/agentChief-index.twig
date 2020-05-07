@@ -24,9 +24,19 @@
 <div class="row">
     <div style="flex-basis:225px;" class=" text-center bg-default shadow pt-3 pb-5 mx-auto">
         <strong class="text-white" style="font-size: .9rem">سفارشات تحویل داده شده نمایندگان</strong>
+        
         <div>
           <i style="font-size:36px" class="fas fa-shopping-bag text-white mt-2"></i>
         </div>
+        <span class="info-box-number text-light mt-3">
+          {{"یکماه اخیر:"}}
+          {{ collected_month }}
+        </span>
+        <span class="info-box-number text-light">
+          {{"امروز:"}}
+          {{ collected_today }}
+        </span>
+
     </div>
   <!-- ./col -->
   <div style="flex-basis:225px;" class=" text-center bg-secondary shadow pt-3 pb-5 mx-auto">
@@ -34,6 +44,14 @@
         <div>
           <i style="font-size:36px" class="fas fa-undo text-white mt-2"></i>
         </div>
+        <span class="info-box-number text-light mt-3">
+          {{"یکماه اخیر:"}}
+          {{ cancelled_month }}
+        </span>
+        <span class="info-box-number text-light">
+          {{"امروز:"}}
+          {{ cancelled_today }}
+        </span>
     </div>
   <!-- ./col -->
   <div style="flex-basis:225px;" class=" text-center bg-info shadow pt-3 pb-5 mx-auto ">
@@ -41,6 +59,9 @@
         <div>
           <i  style="font-size:36px" class="far fa-file-alt text-white mt-2"></i>
         </div>
+        <strong class="info-box-number text-light mt-5">
+          {{ delivaryOrderNumber }}
+        </strong>
     </div>
   <!-- ./col -->
    <div style="flex-basis:225px;" class=" text-center bg-warning shadow pt-3 pb-5 mx-auto">
@@ -48,6 +69,19 @@
         <div>
           <i style="font-size:36px" class="far fa-money-bill-alt text-white mt-2"></i>
         </div>
+
+        <span class="info-box-number text-light mt-3">
+          {{"پورسانت:"}}
+          {{ "0" }}
+        </span>
+        <span class="info-box-number text-light">
+          {{"پرداختی:"}}
+          {{ "0" }}
+        </span>
+        <span class="info-box-number text-light">
+          {{"مانده:"}}
+          {{ "0" }}
+        </span>
     </div>
   <!-- ./col -->
 </div>

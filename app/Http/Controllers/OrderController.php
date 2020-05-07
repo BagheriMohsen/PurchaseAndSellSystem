@@ -8,16 +8,19 @@ use DB;
 use Carbon\Carbon;
 
 
-use App\Order;
-use App\User;
-use App\State;
-use App\Customer;
-use App\OrderProduct;
-use App\City;
-use App\OrderStatus;
-use App\UserInventory;
-use App\SpecialTariff;
-use App\MoneyCirculation;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\State;
+use App\Models\Customer;
+use App\Models\OrderProduct;
+use App\Models\City;
+use App\Models\OrderStatus;
+use App\Models\UserInventory;
+use App\Models\SpecialTariff;
+use App\Models\MoneyCirculation;
+use App\Models\StoreRoom;
+use App\Models\Product;
+#in ths file exists => App\Models\Storage;
 
 class OrderController extends Controller
 {
@@ -38,7 +41,7 @@ class OrderController extends Controller
      */
     public function create()
     {   
-        $products   = 'App\Product'::latest()->get();
+        $products   = Product::latest()->get();
         
         $cities     = City::latest()->get();
         $states     = State::latest()->get();
@@ -241,7 +244,7 @@ class OrderController extends Controller
             'chequePrice'       =>      $request->chequePrice,
             'instant'           =>      $request->instant,
             'sellerDescription' =>      $request->sellerDescription,
-            'sendDescription'   =>      $request->deliverDescription,
+            'sendDescription'   =>      $request->sendDescription,
             'postalCode'        =>      $request->postalCode,
             'address'           =>      $request->address,
             'HBD_Date'          =>      $order->HBD_Date,
@@ -275,6 +278,7 @@ class OrderController extends Controller
     {
         //
     }
+
     /*
     |--------------------------------------------------------------------------
     | Orders For Edit
@@ -312,6 +316,11 @@ class OrderController extends Controller
         ));
     }
 
+     /*
+    |--------------------------------------------------------------------------
+    | Orders Product For Edit Page
+    |--------------------------------------------------------------------------
+    |*/
     public function OrdersProductForEditPage($id){
         $order = Order::findOrFail($id);
         $user = User::findOrFail(auth()->user()->id);
@@ -347,6 +356,7 @@ class OrderController extends Controller
 
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Order List
@@ -361,12 +371,13 @@ class OrderController extends Controller
         ])->latest()->get();
         return view('Admin.Order.Agent.agent-orders',compact('orders','bottom_statuses'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Order Collected list
     |--------------------------------------------------------------------------
     |*/
-    public function AgentOrderCollectedlist(){
+    public function AgentOrderCollectedlist() {
         $bottom_statuses = OrderStatus::skip(9)->take(5)->get();
         $user = User::findOrFail(auth()->user()->id);
         $orders = Order::where([
@@ -439,7 +450,7 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function ProductList(){
-        $products = 'App\Product'::with('types')->where('status','active')->get();
+        $products = Product::with(['types', 'offs'])->where('status','active')->get();
         return Response()->json($products,200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
@@ -477,6 +488,7 @@ class OrderController extends Controller
         $orders = Order::latest()->paginate(10);
         return view('Admin.Order.Seller.seller-orders',compact('orders'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agent Change Order Status
@@ -486,7 +498,7 @@ class OrderController extends Controller
         $user = User::findOrFail(auth()->user()->id);
         
         $items = $request->orderNumbers;
-        return response()->json($items);
+     
 
         foreach($items as $item){
             
@@ -495,7 +507,7 @@ class OrderController extends Controller
                 $order = Order::findOrFail($item['id']);
                 $user = User::findOrFail($order->agent_id);
                 /** foreach for check product exist in storage or not */
-                
+                // $this->AgentWareHouseCheck($order->products, $user, $order);
                 foreach($order->products as $order_product){
                     
                   
@@ -503,7 +515,7 @@ class OrderController extends Controller
                     $user_id = $user->id;
                     $product_id = $order_product->product_id;
                     
-                    $storage_status = 'App\Storage'::where([
+                    $storage_status = 'App\Models\Storage'::where([
                         ['agent_id','=',$order->agent_id],
                         ['product_id','=',$order_product->product_id]
                     ])->exists();
@@ -515,7 +527,7 @@ class OrderController extends Controller
                         return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
                     // else product less than order->count 
                     }else{
-                        $storage = 'App\Storage'::where([
+                        $storage = 'App\Models\Storage'::where([
                             ['agent_id','=',$order->agent_id],
                             ['product_id','=',$product_id]
                         ])->firstOrFail(); 
@@ -540,15 +552,17 @@ class OrderController extends Controller
                 $agent = User::findOrFail($order->agent_id);
                 $product_id_array = explode(",",$order->product_array);
                 $status = $item['statue'];
-                if(is_null($user->calType)){
+
+                if(is_null($user->calType)):
 
                     return $this->AgentSharedPriceForEachProduct($product_id_array,$agent,$status,$order);
 
-                }else{
+                else:
 
                     return $this->AgentPriceForEachFactor($agent,$order);
-                }
-               
+
+                endif;
+                $order->update(['action_Date'=>Carbon::now()]);
                 // return response()
                 // ->json(['message' => 'موفقیت آمیز بود','status' => 1,
                 // 200,[],JSON_UNESCAPED_UNICODE]);
@@ -562,7 +576,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'cancelled_Date'=>Carbon::now()
-                    ]);
+                ]);
 
             /*########## Suspended Status ###############*/
 
@@ -571,7 +585,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'suspended_Date'=>Carbon::now(),
-                    ]);
+                ]);
 
             /*#######Return To Seller_Date Status###########*/
 
@@ -580,7 +594,7 @@ class OrderController extends Controller
                 $order->update([
                     'status'=>$item['statue'],
                     'returnToSeller_Date'=>Carbon::now(),
-                    ]);
+                ]);
 
             /*########## Other Statuses #############*/
             
@@ -594,15 +608,59 @@ class OrderController extends Controller
                 $order = Order::findOrFail($item['id']);
                 $order->update([
                     'status'=>$item['statue'],
-                    ]);
+                ]);
             }
 
             
         }
+        $order->update(['action_Date'=>Carbon::now()]);
         return response()
         ->json(['message' => 'موفقیت آمیز بود','status' => 1,
         200,[],JSON_UNESCAPED_UNICODE]);
         
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent WareHouse Check
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentWareHouseCheck($items, $user, $order) {
+
+        foreach($items as $order_product){
+                    
+                  
+            $count = $order_product->count;
+            $user_id = $user->id;
+            $product_id = $order_product->product_id;
+            
+            $storage_status = 'App\Models\Storage'::where([
+                ['agent_id','=',$order->agent_id],
+                ['product_id','=',$order_product->product_id]
+            ])->exists();
+            // if product not exist
+            if($storage_status != True){
+                $result = ['message' => ' کالای  '.
+                $order_product->product->name.
+                ' در انبار وجود ندارد ','status' => 0];
+                return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+            // else product less than order->count 
+            }else{
+                $storage = 'App\Models\Storage'::where([
+                    ['agent_id','=',$order->agent_id],
+                    ['product_id','=',$product_id]
+                ])->firstOrFail(); 
+
+                if($storage->number < $count){
+                    $result = ['message' => ' کالای  '.
+                    $order_product->product->name.
+                    ' در انبار به تعداد مورد نیاز موجود نیست ','status' => 0];
+                    return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                }
+            }
+           
+        }
+
     }
     /*
     |--------------------------------------------------------------------------
@@ -618,7 +676,7 @@ class OrderController extends Controller
             $user_id = $user->id;
             $product_id = $order_product->product_id;
             
-            $storage_status = 'App\Storage'::where([
+            $storage_status = 'App\Models\Storage'::where([
                 ['agent_id','=',$user->id],
                 ['product_id','=',$order_product->product_id]
             ])->exists();
@@ -630,7 +688,7 @@ class OrderController extends Controller
                 return response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
             // else product less than order->count 
             }else{
-                $storage = 'App\Storage'::where([
+                $storage = 'App\Models\Storage'::where([
                     ['agent_id','=',$user_id],
                     ['product_id','=',$product_id]
                 ])->firstOrFail(); 
@@ -657,7 +715,7 @@ class OrderController extends Controller
         foreach($order->products as $order_product){
                 
                         
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['agent_id','=',$user->id],
                 ['product_id','=',$order_product->product_id]
             ])->firstOrFail();
@@ -673,7 +731,7 @@ class OrderController extends Controller
             $storage->update(['number'=>$number]);
 
             // Create OutPut store room for Agent
-            'App\StoreRoom'::create([
+            StoreRoom::create([
                 'user_id'           =>  $user->id,
                 'storage_id'        =>  $storage->id,
                 'sender_id'         =>  $user->id,
@@ -705,7 +763,7 @@ class OrderController extends Controller
         $AgentStatus  = UserInventory::where('agent_id',$agent->id)->exists();
         $trackingCode = uniqid();
         foreach($product_id_array as $product_id){
-            $product        = 'App\Product'::findOrFail($product_id);
+            $product        = Product::findOrFail($product_id);
             $count  = OrderProduct::where([
                 ['order_id','=',$order->id],
                 ['product_id','=',$product->id]
@@ -1405,5 +1463,100 @@ class OrderController extends Controller
     
         return view('Admin.Order.AgentChief.agents-suspended-orders',compact('orders'));
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reverse Order Status Changes
+    |--------------------------------------------------------------------------
+    |*/
+    public function ReverseOrderStatusChanges(Request $req) {
+
+        $user = User::findOrFail(auth()->user()->id);
+        
+        $items = $req->orderNumbers;
+
+        // change every incomming item
+        foreach( $items as $item ) {
+
+            $order = Order::findOrFail($item["id"]);
+
+            //return money circulation into users inventory and delete circulation
+            foreach( $order->MoneyCirculations as $circulation ) {
+
+                if( !is_null($circulation->agent_id) ) {
+
+                    $shared_money   =   $circulation->sharedSpecialAmount;
+                    $agent_id       =   $circulation->agent_id;
+                    $inventory      =   UserInventory::where("agent_id", $agent_id)->firstOrFail();
+                    $agent_money    =   $inventory->balance;
+                    $balance        =   $agent_money - $shared_money; 
+                    $inventory->update([ 'balance'=> $balance ]);
+
+                }else { 
+                    $seller_id      =   $circulation->seller_id;
+                    $seller         =   User::findOrFail($seller_id);
+                    $shared_money   =   $seller->porsantSeller;
+                    $inventory      =   UserInventory::where("seller_id", $seller_id)->firstOrFail();
+                    $seller_money   =   $inventory->balance;
+                    $balance        =   $seller_money - $shared_money; 
+                    $inventory->update([ 'balance'=> $balance ]);
+                }
+
+                $circulation->delete();
+                
+
+            }
+            
+
+            // return product into users storage 
+            foreach( $order->products as $order_product ) {
+
+                $agent_id = $order->agent_id;
+                $storage = 'App\Models\Storage'::where([
+                    ['user_id', "=", $agent_id],
+                    ['product_id', "=", $order_product->product_id]
+                ])->firstOrFail();
+                $count = $storage->number + $order_product->count;
+                $storage->update([ 'number' => $count ]);
+            }
+
+            //update order status
+            $order->update([ 
+                "status"            =>  $item["statue"],
+                "collected_Date"    =>  Null   
+            ]);
+
+        }
+
+        return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
+
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Change Order Status Desc
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentChangeOrderStatusDesc(Request $req, $order_id) {
+
+        $order = Order::findOrFail($order_id);
+
+   
+
+        $order->update([
+            'status'        =>  $req->condition,
+            'status_desc'   =>  $req->status_desc
+        ]); 
+
+        return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
+
+        
+
+
+    }
+
+
     
 }

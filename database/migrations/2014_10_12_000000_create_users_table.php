@@ -19,26 +19,26 @@ class CreateUsersTable extends Migration
         | cities table
         |--------------------------------------------------------------------------
         |*/
-        // Schema::create('states', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('name');
-        //     $table->timestamps();
-        // });
+        Schema::create('states', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
+        });
         /*
         |--------------------------------------------------------------------------
         | states table
         |--------------------------------------------------------------------------
         |*/
-        // Schema::create('cities', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->bigInteger('state_id')->unsigned();
-        //     $table->string('name');
-        //     $table->timestamps();
+        Schema::create('cities', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('state_id')->unsigned();
+            $table->string('name');
+            $table->timestamps();
 
-        //     $table->foreign('state_id')->references('id')->on('states')
-        //     ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('state_id')->references('id')->on('states')
+            ->onUpdate('cascade')->onDelete('cascade');
 
-        // });
+        });
         /*
         |--------------------------------------------------------------------------
         | users table

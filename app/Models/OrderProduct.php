@@ -1,8 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Product;
+use App\Models\Order;
+use App\Models\ProductType;
 
 class OrderProduct extends Model
 {
@@ -20,26 +24,28 @@ class OrderProduct extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Releate to Product table
+    | Relation to Product table
     |--------------------------------------------------------------------------
     |*/
     public function product(){
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo(Product::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate to Order table
+    | Relation to Order table
     |--------------------------------------------------------------------------
     |*/
     public function order(){
-        return $this->belongsTo('App\Order');
+        return $this->belongsTo(Order::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate to Product Type table
+    | Relation to Product Type table
     |--------------------------------------------------------------------------
     |*/
     public function type(){
-        return $this->belongsTo('App\ProductType','product_type','id');
+        return $this->belongsTo(ProductType::class, 'product_type','id');
     }
 }

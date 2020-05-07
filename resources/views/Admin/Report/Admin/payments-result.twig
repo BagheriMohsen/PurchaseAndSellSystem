@@ -77,13 +77,13 @@
               data-toggle="modal" data-target="#detail{{payment.id}}">
               <i class="fas fa-info-circle crud-icon"></i>
               </a>
-              {% if payment.status_id != 2 %}
+              {% if payment.status_id != 2 and payment.status_id != 7 and payment.status_id != 8 %}
               <a title="پذیرفتن" class="text-secondary m-1" 
               href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
                 <i class="far fa-check-square text-success crud-icon"></i>
               </a>
               {% endif %}
-              {% if payment.status_id != 3 %}
+              {% if payment.status_id != 3 and payment.status_id != 7 and payment.status_id != 8 %}
               <a  title="نپذیرفتن" class="text-success"
                   href="{{route('userInventory.RejectPayment',payment.id)}}">
                   <i class="far fa-window-close text-danger crud-icon"></i>
@@ -165,7 +165,7 @@
                         <div>تصویر :</div>
                         <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
                     </div>
-                {% if payment.status_id != 2 %}
+                {% if payment.status_id != 2 and payment.status_id != 7 and payment.status_id != 8 %}
                   <a  class="btn btn-success btn-sm text-dark"
                       href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
                       <strong class="h6">

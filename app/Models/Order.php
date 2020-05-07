@@ -1,16 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 
-use App\OrderProduct;
-use App\OrderStatus;
-use App\City;
-use App\State;
-use App\User;
-use App\MoneyCirculation;
+use App\Models\OrderProduct;
+use App\Models\OrderStatus;
+use App\Models\City;
+use App\Models\State;
+use App\Models\User;
+use App\Models\MoneyCirculation;
 
 class Order extends Model
 {
@@ -54,11 +54,14 @@ class Order extends Model
     'send_callcenter_Date',
     'returnToManager_Date',
     'allotment_Date',
-    'product_array'
+    'action_Date',
+    'product_array',
+    'status_desc'
    ];
+
     /*
     |--------------------------------------------------------------------------
-    | Releate to pivot order and product table
+    | Relation to pivot order and product table
     |--------------------------------------------------------------------------
     |*/
     public function products(){
@@ -67,7 +70,7 @@ class Order extends Model
     
     /*
     |--------------------------------------------------------------------------
-    | Releation with ProductStatus Model
+    | Relation with ProductStatus Model
     |--------------------------------------------------------------------------
     */
     public function OrderStatus(){
@@ -76,55 +79,61 @@ class Order extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Releation with City Model
+    | Relation with City Model
     |--------------------------------------------------------------------------
     */
     public function city(){
         return $this->belongsTo(City::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with State Model
+    | Relation with State Model
     |--------------------------------------------------------------------------
     */
     public function state(){
         return $this->belongsTo(State::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function seller(){
         return $this->belongsTo(User::class,'seller_id','id');
     }
+    
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function agent(){
         return $this->belongsTo(User::class,'agent_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function followUpManager(){
         return $this->belongsTo(User::class,'followUpManager_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Relation with User Model
     |--------------------------------------------------------------------------
     */
     public function callCenter(){
         return $this->belongsTo(User::class,'callCenter_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate with MoneyCirculation Model 
+    | Relation with MoneyCirculation Model 
     |--------------------------------------------------------------------------
     |*/
     public function MoneyCirculations(){

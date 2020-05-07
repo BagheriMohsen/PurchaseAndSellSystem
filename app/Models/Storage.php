@@ -1,8 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+
+use App\Models\Product;
+use App\Models\User;
+use App\Models\Warehouse;
+use App\Models\StoreRoom;
+
 
 class Storage extends Model
 {
@@ -20,7 +27,7 @@ class Storage extends Model
     |--------------------------------------------------------------------------
     |*/
     public function product(){
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo(Product::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +35,7 @@ class Storage extends Model
     |--------------------------------------------------------------------------
     |*/
     public function user(){
-        return $this->belongsTo('App\User','user_id','id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -36,7 +43,7 @@ class Storage extends Model
     |--------------------------------------------------------------------------
     |*/
     public function agent(){
-        return $this->belongsTo('App\User','agent_id','id');
+        return $this->belongsTo(User::class,'agent_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +51,7 @@ class Storage extends Model
     |--------------------------------------------------------------------------
     |*/
     public function warehouse(){
-        return $this->belongsTo('App\Warehouse');
+        return $this->belongsTo(Warehouse::class);
     }
     /*
     |--------------------------------------------------------------------------
@@ -52,6 +59,6 @@ class Storage extends Model
     |--------------------------------------------------------------------------
     |*/
     public function storeRoom(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany(StoreRoom::class);
     }
 }

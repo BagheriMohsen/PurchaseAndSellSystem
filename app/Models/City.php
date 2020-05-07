@@ -1,53 +1,55 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class State extends Model
+use App\Models\User;
+use App\Models\State;
+use App\Models\Warehouse;
+use App\Models\Order;
+
+class City extends Model
 {
     protected $fillable = [
       'name',
-      'followUpManager'
+      'state_id',
+     
     ];
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with City Model
-    |--------------------------------------------------------------------------
-    */
-    public function cities(){
-      return $this->hasMany('App\City');
-    }
-    /*
-    |--------------------------------------------------------------------------
-    | Releation with WareHouse Model
-    |--------------------------------------------------------------------------
-    */
-    public function Warehouses(){
-      return $this->hasMany('App\Warehouse');
-    }
-    /*
-    |--------------------------------------------------------------------------
-    | Releation with User Model
+    | Realtion with User Model
     |--------------------------------------------------------------------------
     */
     public function users(){
-      return $this->hasMany('App\User');
+      return $this->hasMany(User::class);
     }
-     /*
-    |--------------------------------------------------------------------------
-    | Releation with User Model
-    |--------------------------------------------------------------------------
-    */
-    public function followUpManager(){
-      return $this->belongsTo('App\User','followUpManager','id');
-    }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with Order Model
+    | Realtion with State Model
+    |--------------------------------------------------------------------------
+    */
+    public function state(){
+      return $this->belongsTo(State::class);
+    }
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Realtion with warehouse Model
+    |--------------------------------------------------------------------------
+    */
+    public function warehouses(){
+      return $this->hasMany(Warehouse::class);
+    }
+   
+    /*
+    |--------------------------------------------------------------------------
+    | Realtion with Order Model
     |--------------------------------------------------------------------------
     */
     public function orders(){
-      return $this->hasMany('App\Order');
+      return $this->hasMany(Order::class);
     }
 }

@@ -1,8 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\UserInventory;
+use App\Models\User;
+use App\Models\OrderStatus;
+use App\Models\Order;
 
 class MoneyCirculation extends Model
 {
@@ -22,36 +27,38 @@ class MoneyCirculation extends Model
     ];
     /*
     |--------------------------------------------------------------------------
-    | Releate with UserInventory Model
+    | Relation with UserInventory Model
     |--------------------------------------------------------------------------
     |*/
     public function UserInventory(){
-        return $this->belongsTo('App\UserInventory','user_inventory_id','id');
+        return $this->belongsTo(UserInventory::class,'user_inventory_id','id');
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate with User Model - agent
+    | Relation with User Model - agent
     |--------------------------------------------------------------------------
     |*/
     public function user(){
-        return $this->belongsTo('App\User','user_id','id');
+        return $this->belongsTo(User::class, 'user_id','id');
     }
     
     /*
     |--------------------------------------------------------------------------
-    | Releate with User Model - Orderstatus
+    | Relation with User Model - Orderstatus
     |--------------------------------------------------------------------------
     |*/
     public function status(){
-        return $this->belongsTo('App\OrderStatus','order_status_id','id');
+        return $this->belongsTo(OrderStatus::class, 'order_status_id','id');
     }
+    
     /*
     |--------------------------------------------------------------------------
-    | Releate with Order Model 
+    | Relation with Order Model 
     |--------------------------------------------------------------------------
     |*/
     public function order(){
-        return $this->belongsTo('App\Order');
+        return $this->belongsTo(Order::class);
     }
 
 

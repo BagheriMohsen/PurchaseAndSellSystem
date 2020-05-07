@@ -1,8 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+
+use App\Models\MoneyCirculation;
+use App\Models\User;
 
 class UserInventory extends Model
 {
@@ -21,7 +25,7 @@ class UserInventory extends Model
     |--------------------------------------------------------------------------
     |*/
     public function MoneyCirculations(){
-        return $this->hasMany('App\MoneyCirculation','user_inventory_id','id');
+        return $this->hasMany(MoneyCirculation::class, 'user_inventory_id','id');
     }
      /*
     |--------------------------------------------------------------------------
@@ -29,7 +33,7 @@ class UserInventory extends Model
     |--------------------------------------------------------------------------
     |*/
     public function agent(){
-        return $this->belongsTo('App\User','agent_id','id');
+        return $this->belongsTo(User::class, 'agent_id','id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +41,6 @@ class UserInventory extends Model
     |--------------------------------------------------------------------------
     |*/
     public function seller(){
-        return $this->belongsTo('App\User','seller_id','id');
+        return $this->belongsTo(User::class, 'seller_id','id');
     }
 }

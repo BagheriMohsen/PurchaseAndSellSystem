@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\SpecialTariff;
+
+use App\Models\SpecialTariff;
+use App\Models\User;
+
 class SpecialTariffController extends Controller
 {
     /**
@@ -13,7 +16,7 @@ class SpecialTariffController extends Controller
      */
     public function index($id)
     {
-        $user = 'App\User'::findOrFail($id);
+        $user = User::findOrFail($id);
 
         return Response()->json($user->tariffs,200,[],JSON_UNESCAPED_UNICODE);
     }

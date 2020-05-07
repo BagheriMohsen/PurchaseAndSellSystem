@@ -6,11 +6,13 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
 
+use Carbon\Carbon;
 
-use App\Order;
-use App\User;
-use App\StoreRoom;
-use App\PaymentCirculation;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\StoreRoom;
+use App\Models\PaymentCirculation;
+use App\Models\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -60,8 +62,10 @@ class AppServiceProvider extends ServiceProvider
                 $user       = User::find(auth()->user()->id);
                 // find role name
                 $roleName   = $user->getRoleNames()->first();
+  
                 // find role all detail
                 $role = Role::where('name',$roleName)->firstOrFail();
+                
                 $notifs = 0;
                 $AgentReturnedProduct = 0;
                 $orderNotif = 0;
@@ -126,7 +130,7 @@ class AppServiceProvider extends ServiceProvider
                 }else{
                     //
                 }
-
+             
                 $view ->with(compact(
                     'role',
                     'notifs',
@@ -150,9 +154,9 @@ class AppServiceProvider extends ServiceProvider
                 // find user detail
                 $sellers       = User::Role('seller')->get();
                 $sellerRegisters = array();
-                $today = 'Carbon\Carbon'::now();
-                $yesterday = 'Carbon\Carbon'::now()->subDays(1);
-                $thirteenDaysAgo = 'Carbon\Carbon'::now()->subDays(30);
+                $today = Carbon::now();
+                $yesterday = Carbon::now()->subDays(1);
+                $thirteenDaysAgo = Carbon::now()->subDays(30);
                 foreach($sellers as $seller){
                     $name = $seller->name.' '.$seller->family;
                     $register = Order::where([
@@ -205,7 +209,7 @@ class AppServiceProvider extends ServiceProvider
                 // find role all detail
                 $role = Role::where('name',$roleName)->firstOrFail();
                 // find Storage
-                $products = 'App\Product'::latest()->get();
+                $products = Product::latest()->get();
                 
                 $view ->with(compact('products'));
             }

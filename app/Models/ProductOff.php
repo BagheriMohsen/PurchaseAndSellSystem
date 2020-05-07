@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Product;
 
 class ProductOff extends Model
 {
@@ -16,10 +18,10 @@ class ProductOff extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Releation with Product Model
+    | Relation with Product Model
     |--------------------------------------------------------------------------
     */
     public function product(){
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo(Product::class);
       }
 }

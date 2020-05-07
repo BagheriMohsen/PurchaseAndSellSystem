@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\User;
 
 class BankAccount extends Model
 {
@@ -20,6 +22,6 @@ class BankAccount extends Model
     |--------------------------------------------------------------------------
     */
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 }

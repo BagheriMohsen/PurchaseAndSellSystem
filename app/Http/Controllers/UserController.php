@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 
-use App\User;
-use App\Order;
-use App\State;
-use App\City;
-use App\Product;
-use App\OrderProduct;
-use App\PaymentCirculation;
-use App\UserInventory;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Product;
+use App\Models\OrderProduct;
+use App\Models\PaymentCirculation;
+use App\Models\UserInventory;
 
 class UserController extends Controller
 {
@@ -817,19 +817,87 @@ class UserController extends Controller
                 ['agent_id','=',$agent->id],
                 ['status','=',7]
             ])->get();
-            
+                
+            // four first boxes
+            $today          = Carbon::now();
+            $yesterday      = Carbon::now()->subDays(1);
+            $ThirtyDaysAgo  = Carbon::now()->subDays(30);
+            $days = $ThirtyDaysAgo->diffInDays($today);
+                
+            // collected orders in month
+
+            // in month
+            $collected_month = 0;
+            foreach( $agents as $agent ) {
+                $collected_month += Order::where([
+                    ['agent_id', '=', $agent->id],
+                    ['collected_Date','<=', $today],
+                    ['collected_Date', '>=', $ThirtyDaysAgo]
+                ])->count();
+            }
+
+            // in today
+            $collected_today = 0;
+            foreach( $agents as $agent ) {
+                $collected_today += Order::where([
+                    ['agent_id', '=', $agent->id],
+                    ['collected_Date','<=', $today],
+                    ['collected_Date', '>=', $yesterday]
+                ])->count();
+            }
+
+            //cancelled orders
+
+            // in month
+            $cancelled_month = 0;
+            foreach( $agents as $agent ) {
+                $cancelled_month += Order::where([
+                    ['agent_id', '=', $agent->id],
+                    ['cancelled_Date','<=', $today],
+                    ['cancelled_Date', '>=', $ThirtyDaysAgo]
+                ])->count();
+            }
+
+            // in today
+            $cancelled_today = 0;
+            foreach( $agents as $agent ) {
+                $cancelled_today += Order::where([
+                    ['agent_id', '=', $agent->id],
+                    ['cancelled_Date','<=', $today],
+                    ['cancelled_Date', '>=', $yesterday]
+                ])->count();
+            }
+
+            //Delivary Order Number
+            $delivaryOrderNumber = 0;
+            foreach( $agents as $agent ) {
+                $delivaryOrderNumber += Order::where([
+                    ['agent_id', '=', $agent->id],
+                    ['status', '=', 7]
+                ])->count();
+              
+            }
+
+
+
+
             $CollectedPercentDetails[] = [
                 'name'              =>  $agent->name.' '.$agent->family,
                 'city_state'        =>  $agent->state->name.'-'.$agent->city->name,
                 'percent'           =>  $collectedPercent,
                 'balance'           =>  $balance,
-                'delivaryOrders'    =>  count($delivaryOrders) 
+                'delivaryOrders'    =>  count($delivaryOrders),
             ];
         }
 
 
         return view('Admin.agentChief-index',compact(
-            'CollectedPercentDetails'
+            'CollectedPercentDetails',
+            'delivaryOrderNumber',
+            'collected_month',
+            'collected_today',
+            'cancelled_month',
+            'cancelled_today'
         ));
     }
 

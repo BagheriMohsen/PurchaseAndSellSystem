@@ -1,12 +1,20 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
+
+
+use App\Models\OrderProduct;
+use App\Models\Storage;
+use App\Models\StoreRoom;
+use App\Models\ProductOff;
+use App\Models\ProductType;
+use App\Models\SpecialTariff;
 
 class Product extends Model implements HasMedia
 {
@@ -36,53 +44,59 @@ class Product extends Model implements HasMedia
             ]
         ];
     }
+    
     /*
     |--------------------------------------------------------------------------
-    | Releate to pivot order and product table
+    | Relation to pivot order and product table
     |--------------------------------------------------------------------------
     |*/
     public function orders(){
-        return $this->hasMany('App\OrderProduct');
+        return $this->hasMany(OrderProduct::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Realte With Storage Model
+    | Relation With Storage Model
     |--------------------------------------------------------------------------
     |*/
     public function storage(){
-        return $this->hasMany('App\Storage');
+        return $this->hasMany(Storage::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with StoreRoom Model
+    | Relation with StoreRoom Model
     |--------------------------------------------------------------------------
     */
     public function storeRooms(){
-        return $this->hasMany('App\StoreRoom');
+        return $this->hasMany(StoreRoom::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with ProductOff Model
+    | Relation with ProductOff Model
     |--------------------------------------------------------------------------
     */
     public function offs(){
-        return $this->hasMany('App\ProductOff');
-      }
+        return $this->hasMany(ProductOff::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
-    | Releation with ProductType Model
+    | Relation with ProductType Model
     |--------------------------------------------------------------------------
     */
     public function types(){
-      return $this->hasMany('App\ProductType');
+      return $this->hasMany(ProductType::class);
     }
+
     /*
     |--------------------------------------------------------------------------
-    | Releate with SpecialTariff
+    | Relation with SpecialTariff
     |--------------------------------------------------------------------------
     */
     public function tariffs(){
-      return $this->hasMany('App\SpecialTariff');
+      return $this->hasMany(SpecialTariff::class);
     }
     
     /*
