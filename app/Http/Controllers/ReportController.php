@@ -11,7 +11,8 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\PaymentCirculation;
 use App\Models\Order;
-
+use App\Models\StoreRoom;
+#use App\Models\Storage;
 
 class ReportController extends Controller
 {
@@ -243,16 +244,120 @@ class ReportController extends Controller
         $to_date    =   Carbon::parse($req->to_date);
         $products   =   Product::all();
 
-        foreach($products as $product) {
-            $order = Order::where("product_array", $product->id)->get();
-            dd($order);
+        $agents = User::with(["state", "city"])
+            ->where("agent_id", $user->id)->get();
+        
+        $results = array();
+        foreach($agents as $agent) {
+        
+            foreach( $products as $product ) {
+
+                // total orders by this product in selective time
+                $total_order = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["product_array","=", $product->id],
+                    ["created_at", ">=", $from_date],
+                    ["created_at", "<=", $to_date]
+                ])->count();
+
+                // total delivary order by this product in selective time
+                $total_delivary = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["status", "=", 7],
+                    ["product_array","=", $product->id],
+                    ["delivary_Date", ">=", $from_date],
+                    ["delivary_Date", "<=", $to_date]
+                ])->count();
+
+                // total collected order by this product in selective time
+                $total_collected = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["product_array","=", $product->id],
+                    ["collected_Date", ">=", $from_date],
+                    ["collected_Date", "<=", $to_date]
+                ])->count();
+
+                // total cancelled order by this product in selective time
+                $total_cancelled = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["product_array","=", $product->id],
+                    ["status", "=", 13],
+                    ["cancelled_Date", ">=", $from_date],
+                    ["cancelled_Date", "<=", $to_date]
+                ])->count();
+
+                // total suspended order by this product in selective time
+                $total_suspended = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["product_array","=", $product->id],
+                    ["suspended_Date", ">=", $from_date],
+                    ["suspended_Date", "<=", $to_date]
+                ])->count();
+
+                // total suspended order by this product in selective time
+                $total_final_cancelled = Order::where([
+                    ["agent_id", "=", $agent->id],
+                    ["status", "=", 16],
+                    ["product_array","=", $product->id],
+                    ["cancelled_Date", ">=", $from_date],
+                    ["cancelled_Date", "<=", $to_date]
+                ])->count();
+                
+                // agent name and agent chief information
+                $agent_name = $agent->name." ".$agent->family."-".$agent->state->name."/".$agent->city->name;
+                $agentchief_name = $user->name." ".$user->family;
+                
+                //percent 
+                $percent_delivary           = round (($total_delivary * 100 ) / $total_order , 2);
+                $percent_collected          = round (($total_collected * 100 ) / $total_order , 2);
+                $percent_suspended          = round (($total_suspended * 100 ) / $total_order , 2);
+                $percent_cancelled          = round (($total_cancelled * 100 ) / $total_order , 2);
+                $percent_final_cancelled    = round (($total_final_cancelled * 100 ) / $total_order , 2);
+
+                // storage of this product
+                $product_storage = 'App\Models\Storage'::where([
+                    ["agent_id", "=", $agent->id],
+                    ["product_id", "=", $product->id]
+                ])->firstOrFail();
+                $product_number = $product_storage->number;
+
+                $product_onConfirm = StoreRoom::where([
+                    ["receiver_id", "=", $agent->id],
+                    ["product_id", "=", $product->id],
+                    ["id_date", "=", null]
+                ])->count();
+
+                //payment for this product 
+                
+
+            
+                
+                $results[] = [
+                    'agent_name'                =>  $agent_name,
+                    'agentchief_name'           =>  $agentchief_name,
+                    'product_name'              =>  $product->name,
+                    'total_order'               =>  $total_order,
+                    'total_delivary'            =>  $total_delivary,
+                    "total_collected"           =>  $total_collected,
+                    'total_cancelled'           =>  $total_cancelled,
+                    'total_suspended'           =>  $total_suspended,
+                    'total_final_cancelled'     =>  $total_final_cancelled,
+                    'percent_delivary'          =>  $percent_delivary,
+                    'percent_collected'         =>  $percent_collected,
+                    'percent_suspended'         =>  $percent_suspended,
+                    'percent_cancelled'         =>  $percent_cancelled,
+                    'percent_final_cancelled'   =>  $percent_final_cancelled,
+                    'product_onConfirm'         =>  $product_onConfirm,
+                    'product_number'            =>  $product_number
+
+                ];
+            
+
+            }
+
         }
 
-        $agents = User::where("agent_id", $user->id)->get();
-
-     
-
-        return view("Admin.Report.AgentChief.report-result");
+        return view("Admin.Report.AgentChief.report-result",compact("results"));
     }
 
 

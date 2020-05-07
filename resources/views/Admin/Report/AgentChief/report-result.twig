@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>عملکرد کلی بر اساس کالا</title>
+  <title>گزارش کلی عملکرد به تفکیک کالا</title>
   <style>
     .invoice_details {
     counter-reset: rowNumber;
@@ -26,7 +26,7 @@
 </head>
 <body>
   <div class="mt-4 mb-3 text-center col-12 h4">
-    {{"عملکرد کلی بر اساس کالا"}}
+    {{"گزارش کلی عملکرد به تفکیک کالا"}}
   </div>
 <!--End order details modal -->
 <div class="row">
@@ -42,52 +42,43 @@
         <tr>
           <th>نام</th>
           <th>مدیر نماینده</th>
+          <th>محصول</th>
           <th>کل سفارشات‌دریافتی</th>
           <th>کل در انتظار تحویل</th>
           <th>کل سفارشات وصولی</th>
-          <th>سفارشات وصولی</th>
           <th>سفارشات معلق</th>
           <th>سفارشات کنسلی</th>
           <th>سفارشات انصراف نهایی</th>
           <th>درصد در انتظار تحویل</th>
-          <th>مجموع در انتظار تحویل</th>
-          <th>جمع تعداد کالا</th>
-          <th>درصد وصول</th>
           <th>درصد وصول کل</th>
           <th>درصد معلق کل</th>
           <th>درصد کنسلی کل</th>
           <th>درصد انصراف کل</th>
           <th>انبار دریافتی تایید نشده</th>
-          <th>عودت وجه تایید نشده</th>
-          <th>واریزی تایید نشده</th>
           <th>موجودی انبار</th>
         </tr>
         </thead>
         <tbody>
-      
-          <tr>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-            <td>{{ "this is text" }}</td>
-          </tr>
+          {% for resault in results %}
+            <tr>
+              <td>{{ resault.agent_name }}</td>
+              <td>{{ resault.agentchief_name }}</td>
+              <td>{{ resault.product_name }}</td>
+              <td>{{ resault.total_order }}</td>
+              <td>{{ resault.total_delivary }}</td>
+              <td>{{ resault.total_collected }}</td>
+              <td>{{ resault.total_suspended }}</td>
+              <td>{{ resault.total_cancelled }}</td>
+              <td>{{ resault.total_final_cancelled }}</td>
+              <td>{{ resault.percent_delivary }}</td>
+              <td>{{ resault.percent_collected }}</td>
+              <td>{{ resault.percent_suspended }}</td>
+              <td>{{ resault.percent_cancelled }}</td>
+              <td>{{ resault.percent_final_cancelled }}</td>
+              <td>{{ resault.product_onConfirm }}</td>
+              <td>{{ resault.product_number }}</td>
+            </tr>
+          {% endfor %}
       
         </tbody>
         
