@@ -184,14 +184,23 @@ $(document).ready(function(){
         buttons: [
             {
                 extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
             },
            
         ],
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
+        columnDefs: [ 
+            {
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   0
+            } ,
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
         select: {
             style:'multi'
         },
@@ -204,14 +213,23 @@ $(document).ready(function(){
         buttons: [
             {
                 extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
             },
            
         ],
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
+        columnDefs: [ 
+            {
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   0
+            } ,
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
         select: true,
         order: [[ 1, 'asc' ]],
     });
@@ -222,15 +240,24 @@ $(document).ready(function(){
         buttons: [
             {
                 extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
             },
            
         ],
         "language": persianDataTable,
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
+        columnDefs: [ 
+            {
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   0
+            } ,
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
         select: true,
         order: [[ 1, 'asc' ]],
     });
@@ -1053,6 +1080,7 @@ $(document).ready(function(){
         }
 
     });
+   
     $(".persianDateTimepicker").pDatepicker({
         calendar:{
             persian: {
@@ -1158,6 +1186,7 @@ $(document).ready(function(){
                 url:baseUrl+'/admin/orders/ProductList',
                 type:'GET',
                 success:function(response){
+                    console.log(response)
                     var price = parseInt(getProductPrice(response,product_id));
                     var number = parseInt(self.find('input[name="number"]').val());
                     number = number || 0;
@@ -1276,23 +1305,21 @@ $(document).ready(function(){
     $('.conditionAssignForm input[name="condition"]:radio').change(function(e) {
         var value = e.target.value.trim();
         var form = $(this).parents('form');
-        var waitingDelivery = form.find('.waitingDeliveryField');
-        var suspend = form.find('.suspendField');
-        var cancelField = form.find('.cancelField');
-        waitingDelivery.addClass('d-none');
-        suspend.addClass('d-none');
-        cancelField.addClass('d-none');
-     
-    
+        var waiting_options = form.find('.waiting_options');
+        var suspend_options = form.find('.suspend_options');
+        var cancel_options = form.find('.cancel_options');
+        waiting_options.addClass('d-none');
+        suspend_options.addClass('d-none');
+        cancel_options.addClass('d-none');
         switch (value) {
           case '7':
-            waitingDelivery.removeClass('d-none');
+            waiting_options.removeClass('d-none');
             break;
           case '14':
-            suspend.removeClass('d-none');
+            suspend_options.removeClass('d-none');
             break;
           case '13':
-            cancelField.removeClass('d-none');
+            cancel_options.removeClass('d-none');
             break;
           default:
             break;
@@ -1301,21 +1328,21 @@ $(document).ready(function(){
     $('.conditionAssignForm input[name="cancel"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
-        var cancelDescField = form.find('.cancelDescField');
-        if(value == 'cancelDesc'){
-            cancelDescField.removeClass('d-none');
+        var cancel_desc = form.find('.cancel_desc');
+        if(value == '9'){
+            cancel_desc.removeClass('d-none');
         }else{
-            cancelDescField.addClass('d-none');
+            cancel_desc.addClass('d-none');
         }
     });
     $('.conditionAssignForm input[name="suspend"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
-        var dueDateFuild = form.find('.dueDateFuild');
-        if(value == 'dueDate'){
-            dueDateFuild.removeClass('d-none');
+        var dueDate = form.find('.dueDate');
+        if(value == '3'){
+            dueDate.removeClass('d-none');
         }else{
-            dueDateFuild.addClass('d-none');
+            dueDate.addClass('d-none');
         }
     });
     $('#conditionForm button').on('click',function(event){
@@ -1602,23 +1629,23 @@ $(document).ready(function(){
         form.find('button').attr('disabled','disabled');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
-        var condition = form.find('input[name="condition"]').val();
-        var waitingDeliveryDesc = form.find('textarea[name="waitingDeliveryDesc"]').val();
-        var suspend = form.find('input[name="suspend"]').val();
+        var condition = form.find('input[name="condition"]:checked').val();
+        var waiting_desc = form.find('textarea[name="waiting_desc"]').val();
+        var suspend = form.find('input[name="suspend"]:checked').val();
         var dueDate = form.find('input[name="dueDate"]').val();
-        var cancel = form.find('input[name="cancel"]').val();
-        var cancelDesc = form.find('textarea[name="cancelDesc"]').val();
+        var cancel = form.find('input[name="cancel"]:checked').val();
+        var cancel_desc = form.find('textarea[name="cancel_desc"]').val();
         $.ajax({
             url:actionUrl,
             type:'get',
             data:{
                 _token:CSRF_TOKEN,
                 status:condition,
-                waitDesc:waitingDeliveryDesc,
+                waiting_desc:waiting_desc,
                 suspend:suspend,
                 dueDate:dueDate,
                 cancel:cancel,
-                cancelDesc:cancelDesc,
+                cancel_desc:cancel_desc,
             },
             success:function(response){
                 form.find('button').html('<strong class="h6">ذخیره</strong>');
