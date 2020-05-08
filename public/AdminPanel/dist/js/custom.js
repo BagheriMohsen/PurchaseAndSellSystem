@@ -814,7 +814,7 @@ $(document).ready(function(){
         var div = document.createElement('div');
         div.classList.add('row');
         div.innerHTML =  `
-            <div class="col-sm-3">
+            <div class="col-sm-2">
              
               <select class="productSelect form-control bg-sec" name="product_name" required>
                 <option value="">محصول را انتخاب کنید</option>
@@ -832,11 +832,14 @@ $(document).ready(function(){
              
               <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" required>
             </div>
-            <div class="col-sm-3 mt-1">
+            <div class="col-sm-2 mt-1">
             
               <select class="typeSelect form-control bg-sec"  name="productType">
                 
               </select>
+            </div>
+            <div class="col-sm-2">
+              <input class="offWholeField form-control bg-sec" type="text" placeholder="" name="offGroup" value="0"  disabled>
             </div>
             <div class="col-sm-1 mt-1 text-center mt-2 " >
                 <strong>
@@ -861,7 +864,6 @@ $(document).ready(function(){
             url:baseUrl+'/admin/orders/ProductList',
             type:'GET',
             success:function(response){
-                console.log(response)
                 productList = response;
                 if($('.orderEditForm').length){
                     getOrderList();
@@ -878,7 +880,9 @@ $(document).ready(function(){
         event.preventDefault();
         if(event.target.classList.contains('productSelect') && event.target.value){
             var row = event.target.parentElement.parentElement;
+            var count = row.querySelector('.countField').value;
             var productPriceInput = row.querySelector('.priceField');
+            var off_whole_input = row.querySelector('.offWholeField');
             var typeSelect = row.querySelector('.typeSelect');
             var productPrice;
             productList.forEach(function(item){
@@ -890,16 +894,41 @@ $(document).ready(function(){
                             <option value="${value.id}">${value.name}</option>
                         `;
                     });
+                    calculate_whole_off_order(item,count,off_whole_input)
                 }
             });
             productPriceInput.value = numberWithCommas(productPrice);
 
         }else if(event.target.classList.contains('fa-trash-alt')){
-            // event.target.parentElement.parentElement.parentElement.parentElement.remove();
             event.target.closest(".row").remove();
 
+        }else if(event.target.classList.contains('countField')){
+            var row = event.target.parentElement.parentElement;
+            var off_whole_input = row.querySelector('.offWholeField');
+            var count = event.target.value;
+            var item_id = row.querySelector('.productSelect').value;
+            var selected_item = productList.find(element => element.id == item_id)
+            calculate_whole_off_order(selected_item,count,off_whole_input)
+            
         }
     });
+
+    function calculate_whole_off_order(selected_item,count,off_whole_input){
+        if(selected_item){
+            var off_whole_result = [];
+            selected_item.offs.forEach(off => {
+                if(parseInt(off.numberOfProduct) <= count){
+                    off_whole_result.push(parseInt(off.offPrice))
+                }
+            })
+            if(off_whole_result.length){
+                off_whole_input.value = Math.max.apply(Math, off_whole_result)
+            }else{
+                off_whole_input.value = 0
+            }
+        }
+    }
+
     $('.addProduct').on('click',function(event){
         event.preventDefault();
         addOrderTable();
