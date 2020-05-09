@@ -821,21 +821,16 @@ $(document).ready(function(){
               </select>
             </div>
             <div class="col-sm-1">
-              
               <input class="countField form-control bg-sec" type="number" name="count" value="1" required>
             </div>
             <div class="col-sm-2">
-             
               <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value=""  disabled required>
             </div>
             <div class="col-sm-2">
-             
               <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="0" required>
             </div>
             <div class="col-sm-2 mt-1">
-            
               <select class="typeSelect form-control bg-sec"  name="productType">
-                
               </select>
             </div>
             <div class="col-sm-2">
@@ -946,6 +941,7 @@ $(document).ready(function(){
             orderObject.count = value.querySelector('input[name="count"]').value;
             orderObject.off = value.querySelector('input[name="off"]').value;
             orderObject.type = value.querySelector('.typeSelect').value;
+            orderObject.off_whole = value.querySelector('.offWholeField').value;
             orderArray.push(orderObject);
             if(!product_id_array.includes(value.querySelector('.productSelect').value)){
                 product_id_array.push(value.querySelector('.productSelect').value);
@@ -970,6 +966,8 @@ $(document).ready(function(){
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var sendDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
+        var overAllPrice = parseInt(document.querySelector('#overallPrice').innerHTML.replace(/\,/g,'',10));
+        console.log(overAllPrice)
         m = moment(HBD_Date, 'jYYYY/jM/jD');
         var formData = {
             _token:CSRF_TOKEN,
@@ -991,7 +989,8 @@ $(document).ready(function(){
             sellerDescription:sellerDescription,
             sendDescription:sendDescription,
             orderArray:orderArray,
-            product_id_array:product_id_array
+            product_id_array:product_id_array,
+            overAllPrice: overAllPrice
 
         }
         $.ajax({
@@ -1017,7 +1016,8 @@ $(document).ready(function(){
             var count = value.querySelector('input[name="count"]').value;
             var off = value.querySelector('input[name="off"]').value;
             var price = value.querySelector('input[name="price"]').value.replace(/\,/g,'',10);
-            rowPrice = (count*price) - off;
+            var offWhole = value.querySelector('input[name="offGroup"]').value;
+            rowPrice = (count*price) - off - offWhole;
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(numberWithCommas(overallPrice));
@@ -1802,29 +1802,28 @@ $(document).ready(function(){
             var div = document.createElement('div');
             div.classList.add('row');
             div.innerHTML =  `
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     
                     <select class="productSelect form-control bg-sec" name="product_name" required disabled>
                     <option value="${item.product_id}" checked>${item.product}</option>
                     </select>
                 </div>
                 <div class="col-sm-1">
-                    
                     <input class="countField form-control bg-sec" type="number" name="count" value="${item.count}" required disabled>
                 </div>
                 <div class="col-sm-2">
-                    
                     <input class="priceField form-control bg-sec" type="text" placeholder="" name="price" value="${item.price}"  disabled required>
                 </div>
                 <div class="col-sm-2">
-                    
                     <input class="offField form-control bg-sec" type="number" placeholder="" name="off" value="${item.off}" required disabled>
                 </div>
-                <div class="col-sm-3 mt-1">
-                
+                <div class="col-sm-2 mt-1">
                     <select class="typeSelect form-control bg-sec"  name="productType" disabled>
                     <option value="${item.product_type}" checked>${item.type}</option>
                     </select>
+                </div>
+                <div class="col-sm-2">
+                    <input class="offWholeField form-control bg-sec" type="text" placeholder="" name="offGroup" value="${item.off_whole}"  disabled>
                 </div>
                 <div class="col-sm-1 mt-1 text-center mt-2 " >
                     <strong>
