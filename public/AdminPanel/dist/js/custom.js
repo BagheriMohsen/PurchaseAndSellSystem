@@ -1823,7 +1823,7 @@ $(document).ready(function(){
                     </select>
                 </div>
                 <div class="col-sm-2">
-                    <input class="offWholeField form-control bg-sec" type="text" placeholder="" name="offGroup" value="${item.off_whole}"  disabled>
+                    <input class="offWholeField form-control bg-sec" type="text" placeholder="" name="offGroup" value="${item.off_whole || 0}"  disabled>
                 </div>
                 <div class="col-sm-1 mt-1 text-center mt-2 " >
                     <strong>
