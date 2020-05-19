@@ -107,7 +107,9 @@ class MoneyCirculationController extends Controller
             ['confirmDate','!=', null]
         ])
         ->sum("bill");
-            
+       
+     
+        
 
         return view('Admin.UserInventory.Agent.current-bills',compact(
             'AllSell',
@@ -361,7 +363,7 @@ class MoneyCirculationController extends Controller
             ['status_id','=', 8],
             ['user_id','=', $user->id] 
         ])
-        ->latest()->paginate(15);
+        ->latest("billDate")->paginate(15);
 
         return view('Admin.UserInventory.Agent.payback-list',compact(
             'payments'

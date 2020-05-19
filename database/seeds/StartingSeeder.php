@@ -263,6 +263,8 @@ class StartingSeeder extends Seeder
       PaymentStatus::create(['name'=>"هزینه نماینده-بررسی نشده",]);
       PaymentStatus::create(['name'=>"هزینه نماینده-تایید شده",]);
       PaymentStatus::create(['name'=>"هزینه نماینده-تایید نشده",]);
+      PaymentStatus::create(['name'=>"عودت وجه- تایید نشده",]);
+      PaymentStatus::create(['name'=>"عودت وجه-تایید شده",]);
       /*
       |--------------------------------------------------------------------------
       | Create Transport
@@ -378,8 +380,9 @@ class StartingSeeder extends Seeder
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
+      'product_array'     =>      1,
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
   ]);
   OrderProduct::create([
     'order_id'      =>  $order->id,
@@ -407,11 +410,12 @@ class StartingSeeder extends Seeder
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
       'instant'           =>      'IsNot',
+      'product_array'     =>      1,
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
   ]);
     OrderProduct::create([
       'order_id'      =>  $order->id,
@@ -438,12 +442,79 @@ class StartingSeeder extends Seeder
       'telephone'         =>      '02531616161',
       'fullName'          =>      'mohsen bagheri',
       'paymentMethod'     =>      'cash',
+      'product_array'     =>      1,
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
       'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
+  ]);
+  OrderProduct::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = Order::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      2,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'instant'           =>      'IsNot',
+      'sellerDescription' =>      '5455454',
+      'product_array'     =>      1,
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
+  ]);
+  OrderProduct::create([
+    'order_id'      =>  $order->id,
+    'product_id'    =>  1,
+    'count'         =>  5,
+    'off'           =>  400,
+    'product_type'  =>  1
+]);
+   /*
+    |--------------------------------------------------------------------------
+    | Create Order
+    |--------------------------------------------------------------------------
+    |*/
+    $order = Order::create([
+      'city_id'           =>      1,
+      'state_id'          =>      1,
+      'agent_id'          =>      6,
+      'followUpManager_id'=>      2,
+      'seller_id'         =>      7,
+      'status'            =>      7,
+      'lastStatus'        =>      1,
+      'trackingCode'      =>      uniqid(),
+      'mobile'            =>      '09106769465',
+      'telephone'         =>      '02531616161',
+      'fullName'          =>      'mohsen bagheri',
+      'paymentMethod'     =>      'cash',
+      'instant'           =>      'IsNot',
+      'product_array'     =>      1,
+      'sellerDescription' =>      '5455454',
+      'postalCode'        =>      '73737373',
+      'address'           =>      'address',
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
   ]);
   OrderProduct::create([
     'order_id'      =>  $order->id,
@@ -473,73 +544,10 @@ class StartingSeeder extends Seeder
       'instant'           =>      'IsNot',
       'sellerDescription' =>      '5455454',
       'postalCode'        =>      '73737373',
+      'product_array'     =>      1,
       'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
-  ]);
-  OrderProduct::create([
-    'order_id'      =>  $order->id,
-    'product_id'    =>  1,
-    'count'         =>  5,
-    'off'           =>  400,
-    'product_type'  =>  1
-]);
-   /*
-    |--------------------------------------------------------------------------
-    | Create Order
-    |--------------------------------------------------------------------------
-    |*/
-    $order = Order::create([
-      'city_id'           =>      1,
-      'state_id'          =>      1,
-      'agent_id'          =>      6,
-      'followUpManager_id'=>      2,
-      'seller_id'         =>      7,
-      'status'            =>      7,
-      'lastStatus'        =>      1,
-      'trackingCode'      =>      uniqid(),
-      'mobile'            =>      '09106769465',
-      'telephone'         =>      '02531616161',
-      'fullName'          =>      'mohsen bagheri',
-      'paymentMethod'     =>      'cash',
-      'instant'           =>      'IsNot',
-      'sellerDescription' =>      '5455454',
-      'postalCode'        =>      '73737373',
-      'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
-  ]);
-  OrderProduct::create([
-    'order_id'      =>  $order->id,
-    'product_id'    =>  1,
-    'count'         =>  5,
-    'off'           =>  400,
-    'product_type'  =>  1
-]);
-   /*
-    |--------------------------------------------------------------------------
-    | Create Order
-    |--------------------------------------------------------------------------
-    |*/
-    $order = Order::create([
-      'city_id'           =>      1,
-      'state_id'          =>      1,
-      'agent_id'          =>      6,
-      'followUpManager_id'=>      2,
-      'seller_id'         =>      7,
-      'status'            =>      7,
-      'lastStatus'        =>      1,
-      'trackingCode'      =>      uniqid(),
-      'mobile'            =>      '09106769465',
-      'telephone'         =>      '02531616161',
-      'fullName'          =>      'mohsen bagheri',
-      'paymentMethod'     =>      'cash',
-      'instant'           =>      'IsNot',
-      'sellerDescription' =>      '5455454',
-      'postalCode'        =>      '73737373',
-      'address'           =>      'address',
-      'HBD_Date'          =>      null,
-      'delivary_Date'    =>      Carbon::now()
+      'HBD_Date'          =>      Carbon::now(),
+      'delivary_Date'     =>      Carbon::now()
   ]);
     OrderProduct::create([
       'order_id'      =>  $order->id,

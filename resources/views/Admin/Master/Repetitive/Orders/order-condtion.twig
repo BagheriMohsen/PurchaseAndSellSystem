@@ -15,7 +15,8 @@
 
         <!-- Modal body -->
         <div class="modal-body text-center ">
-          <form method="post" class="conditionAssignForm">
+          <form method="post" class="conditionAssignForm" action="{{ route("orders.AgentChangeOrderStatusDesc", order.id) }}">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
             <div class="row">
               <div class="col-6 text-right">
                 <h6>انتخاب حالات دیگر:</h6>
@@ -40,15 +41,15 @@
                 <div class="suspend_options d-none">
                   <h6>انتخاب حالت تماس مجدد:</h6>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="1"  name="suspend">
+                    <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
                     <label class="form-check-label">عدم پاسخگویی</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="2" name="suspend" >
+                    <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
                     <label class="form-check-label">خارج از دسترس</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="3" name="suspend">
+                    <input type="radio" class="form-check-input" value="زمان سررسید" name="suspend">
                     <label class="form-check-label">زمان سررسید</label>
                   </div>
                   <div class="dueDate d-none">
@@ -59,39 +60,39 @@
                 <div class="cancel_options d-none">
                   <h6>انتخاب حالت انصراف :</h6>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="1" name="cancel">
+                    <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
                     <label class="form-check-label">قیمت بالا</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="2" name="cancel" >
+                    <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
                     <label class="form-check-label">کیفیت پایین</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="3" name="cancel">
+                    <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
                     <label class="form-check-label">ناکارآمد بودن </label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="4" name="cancel">
+                    <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
                     <label class="form-check-label">برآورده نکردن خواسته ها </label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="5" name="cancel" >
+                    <input type="radio" class="form-check-input" value="مزاحمت" name="cancel" >
                     <label class="form-check-label">  مزاحمت</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="6" name="cancel">
+                    <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
                     <label class="form-check-label">تماس دیروقت </label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="7" name="cancel">
+                    <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
                     <label class="form-check-label"> خرید از مکان دیگر</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="8" name="cancel" >
+                    <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر (فروشنده)" name="cancel" >
                     <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" value="9" name="cancel">
+                    <input type="radio" class="form-check-input" value="توضیحات" name="cancel">
                     <label class="form-check-label">توضیحات </label>
                   </div>
                   <div class="cancel_desc d-none">

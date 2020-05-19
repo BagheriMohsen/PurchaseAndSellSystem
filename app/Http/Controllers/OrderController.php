@@ -1543,12 +1543,29 @@ class OrderController extends Controller
 
         $order = Order::findOrFail($order_id);
 
-   
 
-        $order->update([
-            'status'        =>  $req->condition,
-            'status_desc'   =>  $req->status_desc
-        ]); 
+        if($status == 7) {
+            $order->update([
+                'status'        =>  $req->status,
+                'status_desc'   =>  $req->waiting_desc
+            ]); 
+        }elseif($status == 13 ) {
+            $order->update(['status'=>  $req->status]);
+            if(!is_null($req->cancel)): 
+                $order->update(['status_desc'=>  $req->cancel]);
+            else: 
+                $order->update(['status_desc'=>  $req->cancel_desc]);
+            endif;
+
+        }else {
+            $order->update(['status'=>  $req->status]);
+            if(is_null($req->suspend)):
+                $order->update(['status_desc'=>  $req->suspend]);
+            elseif(!is_null($req->dueDate)): 
+                $order->update(['dueDate'=>  $req->dueDate]);
+            endif;
+            
+        }
 
         return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
 

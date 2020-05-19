@@ -162,3 +162,42 @@
     </ul>
 </li>
 {#  user-inventory #}
+
+{# Search #}
+<li class="nav-item">
+    <a href="{{route('search.AgentAdvancedSearchPage')}}" class="nav-link">
+        <i class="fas fa-search"></i>
+        <p>
+        جستجو پیشرفته
+        </p>
+    </a>
+</li>
+{# Search #}
+
+{#  Report #}
+
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="far fa-calendar-plus"></i>
+    <p>
+        گزارش
+    <i class="fa fa-angle-left right"></i> 
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+       
+        <li class="nav-item">
+            <a href="{{route('search.AgentOrderSearchPage')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>سفارشات</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('report.AgentReportPaymentPage')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>مالی</p>
+            </a>
+        </li>
+      
+    </ul>
+</li>

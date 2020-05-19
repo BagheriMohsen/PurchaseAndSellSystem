@@ -18,6 +18,7 @@ use App\Models\Product;
 use App\Models\OrderProduct;
 use App\Models\PaymentCirculation;
 use App\Models\UserInventory;
+use App\Models\MoneyCirculation;
 
 class UserController extends Controller
 {
@@ -671,11 +672,52 @@ class UserController extends Controller
       
             
 
+        $user = User::findOrFail(auth()->user()->id);
+        $AllSell = 
+        MoneyCirculation::where('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)
+        ->orWhere('agent_id',$user->id)->sum('amount');
+            
+        $AllSpecialShared = UserInventory::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+            
+        $TotalSettle = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])->sum('bill');
+
+        $today = Carbon::now();
+        $yesterday = Carbon::now()->subDays(1);
+        $ThirtyDaysAgo = Carbon::now()->subDays(30);
+
+        $totalDebtor = Order::where([
+            ['agent_id','=',$user->id],
+            ['collected_Date','!=',null]
+        ])->sum('cashPrice');
+        $totalCreditor = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['confirmDate','!=',null]
+        ])
+        ->sum('bill');
+        
         $AllSell =   Order::where([
             ['collected_Date','!=',Null],
             ['agent_id','=',$user->id]
         ])->sum('cashPrice');
 
+        $orders = Order::with("products")->where([
+            ["collected_Date","!=", Null],
+            ["agent_id","=", $user->id]
+        ])->get();
+        
+        $Discount = 0;
+        foreach( $orders as $order ) {
+            $Discount += $order->products->sum("off");
+        }
+
+        
+   
         $costs = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',5]
@@ -689,6 +731,32 @@ class UserController extends Controller
         $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
         ])->sum('balance');
+
+
+        $Allpayments = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])
+        ->get();
+
+        $AllOrders = Order::where([
+            ['collected_Date','!=',Null],
+            ['agent_id','=',$user->id]
+        ])->get();
+        $Allpayments = $Allpayments->toArray();
+        $AllOrders = $AllOrders->toArray();
+        $transaction = array_merge($AllOrders,$Allpayments);
+
+        $payback = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id', '=', 8],
+            ['confirmDate','!=', null]
+        ])
+        ->sum("bill");
  
 
         return view('Admin.agent-index',compact(
@@ -700,8 +768,15 @@ class UserController extends Controller
             'user',
             'AllSell',
             'AllSpecialShared',
-            'costs',
             'payments',
+            'costs',
+            'TotalSettle',
+            'user',
+            'totalDebtor',
+            'totalCreditor',
+            'transaction',
+            'Discount',
+            'payback'
       
          
         

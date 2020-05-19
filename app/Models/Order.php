@@ -55,6 +55,7 @@ class Order extends Model
     'returnToManager_Date',
     'allotment_Date',
     'action_Date',
+    'dueDate',
     'product_array',
     'status_desc'
    ];

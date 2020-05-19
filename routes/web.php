@@ -265,9 +265,23 @@ Route::group(['middleware'=>'auth','prefix'=>'user-inventory','as'=>'userInvento
 |--------------------------------------------------------------------------
 |*/
 Route::group(['middleware'=>'auth','prefix'=>'search','as'=>'search.'],function(){
-    /* Admin */
-    Route::get('AdminAdvancedSearchPage','SearchController@AdminAdvancedSearchPage')->name('AdminAdvancedSearchPage');
-    Route::post('AdminAdvancedSearch','SearchController@AdminAdvancedSearch')->name('AdminAdvancedSearch');
+
+  /* Admin */
+  Route::get('AdminAdvancedSearchPage','SearchController@AdminAdvancedSearchPage')->name('AdminAdvancedSearchPage');
+  Route::post('AdminAdvancedSearch','SearchController@AdminAdvancedSearch')->name('AdminAdvancedSearch');
+
+  /* AgentChief */
+  Route::get('AgentChiefAdvancedSearchPage','SearchController@AgentChiefAdvancedSearchPage')->name('AgentChiefAdvancedSearchPage');
+  Route::post('AgentChiefAdvancedSearch','SearchController@AgentChiefAdvancedSearch')->name('AgentChiefAdvancedSearch');
+
+  /* Agent */
+  Route::get('AgentAdvancedSearchPage','SearchController@AgentAdvancedSearchPage')->name('AgentAdvancedSearchPage');
+  Route::post('AgentAdvancedSearch','SearchController@AgentAdvancedSearch')->name('AgentAdvancedSearch');
+
+  Route::get('AgentOrderSearchPage','SearchController@AgentOrderSearchPage')->name('AgentOrderSearchPage');
+  Route::post('AgentOrderSearch','SearchController@AgentOrderSearch')->name('AgentOrderSearch');
+
+
 });
 /*
 |--------------------------------------------------------------------------
@@ -287,6 +301,13 @@ Route::group(['middleware'=>'auth','prefix'=>'report/','as'=>'report.'],function
   Route::get("agent-chief-reports-agent","ReportController@AgentChiefReportsAgent")->name("AgentChiefReportsAgent");
   Route::post("agent-chief-report-result","ReportController@AgentsAllReport")->name("agentsAllReport");
 
+  // AgentChief 
+  Route::get("agent-reports-agent","ReportController@AgentProductReportsPage")->name("AgentProductReportsPage");
+  Route::post("agent-report-result","ReportController@AgentProductReports")->name("AgentProductReports");
+
+  // Agent
+  Route::get("agent-payment-report-page", "ReportController@AgentReportPaymentPage")->name("AgentReportPaymentPage");
+  Route::post("agent-payment-report", "ReportController@AgentReportPayment")->name("AgentReportPayment");
 
   
 });

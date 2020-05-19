@@ -73,10 +73,16 @@ class AppServiceProvider extends ServiceProvider
                 $Agentcosts =   0;
                 $agents_order = 0;
                 $returnToSeller = 0;
+                $AgentPayBack       = 0;
                 if($roleName == "agent"){
                     $notifs = StoreRoom::where(['receiver_id'=>$user->id,'in_out'=>10])
                     ->count();
-              
+                    
+                    $AgentPayBack = PaymentCirculation::where([
+                        ['status_id','=', 7],
+                        ['user_id','=', $user->id]
+                    ])->count();
+
                     $orderNotif = Order::where(['agent_id'=>$user->id,'status'=>7])
                     ->count();
                 }elseif($roleName == "agentChief"){
@@ -139,7 +145,8 @@ class AppServiceProvider extends ServiceProvider
                     'Agentpayments',
                     'Agentcosts',
                     'agents_order',
-                    'returnToSeller'
+                    'returnToSeller',
+                    'AgentPayBack'
                 
                 ));
             }

@@ -58,6 +58,7 @@ class CreateOrdersTable extends Migration
             $table->Date('allotment_Date')->nullable();
             $table->Date('action_Date')->nullable();
             $table->Text("status_desc")->nullable();
+            $table->Date("dueDate")->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
             $table->timestamps();
