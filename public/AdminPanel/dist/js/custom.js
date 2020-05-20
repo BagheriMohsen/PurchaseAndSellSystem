@@ -1,28 +1,28 @@
-$(document).ready(function(){
+$(document).ready(function() {
     var baseUrl = 'http://localhost:8000/';
 
     // Global variables
 
     var persianDataTable = {
-        "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
-        "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
-        "sInfoEmpty":      "نمایش 0 تا 0 از 0 ردیف",
-        "sInfoFiltered":   "(فیلتر شده از _MAX_ ردیف)",
-        "sInfoPostFix":    "",
-        "sInfoThousands":  ",",
-        "sLengthMenu":     "نمایش _MENU_ ",
+        "sEmptyTable": "هیچ داده‌ای در جدول وجود ندارد",
+        "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
+        "sInfoEmpty": "نمایش 0 تا 0 از 0 ردیف",
+        "sInfoFiltered": "(فیلتر شده از _MAX_ ردیف)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ",",
+        "sLengthMenu": "نمایش _MENU_ ",
         "sLoadingRecords": "در حال بارگزاری...",
-        "sProcessing":     "در حال پردازش...",
-        "sSearch":         "جستجو:",
-        "sZeroRecords":    "رکوردی با این مشخصات پیدا نشد",
+        "sProcessing": "در حال پردازش...",
+        "sSearch": "جستجو:",
+        "sZeroRecords": "رکوردی با این مشخصات پیدا نشد",
         "oPaginate": {
-            "sFirst":    "برگه‌ی نخست",
-            "sLast":     "برگه‌ی آخر",
-            "sNext":     "بعدی",
+            "sFirst": "برگه‌ی نخست",
+            "sLast": "برگه‌ی آخر",
+            "sNext": "بعدی",
             "sPrevious": "قبلی"
         },
         "oAria": {
-            "sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+            "sSortAscending": ": فعال سازی نمایش به صورت صعودی",
             "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
         }
     };
@@ -32,89 +32,90 @@ $(document).ready(function(){
     //Initiating plugins
 
     //Initiating datatable js
-    $.extend( $.fn.dataTable.defaults, {
+    $.extend($.fn.dataTable.defaults, {
         "language": persianDataTable,
-    } );
+    });
 
     //End initiating plugins
-    
+
     //Defining functions
 
-    $('.justDate').each(function(index,value){
-        if(value.innerHTML){
-            var dateArray = value.innerHTML.replace(/\-/g,' ').split(' ');
-            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+    $('.justDate').each(function(index, value) {
+        if (value.innerHTML) {
+            var dateArray = value.innerHTML.replace(/\-/g, ' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]), parseInt(dateArray[1]), parseInt(dateArray[2]));
             value.innerHTML = jalaliDate;
         }
     });
 
-    $('.timestamp').each(function(index,value){
+    $('.timestamp').each(function(index, value) {
         var jalaliTime = convertTimeStampToJalali(value.innerHTML)
         value.innerHTML = (jalaliTime);
     });
 
     //Check user role in create user page
-    var checkUserRole = function(){
+    var checkUserRole = function() {
         var user_value = $('#user_role').val();
 
         // enabled agent_id option when agent role selected in create&edit user page
-        if(user_value == '2'){
+        if (user_value == '2') {
             $('#agent_id').parent().removeClass('d-none');
-        }else{
+        } else {
             $('#agent_id').parent().addClass('d-none');
         }
 
         // enabled callcenter_id option when seller role selected in create&edit user page
-        if(user_value == '4'){
+        if (user_value == '4') {
             $('#callcenter_id').parent().removeClass('d-none');
-        }else{
+        } else {
             $('#callcenter_id').parent().addClass('d-none');
         }
 
         // enabled tariff inputs when agent and agent manager roles selected in create&edit user page
-        if(user_value == '2'){
+        if (user_value == '2') {
             $('#tariff_internal,#tariff_locally,#tariff_village,#factorCal').parent().removeClass('d-none');
-        }else{
+        } else {
             $('#tariff_internal,#tariff_locally,#tariff_village,#factorCal').parent().addClass('d-none');
         }
         // enabled commission input when seller role selected in create&edit user page
-        if(user_value == '4'){
+        if (user_value == '4') {
             $('#porsantSeller').parent().removeClass('d-none');
-        }else{
+        } else {
             $('#porsantSeller').parent().addClass('d-none');
         }
         // Enable sending order, product return from warehouse and type of calculating product price for agent role in create&edit user page
-        if(user_value == '2'){
+        if (user_value == '2') {
             $('#send_order,#calType,#return_product').parents('.col-sm-4').removeClass('d-none');
-        }else{
+        } else {
             $('#send_order,#calType,#return_product').parents('.col-sm-4').addClass('d-none');
         }
 
         // Show callcenter fields and hide other fields when callcenter role selected in create&edit user page
-        if(user_value == '9'){
+        if (user_value == '9') {
             $('.callcenterFields').removeClass('d-none');
             $('.otherRolesFields').addClass('d-none');
-        }else{
+        } else {
             $('.callcenterFields').addClass('d-none');
             $('.otherRolesFields').removeClass('d-none');
         }
         // enabled backToFollowManager option when agent role selected in create&edit user page
-        if(user_value == '2'){
+        if (user_value == '2') {
             $('#backToFollowManager').parents('.col-sm-4').removeClass('d-none');
-        }else{
+        } else {
             $('#backToFollowManager').parents('.col-sm-4').addClass('d-none');
         }
-        if(user_value == '6'){
+        if (user_value == '6') {
             $('#backToSeller').parents('.col-sm-4').removeClass('d-none');
-        }else{
+        } else {
             $('#backToSeller').parents('.col-sm-4').addClass('d-none');
         }
     };
-    function checkCalType(){
-        if($('#calType').prop('checked') == true){
-            $('#factorCal').prop('disabled',false);
-        }else{
-            $('#factorCal').prop('disabled',true);
+
+    function checkCalType() {
+        if ($('#calType').prop('checked') == true) {
+            $('#factorCal').prop('disabled', false);
+        } else {
+            $('#factorCal').prop('disabled', true);
         }
     }
 
@@ -123,21 +124,21 @@ $(document).ready(function(){
 
     $('#user_role').on('change', checkUserRole);
     $('.CalTypeBox').on('click', checkCalType);
-   
+
 
     //Updating product types via ajax in product type modal in products page
-    var updateProductTypes = function(typesList,product_id,CSRF_TOKEN){
+    var updateProductTypes = function(typesList, product_id, CSRF_TOKEN) {
         var CSRF_TOKEN = CSRF_TOKEN;
         var typesList = typesList;
         var product_id = product_id;
-        var product_type_counter_id = '#typeCounter'+product_id;
-        var product_modal_tbody_id = '#types'+product_id+' '+'tbody';
+        var product_type_counter_id = '#typeCounter' + product_id;
+        var product_modal_tbody_id = '#types' + product_id + ' ' + 'tbody';
         var product_modal_tbody = document.querySelector(product_modal_tbody_id);
         $(product_type_counter_id).html(typesList.length);
         product_modal_tbody.innerHTML = '';
 
-        $.each(typesList,function(index,value){
-            product_modal_tbody.innerHTML +=`
+        $.each(typesList, function(index, value) {
+            product_modal_tbody.innerHTML += `
                 <tr class="text-center">
                     <td class="productTypeName">
                         <span>${value.name}</span>
@@ -175,106 +176,105 @@ $(document).ready(function(){
     }
 
     // Setup tables 
-    
+
     //Setup order table in agentOrderList page
     var orderTable = $('#orderTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
-           
+
         ],
-        columnDefs: [ 
-            {
+        columnDefs: [{
                 orderable: false,
                 className: 'select-checkbox',
-                targets:   0
-            } ,
+                targets: 0
+            },
             {
                 targets: 1,
                 visible: false,
             }
         ],
         select: {
-            style:'multi'
+            style: 'multi'
         },
-        order: [[ 1, 'asc' ]],
+        order: [
+            [1, 'asc']
+        ],
     });
     var unverifiedOrdersTable = $('#unverifiedOrdersForm').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
-           
+
         ],
-        columnDefs: [ 
-            {
+        columnDefs: [{
                 orderable: false,
                 className: 'select-checkbox',
-                targets:   0
-            } ,
+                targets: 0
+            },
             {
                 targets: 1,
                 visible: false,
             }
         ],
         select: true,
-        order: [[ 1, 'asc' ]],
+        order: [
+            [1, 'asc']
+        ],
     });
     var sellerNoActionTable = $('#sellerNoActionTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
-           
+
         ],
         "language": persianDataTable,
-        columnDefs: [ 
-            {
+        columnDefs: [{
                 orderable: false,
                 className: 'select-checkbox',
-                targets:   0
-            } ,
+                targets: 0
+            },
             {
                 targets: 1,
                 visible: false,
             }
         ],
         select: true,
-        order: [[ 1, 'asc' ]],
+        order: [
+            [1, 'asc']
+        ],
     });
-    $('#productTable').DataTable( {
+    $('#productTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
                 // exportOptions: {
                 //     columns: [2,3,4,5,6,7]
                 // }
             },
-           
+
         ]
-    } );
+    });
     // $('#storeRoomTable').DataTable( {
     //     dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
     //     "<'row'<'col-sm-12'tr>>" +
@@ -283,99 +283,95 @@ $(document).ready(function(){
     //         {
     //             extend: 'excelHtml5',
     //         },
-           
+
     //     ]
     // } );
     // city&state section tabless
     $('#cityTable,#stateTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
             },
-           
+
         ],
     });
     //User sections tables
     $('#agentTable,#callcenterTable,#sellerTable,#usersTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
             },
-           
+
         ],
     });
     //Dashboard tables
     $('#sellerInfoTable').DataTable({
-        "order": [[ 1, "desc" ]]
+        "order": [
+            [1, "desc"]
+        ]
     });
 
     //Store room tables
     $('#agentInTable,#agentOutTable,#agentReceiveTable,#agentIndexTable,#agentExchangeStorageTable,#fundInStorageTable,#mainReceiveTable,#fundOutStorageTable,#returnFromAgentTable,#sendToAgentTable,#mainInStorageTable,#mainOutStorageTable,#returnFromFundTable,#storageChangeTable,#storeRoomTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
-                extend: 'excelHtml5',
-            },
-        ],
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
+            extend: 'excelHtml5',
+        }, ],
     });
     //Warehouse tables
     $('#warehouseInOutTable,#warehouseIndexTable').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
             },
-           
+
         ],
     });
     //Search result table
     $('#searchResult').DataTable({
         dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
-        buttons: [
-            {
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-4'i><'col-sm-4 text-center'p><'col-sm-4'B>>",
+        buttons: [{
                 extend: 'excelHtml5',
             },
-           
+
         ],
     });
 
     // End setup tables 
 
-    function deleteTypeButton(event){
+    function deleteTypeButton(event) {
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
-        $(this).attr('disabled','disabled');
+        $(this).attr('disabled', 'disabled');
         var form = $(this).parent('form');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var _method = form.find('input[name="_method"]').val();
         var product_id = form.find('input[name="product"]').val();
         $.ajax({
-            url:actionUrl,
-            type:'post',
-            data:{
-                _token:CSRF_TOKEN,
-                _method:_method,
+            url: actionUrl,
+            type: 'post',
+            data: {
+                _token: CSRF_TOKEN,
+                _method: _method,
             },
-            success:function(response){
-                getProductTypes(product_id,CSRF_TOKEN);
-                $(this).attr('disabled',false);
+            success: function(response) {
+                getProductTypes(product_id, CSRF_TOKEN);
+                $(this).attr('disabled', false);
             }
         });
     }
-   
+
 
     // //Editing product type via ajax
     // $('.editTypeButton').on('click',function(event){
@@ -424,13 +420,13 @@ $(document).ready(function(){
     // });
 
     //Getting product types via ajax in product type modal in products page
-    var getProductTypes = function(product_id,CSRF_TOKEN){
+    var getProductTypes = function(product_id, CSRF_TOKEN) {
 
         $.ajax({
-            url:baseUrl+'/types/'+ product_id,
-            type:'Get',
-            success:function(response){
-                updateProductTypes(response,product_id,CSRF_TOKEN);
+            url: baseUrl + '/types/' + product_id,
+            type: 'Get',
+            success: function(response) {
+                updateProductTypes(response, product_id, CSRF_TOKEN);
             }
         });
     }
@@ -440,61 +436,61 @@ $(document).ready(function(){
     //Submitting Forms
 
     // In products_create page
-    $('#productCreateForm').submit(function(event){
+    $('#productCreateForm').submit(function(event) {
         event.preventDefault();
         //remove comma before submit
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        $('input.comma').each(function(index, item) {
+            item.value = parseInt(item.value.replace(/\,/g, '', 10));
         });
         $(this)[0].submit();
     });
     // In products-off page
-    $('#offPriceForm').submit(function(event){
+    $('#offPriceForm').submit(function(event) {
         event.preventDefault();
         //remove comma before submit
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        $('input.comma').each(function(index, item) {
+            item.value = parseInt(item.value.replace(/\,/g, '', 10));
         });
         $(this)[0].submit();
     });
     // In products-off page
-    $('#productEditForm').submit(function(event){
+    $('#productEditForm').submit(function(event) {
         event.preventDefault();
         //remove comma before submit
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        $('input.comma').each(function(index, item) {
+            item.value = parseInt(item.value.replace(/\,/g, '', 10));
         });
         $(this)[0].submit();
     });
     //Adding product type via ajax in product type modal in products page
-    $('.storeTypeForm').submit(function(event){
+    $('.storeTypeForm').submit(function(event) {
         event.preventDefault();
         var self = $(this);
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
-        $(this).find('button[type="submit"]').attr('disabled','disabled');
+        $(this).find('button[type="submit"]').attr('disabled', 'disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var product_id = $(this).find('input[name="product"]').val();
         var name = $(this).find('input[name="name"]').val();
         $(this).trigger('reset');
         $.ajax({
-            url:actionUrl,
-            type:'post',
-            data:{
-                _token:CSRF_TOKEN,
-                product:product_id,
-                name:name
+            url: actionUrl,
+            type: 'post',
+            data: {
+                _token: CSRF_TOKEN,
+                product: product_id,
+                name: name
             },
-            success:function(response){
+            success: function(response) {
                 self.find('button[type="submit"]').html('<i class="far fa-plus-square crud-icon"></i>');
-                self.find('button[type="submit"]').attr('disabled',false);
+                self.find('button[type="submit"]').attr('disabled', false);
                 toastr["info"](response);
-                getProductTypes(product_id,CSRF_TOKEN);
+                getProductTypes(product_id, CSRF_TOKEN);
             }
         });
     });
     //Deleting product type via ajax
-    $('.deleteTypeButton').on('click',deleteTypeButton);
+    $('.deleteTypeButton').on('click', deleteTypeButton);
 
     //  //Editing product type via ajax
     //  $('.editTypeButton').on('click',function(event){
@@ -543,23 +539,23 @@ $(document).ready(function(){
     // });
 
     //Updating special tariff table data
-    var updateSpecialTariff = function(specialList,user_id,CSRF_TOKEN,product_name){
+    var updateSpecialTariff = function(specialList, user_id, CSRF_TOKEN, product_name) {
         var newSpecial = specialList[specialList.length - 1];
         var user_id = user_id;
-        var special_type_counter_id = '#specialCounter'+user_id;
-        var special_modal_tbody_selector = '#special'+ user_id +' '+'tbody';
+        var special_type_counter_id = '#specialCounter' + user_id;
+        var special_modal_tbody_selector = '#special' + user_id + ' ' + 'tbody';
         var special_modal_tbody = document.querySelector(special_modal_tbody_selector);
         $(special_type_counter_id).html(specialList.length);
         // special_modal_tbody.innerHTML = '';
 
-        if(newSpecial.place == 'village'){
+        if (newSpecial.place == 'village') {
             newSpecial.place = 'روستا';
-        }else if(newSpecial.place == 'internal'){
+        } else if (newSpecial.place == 'internal') {
             newSpecial.place = 'داخل شهر';
-        }else{
+        } else {
             newSpecial.place = 'حومه شهر';
         };
-        special_modal_tbody.innerHTML +=`
+        special_modal_tbody.innerHTML += `
         <tr class="text-center">
             
         <td>${product_name}</td>
@@ -579,53 +575,53 @@ $(document).ready(function(){
         `;
 
         //update tarrif count
-        
+
         //Deleting special tariffs for users via ajax
-        $('.deleteSpecialTariff').on('click',function(event){
+        $('.deleteSpecialTariff').on('click', function(event) {
             event.preventDefault();
             $(this).html('<i class="fas fa-spinner"></i>');
-            $(this).attr('disabled','disabled');
+            $(this).attr('disabled', 'disabled');
             var form = $(this).parent('form');
             var actionUrl = form.attr('action');
             var CSRF_TOKEN = form.find('input[name="_token"]').val();
             var user_id = form.find('input[name="user_id"]').val();
             var _method = form.find('input[name="_method"]').val();
             $.ajax({
-                url:actionUrl,
-                type:'post',
-                data:{
-                    _token:CSRF_TOKEN,
-                    _method:_method,
+                url: actionUrl,
+                type: 'post',
+                data: {
+                    _token: CSRF_TOKEN,
+                    _method: _method,
                 },
-                success:function(response){
+                success: function(response) {
                     // getSpecialTariff(user_id,CSRF_TOKEN);
                     form.parents('tr').remove();
-                    $(this).attr('disabled',false);
+                    $(this).attr('disabled', false);
                 }
             });
-            var special_type_counter_id = '#specialCounter'+user_id;
-            $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
-            });
+            var special_type_counter_id = '#specialCounter' + user_id;
+            $(special_type_counter_id).html($(this).parents('table').find('tr').length - 2);
+        });
     };
     //Getting special tariff table data
-    var getSpecialTariff = function(user_id,CSRF_TOKEN,product_name){
-        $.ajax({
-            url:baseUrl+'/special-tariffs-index/'+ user_id,
-            type:'Get',
-            success:function(response){
-                updateSpecialTariff(response,user_id,CSRF_TOKEN,product_name);
-            }
-        });
-    }
-    //Storing special tariffs for users via ajax
-    $('.storeSTariffForm').submit(function(event){
+    var getSpecialTariff = function(user_id, CSRF_TOKEN, product_name) {
+            $.ajax({
+                url: baseUrl + '/special-tariffs-index/' + user_id,
+                type: 'Get',
+                success: function(response) {
+                    updateSpecialTariff(response, user_id, CSRF_TOKEN, product_name);
+                }
+            });
+        }
+        //Storing special tariffs for users via ajax
+    $('.storeSTariffForm').submit(function(event) {
         event.preventDefault();
         var self = $(this);
-        $('input.comma').each(function(index,item){
-            item.value = parseInt(item.value.replace(/\,/g,'',10));
+        $('input.comma').each(function(index, item) {
+            item.value = parseInt(item.value.replace(/\,/g, '', 10));
         });
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner"></i>');
-        $(this).find('button[type="submit"]').attr('disabled','disabled');
+        $(this).find('button[type="submit"]').attr('disabled', 'disabled');
         var actionUrl = $(this).attr('action');
         var CSRF_TOKEN = $(this).find('input[name="_token"]').val();
         var user_id = $(this).find('input[name="user_id"]').val();
@@ -635,33 +631,33 @@ $(document).ready(function(){
         var tariff_price = $(this).find('input[name="tariff_price"]').val();
         $(this).trigger('reset');
         $.ajax({
-            url:actionUrl,
-            type:'post',
-            data:{
-                _token:CSRF_TOKEN,
-                user_id:user_id,
-                product_id:product_id,
-                place:tariff_place,
-                price:tariff_price
+            url: actionUrl,
+            type: 'post',
+            data: {
+                _token: CSRF_TOKEN,
+                user_id: user_id,
+                product_id: product_id,
+                place: tariff_place,
+                price: tariff_price
             },
-            success:function(response){
-                if(response.status == 1){
+            success: function(response) {
+                if (response.status == 1) {
                     toastr["info"](response.message);
-                    getSpecialTariff(user_id,CSRF_TOKEN,product_name);
+                    getSpecialTariff(user_id, CSRF_TOKEN, product_name);
                     self.find('button[type="submit"]').html('ذخیره');
-                    self.find('button[type="submit"]').attr('disabled',false);
-                   
-                }else{
+                    self.find('button[type="submit"]').attr('disabled', false);
+
+                } else {
                     toastr["info"](response.message);
                     self.find('button[type="submit"]').html('ذخیره');
-                    self.find('button[type="submit"]').attr('disabled',false);
+                    self.find('button[type="submit"]').attr('disabled', false);
                 }
-                
+
             }
         });
     });
     //Deleting special tariffs for users via ajax
-    $('.deleteSpecialTariff').on('click',function(event){
+    $('.deleteSpecialTariff').on('click', function(event) {
         event.preventDefault();
         $(this).html('<i class="fas fa-spinner"></i>');
         var form = $(this).parent('form');
@@ -670,43 +666,43 @@ $(document).ready(function(){
         var user_id = form.find('input[name="user_id"]').val();
         var _method = form.find('input[name="_method"]').val();
         $.ajax({
-            url:actionUrl,
-            type:'post',
-            data:{
-                _token:CSRF_TOKEN,
-                _method:_method,
+            url: actionUrl,
+            type: 'post',
+            data: {
+                _token: CSRF_TOKEN,
+                _method: _method,
             },
-            success:function(response){
+            success: function(response) {
                 // getSpecialTariff(user_id,CSRF_TOKEN);
                 form.parents('tr').remove();
             }
         });
-        var special_type_counter_id = '#specialCounter'+user_id;
+        var special_type_counter_id = '#specialCounter' + user_id;
         // console.log($(this).parents('table').find('tr'));
-        $(special_type_counter_id).html($(this).parents('table').find('tr').length-2);
+        $(special_type_counter_id).html($(this).parents('table').find('tr').length - 2);
 
     });
-   
 
-    
-    function configureChart(chartData,element_id){
+
+
+    function configureChart(chartData, element_id) {
         var chartData = chartData;
         var dates = [];
         var suspended = [];
         var collected = [];
         var cancelled = [];
-        chartData.forEach(function(element){
-            var gregorianDate = element.Date.replace(/\-/g,' ').split(' ');
-            var jalaliDate = gregorian_to_jalali(parseInt(gregorianDate[0]),parseInt(gregorianDate[1]),parseInt(gregorianDate[2]));
+        chartData.forEach(function(element) {
+            var gregorianDate = element.Date.replace(/\-/g, ' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(gregorianDate[0]), parseInt(gregorianDate[1]), parseInt(gregorianDate[2]));
             dates.push(jalaliDate);
         });
-        chartData.forEach(function(element){
+        chartData.forEach(function(element) {
             suspended.push(element.subsended);
         });
-        chartData.forEach(function(element){
+        chartData.forEach(function(element) {
             collected.push(element.collected);
         });
-        chartData.forEach(function(element){
+        chartData.forEach(function(element) {
             cancelled.push(element.cancelled);
         });
         var config = {
@@ -714,26 +710,27 @@ $(document).ready(function(){
             data: {
                 labels: dates.reverse(),
                 datasets: [{
-                    label: 'سفارشات وصولی',
-                    backgroundColor: '#17a2b8',
-                    borderColor: '#17a2b8',
-                    data: collected.reverse(),
-                    fill: false,
-                }, 
-                {
-                    label: 'سفارشات کنسلی',
-                    fill: false,
-                    backgroundColor: '#dc3545',
-                    borderColor: '#dc3545',
-                    data: cancelled.reverse(),
-                },
-                {
-                    label: 'سفارشات در انتظار و معلق',
-                    fill: false,
-                    backgroundColor: '#ffc107',
-                    borderColor: '#ffc107',
-                    data: suspended.reverse(),
-                }]
+                        label: 'سفارشات وصولی',
+                        backgroundColor: '#17a2b8',
+                        borderColor: '#17a2b8',
+                        data: collected.reverse(),
+                        fill: false,
+                    },
+                    {
+                        label: 'سفارشات کنسلی',
+                        fill: false,
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        data: cancelled.reverse(),
+                    },
+                    {
+                        label: 'سفارشات در انتظار و معلق',
+                        fill: false,
+                        backgroundColor: '#ffc107',
+                        borderColor: '#ffc107',
+                        data: suspended.reverse(),
+                    }
+                ]
             },
             options: {
                 responsive: true,
@@ -767,41 +764,41 @@ $(document).ready(function(){
                 }
             }
         };
-    
+
         var ctx = document.getElementById(element_id).getContext('2d');
         window.myLine = new Chart(ctx, config);
     }
-    if(document.querySelector('#agent_sell_chart')){
-        var element_id = 'agent_sell_chart'; 
+    if (document.querySelector('#agent_sell_chart')) {
+        var element_id = 'agent_sell_chart';
         var userId = $('#userId').val();
         $.ajax({
-            url:baseUrl+'/users/Agent-Dashboard-Chart-API/' + userId,
-            type:'Get',
-            success:function(response){ 
-                configureChart(response[0],element_id);
+            url: baseUrl + '/users/Agent-Dashboard-Chart-API/' + userId,
+            type: 'Get',
+            success: function(response) {
+                configureChart(response[0], element_id);
             }
         });
     };
     //Sell and orders Chart Setup for admin
-    if(document.querySelector('#admin_sell_chart')){
+    if (document.querySelector('#admin_sell_chart')) {
         var element_id = 'admin_sell_chart';
         $.ajax({
-            url:baseUrl+'/users/Admin-Dashboard-Chart-API',
-            type:'Get',
-            success:function(response){ 
-                configureChart(response[0],element_id);
+            url: baseUrl + '/users/Admin-Dashboard-Chart-API',
+            type: 'Get',
+            success: function(response) {
+                configureChart(response[0], element_id);
             }
         });
     };
 
     //Sell and orders Chart Setup for agent chief
-    if(document.querySelector('#agentChief_sell_chart')){
+    if (document.querySelector('#agentChief_sell_chart')) {
         var element_id = 'agentChief_sell_chart';
         $.ajax({
-            url:baseUrl+'/users/Agent-Chief-Dashboard-Chart-API',
-            type:'Get',
-            success:function(response){ 
-                configureChart(response,element_id);
+            url: baseUrl + '/users/Agent-Chief-Dashboard-Chart-API',
+            type: 'Get',
+            success: function(response) {
+                configureChart(response, element_id);
             }
         });
     };
@@ -810,10 +807,10 @@ $(document).ready(function(){
     var productList;
     var orderListTable = document.querySelector('.orderList');
     //Setup for order page
-    var addOrderTable = function(){
+    var addOrderTable = function() {
         var div = document.createElement('div');
         div.classList.add('row');
-        div.innerHTML =  `
+        div.innerHTML = `
             <div class="col-sm-2">
              
               <select class="productSelect form-control bg-sec" name="product_name" required>
@@ -846,96 +843,96 @@ $(document).ready(function(){
         `;
         orderListTable.appendChild(div);
         var productSelectList = document.querySelectorAll('.productSelect');
-        var productSelect = productSelectList[productSelectList.length-1];
+        var productSelect = productSelectList[productSelectList.length - 1];
         productList.forEach(function(item) {
             productSelect.innerHTML += `
                 <option value="${item.id}">${item.name}</option>
             `;
         });
     };
-    if(document.querySelector('#orderForm')){
+    if (document.querySelector('#orderForm')) {
         // Getting product list for seller order table 
         $.ajax({
-            url:baseUrl+'/admin/orders/ProductList',
-            type:'GET',
-            success:function(response){
+            url: baseUrl + '/admin/orders/ProductList',
+            type: 'GET',
+            success: function(response) {
                 productList = response;
-                if($('.orderEditForm').length){
+                if ($('.orderEditForm').length) {
                     getOrderList();
-                    
-                }else{
+
+                } else {
                     addOrderTable();
                 }
-                
+
             }
         });
     }
     //Order list type and price updating when product selected
-    $('.orderList').on('click',function(event){
+    $('.orderList').on('click', function(event) {
         event.preventDefault();
-        if(event.target.classList.contains('productSelect') && event.target.value){
+        if (event.target.classList.contains('productSelect') && event.target.value) {
             var row = event.target.parentElement.parentElement;
             var count = row.querySelector('.countField').value;
             var productPriceInput = row.querySelector('.priceField');
             var off_whole_input = row.querySelector('.offWholeField');
             var typeSelect = row.querySelector('.typeSelect');
             var productPrice;
-            productList.forEach(function(item){
-                if(item.id == event.target.value){
+            productList.forEach(function(item) {
+                if (item.id == event.target.value) {
                     productPrice = item.price;
                     typeSelect.innerHTML = '';
-                    item.types.forEach(function(value){
-                        typeSelect.innerHTML +=`
+                    item.types.forEach(function(value) {
+                        typeSelect.innerHTML += `
                             <option value="${value.id}">${value.name}</option>
                         `;
                     });
-                    calculate_whole_off_order(item,count,off_whole_input)
+                    calculate_whole_off_order(item, count, off_whole_input)
                 }
             });
             productPriceInput.value = numberWithCommas(productPrice);
 
-        }else if(event.target.classList.contains('fa-trash-alt')){
+        } else if (event.target.classList.contains('fa-trash-alt')) {
             event.target.closest(".row").remove();
 
-        }else if(event.target.classList.contains('countField')){
+        } else if (event.target.classList.contains('countField')) {
             var row = event.target.parentElement.parentElement;
             var off_whole_input = row.querySelector('.offWholeField');
             var count = event.target.value;
             var item_id = row.querySelector('.productSelect').value;
             var selected_item = productList.find(element => element.id == item_id)
-            calculate_whole_off_order(selected_item,count,off_whole_input)
-            
+            calculate_whole_off_order(selected_item, count, off_whole_input)
+
         }
     });
 
-    function calculate_whole_off_order(selected_item,count,off_whole_input){
-        if(selected_item){
+    function calculate_whole_off_order(selected_item, count, off_whole_input) {
+        if (selected_item) {
             var off_whole_result = [];
             selected_item.offs.forEach(off => {
-                if(parseInt(off.numberOfProduct) <= count){
+                if (parseInt(off.numberOfProduct) <= count) {
                     off_whole_result.push(parseInt(off.offPrice))
                 }
             })
-            if(off_whole_result.length){
+            if (off_whole_result.length) {
                 off_whole_input.value = Math.max.apply(Math, off_whole_result)
-            }else{
+            } else {
                 off_whole_input.value = 0
             }
         }
     }
 
-    $('.addProduct').on('click',function(event){
+    $('.addProduct').on('click', function(event) {
         event.preventDefault();
         addOrderTable();
     });
-    $('#orderForm').submit(function(event){
+    $('#orderForm').submit(function(event) {
         event.preventDefault();
         var form = $(this);
         form.find('button[type="submit"]').html('<i class="fas fa-spinner"></i>')
         var orderArray = [];
-        var product_id_array =[];
+        var product_id_array = [];
         // form.find('input[name="HBD_Date"]').val(isoDate);
-        $('.orderList .row').each(function(index,value){
+        $('.orderList .row').each(function(index, value) {
             var orderObject = {};
             orderObject.product_id = value.querySelector('.productSelect').value;
             orderObject.count = value.querySelector('input[name="count"]').value;
@@ -943,7 +940,7 @@ $(document).ready(function(){
             orderObject.type = value.querySelector('.typeSelect').value;
             orderObject.off_whole = value.querySelector('.offWholeField').value;
             orderArray.push(orderObject);
-            if(!product_id_array.includes(value.querySelector('.productSelect').value)){
+            if (!product_id_array.includes(value.querySelector('.productSelect').value)) {
                 product_id_array.push(value.querySelector('.productSelect').value);
             }
         });
@@ -958,48 +955,47 @@ $(document).ready(function(){
         var HBD_Date = form.find('input[name="HBD_Date"]').val();;
         var address = form.find('textarea[name="address"]').val();
         var paymentMethod = form.find('input[name="paymentMethod"]').val();
-        var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g,'',10);
-        var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g,'',10);
-        var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g,'',10);
-        var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g,'',10);
+        var shippingCost = form.find('input[name="shippingCost"]').val().replace(/\,/g, '', 10);
+        var cashPrice = form.find('input[name="cashPrice"]').val().replace(/\,/g, '', 10);
+        var prePayment = form.find('input[name="prePayment"]').val().replace(/\,/g, '', 10);
+        var chequePrice = form.find('input[name="chequePrice"]').val().replace(/\,/g, '', 10);
         var instant = form.find('input[name="instant"]').val();
         var sellerDescription = form.find('textarea[name="sellerDescription"]').val();
         var sendDescription = form.find('textarea[name="deliverDescription"]').val();
         var agentStatue = form.find('#agentStatue').val();
-        var overAllPrice = parseInt(document.querySelector('#overallPrice').innerHTML.replace(/\,/g,'',10));
-        console.log(overAllPrice)
-        m = moment(HBD_Date, 'jYYYY/jM/jD');
+        var overAllPrice = parseInt(document.querySelector('#overallPrice').innerHTML.replace(/\,/g, '', 10));
+        m = moment(HBD_Date, 'jYYYY/jM/jD').format('YYYY/M/D');
         var formData = {
-            _token:CSRF_TOKEN,
-            mobile:mobile,
-            telephone:telephone,
-            state_id:state_id,
-            city_id:city_id,
-            agentStatue:agentStatue,
-            fullName:fullName,
-            postalCode:postalCode,
-            HBD_Date:HBD_Date,
-            address:address,
-            paymentMethod:paymentMethod,
-            shippingCost:shippingCost,
-            cashPrice:cashPrice,
-            prePayment:prePayment,
-            chequePrice:chequePrice,
-            instant:instant,
-            sellerDescription:sellerDescription,
-            sendDescription:sendDescription,
-            orderArray:orderArray,
-            product_id_array:product_id_array,
+            _token: CSRF_TOKEN,
+            mobile: mobile,
+            telephone: telephone,
+            state_id: state_id,
+            city_id: city_id,
+            agentStatue: agentStatue,
+            fullName: fullName,
+            postalCode: postalCode,
+            HBD_Date: m,
+            address: address,
+            paymentMethod: paymentMethod,
+            shippingCost: shippingCost,
+            cashPrice: cashPrice,
+            prePayment: prePayment,
+            chequePrice: chequePrice,
+            instant: instant,
+            sellerDescription: sellerDescription,
+            sendDescription: sendDescription,
+            orderArray: orderArray,
+            product_id_array: product_id_array,
             overAllPrice: overAllPrice
 
         }
         $.ajax({
-            url:actionUrl,
-            type:'POST',
-            data:formData,
-            success:function(response){
+            url: actionUrl,
+            type: 'POST',
+            data: formData,
+            success: function(response) {
                 form.find('button[type="submit"]').html('ثبت سفارش');
-                
+
                 toastr["success"](response);
                 $('#orderForm').trigger('reset');
                 $('#cityAgent').html('');
@@ -1008,46 +1004,46 @@ $(document).ready(function(){
 
     });
     // Calculating order overall price
-    function setOverAllPrice(){
+    function setOverAllPrice() {
         var overallPrice = null;
         // console.log($('.orderList .row'));
-        $('.orderList .row').each(function(index,value){
+        $('.orderList .row').each(function(index, value) {
             var rowPrice = null;
             var count = value.querySelector('input[name="count"]').value;
             var off = value.querySelector('input[name="off"]').value;
-            var price = value.querySelector('input[name="price"]').value.replace(/\,/g,'',10);
+            var price = value.querySelector('input[name="price"]').value.replace(/\,/g, '', 10);
             var offWhole = value.querySelector('input[name="offGroup"]').value;
-            rowPrice = (count*price) - off - offWhole;
+            rowPrice = (count * price) - off - offWhole;
             overallPrice += rowPrice;
         });
         $('#overallPrice').html(numberWithCommas(overallPrice));
-        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
+        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g, '', 10);
         $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(overallPrice) + parseInt(deliveryPrice)));
     }
     $('#orderForm .orderList').on('change click keyup load', setOverAllPrice);
-    $('#orderForm input[name="shippingCost"]').on('change keyup',function(){
-        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g,'',10);
-        var productsPrice = $('#overallPrice').html().replace(/\,/g,'',10);
+    $('#orderForm input[name="shippingCost"]').on('change keyup', function() {
+        var deliveryPrice = $('#orderForm input[name="shippingCost"]').val().replace(/\,/g, '', 10);
+        var productsPrice = $('#overallPrice').html().replace(/\,/g, '', 10);
         $('#orderForm input[name="cashPrice"]').val(numberWithCommas(parseInt(productsPrice) + parseInt(deliveryPrice)));
     });
 
     //Checking if city has agent exist when seller gives order
-    $('#orderForm #city').on('click',function(){
+    $('#orderForm #city').on('click', function() {
         $('#cityAgent').html('');
         var city = document.querySelector('#city');
-        if(city.value){
+        if (city.value) {
             var cityName = city.selectedOptions[0].innerText;
             $.ajax({
-                url:baseUrl+'/admin/orders/AgentExistInState/' + cityName,
-                type:'Get',
-                success:function(response){
+                url: baseUrl + '/admin/orders/AgentExistInState/' + cityName,
+                type: 'Get',
+                success: function(response) {
                     $('#agentStatue').val(response.state);
-                    if(response.state == 2){
-                        $('#cityAgent').html('<span class="text-success">'+ response.message +'</span>');
-                    }else if(response.state == 1){
-                        $('#cityAgent').html('<span class="text-secondary">'+ response.message +'</span>');
-                    }else{
-                        $('#cityAgent').html('<span class="text-danger">'+ response.message +'</span>');
+                    if (response.state == 2) {
+                        $('#cityAgent').html('<span class="text-success">' + response.message + '</span>');
+                    } else if (response.state == 1) {
+                        $('#cityAgent').html('<span class="text-secondary">' + response.message + '</span>');
+                    } else {
+                        $('#cityAgent').html('<span class="text-danger">' + response.message + '</span>');
                     }
                 }
             });
@@ -1055,10 +1051,10 @@ $(document).ready(function(){
     });
 
     // Confirm before delete for all delete buttons in all pages
-    $('.deleteConfirm').submit(function (event) {
-        if(confirm('آیا از حذف این آیتم مطمئن هستید؟')){
+    $('.deleteConfirm').submit(function(event) {
+        if (confirm('آیا از حذف این آیتم مطمئن هستید؟')) {
             // do nothing and submit
-        }else{
+        } else {
             // prevent submit
             event.preventDefault();
         }
@@ -1068,11 +1064,11 @@ $(document).ready(function(){
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     //Overall value for store room table 
-    if($('#storeRoomTable').length){
+    if ($('#storeRoomTable').length) {
         var rowSum = $('#storeRoomTable .rowSum');
         var overallSum = 0;
-        rowSum.each(function(index,value){
-            overallSum += parseInt(value.innerText.replace(/\,/g,''));
+        rowSum.each(function(index, value) {
+            overallSum += parseInt(value.innerText.replace(/\,/g, ''));
         });
         $('#overAllSum').html(numberWithCommas(overallSum));
     }
@@ -1080,27 +1076,27 @@ $(document).ready(function(){
     $('input.comma').keyup(function(event) {
 
         // skip for arrow keys
-        if(event.which >= 37 && event.which <= 40) return;
+        if (event.which >= 37 && event.which <= 40) return;
         // format number
         $(this).val(function(index, value) {
             return value
-            .replace(/\D/g, "")
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
-   
+
     // var isoDate;
     // Setup persian datepicker for date inputs
     var isoDate;
     $(".persianDatePicker").pDatepicker({
-        calendar:{
+        calendar: {
             persian: {
                 locale: 'en'
             }
         },
-        format : 'YYYY-MM-DD',
-        initialValue : false,
-        onSelect: function(unix){
+        format: 'YYYY-MM-DD',
+        initialValue: false,
+        onSelect: function(unix) {
             var date = new Date(unix);
             var year = date.getFullYear();
             var month = date.getMonth();
@@ -1109,16 +1105,16 @@ $(document).ready(function(){
         }
 
     });
-   
+
     $(".persianDateTimepicker").pDatepicker({
-        calendar:{
+        calendar: {
             persian: {
                 locale: 'en'
             }
         },
-        format:'YYYY-MM-DDTHH:mm:ss',
-        initialValue : false,
-        onSelect: function(unix){
+        format: 'YYYY-MM-DDTHH:mm:ss',
+        initialValue: false,
+        onSelect: function(unix) {
             var date = new Date(unix);
             var year = date.getFullYear();
             var month = date.getMonth();
@@ -1135,43 +1131,43 @@ $(document).ready(function(){
     //Add zero to hours,minutes and seconds for clock
     function addZero(i) {
         if (i < 10) {
-          i = "0" + i;
+            i = "0" + i;
         }
         return i;
     }
     //Turn timestamp js date object
-    function convertTimeStampToJalali(timestamp){
+    function convertTimeStampToJalali(timestamp) {
         var date = new Date(timestamp);
-        if(!date)
+        if (!date)
             return false;
-            return ( gregorian_to_jalali(date.getFullYear(),(date.getMonth()+1),date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds()) );
+        return (gregorian_to_jalali(date.getFullYear(), (date.getMonth() + 1), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
     }
     // Turn js date object to jalali date
-    function gregorian_to_jalali(gy,gm,gd,h,m,s){
+    function gregorian_to_jalali(gy, gm, gd, h, m, s) {
         var result = '';
-        g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
-        if(gy > 1600){
-            jy=979;
-            gy-=1600;
-        }else{
-            jy=0;
-            gy-=621;
+        g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        if (gy > 1600) {
+            jy = 979;
+            gy -= 1600;
+        } else {
+            jy = 0;
+            gy -= 621;
         }
-        gy2=(gm > 2)?(gy+1):gy;
-        days=(365*gy) +(parseInt((gy2+3)/4)) -(parseInt((gy2+99)/100)) +(parseInt((gy2+399)/400)) -80 +gd +g_d_m[gm-1];
-        jy+=33*(parseInt(days/12053)); 
-        days%=12053;
-        jy+=4*(parseInt(days/1461));
-        days%=1461;
-        if(days > 365){
-            jy+=parseInt((days-1)/365);
-            days=(days-1)%365;
+        gy2 = (gm > 2) ? (gy + 1) : gy;
+        days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+        jy += 33 * (parseInt(days / 12053));
+        days %= 12053;
+        jy += 4 * (parseInt(days / 1461));
+        days %= 1461;
+        if (days > 365) {
+            jy += parseInt((days - 1) / 365);
+            days = (days - 1) % 365;
         }
-        jm=(days < 186)?1+parseInt(days/31):7+parseInt((days-186)/30);
-        jd=1+((days < 186)?(days%31):((days-186)%30));
-        result = jy +'-' + jm + '-' + jd;
+        jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+        jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+        result = jy + '-' + jm + '-' + jd;
 
-        if(h && m && s){
+        if (h && m && s) {
             var hours = addZero(h);
             var minutes = addZero(m);
             var seconds = addZero(s);
@@ -1179,47 +1175,48 @@ $(document).ready(function(){
         }
         return result;
     }
-    
-    $('.paginate_button').on('click',function(){
-        $('.timestamp').each(function(index,value){
+
+    $('.paginate_button').on('click', function() {
+        $('.timestamp').each(function(index, value) {
             var jalaliTime = convertTimeStampToJalali(value.innerHTML)
             value.innerHTML = (jalaliTime);
         });
     });
 
-    $('.inputDateToJalali').each(function(index,value){
-        if(value.value){
-            var dateArray = value.value.replace(/\-/g,' ').split(' ');
-            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]),parseInt(dateArray[1]),parseInt(dateArray[2]));
+    $('.inputDateToJalali').each(function(index, value) {
+        if (value.value) {
+            var dateArray = value.value.replace(/\-/g, ' ').split(' ');
+            var jalaliDate = gregorian_to_jalali(parseInt(dateArray[0]), parseInt(dateArray[1]), parseInt(dateArray[2]));
             value.value = jalaliDate;
         }
 
     });
-    
+
     // Calculating sent cargo to agent from tankhah warehouse in agentExchangeForm page
-    function getProductPrice(products,product_id){
+    function getProductPrice(products, product_id) {
         var price = 0;
-        $.each(products,function(index,value){
-            if(value.id == product_id){
-               price = value.price;
+        $.each(products, function(index, value) {
+            if (value.id == product_id) {
+                price = value.price;
             }
         });
         return price;
     }
-    function calculateCargoValue(){
+
+    function calculateCargoValue() {
         var self = $(this);
         $(this).find('.cargoValue').html('<i class="fas fa-spinner"></i>');
         var product_id = $(this).find('select[name="product"]').val();
-        if(product_id){
+        if (product_id) {
             $.ajax({
-                url:baseUrl+'/admin/orders/ProductList',
-                type:'GET',
-                success:function(response){
+                url: baseUrl + '/admin/orders/ProductList',
+                type: 'GET',
+                success: function(response) {
                     console.log(response)
-                    var price = parseInt(getProductPrice(response,product_id));
+                    var price = parseInt(getProductPrice(response, product_id));
                     var number = parseInt(self.find('input[name="number"]').val());
                     number = number || 0;
-                    self.find('.cargoValue').html(numberWithCommas(price*number));
+                    self.find('.cargoValue').html(numberWithCommas(price * number));
                 }
             });
         }
@@ -1244,16 +1241,16 @@ $(document).ready(function(){
     //     });
     //     $(this)[0].submit();
     // });
-    $('#costReportForm,#paymentReportForm,#reportOrderForm,#sendToAgentForm,#storeToStoreAgents,#tankhahExit,#returnToFund,#costForm,#searchForm,#payOrderList').submit(function(event){
+    $('#costReportForm,#paymentReportForm,#reportOrderForm,#sendToAgentForm,#storeToStoreAgents,#tankhahExit,#returnToFund,#costForm,#searchForm,#payOrderList').submit(function(event) {
         event.preventDefault();
-        $('.persianDatePicker').each(function(index,item){
+        $('.persianDatePicker').each(function(index, item) {
             var jalali_date = $(this).val();
-            if(jalali_date){
+            if (jalali_date) {
                 m = moment(jalali_date, 'jYYYY/jM/jD');
                 $(this).siblings('.georgian_date').val(m._i.slice(0, -1));
             }
         });
-       $(this)[0].submit();
+        $(this)[0].submit();
     });
     // $('#storeToStoreAgents').submit(function(event){
     //     event.preventDefault();
@@ -1275,55 +1272,55 @@ $(document).ready(function(){
     //     $(this).find('input[name="date"]').val(isoDate);
     //     $(this)[0].submit();
     //  });
-    
+
     //Get State and cities array via ajax for user_create and user_edit 
     var statesCityArray;
-    if($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length || $('#warehouseForm')){
+    if ($('#createUserForm').length || $('#editUserForm').length || $('#searchForm').length || $('#warehouseForm')) {
         $.ajax({
-            url:baseUrl+'/states/AllStatesAndCitiesName',
-            type:'Get',
-            success:function(response){
+            url: baseUrl + '/states/AllStatesAndCitiesName',
+            type: 'Get',
+            success: function(response) {
                 statesCityArray = response;
             }
         });
         //City dependency to states in forms
-        $('#state').on('change',function(){
+        $('#state').on('change', function() {
             var null_value = null;
             var form = $(this).parents('form');
             var city = form.find('#city')[0];
             city.innerHTML = '';
-            if($('#searchForm').length){
+            if ($('#searchForm').length) {
                 city.innerHTML += `<option value="${null_value}">همه</option>`;
             }
             var stateName = form.find('#state option:selected').html();
-            $.each(statesCityArray,function(index,value){
-                if(value.name == stateName){
-                    $.each(value.cities,function(index,value){
+            $.each(statesCityArray, function(index, value) {
+                if (value.name == stateName) {
+                    $.each(value.cities, function(index, value) {
                         city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
                     });
                 }
             });
         });
     }
-    if($('#orderForm').length){
+    if ($('#orderForm').length) {
         $.ajax({
-            url:baseUrl+'/states/AllStatesAndCitiesName',
-            type:'Get',
-            success:function(response){
+            url: baseUrl + '/states/AllStatesAndCitiesName',
+            type: 'Get',
+            success: function(response) {
                 statesCityArray = response;
             }
         });
         //City dependency to states in forms
-        $('#state').on('change click',function(){
+        $('#state').on('change click', function() {
             $('#cityAgent').html('');
             var form = $(this).parents('form');
             var city = form.find('#city')[0];
             city.innerHTML = '';
             city.innerHTML += `<option value="">شهر را انتخاب کنید</option>`;
             var stateName = form.find('#state option:selected').html();
-            $.each(statesCityArray,function(index,value){
-                if(value.name == stateName){
-                    $.each(value.cities,function(index,value){
+            $.each(statesCityArray, function(index, value) {
+                if (value.name == stateName) {
+                    $.each(value.cities, function(index, value) {
                         city.innerHTML += `<option value="${value.id}">${value.name}</option>`;
                     });
                 }
@@ -1341,26 +1338,26 @@ $(document).ready(function(){
         suspend_options.addClass('d-none');
         cancel_options.addClass('d-none');
         switch (value) {
-          case '7':
-            waiting_options.removeClass('d-none');
-            break;
-          case '14':
-            suspend_options.removeClass('d-none');
-            break;
-          case '13':
-            cancel_options.removeClass('d-none');
-            break;
-          default:
-            break;
+            case '7':
+                waiting_options.removeClass('d-none');
+                break;
+            case '14':
+                suspend_options.removeClass('d-none');
+                break;
+            case '13':
+                cancel_options.removeClass('d-none');
+                break;
+            default:
+                break;
         }
     });
     $('.conditionAssignForm input[name="cancel"]:radio').change(function(e) {
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var cancel_desc = form.find('.cancel_desc');
-        if(value == '9'){
+        if (value == 'توضیحات') {
             cancel_desc.removeClass('d-none');
-        }else{
+        } else {
             cancel_desc.addClass('d-none');
         }
     });
@@ -1368,13 +1365,13 @@ $(document).ready(function(){
         var value = e.target.value.trim()
         var form = $(this).parents('form');
         var dueDate = form.find('.dueDate');
-        if(value == '3'){
+        if (value == 'زمان سررسید') {
             dueDate.removeClass('d-none');
-        }else{
+        } else {
             dueDate.addClass('d-none');
         }
     });
-    $('#conditionForm button').on('click',function(event){
+    $('#conditionForm button').on('click', function(event) {
         event.preventDefault();
         var tableData = orderTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1382,45 +1379,45 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('select').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'statue': condition};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'statue': condition };
             orderNumbers.push(orderId);
         });
-        if(!orderNumbers.length){
+        if (!orderNumbers.length) {
             alert('سفارشی انتخاب نشده است');
-        }else if(!condition){
+        } else if (!condition) {
             alert('گزینه ای انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             // var formData = [];
             // formData.status = condition;
             // formData.orders = orderNumbers;
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        orderTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        orderTable.rows('.selected').remove().draw(false);
                         toastr["success"](response.message);
-                        
-                        
-                    }else{
+
+
+                    } else {
                         toastr["error"](response.message);
                     }
-                   
+
                 }
             });
         }
-        
+
     });
-    $('#toFollowManagerForm button').on('click',function(event){
+    $('#toFollowManagerForm button').on('click', function(event) {
         event.preventDefault();
         var tableData = orderTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1428,37 +1425,37 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var status = form.find('input[name="status"]').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'statue': status};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'statue': status };
             orderNumbers.push(orderId);
         });
-        if(!orderNumbers.length){
+        if (!orderNumbers.length) {
             alert('سفارشی انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers,
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers,
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        orderTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        orderTable.rows('.selected').remove().draw(false);
                         toastr["info"](response.message);
-                    }else{
+                    } else {
                         toastr["danger"](response.message);
                     }
                 }
             });
         }
-        
+
     });
-    $('#chooseAgentForm button').on('click',function(event){
+    $('#chooseAgentForm button').on('click', function(event) {
         event.preventDefault();
         var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1466,39 +1463,39 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var agent_id = form.find('select[name="agent"]').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'agent_id': agent_id};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'agent_id': agent_id };
             orderNumbers.push(orderId);
         });
-        if(!orderNumbers.length){
+        if (!orderNumbers.length) {
             alert('سفارشی انتخاب نشده است');
-        }else if(!agent_id){
+        } else if (!agent_id) {
             alert('گزینه ای انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers,
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers,
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">ذخیره</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        unverifiedOrdersTable.rows('.selected').remove().draw(false);
                         toastr["info"](response.message);
-                    }else{
+                    } else {
                         toastr["danger"](response.message);
                     }
                 }
             });
         }
-        
+
     });
-    $('#backToSellerForm button').on('click',function(event){
+    $('#backToSellerForm button').on('click', function(event) {
         event.preventDefault();
         var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1506,37 +1503,37 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var statue = form.find('input[name="status"]').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'statue': statue};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'statue': statue };
             orderNumbers.push(orderId);
         });
-        if(false){
+        if (false) {
             alert('سفارشی انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">برگشت به فروشنده</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        unverifiedOrdersTable.rows('.selected').remove().draw(false);
                         toastr["info"](response.message);
-                    }else{
+                    } else {
                         toastr["danger"](response.message);
                     }
                 }
             });
         }
-        
+
     });
-    $('#notAbleToSendForm button').on('click',function(event){
+    $('#notAbleToSendForm button').on('click', function(event) {
         event.preventDefault();
         var tableData = unverifiedOrdersTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1544,37 +1541,37 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var statue = form.find('input[name="status"]').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'statue': statue};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'statue': statue };
             orderNumbers.push(orderId);
         });
-        if(false){
+        if (false) {
             alert('سفارشی انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">غیر قابل ارسال</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        unverifiedOrdersTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        unverifiedOrdersTable.rows('.selected').remove().draw(false);
                         toastr["info"](response.message);
-                    }else{
+                    } else {
                         toastr["danger"](response.message);
                     }
                 }
             });
         }
-        
+
     });
-    $('#toFollowManager button').on('click',function(event){
+    $('#toFollowManager button').on('click', function(event) {
         event.preventDefault();
         var tableData = sellerNoActionTable.rows({ selected: true }).data().toArray();
         var orderNumbers = [];
@@ -1582,38 +1579,38 @@ $(document).ready(function(){
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var statue = form.find('input[name="status"]').val();
-        $.each(tableData,function(index,value){
-            var orderId = {'id': parseInt(value[1]),'statue': statue};
+        $.each(tableData, function(index, value) {
+            var orderId = { 'id': parseInt(value[1]), 'statue': statue };
             orderNumbers.push(orderId);
         });
-        if(false){
+        if (false) {
             alert('سفارشی انتخاب نشده است');
-        }else{
+        } else {
             form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-            form.find('button').attr('disabled','disabled');
+            form.find('button').attr('disabled', 'disabled');
             $.ajax({
-                url:actionUrl,
-                type:'get',
-                data:{
-                    _token:CSRF_TOKEN,
-                    orderNumbers:orderNumbers
+                url: actionUrl,
+                type: 'get',
+                data: {
+                    _token: CSRF_TOKEN,
+                    orderNumbers: orderNumbers
                 },
-                success:function(response){
+                success: function(response) {
                     form.find('button').html('<strong class="h6">غیر قابل ارسال</strong>');
-                    form.find('button').attr('disabled',false);
-                    if(response.status == 1){
-                        sellerNoActionTable.rows('.selected').remove().draw( false );
+                    form.find('button').attr('disabled', false);
+                    if (response.status == 1) {
+                        sellerNoActionTable.rows('.selected').remove().draw(false);
                         toastr["info"](response.message);
-                    }else{
+                    } else {
                         toastr["danger"](response.message);
                     }
                 }
             });
         }
-        
+
     });
-    
-    
+
+
     //Handling cash and cheque in order_create page
     // $('#orderForm input[name="paymentMethod"]').on('change',function(){
     //     var form = $(this).parents('form');
@@ -1629,7 +1626,7 @@ $(document).ready(function(){
     //         cashPrice.val(numberWithCommas(overallPrice));
     //         chequePrice.val(0);
     //         prePayment.val(0);
-           
+
     //     }else{
     //         cashPrice.attr('disabled','disabled');
     //         prePayment.attr('disabled', false);
@@ -1649,13 +1646,13 @@ $(document).ready(function(){
     //         form.find('input[name="chequePrice"]').val(numberWithCommas(overallPrice));
     //     }
     // });
-    
+
     // Condition assign per order in modal 
-    $('.conditionAssignForm button').on('click',function(event){
+    $('.conditionAssignForm button').on('click', function(event) {
         event.preventDefault();
         var form = $(this).parents('form');
         form.find('button').html('<strong class="h6"><i class="fas fa-spinner"></i></strong>');
-        form.find('button').attr('disabled','disabled');
+        form.find('button').attr('disabled', 'disabled');
         var actionUrl = form.attr('action');
         var CSRF_TOKEN = form.find('input[name="_token"]').val();
         var condition = form.find('input[name="condition"]:checked').val();
@@ -1665,68 +1662,68 @@ $(document).ready(function(){
         var cancel = form.find('input[name="cancel"]:checked').val();
         var cancel_desc = form.find('textarea[name="cancel_desc"]').val();
         $.ajax({
-            url:actionUrl,
-            type:'get',
-            data:{
-                _token:CSRF_TOKEN,
-                status:condition,
-                waiting_desc:waiting_desc,
-                suspend:suspend,
-                dueDate:dueDate,
-                cancel:cancel,
-                cancel_desc:cancel_desc,
+            url: actionUrl,
+            type: 'get',
+            data: {
+                _token: CSRF_TOKEN,
+                status: condition,
+                waiting_desc: waiting_desc,
+                suspend: suspend,
+                dueDate: dueDate,
+                cancel: cancel,
+                cancel_desc: cancel_desc,
             },
-            success:function(response){
+            success: function(response) {
                 form.find('button').html('<strong class="h6">ذخیره</strong>');
-                form.find('button').attr('disabled',false);
+                form.find('button').attr('disabled', false);
             }
         });
     });
     // Invoice calculation in agent page
-    if($('.invoice_details').length){
+    if ($('.invoice_details').length) {
         var total_without_off = null;
-        var post_price = parseInt($('.post_price').html().replace(/\,/g,'',10));
-        var pre_payment = parseInt($('.pre_payment').html().replace(/\,/g,'',10));
+        var post_price = parseInt($('.post_price').html().replace(/\,/g, '', 10));
+        var pre_payment = parseInt($('.pre_payment').html().replace(/\,/g, '', 10));
         post_price = post_price || 0;
         pre_payment = pre_payment || 0;
-        $('.row_total').each(function(index,value){
+        $('.row_total').each(function(index, value) {
             total_without_off += parseInt(value.innerHTML);
         });
-        
-        $('.total').html( total_without_off + post_price - pre_payment);
-        
+
+        $('.total').html(total_without_off + post_price - pre_payment);
+
     }
     // Order_details modal calculation for agent,seller,etc..
-    if($('.orderDetail').length){
-        $('.orderDetail').each(function(index,value){
+    if ($('.orderDetail').length) {
+        $('.orderDetail').each(function(index, value) {
             var total_without_off = null;
-            var post_price = parseInt($(this).find('.post_price').html().replace(/\,/g,'',10));
-            var pre_payment = parseInt($(this).find('.pre_payment').html().replace(/\,/g,'',10));
+            var post_price = parseInt($(this).find('.post_price').html().replace(/\,/g, '', 10));
+            var pre_payment = parseInt($(this).find('.pre_payment').html().replace(/\,/g, '', 10));
             post_price = post_price || 0;
             pre_payment = pre_payment || 0;
-            $(this).find('.row_total').each(function(index,value){
+            $(this).find('.row_total').each(function(index, value) {
                 total_without_off += parseInt(value.innerHTML);
             });
-            $(this).find('.total').html( total_without_off + post_price - pre_payment);
+            $(this).find('.total').html(total_without_off + post_price - pre_payment);
         });
-     
+
     }
     // Togge allowNewOrder in callcenter users list
-    $('#callcenterTable input[name="allowNewOrder"]').on('change',function(){
-        var allowNewOrder = $(this). is(":checked");
-        if(allowNewOrder == true){
-            allowNewOrder =  'on';
-        }else{
+    $('#callcenterTable input[name="allowNewOrder"]').on('change', function() {
+        var allowNewOrder = $(this).is(":checked");
+        if (allowNewOrder == true) {
+            allowNewOrder = 'on';
+        } else {
             allowNewOrder = null;
         }
         var user_id = $('#user_id').val();
         $.ajax({
-            url:baseUrl+'/users/callCenterAddNewOrderChange/'+ user_id,
-            type:'get',
+            url: baseUrl + '/users/callCenterAddNewOrderChange/' + user_id,
+            type: 'get',
             data: {
                 allowNewOrder: allowNewOrder
             },
-            success:function(response){
+            success: function(response) {
                 toastr["success"](response);
             }
         });
@@ -1736,8 +1733,8 @@ $(document).ready(function(){
     //     event.preventDefault();
 
     // });
- 
-    $('.persianDatePicker').on('change paste keyup select',function(){
+
+    $('.persianDatePicker').on('change paste keyup select', function() {
         // $(this).siblings('.georgian_date').val()
     });
     // $('#searchForm').submit(function(event){
@@ -1763,9 +1760,9 @@ $(document).ready(function(){
     //     $(this)[0].submit();
     // });
     //Adding comma to numbers in tables 
-    $.fn.digits = function(){ 
-        return this.each(function(){ 
-            $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
+    $.fn.digits = function() {
+        return this.each(function() {
+            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
         })
     }
     $(".number").digits();
@@ -1776,32 +1773,32 @@ $(document).ready(function(){
     //     $(this).find('input[name="date"]').val(isoDate);
     //     $(this)[0].submit();
     //  });
-     //Order edit page, get order products
-    function getOrderList(){
-        
+    //Order edit page, get order products
+    function getOrderList() {
+
         var order_id = $('input[name="order_id"]').val();
         $.ajax({
-            url:baseUrl+'/admin/orders/OrdersProductForEditPage/'+ order_id,
-            type:'get',
-            success:function(response){
+            url: baseUrl + '/admin/orders/OrdersProductForEditPage/' + order_id,
+            type: 'get',
+            success: function(response) {
                 // console.log('edit',response);
                 setOrderList(response);
             }
         });
     }
-        
-    function setOrderList(orderList){
+
+    function setOrderList(orderList) {
         var orderListTable = document.querySelector('.orderList');
-        orderList.forEach(function(item){
-            if(!item.type){
+        orderList.forEach(function(item) {
+            if (!item.type) {
                 item.type = '';
             };
-            if(!item.product_type){
+            if (!item.product_type) {
                 item.product_type = '';
             }
             var div = document.createElement('div');
             div.classList.add('row');
-            div.innerHTML =  `
+            div.innerHTML = `
                 <div class="col-sm-2">
                     
                     <select class="productSelect form-control bg-sec" name="product_name" required disabled>
@@ -1838,19 +1835,19 @@ $(document).ready(function(){
         setOverAllPrice();
     }
     //Setup current bill table for agents in current-bills page
-    if($('#current_bill_form').length){
+    if ($('#current_bill_form').length) {
         var user_id = $('input[name="user_id"]').val();
         var debts = [];
         var credits = [];
         var all = [];
-        
+
         //Get credits and debts array
         $.ajax({
             url: baseUrl + '/user-inventory/currentBillsCreditor/' + user_id,
-            type:'get',
-            dataType:'json',
-            success:function(response){
-                credits = response[0].map(function(value){
+            type: 'get',
+            dataType: 'json',
+            success: function(response) {
+                credits = response[0].map(function(value) {
                     var element = {}
                     element.id = value.id;
                     element.title = value.status_id;
@@ -1862,9 +1859,9 @@ $(document).ready(function(){
                 });
                 $.ajax({
                     url: baseUrl + '/user-inventory/currentBillsDebtor/' + user_id,
-                    type:'get',
-                    success:function(response){
-                        debts = response[0].map(function(value){
+                    type: 'get',
+                    success: function(response) {
+                        debts = response[0].map(function(value) {
                             var element = {}
                             element.id = value.id;
                             element.title = 'فاکتور فروش' + value.id;
@@ -1872,52 +1869,57 @@ $(document).ready(function(){
                             element.debt = value.cashPrice;
                             element.credit = 0;
                             element.contribute = 0;
-                            value.money_circulations.forEach(function(item){
-                                element.contribute += item.sharedSpecialAmount;
-                            })
-                            // element.contribute = value.money_circulations[0].sharedSpecialAmount;
+                            value.money_circulations.forEach(function(item) {
+                                    element.contribute += item.sharedSpecialAmount;
+                                })
+                                // element.contribute = value.money_circulations[0].sharedSpecialAmount;
                             return element;
                         });
-                        all = [...debts,...credits];
+                        all = [...debts, ...credits];
                         $('#current_bill_form').DataTable({
-                            "paging":   false,
-                            'searching':false,
-                            'info':false,
-                            'ordering':false,
-                            data:all,
-                            columns:[
-                                {'data':'date'},
-                                {'data':'title','render':function(data,row){
-                                    if(data == 2){
-                                        title =  'واریز نقدی';
-                                    }else if(data == 5){
-                                        title = 'ثبت هزینه';
-                                    }else{
-                                        title = data;
+                            "paging": false,
+                            'searching': false,
+                            'info': false,
+                            'ordering': false,
+                            data: all,
+                            columns: [
+                                { 'data': 'date' },
+                                {
+                                    'data': 'title',
+                                    'render': function(data, row) {
+                                        if (data == 2) {
+                                            title = 'واریز نقدی';
+                                        } else if (data == 5) {
+                                            title = 'ثبت هزینه';
+                                        } else {
+                                            title = data;
+                                        }
+                                        return title;
                                     }
-                                    return title;
-                                }},
-                                {
-                                    'data':'debt',
-                                    'render':$.fn.dataTable.render.number( ',', '.')
                                 },
                                 {
-                                    'data':'credit',
-                                    'render':$.fn.dataTable.render.number( ',', '.')
+                                    'data': 'debt',
+                                    'render': $.fn.dataTable.render.number(',', '.')
                                 },
                                 {
-                                    'data':'contribute',
-                                    'render':$.fn.dataTable.render.number( ',', '.')
+                                    'data': 'credit',
+                                    'render': $.fn.dataTable.render.number(',', '.')
                                 },
                                 {
-                                    'data':null,
-                                    'render':function(data,type,row){
+                                    'data': 'contribute',
+                                    'render': $.fn.dataTable.render.number(',', '.')
+                                },
+                                {
+                                    'data': null,
+                                    'render': function(data, type, row) {
                                         return row.debt - row.credit - row.contribute;
                                     },
-                                    'className':'remain'
+                                    'className': 'remain'
                                 }
                             ],
-                            "order": [[ 0, "desc" ]]
+                            "order": [
+                                [0, "desc"]
+                            ]
                         });
                         calculateRemain();
                     }
@@ -1925,22 +1927,22 @@ $(document).ready(function(){
             }
         });
     }
-     
-    
-    
-    function calculateRemain(){
+
+
+
+    function calculateRemain() {
         var sum_remain = 0;
-        $('.remain').each(function(index,item){
-            if(index != 0){
+        $('.remain').each(function(index, item) {
+            if (index != 0) {
                 sum_remain = parseInt(item.innerText) + sum_remain;
                 item.innerText = sum_remain;
             }
         });
-        $('.remain').each(function(index,item){
-            if(index != 0){
+        $('.remain').each(function(index, item) {
+            if (index != 0) {
                 item.innerText = numberWithCommas(parseInt(item.innerText));
             }
-            
+
         })
     }
 
@@ -1957,4 +1959,3 @@ $(document).ready(function(){
     //     $(this)[0].submit();
     // });
 });
-
