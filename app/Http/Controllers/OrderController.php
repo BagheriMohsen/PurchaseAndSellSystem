@@ -1543,7 +1543,8 @@ class OrderController extends Controller
 
         $order = Order::findOrFail($order_id);
 
-
+        $status = $req->status;
+       
         if($status == 7) {
             $order->update([
                 'status'        =>  $req->status,
@@ -1567,7 +1568,7 @@ class OrderController extends Controller
             
         }
 
-        return response()->json(['message' => 'سفارش با موفقیت در لیست در انتظار تحویل قرار گرفت','status' => 1]);
+        return response()->json(['message' => 'تغییرات با موفقیت انجام شد','status' => 1]);
 
         
 

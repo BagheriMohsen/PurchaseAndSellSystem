@@ -246,6 +246,11 @@ class ReportController extends Controller
         $to_date    =   Carbon::parse($req->to_date);
         $products   =   Product::all();
 
+        if($from_date == $to_date) {
+            $from_date->subDay(1);
+            $to_date->addDay(1);
+        }
+
         $agents = User::with(["state", "city"])
             ->where("agent_id", $user->id)->get();
         
@@ -310,11 +315,36 @@ class ReportController extends Controller
                 $agentchief_name = $user->name." ".$user->family;
                 
                 //percent 
-                $percent_delivary           = round (($total_delivary * 100 ) / $total_order , 2);
-                $percent_collected          = round (($total_collected * 100 ) / $total_order , 2);
-                $percent_suspended          = round (($total_suspended * 100 ) / $total_order , 2);
-                $percent_cancelled          = round (($total_cancelled * 100 ) / $total_order , 2);
-                $percent_final_cancelled    = round (($total_final_cancelled * 100 ) / $total_order , 2);
+                if($total_delivary > 0): 
+                    $percent_delivary = round (($total_delivary * 100 ) / $total_order , 2);
+                else: 
+                    $percent_delivary = 0;
+                endif;
+                
+                if($total_collected > 0): 
+                    $percent_collected = round (($total_collected * 100 ) / $total_order , 2);
+                else: 
+                    $percent_collected = 0;
+                endif;
+
+                if($total_suspended > 0): 
+                    $percent_suspended  = round (($total_suspended * 100 ) / $total_order , 2);
+                else: 
+                    $percent_suspended = 0;
+                endif;
+                
+                
+                if($total_cancelled > 0): 
+                    $percent_cancelled = round (($total_cancelled * 100 ) / $total_order , 2);
+                else: 
+                    $percent_cancelled = 0;
+                endif;
+
+                if($total_final_cancelled > 0): 
+                    $percent_final_cancelled    = round (($total_final_cancelled * 100 ) / $total_order , 2);
+                else: 
+                    $percent_final_cancelled = 0;
+                endif;
 
                 // storage of this product
                 $product_storage = 'App\Models\Storage'::where([
@@ -386,7 +416,10 @@ class ReportController extends Controller
         $to_date    =   Carbon::parse($req->to_date);
         $products   =   Product::all();
 
-
+        if($from_date == $to_date) {
+            $from_date->subDay(1);
+            $to_date->addDay(1);
+        }
         
         $results = array();
    
@@ -548,14 +581,21 @@ class ReportController extends Controller
         
     }
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | payment report
+    |--------------------------------------------------------------------------
+    |*/
     public function payment_report($from_date, $to_date) {
+
+        if($from_date == $to_date) {
+            $from_date->subDay(1);
+            $to_date->addDay(1);
+        }
 
         $user = auth()->user();
         $AllSell = 
-        MoneyCirculation::where('agent_id',$user->id)
-            ->orWhere('agent_id',$user->id)
-            ->orWhere('agent_id',$user->id)->sum('amount');
+        MoneyCirculation::where('agent_id',$user->id)->sum('amount');
             
         $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
@@ -574,16 +614,17 @@ class ReportController extends Controller
             ['agent_id','=',$user->id],
             ['collected_Date','!=',null]
         ])->sum('cashPrice');
+
         $totalCreditor = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['confirmDate','!=',null]
         ])
         ->sum('bill');
         
-        $AllSell =   Order::where([
-            ['collected_Date','!=',Null],
-            ['agent_id','=',$user->id]
-        ])->sum('cashPrice');
+        // $AllSell =   Order::where([
+        //     ['collected_Date','!=',Null],
+        //     ['agent_id','=',$user->id]
+        // ])->sum('cashPrice');
 
         $orders = Order::with("products")->where([
             ["collected_Date","!=", Null],
@@ -640,22 +681,28 @@ class ReportController extends Controller
 
         $payment = PaymentCirculation::where([
             ["user_id", "=", $user->id],
-            ["status_id", "=", 8],
-            ["billDate", ">=", $from_date],
-            ["billDate", "<=", $to_date]
+            ["status_id", "=", 8]
         ])
+        ->when($from_date,function($query,$from_date){
+            return $query->where('billDate',">=",$from_date);
+        })
+        ->when($to_date,function($query,$to_date){
+            return $query->where('billDate',"<=",$to_date);
+        })
         ->latest("billDate")
         ->get();
       
 
-        $moneycircle = MoneyCirculation::where([
-            ["agent_id", "=", $user->id],
-            ["created_at", ">=", $from_date],
-            ["created_at", "<=", $to_date]
-        ])
+        $moneycircle = MoneyCirculation::where("agent_id", $user->id)
+        ->when($from_date,function($query,$from_date){
+            return $query->where('created_at',">=",$from_date);
+        })
+        ->when($to_date,function($query,$to_date){
+            return $query->where('created_at',"<=",$to_date);
+        })
         ->latest()
         ->get();
-
+  
         $merged     =   $moneycircle->merge($payment);
         $results    =   $merged->sortByDesc("created_at")->all();
         

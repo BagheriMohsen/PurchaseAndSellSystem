@@ -42,7 +42,7 @@ class StartingSeeder extends Seeder
         City::create([
             'name'      => 'قم',
             'state_id'  =>  1
-          ]);
+        ]);
         
         /*
         |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class StartingSeeder extends Seeder
           
             'percent'       =>  null,
            
-          ]);
+        ]);
         #2.create user for followUpManger
         User::create([
             'name'          =>  'حمیدرضا',

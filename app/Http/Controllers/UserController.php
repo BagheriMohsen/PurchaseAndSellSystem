@@ -674,9 +674,7 @@ class UserController extends Controller
 
         $user = User::findOrFail(auth()->user()->id);
         $AllSell = 
-        MoneyCirculation::where('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)->sum('amount');
+        MoneyCirculation::where('agent_id',$user->id)->sum('amount');
             
         $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
@@ -701,10 +699,10 @@ class UserController extends Controller
         ])
         ->sum('bill');
         
-        $AllSell =   Order::where([
-            ['collected_Date','!=',Null],
-            ['agent_id','=',$user->id]
-        ])->sum('cashPrice');
+        // $AllSell =   Order::where([
+        //     ['collected_Date','!=',Null],
+        //     ['agent_id','=',$user->id]
+        // ])->sum('cashPrice');
 
         $orders = Order::with("products")->where([
             ["collected_Date","!=", Null],

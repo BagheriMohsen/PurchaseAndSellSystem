@@ -173,7 +173,8 @@ class SearchController extends Controller
     |*/
     public function AgentChiefAdvancedSearch(Request $request){
        
-     
+        $user = auth()->user();
+        $agents = User::where("agent_id", $user->id)->get();
         $from_register      =   $request->from_register;
         $to_register        =   $request->to_register_date;
         $from_collected     =   $request->from_register_date;
@@ -207,9 +208,7 @@ class SearchController extends Controller
         ->when($followUpManager,function($query,$followUpManager){
             return $query->where('followUpManager_id','=',$followUpManager);
         })
-        ->when($agent,function($query,$agent){
-            return $query->where('agent_id','=',$agent) ;         
-        })
+     
         ->when($status,function($query,$status){
             return $query->where('status','=',$status);
         })
@@ -240,7 +239,9 @@ class SearchController extends Controller
         ->when($city,function($query,$city){
             return $query->where('city_id','=',$city); 
         })
-        ->with([
+        ->when($agent,function($query,$agent){
+            return $query->where('agent_id','=',$agent) ;         
+        })->with([
             "products",
             "seller",
             "callCenter",
