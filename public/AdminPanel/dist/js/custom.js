@@ -1676,6 +1676,7 @@ $(document).ready(function() {
             success: function(response) {
                 form.find('button').html('<strong class="h6">ذخیره</strong>');
                 form.find('button').attr('disabled', false);
+                window.location.reload()
             }
         });
     });
