@@ -1,0 +1,282 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+   نتایج جستجو پیشرفته
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'نتایج جستجو پیشرفته'} %}
+{% endblock %}
+
+{% block content %}
+
+  {% include 'Messages/switchSuccess' %}
+  {% set user = auth_user() %}
+  
+   
+     
+
+
+<!--End order details modal -->
+  <div class="row">
+    <div class="card col-sm-12">
+     
+                
+                <!-- /.card-header -->
+                <div class="card-body col-12 mx-auto table-responsive">
+                
+                  <table id="searchResult"  class="table table-striped table-bordered table-sm text-center" 
+                  cellspacing="0"  width="100%"
+                  >
+                    <thead>
+                    <tr>
+                      <th>تاریخ ثبت</th>
+                      <th>تاریخ تخصیص</th>
+                      <th>تاریخ اقدام</th>
+                      <th>استان-شهر</th>
+                      <th>آدرس</th>
+                      <th>نام خریدار</th>
+                      <th>همراه-ثابت</th>
+                      <th>نام کالا</th>
+                      <th>مبلغ پرداخت</th>
+                      <th>پیش پرداخت</th>
+                      <th>تعداد اقلام سفارش</th>
+                      <th>جمع تعداد کالا</th>
+                      <th>تخفیف</th>
+                      <th>فروشنده</th>
+                      <th>کالسنتر</th>
+                      <th>مدیر پیگیری</th>
+                      <th>نماینده</th>
+                      <th>توضیحات فروشنده</th>
+                      <th>توضیحات ارسال</th>
+                      <th>وضعیت</th>
+                      <th>جزئیات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                      {% if order.agent.agent_id == user.id %}
+                        <tr>
+                          <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
+                          <td class="timestamp">{{order.delivary_Date | date('Y-m-d') }}</td>
+                          <td class="timestamp">{{order.updated_at | date('Y-m-d') }}</td>
+                          <td>{{ order.state.name }}{{"-"}}{{ order.city.name }}</td>
+
+                          <td>{{ order.address }}</td>
+                          <td>{{ order.fullName }}</td>
+                          <td>{{ order.mobile }}{{"-"}}{{ order.telephone }}</td>
+                          <td>
+                            {% for item in order.products %}
+                                <p>{{ item.product.name }}</p>
+                            {% endfor %}
+                          </td>
+                          <td>{{ order.cashPrice | number_format }}</td>
+                          <td>{{ order.prePayment | number_format }}</td>
+                          <td>{{ order.products.count }}</td>
+                          <td>{{ order.products.sum("count") }}</td>
+                          <td>{{ order.products.sum("off") }}</td>
+
+                          {# Seller #}
+                          <td>{{order.seller.name}}{{' '}}{{order.seller.family}}
+                            {{'/'}}
+                            {{order.seller.city.name}}
+                          </td>
+
+                          {# Call   Center #}
+                          <td>{{order.callCenter.name}}{{' '}}{{order.callCenter.family}}
+                            {{'/'}}
+                            {{order.callCenter.city.name}}
+                          </td>
+
+                          {# Follow Up Manager #}
+                          <td>{{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}
+                            {{'/'}}
+                            {{order.followUpManager.city.name}}
+                          </td>
+
+                          {# Agent #}
+                          <td>{{order.agent.name}}{{' '}}{{order.agent.family}}
+                            {{'/'}}
+                            {{order.agent.city.name}}
+                          </td>
+
+                          {# Seller Description #}
+                          <td>{{ order.sellerDescription }}</td>
+
+                          {# Send Description #}
+                          <td>{{ order.sendDescription }}</td>
+
+                          {# Status #}
+                          <td>{{order.OrderStatus.name}}</td>
+                          <td>
+                            <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                              <sub class="text-dark">
+                                {{order.products.count()}}
+                              </sub>
+                              <i class="fas fa-shopping-basket crud-icon"></i>
+                            </a>
+                            {# <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+                            target="_blank">
+                              <i class="fa fa-book crud-icon"></i>
+                            </a>
+                            <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
+                                <i class="fa fa-cogs crud-icon"></i>
+                            </a> #}
+                            
+                          </td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                    </tbody>
+                    
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+          </div>
+
+    
+     
+
+          
+      {# 
+      ######### ORDERS START MODAL  
+      #}
+      {% include 'Admin/Master/Repetitive/order-details-modal' with {'orders':orders} %}
+      {#
+      ######### ORDERS END MODAL
+      #}
+
+<!-- Order condition modal -->
+<div class="modal fade" id="condition">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-success justify-content-start pb-0">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <p class="heading lead"> 
+         تعیین وضعیت
+        </p>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body text-center ">
+        <form action="{{route('orders.AgentChangeOrderStatus')}}" method="post" class="conditionAssignForm">
+          <div class="row">
+            <div class="col-6 text-right">
+              <h6>انتخاب حالات دیگر:</h6>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="7" name="condition" checked>
+                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="suspend" value="14" name="condition" >
+                <label class="form-check-label" for="suspend">معلق</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="cancel" value="13" name="condition">
+                <label class="form-check-label" for="cancel">کنسلی</label>
+              </div>
+            </div>
+            <div class="col-6 text-right">
+              <div class="waitingDeliveryField">
+                <label for="waitingDeliveryDesc">توضیحات:</label>
+                <textarea rows="10" cols="50" class="form-control" type="text"  name="waitingDeliveryDesc" value="" placeholder="توضیحات وضعیت سفارش"></textarea>
+              </div>
+              <div class="suspendField d-none">
+                <h6>انتخاب حالت تماس مجدد:</h6>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
+                  <label class="form-check-label">عدم پاسخگویی</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
+                  <label class="form-check-label">خارج از دسترس</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="dueDate" name="suspend">
+                  <label class="form-check-label">زمان سررسید</label>
+                </div>
+                <div class="dueDateFuild d-none">
+                  <label>تاریخ: </label>
+                  <input type="text" class="form-control persianDateTimepicker" name="dueDate">
+                </div>
+              </div>
+              <div class="cancelField d-none">
+                <h6>انتخاب حالت انصراف :</h6>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
+                  <label class="form-check-label">قیمت بالا</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
+                  <label class="form-check-label">کیفیت پایین</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
+                  <label class="form-check-label">ناکارآمد بودن </label>
+                </div>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
+                  <label class="form-check-label">برآورده نکردن خواسته ها </label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value=" مزاحمت" name="cancel" >
+                  <label class="form-check-label">  مزاحمت</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
+                  <label class="form-check-label">تماس دیروقت </label>
+                </div>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
+                  <label class="form-check-label"> خرید از مکان دیگر</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر" name="cancel" >
+                  <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="cancelDesc" name="cancel">
+                  <label class="form-check-label">توضیحات </label>
+                </div>
+                <div class="cancelDescField d-none">
+                   <label for="cancelDesc">توضیحات:</label>
+                    <textarea rows="10" cols="50" class="form-control " type="text"  name="cancelDesc" value="" placeholder="توضیحات دلیل کنسلی"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 text-center mt-5">
+              <button class="btn btn-info" type="button" name="button">
+                <strong class="">
+                  اعمال
+                </strong>
+              </button>
+            </div>
+          </div>
+        </from>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+
+
+     

@@ -122,7 +122,10 @@
           <select id="callcenter_id" class="form-control "  name="callCenter">
               <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
             {% for callCenter in callCenters %}
-              <option  {% if callCenter.id == user.callCenter %} selected {% endif %} value="{{callCenter.id}}">{{callCenter.username}}</option>
+              <option  {% if callCenter.id == user.callCenter %} selected {% endif %}
+               value="{{callCenter.id}}">
+                  {{callCenter.name}}{{" "}}{{ callCenter.family }}
+               </option>
             {% endfor %}
           </select>
         </div>
@@ -181,16 +184,22 @@
         </div>
         {# end auto send #}
         {# auto send #}
-        <div class="col-sm-4 mb-4 d-none">
-          <h6>نوع محاسبه هزینه کالا
-          </h6>
-          <input id="calType" type="checkbox"
+        <div class="col-sm-4 mb-4 d-none CalTypeBox">
+          <div>
+            <h6>نوع محاسبه هزینه کالا
+            </h6>
+            <input id="calType" type="checkbox"
 
-            data-toggle="switchbutton"
-            data-onstyle="success"
-            data-offstyle="info"
-            data-onlabel="مبلغ فاکتور"
-            data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}>
+              data-toggle="switchbutton"
+              data-onstyle="success"
+              data-offstyle="info"
+              data-onlabel="مبلغ فاکتور"
+              data-offlabel="تعرفه تعیین شده" name="calType" {% if user.calType != null %} checked {% endif %}>
+          </div>
+          <div class="md-form d-none">
+            <input type="text" id="factorCal" class="form-control comma" name="factorPrice" value="{{user.factorPrice | number_format}}">
+            <label for="factorCal"> مبلغ محاسبه مبلغ فاکتور</label>
+          </div>
         </div>
         {# end auto send #}
         {# Back to follow manager #}
@@ -343,7 +352,7 @@
     <div class="col-sm-5  mt-5">
       <label for="state">استان
       </label>
-      <select id="state" class="form-control"  name="state">
+      <select id="state" class="form-control"  name="state" required>
         <option value="{{null}}">استان را انتخاب کنید</option>
         {% for state in states %}
         <option {% if state.id == user.state_id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
@@ -365,7 +374,7 @@
     <div class="col-sm-5  mt-5">
       <label for="city">شهر
       </label>
-      <select id="city" class="form-control" name="city">
+      <select id="city" class="form-control" name="city" required>
         <option value="{{null}}">شهر را انتخاب کنید</option>
         {% for city in cities %}
         <option {% if city.id == user.city_id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>

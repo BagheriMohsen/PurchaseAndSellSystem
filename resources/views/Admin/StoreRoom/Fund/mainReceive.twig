@@ -38,7 +38,13 @@
                   <tbody>
                  {% for storeRoom in storeRooms %}
                     <tr class="text-center">
-                      <td><img src="{{storeRoom.product.thumbUrl}}" /></td>
+                      <td>
+                        {% if storage.image_id is not null %} 
+                          <img src="{{storeRoom.product.thumbUrl}}" />
+                        {% else %}
+                          {{"تصویر پیدا نشد"}}
+                        {% endif %}
+                      </td>
                       <td>{{storeRoom.product.name}}</td>
                       {% if storeRoom.sender_id == 1 %}
                         <td>{{'انبار مادر'}}</td>
@@ -85,7 +91,12 @@
                 
             </div>
             <div class="modal-body">
-                    <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" />
+                        {% if storage.product.image_id is not null %} 
+                          <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" />
+                        {% else %}
+                          {{"تصویر پیدا نشد"}}
+                        {% endif %}
+                    
                     <div class="d-flex mt-3">
                         <div>نام:</div>
                         <div>{{storeRoom.product.name}}</div>

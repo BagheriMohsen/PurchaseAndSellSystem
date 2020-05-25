@@ -4,8 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\StoreRoom;
 use Carbon\Carbon;
+
+
+use App\Models\StoreRoom;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Transport;
+// in this file exists App\Storage
+
 class StoreRoomController extends Controller
 {
     /**
@@ -15,17 +22,17 @@ class StoreRoomController extends Controller
      */
     public function index()
     {   
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
-            $storages = 'App\Storage'::where('warehouse_id',1)->get();
-            $allProduct = 'App\Storage'::where('warehouse_id',1)->sum('number');
+            $storages = 'App\Models\Storage'::where('warehouse_id',1)->get();
+            $allProduct = 'App\Models\Storage'::where('warehouse_id',1)->sum('number');
             
             
         }else{
-            $storages = 'App\Storage'::where('warehouse_id',2)->get();
-            $allProduct = 'App\Storage'::where('warehouse_id',2)->sum('number');
+            $storages = 'App\Models\Storage'::where('warehouse_id',2)->get();
+            $allProduct = 'App\Models\Storage'::where('warehouse_id',2)->sum('number');
            
         }
        
@@ -40,7 +47,7 @@ class StoreRoomController extends Controller
      */
     public function create()
     {
-        $products = 'App\Product'::where('status','active')->latest()->get();
+        $products = Product::where('status','active')->latest()->get();
         return view('Admin.StoreRoom.Main.storeRoom-create',compact('products'));
     }
 
@@ -116,14 +123,14 @@ class StoreRoomController extends Controller
             'status.required'   =>  'یکی از وضعیت ها را باید انتخاب کنید',
         ]);
 
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',1]
         ])->exists();
         
             /*(IN) IF product is exist in storage table*/
             if($status == true){
-                $storage = 'App\Storage'::where([
+                $storage = 'App\Models\Storage'::where([
                     ['product_id','=',$request->product],
                     ['warehouse_id','=',1]
                 ])->firstOrFail();
@@ -144,7 +151,7 @@ class StoreRoomController extends Controller
                 ]);
             }else{
                 /*IF product is not exist in storage table*/
-                $storage = 'App\Storage'::create([
+                $storage = 'App\Models\Storage'::create([
                     'user_id'       =>  auth()->user()->id,
                     'warehouse_id'  =>  1,
                     'product_id'    =>  $request->product,
@@ -165,7 +172,7 @@ class StoreRoomController extends Controller
 
             }
 
-            $product = 'App\Product'::findOrFail($request->product);
+            $product = Product::findOrFail($request->product);
            
             $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد به انبار مادر افزوده شد ';
             
@@ -187,7 +194,7 @@ class StoreRoomController extends Controller
                 'status.required'   =>  'یکی از وضعیت ها را باید انتخاب کنید',
             ]);
 
-            $status = 'App\Storage'::where([
+            $status = 'App\Models\Storage'::where([
                 ['product_id','=',$request->product],
                 ['warehouse_id','=',1]
             ])->exists();
@@ -196,7 +203,7 @@ class StoreRoomController extends Controller
 
             /*(OUT) IF product is exist in storage table */
             if($status == true){
-                $storage = 'App\Storage'::where([
+                $storage = 'App\Models\Storage'::where([
                     ['product_id','=',$request->product],
                     ['warehouse_id','=',1]
                 ])->firstOrFail();
@@ -228,7 +235,7 @@ class StoreRoomController extends Controller
         }
 
 
-        $product = 'App\Product'::findOrFail($request->product);
+        $product = Product::findOrFail($request->product);
             
         $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد از انبار خارج شد ';
         
@@ -251,13 +258,13 @@ class StoreRoomController extends Controller
             'status.required'   =>  'یکی از وضعیت ها را باید انتخاب کنید',
         ]);
 
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',1]
         ])->exists();
          /*(ANBAR) IF product is exist in storage table*/
         if($status == true){
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['product_id','=',$request->product],
                 ['warehouse_id','=',1]
             ])->firstOrFail();
@@ -300,7 +307,7 @@ class StoreRoomController extends Controller
         }else{
             return back()->with('info','این کالا در انبار موجود نیست');
         }
-        $product = 'App\Product'::findOrFail($request->product);
+        $product = Product::findOrFail($request->product);
             
         $message = 'محصول '.$product->name.' به تعداد  '.$request->number.' عدد به انبار تنخواه منتقل شد ';
         
@@ -324,7 +331,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function inStorage(Request $request){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
@@ -350,7 +357,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function outStorage(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
 
         if($role == "mainWarehouser"){
@@ -370,7 +377,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function storageManage(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $role = $user->getRoleNames()->first();
        
         if($role == "mainWarehouser"){
@@ -401,13 +408,13 @@ class StoreRoomController extends Controller
         $storeRoom = StoreRoom::findOrFail($id); // this storeRoom
         $pre_id = $id - 1 ; // previous id for find previous storeRoom
         $pre_storeRoom = StoreRoom::findOrFail($pre_id); //previous storeRoom
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$storeRoom->product_id],
             ['warehouse_id','=',$storeRoom->warehouse_id]
         ])->exists();
         /* IF product exist in fund warehouse */
         if($status == True){
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['product_id','=',$storeRoom->product_id],
                 ['warehouse_id','=',2]
             ])
@@ -424,7 +431,7 @@ class StoreRoomController extends Controller
             $message = 'کالای '.$storeRoom->product->name.' به تعداد '.$storeRoom->number.' عدد به موجودی انبار افزوده شد'; 
             return back()->with('message',$message);
         }else{
-            $storage = 'App\Storage'::create([
+            $storage = 'App\Models\Storage'::create([
                 'user_id'       =>  auth()->user()->id,
                 'warehouse_id'  =>  2,
                 'product_id'    =>  $storeRoom->product_id,
@@ -448,9 +455,9 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentExchangesForm(){
-        $products   =   'App\Product'::latest()->get();
-        $transports =   'App\Transport'::latest()->get();
-        $agents     =   'App\User'::role(['agent'])->get();
+        $products   =   Product::latest()->get();
+        $transports =   Transport::latest()->get();
+        $agents     =   User::role(['agent'])->get();
         return view('Admin.StoreRoom.Fund.AgentExchanges',compact('products','transports','agents'));
     }
     /*
@@ -468,7 +475,8 @@ class StoreRoomController extends Controller
             'receiver'      =>  'required',
             'description'   =>  'required',
             'transport'     =>  'required',
-            'status'        =>  'required'
+            'status'        =>  'required',
+            'pejak'         =>  'required | unique:store_rooms'
 
         ],[
             'date.required'             =>  'تاریخ را وارد کنید',
@@ -479,15 +487,12 @@ class StoreRoomController extends Controller
             'receiver.required'         =>  'گیرنده را انتخاب کنید',
             'description.required'      =>  'توضیحاتی یادداشت نشده',
             'transport.required'        =>  'وسیله ارسالی را مشخص کنید',
-            'status.required'           =>  'وضعیت را مشخص کنید'
+            'status.required'           =>  'وضعیت را مشخص کنید',
+            'pejak.unique'              =>  'این شماره بیجک قبلا در سیستم ثبت شده',
+            'pejak.required'            =>  'شماره بیجک را وارد کنید'         
         ]);
-<<<<<<< HEAD
-            
-     
-      
-=======
        
-        $storageStatus = 'App\Storage'::where([
+        $storageStatus = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
         ])->exists();
@@ -496,51 +501,53 @@ class StoreRoomController extends Controller
             $message = 'متاسفانه این محصول در انبار وجود ندارد';
             return redirect()->back()->with('info',$message);
         }
->>>>>>> Develop
         
-
-        $status = 'App\Storage'::where([
+       
+        $status = 'App\Models\Storage'::where([
             ['agent_id','=',$request->receiver],
             ['product_id','=',$request->product_id]
         ])->exists();
         /* IF this product number is not exist in fundwarehouse */
-        $storage = 'App\Storage'::where([
+        $storage = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
         ])->first();
-
+       
         if($storage->number < $request->number){
             $message = ' این میزان موجودی در انبار وجود ندارد.موجودی این کالا  '.$storage->number.' عدد در انبار است';
             return redirect()->back()->with('info',$message);
         }
         $image = Storage::disk('public')->put('StoreRoom',$request->File('image'));
         /* IF this product is exist in agent storage */
+        $date = Carbon::parse($request->date)->toDateString();
         if($status == True){
             /* update storage for this houseware  */
             $number = $storage->number - $request->number;
             $storage->update(['number'=>$number]);
             /* update storage for this agent  */
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['receiver_id','=',$request->receiver],
                 ['product_id','=',$request->product_id]
             ])->firstOrFail();
             $number = $storage->number + $request->number;
             $storage->update(['number'=>$number]);
             /* create storeRoom for fundWarehouse out */
+           
             $storeRoom = StoreRoom::create([
-                'user_id'       =>  auth()->user()->id,
-                'warehouse_id'  =>  2,
-                'storage_id'    =>  $storage->id,
-                'sender_id'     =>  2,
-                'receiver_id'   =>  $request->receiver,
-                'product_id'    =>  $request->product,
-                'transport_id'  =>  $request->transport,
-                'number'        =>  $request->number,
-                'description'   =>  $request->description,
-                'status'        =>  $request->status,
-                'image'         =>  $image,
-                'in_out'        =>  7,
-                'out_date'      =>  $request->date
+                'user_id'           =>  auth()->user()->id,
+                'warehouse_id'      =>  2,
+                'storage_id'        =>  $storage->id,
+                'sender_id'         =>  2,
+                'receiver_id'       =>  $request->receiver,
+                'product_id'        =>  $request->product,
+                'transport_id'      =>  $request->transport,
+                'number'            =>  $request->number,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'image'             =>  $image,
+                'in_out'            =>  7,
+                'out_date'          =>  $date,
+                'pejak'             =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -555,7 +562,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date
+                'in_date'       =>  $date,
+                'pejak'         =>  $request->pejak
             ]);
             $message = 'کالای '.$storeRoom->product->name.' به انبار نماینده افزوده شد ';
             return redirect()->route('storeRooms.index')->with('message',$message);
@@ -576,7 +584,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  7,
-                'out_date'      =>  $request->date
+                'out_date'      =>  $date,
+                'pejak'         =>  $request->pejak
             ]);
             /* create storeRoom for agent in */
             StoreRoom::create([
@@ -591,7 +600,8 @@ class StoreRoomController extends Controller
                 'status'        =>  $request->status,
                 'image'         =>  $image,
                 'in_out'        =>  10,
-                'in_date'       =>  $request->date
+                'in_date'       =>  $date,
+                'pejak'         =>  $request->pejak
             ]);
             /* update storage for this houseware  */
             $number = $storage->number - $request->number;
@@ -628,19 +638,19 @@ class StoreRoomController extends Controller
             'status.required'           =>  'وضعیت را مشخص کنید'
         ]);
         /* Check Agent warehouse for this product  */
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$request->sender]
         ])->exists();
         
-        $sender_storage = 'App\Storage'::where([
+        $sender_storage = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$request->sender]
         ])->first();
        
-        $agent = 'App\User'::findOrFail($request->sender);
+        $agent = User::findOrFail($request->sender);
        
-        
+        $date = Carbon::parse($request->date)->toDateString();
         if($status == True){
             /* IF storage number less than request number */
             if($sender_storage->number < $request->number){
@@ -650,7 +660,7 @@ class StoreRoomController extends Controller
             }
        
             /* Check Agent warehouse for this product  */
-            $receiver_status = 'App\Storage'::where([
+            $receiver_status = 'App\Models\Storage'::where([
                 ['product_id','=',$request->product],
                 ['agent_id','=',$request->receiver]
             ])->exists();
@@ -670,7 +680,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  8,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for receiver agent
             StoreRoom::create([
@@ -684,7 +694,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  10,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for sender_id agent
             StoreRoom::create([
@@ -698,7 +708,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  12,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             
             
@@ -718,7 +728,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnToMain(Request $request){
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
         ])->exists();
@@ -727,14 +737,15 @@ class StoreRoomController extends Controller
             return back()->with('info','این کالا در انبار موجود نیست');
         }
        
-        $fundWarestorage = 'App\Storage'::where([
+        $fundWarestorage = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',2]
         ])->first();
-        $mainWarestorage = 'App\Storage'::where([
+        $mainWarestorage = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['warehouse_id','=',1]
         ])->first();
+        $date = Carbon::parse($request->date)->toDateString();
         if($fundWarestorage->number > $request->number){
             
             // create store room for fundWareHouse
@@ -749,7 +760,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  9,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // create store room for mainWareHouse
             StoreRoom::create([
@@ -763,7 +774,7 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  15,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
             // FundWareHouse Storage 
             $numberInFundHouse = $fundWarestorage->number - $request->number;
@@ -794,7 +805,7 @@ class StoreRoomController extends Controller
         $pre_id = $id -1;
         $storeRoom      = StoreRoom::findOrFail($id);
         $pre_storeRoom = StoreRoom::findOrFail($pre_id); 
-        $mainWarestorage = 'App\Storage'::where([
+        $mainWarestorage = 'App\Models\Storage'::where([
             ['product_id','=',$storeRoom->product_id],
             ['warehouse_id','=',1]
         ])->first();
@@ -811,8 +822,13 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function returnToFundForm(){
-        $products = 'App\Product'::latest()->get();
-        return view('Admin.StoreRoom.Agent.returnToFund',compact('products'));
+        $user = User::findOrFail(auth()->user()->id);
+        $storages = 'App\Models\Storage'::Where([
+            ['agent_id','=',$user->id],
+            ['number','>',0]
+        ])->get();
+        
+        return view('Admin.StoreRoom.Agent.returnToFund',compact('storages'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -821,12 +837,12 @@ class StoreRoomController extends Controller
     |*/
     public function returnToFund(Request $request){
         $id = auth()->user()->id;
-        $user = 'App\User'::findOrFail($id);
+        $user = User::findOrFail($id);
 
         if($user->backToWareHouse == null){
             return back()->with('info','دسترسی شما برای برگشت کالا توسط ادمین محدود شده است');
         }
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$id]
         ])->exists();
@@ -835,11 +851,11 @@ class StoreRoomController extends Controller
             return back()->with('info','این کالا در انبار شما موجود نیست');
         }
        
-        $AgentStorage = 'App\Storage'::where([
+        $AgentStorage = 'App\Models\Storage'::where([
             ['product_id','=',$request->product],
             ['agent_id','=',$id]
         ])->first();
-       
+        $date = Carbon::parse($request->date)->toDateString();
         if($AgentStorage->number > $request->number){
             
             // create store room for AgentStorage
@@ -854,9 +870,9 @@ class StoreRoomController extends Controller
                 'description'       =>  $request->description,
                 'status'            =>  $request->status,
                 'in_out'            =>  12,
-                'out_date'          =>  $request->date
+                'out_date'          =>  $date
             ]);
-            $FundWareStorage = 'App\Storage'::where([
+            $FundWareStorage = 'App\Models\Storage'::where([
                 ['product_id','=',$request->product],
                 ['warehouse_id','=',2]
             ])->firstOrFail();
@@ -872,7 +888,7 @@ class StoreRoomController extends Controller
                 'description'           =>  $request->description,
                 'status'                =>  $request->status,
                 'in_out'                =>  16,
-                'out_date'              =>  $request->date
+                'out_date'              =>  $date
             ]);
             // AgentWareHouse Storage 
             $numberInAgent = $AgentStorage->number - $request->number;
@@ -912,7 +928,7 @@ class StoreRoomController extends Controller
 
         $storeRoom->update(['in_date'=>Carbon::now(),'in_out'=>13]);
         $pre_storeRoom->update(['in_date'=>Carbon::now()]);
-        $FundWareStorage = 'App\Storage'::where([
+        $FundWareStorage = 'App\Models\Storage'::where([
             ['product_id','=',$storeRoom->product_id],
             ['warehouse_id','=',2]
         ])->firstOrFail();
@@ -958,7 +974,7 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentReceive(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storeRooms = StoreRoom::where(['receiver_id'=>$user->id,'in_out'=>10])->latest()->paginate(10);
         return view('Admin.StoreRoom.Agent.AgentReceive',compact('storeRooms'));
     }
@@ -969,18 +985,18 @@ class StoreRoomController extends Controller
     |*/
     public function acceptFundReceive(Request $request,$id){
        
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $storeRoom = StoreRoom::findOrFail($id); // this storeRoom
         $pre_id = $id - 1 ; // previous id for find previous storeRoom
         $pre_storeRoom = StoreRoom::findOrFail($pre_id); //previous storeRoom
-        $status = 'App\Storage'::where([
+        $status = 'App\Models\Storage'::where([
             ['product_id','=',$storeRoom->product_id],
             ['agent_id','=',$user->id]
         ])->exists();
         
         /* IF product exist in fund warehouse */
         if($status == True){
-            $storage = 'App\Storage'::where([
+            $storage = 'App\Models\Storage'::where([
                 ['product_id','=',$storeRoom->product_id],
                 ['agent_id','=',$user->id]
             ])
@@ -1005,7 +1021,7 @@ class StoreRoomController extends Controller
             return back()->with('message',$message);
         }else{
            
-            $storage = 'App\Storage'::create([
+            $storage = 'App\Models\Storage'::create([
                 'user_id'       =>  auth()->user()->id,
                 'agent_id'      =>  $user->id,
                 'product_id'    =>  $storeRoom->product_id,
@@ -1035,9 +1051,9 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentIndexWarehouse(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $storages = 'App\Storage'::where('agent_id',$user->id)->latest()->paginate(10);
-        $allProduct = 'App\Storage'::where('agent_id',$user->id)->sum('number');
+        $user = User::findOrFail(auth()->user()->id);
+        $storages = 'App\Models\Storage'::where('agent_id',$user->id)->latest()->paginate(10);
+        $allProduct = 'App\Models\Storage'::where('agent_id',$user->id)->sum('number');
         return view('Admin.StoreRoom.Agent.index',compact('storages','allProduct'));
     }
     /*
@@ -1063,7 +1079,7 @@ class StoreRoomController extends Controller
         $storeRooms = StoreRoom::where([
             ['receiver_id','=',$id],
             ['in_out','=',11]
-        ])->latest()->paginate(10);
+        ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
     }
     /*
@@ -1075,7 +1091,7 @@ class StoreRoomController extends Controller
         $id = auth()->user()->id;
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$id],
-            ['in_out','=',13]
+            ['in_out','=',14]
         ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
@@ -1087,9 +1103,9 @@ class StoreRoomController extends Controller
     |*/
     public function AgentsListForCheckStorage(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
         
         return view('Admin.StoreRoom.AgentChief.check-agents-storage-list',compact('agents'));
     
@@ -1101,17 +1117,17 @@ class StoreRoomController extends Controller
     |*/
     public function AgensStorageWareHoouse($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
         }
 
-        $storages = 'App\Storage'::where('agent_id',$agent_id)->latest()->get();
-        $allProduct = 'App\Storage'::where('agent_id',$agent_id)->sum('number');
-        return view('Admin.StoreRoom.AgentChief.agents-storage',compact('storages','allProduct'));
+        $storages = 'App\Models\Storage'::where('agent_id',$agent_id)->latest()->get();
+        $allProduct = 'App\Models\Storage'::where('agent_id',$agent_id)->sum('number');
+        return view('Admin.StoreRoom.AgentChief.agents-storage',compact('storages','allProduct', 'user'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -1119,9 +1135,9 @@ class StoreRoomController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgensStorageIn($agent_id){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
@@ -1132,6 +1148,7 @@ class StoreRoomController extends Controller
         ])->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentIn',compact('storeRooms'));
     }
+
     /*
     |--------------------------------------------------------------------------
     | Agens Storage Out
@@ -1139,19 +1156,21 @@ class StoreRoomController extends Controller
     |*/
     public function AgensStorageOut($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
-            return abort(404);
+            return abort(403);
         }
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$agent_id],
             ['in_out','=',12]
-        ])->latest()->paginate(15);
+        ])
+        ->latest()->paginate(15);
         return view('Admin.StoreRoom.Agent.AgentOut',compact('storeRooms'));
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Agens Delivery To Customers
@@ -1159,20 +1178,320 @@ class StoreRoomController extends Controller
     |*/
     public function AgensDeliveryToCustomers($agent_id){
        
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
-            return abort(404);
+            return abort(403);
         }
 
         $storeRooms = StoreRoom::where([
             ['sender_id','=',$agent_id],
-            ['in_out','=',13]
+            ['in_out','=',14]
         ])->latest()->paginate(15);
         
         return view('Admin.StoreRoom.Agent.delivery-to-customers',compact('storeRooms'));
     }
+    /*
+    |--------------------------------------------------------------------------
+    | Destroy Row from store_rooms table
+    |--------------------------------------------------------------------------
+    |*/
+    public function delete($id){
+        
+        $storeRoom = StoreRoom::findOrFail($id);
+
+        /** Agent To Agent with FundHouseWare */
+        if($storeRoom->in_out == 8 && is_null($storeRoom->in_date) ){
+            
+            return $this->AgentToAgentDelete($storeRoom,$id);
+
+        /** Agent In OnConfirm */
+        }elseif($storeRoom->in_out == 12 && is_null($storeRoom->in_date) ){
+            
+            $pre_id = $id - 1;
+            $pre_id2 = $id - 2;
+            $pre2_storeRoom = StoreRoom::find($pre_id2);
+
+            if(is_null($pre2_storeRoom)){
+
+                return $this->NormalDelete($storeRoom,$id);
+
+            }elseif($pre2_storeRoom->in_out == 8){
+                $pre_storeRoom = StoreRoom::findOrFail($pre_id);
+                $pre2_storeRoom = StoreRoom::findOrFail($pre_id2);
+                /** storage */
+                $storage = 'App\Models\Storage'::findOrFail($storeRoom->storage_id);
+                $number = $storage->number + $storeRoom->number;
+                $storage->update(['number'=>$number]);
+                $pre_storeRoom->delete();
+                $pre2_storeRoom->delete();
+                $storeRoom->delete();
+
+                return back()->with('message','با موفقیت حدف شد و موجودی به انبار بازگشت داده شد');
+                
+            }else{
+
+                return $this->NormalDelete($storeRoom,$id);
+
+            }
+            
+        /** send To Agent */
+        }elseif($storeRoom->in_out == 7 && is_null($storeRoom->in_date) ){
+
+            return $this->NormalDelete($storeRoom,$id);
+
+        /** send To FundHouseWare */
+        }elseif($storeRoom->in_out == 2 && is_null($storeRoom->out_date)){
+            
+            return $this->NormalDelete($storeRoom,$id);
+
+        /** return To MainHouseWare */
+        }elseif($storeRoom->in_out == 9 && is_null($storeRoom->in_date)){
+
+            return $this->NormalDelete($storeRoom,$id);
+
+        }else{
+            return back()->with('info','متاسفانه دیر اقدام کردید این قابلیت از کار افتاده است');
+        }
+
+        
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Normal Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function NormalDelete($storeRoom,$id){
+        $storage = 'App\Models\Storage'::findOrFail($storeRoom->storage_id);
+        $number = $storage->number + $storeRoom->number;
+        $storage->update(['number'=>$number]);
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** delete store room */
+        $storeRoom->delete();
+        /** delete next store room */
+        $next_storeRoom->delete();
+        return back()->with('message','با موفقیت حذف شد و موجودی به انبار بازگشت داده شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent To Agent Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentDelete($storeRoom,$id){
+        $next_id    = $id + 1;
+        $next_id2   = $id + 2;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        $next2_storeRoom = StoreRoom::findOrFail($next_id2);
+        /** delete store room */
+        $storeRoom->delete();
+        /** delete next store room */
+        $next_storeRoom->delete();
+        /** delete next 2 store room */
+        $next2_storeRoom->delete();
+        $storage = 'App\Models\Storage'::findOrFail($next2_storeRoom->storage_id);
+        $number = $storage->number + $storeRoom->number;
+        $storage->update(['number'=>$number]);
+        return back()->with('message','با موفقیت حدف شد و موجودی به انبار نماینده بازگشت داده شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function storeRoomsUpdate(Request $request,$id){
+        $storeRoom = StoreRoom::findOrFail($id);
+        
+        if($storeRoom->in_out == 8 && is_null($storeRoom->in_date) ){
+            
+            return $this->AgentToAgentFund($storeRoom,$id,$request);
+
+        /** Agent In OnConfirm */
+        }elseif($storeRoom->in_out == 12 && is_null($storeRoom->in_date) ){
+            
+            $pre_id = $id - 1;
+            $pre_id2 = $id - 2;
+            $pre2_storeRoom = StoreRoom::find($pre_id2);
+
+            if(is_null($pre2_storeRoom)){
+
+                return $this->NormalUpdate($storeRoom,$id,$request);
+
+            }elseif($pre2_storeRoom->in_out == 8){
+
+                return $this->AgentToAgentOut($storeRoom,$id,$request,$pre_id,$pre_id2);
+                
+            }else{
+
+                return $this->NormalUpdate($storeRoom,$id,$request);
+
+            }
+            
+        /** send To Agent */
+        }elseif($storeRoom->in_out == 7 && is_null($storeRoom->in_date) ){
+
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        /** send To FundHouseWare */
+        }elseif($storeRoom->in_out == 2 && is_null($storeRoom->out_date)){
+            
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        /** return To MainHouseWare */
+        }elseif($storeRoom->in_out == 9 && is_null($storeRoom->in_date)){
+
+            return $this->NormalUpdate($storeRoom,$id,$request);
+
+        }else{
+            return back()->with('info','متاسفانه دیر اقدام کردید این قابلیت از کار افتاده است');
+        }
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Normal Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function NormalUpdate($storeRoom,$id,$request){
+        $storage = 'App\Models\Storage'::findOrFail($storeRoom->storage_id);
+
+        
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update next store room */
+        $next_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Agent To Agent Update-Agent
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentOut($storeRoom,$id,$request,$pre_id,$pre_id2){
+        $storage = 'App\Models\Storage'::findOrFail($storeRoom->storage_id);
+       
+        $pre_storeRoom = StoreRoom::findOrFail($pre_id);
+       
+        $pre2_storeRoom = StoreRoom::findOrFail($pre_id2);
+        
+        
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $storeRoom = StoreRoom::findOrFail($id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update pre store room */
+        $pre_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update pre 2 store room */
+        $pre2_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | store Rooms Agent To Agent Update-Fund
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentToAgentFund($storeRoom,$id,$request){
+        
+        $next_id    = $id + 1;
+        $next_id2   = $id + 2;
+       
+        $next_storeRoom     = StoreRoom::findOrFail($next_id);
+        $next2_storeRoom    = StoreRoom::findOrFail($next_id2);
+        $storage = 'App\Models\Storage'::findOrFail($next2_storeRoom->storage_id);
+        $cal = $storage->number + $storeRoom->number;
+        if($cal < $request->number){
+            return back()->with('info','این تعداد کالا از این محصول در انبار وجود ندارد');
+        }
+
+        if($storeRoom->number > $request->number){
+            $number = $storeRoom->number - $request->number;
+            $number = $storage->number + $number;
+
+        }elseif($storeRoom->number < $request->number){
+            $number = $request->number - $storeRoom->number ;
+            $number = $storage->number - $number;
+
+        }else{
+            $number = $storage->number;
+        }
+
+        $next_id = $id + 1;
+        $next_storeRoom = StoreRoom::findOrFail($next_id);
+        /** update store room */
+        $storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        /** update next store room */
+        $next_storeRoom->update([
+            'number'=>$request->number,
+            'description'=>$request->desc
+            ]);
+        $storage->update([
+            'number'=>$number]);
+        
+
+        return back()->with('message','موجودی انبار به روز رسانی شد');
+    }
+
 
 }

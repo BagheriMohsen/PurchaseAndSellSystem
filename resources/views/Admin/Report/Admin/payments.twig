@@ -1,0 +1,78 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  پرداخت ها و عودت وجه
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'پرداخت ها و عودت وجه'} %}
+{% endblock %}
+
+{% block content %}
+
+
+<form id="paymentReportForm" action="{{route('report.payments_filter')}}" method="post" class="row pt-2 pb-2">
+
+  <input type="hidden" name="_token" value="{{csrf_token()}}" >
+
+    <div class="col-sm-3 mx-auto">
+      <label for="from">از تاریخ</label>
+      <input class="form-control persianDatePicker" type="text">
+      <input class="georgian_date" type="hidden" name="from">
+    </div>
+    <div class="col-sm-3 mx-auto">
+      <label for="to">تا تاریخ</label>
+      <input class="form-control persianDatePicker" type="text">
+      <input class="georgian_date" type="hidden" name="to">
+    </div>
+    <div class="col-sm-3 mx-auto">
+        <label for="agents">نمایندگان</label>
+        <select class="form-control" name="agents" id="">
+          <option value="{{null}}">همه</option>
+          {% for agent in agents %}
+            <option value="{{agent.id}}">
+              {{agent.name}}{{' '}}{{agent.family}}
+              {{'/'}}
+              {{agent.state.name}}{{'-'}}{{agent.city.name}}
+            </option>
+          {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-sm-3">
+      <label for="report_status">نوع گزارش</label>
+      <!-- Group of default radios - option 2 -->
+      <div class="custom-control custom-radio">
+        <input name="report_status" value="2" type="radio" class="custom-control-input" id="defaultGroupExample1" checked>
+        <label class="custom-control-label" for="defaultGroupExample1">پرداخت های تایید شده</label>
+      </div>
+      <div class="custom-control custom-radio">
+        <input name="report_status" value="8" type="radio" class="custom-control-input" id="defaultGroupExample2" >
+        <label class="custom-control-label" for="defaultGroupExample2">عودت ‌وجه تایید شده</label>
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-5">
+        
+        <button class="btn btn-success btn-sm text-dark">
+            <strong class="h6">
+                مشاهده
+            </strong>
+        </button>
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

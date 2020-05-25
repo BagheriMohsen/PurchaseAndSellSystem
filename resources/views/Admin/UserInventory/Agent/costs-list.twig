@@ -18,6 +18,223 @@
 
 {% block content %}
 
+{% include 'Messages/message' %}
+{% include 'Messages/info' %}
+
+
+<div class="row">
+  <div class="card col-sm-12 p-3">
+
+      <div class="row p-4">
+        <button class="btn btn-info btn-sm" type="button" data-toggle="modal" href="#cost">
+            <strong class="text-dark h6">
+              ثبت هزینه
+            </strong>
+          </button>
+      </div>
+
+
+      <table   class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            {# <th>کد پیگیری</th> #}
+        
+            <th>تاریخ</th>
+            <th>تاریخ تایید-رد</th>
+            <th>مبلغ</th>
+            <th>توضیحات</th>
+       
+            <th>عملیات </th>
+          </tr>
+        </thead>
+        <tbody>
+        {# {% for order in orders %} #}
+        {% for cost in costs %}
+          <tr>
+            {# <td>{{cost.trackingCode}}</td> #}
+            <td class="justDate">{{cost.billDate}}</td>
+            {% if cost.OnconfirmDate is not null %}
+              <td title="تایید نشده" class="justDate text-danger">{{cost.OnconfirmDate}}</td>
+            {% elseif cost.confirmDate is null %}
+              <td class="text-warning">{{'بررسی نشده'}}</td>
+            {% else %}
+              <td title="تایید شده" class="justDate text-primary">{{cost.confirmDate}}</td>
+            {% endif %}
+            
+            <td>{{cost.bill | number_format}}</td>
+            <td>{{cost.billDesc | raw }}</td>
+        
+
+            <td>
+              {% if cost.status_id == 4 %}
+                <a title="حذف" class="text-danger m-1" 
+                  href="{{route('userInventory.AgentCostsDelete',cost.id)}}">
+                  <i class="far fa-trash-alt crud-icon"></i>
+                </a>
+                <a title="ویرایش" class="text-warning m-1" 
+                  data-toggle="modal" data-target="#edit{{cost.id}}">
+                  <i class="far fa-edit crud-icon"></i>
+                </a>
+              {% else %}
+                <a title="از کار افتاده">
+                  <i class="far fa-trash-alt crud-icon"></i>
+                </a>
+                <a title="از کار افتاده">
+                  <i class="far fa-edit crud-icon"></i>
+                </a>
+              {% endif %}
+              
+            </td>
+          </tr>
+          {% endfor %}
+          {# {% endfor %} #}
+        </tbody>
+      </table>
+      <div class="col-12">
+      {# <form class="" action="" method="post" id=""> 
+        <button class="btn btn-default" type="submit">
+          <strong class="">
+            تایید پرداخت  
+          </strong>
+        </button>
+      </form> #}
+    </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% for cost in costs %}
+{# Edit #}
+<!-- Pay orders modal -->
+<div class="modal fade" id="edit{{cost.id}}">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-info space-content-between flex-row-reverse p-2">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <span class="p-1  text-dark">
+          <div class="justDate">{{cost.billDate}}</div>
+        </span>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container">
+         <form action="{{route('userInventory.AgentCostsUpdate',cost.id)}}" 
+         class="row label-light" method="POST" id="payOrderList" 
+         enctype="multipart/form-data">
+          <input name="_token" type="hidden" value="{{ csrf_token() }}" />
+          <div class="col-sm-6 mt-3">
+            <label for="price">مبلغ-تومان
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="price" value="{{cost.bill | number_format}}" required>
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="date">تاریخ
+              <span class="text-danger">*</span>
+              
+            </label>
+            <input class="form-control persianDatePicker" type="text" value="" required autocomplete="off">
+            <input type="hidden" name="date">
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="desc">توضیحات
+              <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" type="text"  name="desc" value="" required>{{cost.billDesc | raw }}</textarea>
+          </div>
+          <div class="col-12 mt-3 text-center">
+           <button class="btn btn-primary" type="submit" name="button">
+              <strong class="">
+                ویرایش هزینه
+              </strong>
+            </button>
+          </div>
+          
+        </form>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+{# End Edit #}
+{% endfor %}
+
+
+
+
+
+
+<!-- Pay orders modal -->
+<div class="modal fade" id="cost">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-info space-content-between flex-row-reverse p-2">
+        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+        <span class="p-1">ثبت هزینه</span>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container">
+         <form id="costForm" action="{{route('userInventory.AgentCostsStore')}}" 
+         class="row label-light" method="POST" id="payOrderList" 
+         enctype="multipart/form-data">
+          <input name="_token" type="hidden" value="{{ csrf_token() }}" />
+          <div class="col-sm-6 mt-3">
+            <label for="price">مبلغ-تومان
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control comma" type="text" name="price" value="" required>
+            
+          </div>
+          <div class="col-sm-6 mt-3">
+            <label for="date">تاریخ
+              <span class="text-danger">*</span>
+            </label>
+            <input class="form-control persianDatePicker" type="text" value="" required autocomplete="off">
+            <input type="hidden" class="georgian_date" name="date"></input> 
+          </div>
+          <div class="col-sm-12 mt-3">
+            <label for="desc">توضیحات
+              <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" type="text"  name="desc" value="" required></textarea>
+          </div>
+          <div class="col-12 mt-3 text-center">
+           <button class="btn btn-primary" type="submit" name="button">
+              <strong class="">
+                ثبت هزینه
+              </strong>
+            </button>
+          </div>
+          
+        </form>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 
 {% endblock %}
 

@@ -122,3 +122,24 @@ table.dataTable tbody td.select-checkbox, table.dataTable tbody th.select-checkb
 .nav-treeview .nav-item{
     font-size: 14px;
 }
+.buttons-excel{
+    background: #9393a9!important;
+    color: #f3f3f3!important;
+    padding: 7px 10px!important;
+    border-radius: 3px!important;
+    border: 0!important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+.select-checkbox{
+    width: 30px;
+}
+td,th{
+    vertical-align: middle!important;
+}
+/* .modal .modal-dialog.modal-bottom-left{
+    top:0;
+} */
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

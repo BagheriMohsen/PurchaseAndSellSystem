@@ -33,6 +33,7 @@
             <th>تاریخ ارسال</th>
             <th>تاریخ دریافت</th>
             <th >جمع(تومان)</th>
+            <th >عملیات</th>
           </tr>
           </thead>
           <tbody>
@@ -56,7 +57,7 @@
               <td>{{storeRoom.status}}</td>
               <td>{{storeRoom.description}}</td>
               <td>{{storeRoom.number}}</td>
-              <td class="">{{storeRoom.out_date | date('Y/m/d')}}</td>
+              <td class="justDate">{{storeRoom.out_date | date('Y-m-d')}}</td>
               {% if storeRoom.in_date is null  %}
                 <td class="text-danger">{{'تایید نشده'}}</td>
               {% else %}
@@ -64,11 +65,40 @@
               {% endif %}
               {% set price = storeRoom.product.price * storeRoom.number %}
               <td>{{ price|number_format}}</td>
+
+              {% if storeRoom.in_date == Null %}
+                <td>
+                  <a href="{{route('storeRooms.delete',storeRoom.id)}}" title="حذف" type="submit">
+                    <i class="far fa-trash-alt text-danger crud-icon"></i>
+                  </a>
+                  <a title="ویرایش" class="text-warning m-1" 
+                    data-toggle="modal" data-target="#editStoreRoom{{storeRoom.id}}">
+                    <i class="far fa-edit crud-icon"></i>
+                  </a>
+                </td>
+              {% else %}
+                <td>
+                  <a title="از کار افتاده" type="submit">
+                    <i class="fas fa-trash-alt crud-icon"></i>
+                  </a>
+                  <a title="از کار افتاده" >
+                    <i class="fas fa-edit crud-icon"></i>
+                  </a>
+                </td>
+              {% endif %}
             </tr>
           {% endfor %}
           </tbody>
         </table>
 
+
+        {# 
+        ###### store room edit modal  
+        #}
+        {% include 'Admin/Master/Repetitive/StoreRoom/edit-modal' %}
+        {# 
+        ###### store room edit modal  
+        #}
                 
                 
 {% endblock %}

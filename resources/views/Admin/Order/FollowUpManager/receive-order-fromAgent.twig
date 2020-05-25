@@ -34,51 +34,79 @@
                   
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body col-12 mx-auto">
+                <div class="card-body col-12 mx-auto table-responsive">
                 
-                  <table  id="unverifiedOrdersForm" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
+                  <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
                 width="100%">
                     <thead>
                     <tr>
                       <th></th>
-                      <th>شماره<br> سفارش</th>
-                      <th>نام خریدار</th>
-                      <th>استان-شهر</th>
-                      <th>همراه-ثابت</th>
-                      <th>کد پیگیری</th>
-                      <th>نوع پرداخت</th>
+                      <th class="d-none">شماره سفارش</th>
                       <th>تاریخ ثبت</th>
+                      <th>تاریخ برگشت</th>
+                      <th>استان-شهر</th>
+                      <th>آدرس مشتری</th>
+                      <th>نام خریدار</th>
+                      <th>همراه-ثابت</th>
+                      <th>محصولات</th>
+                      <th>مبلغ قابل پرداخت</th>
+                      <th>پیش پرداخت</th>
+                      <th>تعداد اقلام سفارش</th>
+                      <th>جمع تعداد کالا</th>
+                      <th>تخفیف</th>
                       <th>فروشنده</th>
-                      <th>عملیات</th>
+                      <th>نماینده</th>
+                      <th>جزئیات</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for order in orders %}
                       <tr>
-                       <td></td>
-                        <td>{{order.id}}</td>
-                        <td>{{order.fullName}}</td>
+                        <td></td>
+                        <td class="d-none">{{order.id}}</td>
+                        <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
+                        <td class="timestamp">{{order.returnToManager_Date | date('Y-m-d') }}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+                        <td>{{order.address}}</td>
+                        <td>{{order.fullName}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
-                        <td>{{order.trackingCode}}</td>
-                        {% if order.paymentMethod == 'cash' %}
-                          <td>{{'نقدی'}}</td>
-                        {% else %}
-                          <td>{{'غیر نقدی'}}</td>
-                        {% endif %}
-                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        <td> فروشنده اول</td>
                         <td>
-                          <a title="ویرایش سفارش" class="text-secondary" >
-                              <i class="far fa-edit crud-icon"></i>
-                          </a>
+                          {% for ProductItem in order.products %}
+                          <span>
+                            {{ProductItem.product.name}}
+                            {{' '}}
+                            {% if ProductItem.type is not null %}
+                              ({{ProductItem.type.name}})
+                            {% endif %}
+                          </span>
+                          {% endfor %}
+                        </td>
+                        <td>{{order.cashPrice | number_format}}</td>
+                        <td>{{order.prePayment | number_format}}</td>
+                        <td>{{order.products.count}}</td>
+                        <td>{{order.products.sum("count")}}</td>
+                        <td>{{order.products.sum("off")}}</td>
+                        <td>{{order.seller.name }}{{" "}}{{ order.seller.family }}</td>
+                        <td>{{ order.agent.name }}{{" "}}{{ order.agent.family }}</td>
 
+                        <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
                               {{order.products.count()}}
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>
+                          <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+                          target="_blank">
+                            <i class="fa fa-book crud-icon"></i>
+                          </a>
+                          {# <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
+                              <i class="fa fa-cogs crud-icon"></i>
+                          </a> #}
+                          {# <a  title="ویرایش" class="text-warning mx-auto"
+                            href="#">
+                            <i class="far fa-edit crud-icon"></i>
+                          </a> #}
                         </td>
                       </tr>
                     {% endfor %}
@@ -119,15 +147,17 @@
               </button>
               <input type="hidden" name="status" value="9" />
           </form>
-          <form class="" action="" method="post" id="">
+          {# <form class="" action="" method="post" id="">
               <button class="col-sm-6  btn btn-mdb-color btn-sm mx-auto" type="submit" name="button">
                 <strong class="h6">
                   اختصاص   
                 </strong>
               </button>
-          </form>
+          </form> #}
          </div>
-        <div class="col-6">
+
+
+        {# <div class="col-6">
           <form class="" action="" id="chooseAgentForm">
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
             <h6>نوع ارسال:</h6>
@@ -196,188 +226,19 @@
           <hr>
           
         </div>
-         
+          #}
         
       </div>
      
 
           
-{# Order Product #}
-{% for order in orders %}
-
-<!-- Order details modal -->
-<div class="modal fade orderDetail" id="order{{order.id}}">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header bg-success justify-content-start pb-0">
-        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="white-text">&times;</span>
-        </button>
-        <p class="heading lead"> 
-          مشخصات سفارش
-          {{order.fullName}}
-        </p>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body text-center  ">
-        <table  class="table pt-2 pb-2 text-center">
-          <tbody>
-            <tr class="text-center">
-              <th>نام و نام خانوادگی</th>
-              <th>شماره موبایل</th>
-              <th>شماره تلفن</th>
-              <th>کد ارسالی</th>
-              <th>استان</th>
-              <th>شهر</th>
-            </tr>
-            <tr>
-              <td>{{order.fullName}}</td>
-              <td>{{order.mobile}}</td>
-              <td>{{order.telephone}}</td>
-              <td>-</td>
-              <td>{{order.state.name}}</td>
-              <td>{{order.city.name}}</td>
-            </tr>
-            <tr class="text-center">
-              <th>کد پستی</th>
-              <th>کد پیگیری</th>
-              <th>مبلغ مشارکت پایه</th>
-            </tr>
-            <tr>
-              <td>{{ order.postalCode }}</td>
-              <td>{{ order.trackingCode }}</td>
-              <td>
-                    <span>
-                      {{'داخل شهر:'}}
-                      {{user.internalPrice}}
-                    </span>/
-                    <span>
-                      {{'حومه شهر:'}}
-                      {{user.locallyPrice}}
-                      </span>/
-                    <span>
-                      {{'روستا:'}}
-                      {{user.villagePrice}}
-                    </span>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <strong>آدرس:</strong>
-        {{order.address}}
-        <hr>
-        <table  class="table pt-2 pb-2 text-center">
-          <tbody>
-            <tr class="text-center">
-              <th>محصول</th>
-              <th>نوع</th>
-              <th>مبلغ</th>
-              <th>تعداد</th>
-              <th>تخفیف</th>
-              <th>مبلغ مشارکت ویژه</th>
-              <th>جمع</th>
-            </tr>
-            {% for item in order.products %}
-              <tr class="text-center">
-
-                <td>{{ item.product.name }}</td>
-                {% if item.product_type is null %}
-                  <td>{{ 'ندارد' }}</td>
-                {% else %}
-                  <td>{{ item.type.name }}</td>
-                {% endif %}
-                <td class="number">{{ item.product.price }}</td>
-                <td>{{ item.count }}</td>
-                <td class="number">{{ item.off }}</td>
-                <td>
-                  {% for share in user.tariffs %}
-
-                    {% if share.product_id == item.product.id %}
-                      {% if share.place == "internal" %}
-                        {{'داخل شهر'}}
-                      {% elseif share.place == "suburb" %}
-                        {{'حومه شهر'}}
-                      {% else %}
-                        {{'روستا'}}
-                      {% endif %}
-                      {{':'}}
-                      {{share.price | number_format}}
-                      {{'<br />'}}
-                    {% endif %}
-
-                  {% endfor %}
-
-                </td>
-                <td class="row_total number">{{ (item.product.price * item.count) - item.off  }}</td>
-              </tr>
-
-            {% endfor %}
-
-          </tbody>
-
-        </table>
-       <!-- 
-        #########
-        More Details
-        #########
-       -->
-       <hr>
-       <table  class="table pt-2 pb-2 text-center">
-        <tbody>
-          <tr class="text-center">
-            <th>نوع پرداخت</th>
-            <th>مبلغ پرداخت نقدی</th>
-            <th>مبلغ پرداخت چکی</th>
-            <th>پیش پرداخت</th>
-          </tr>
-          <tr class="text-center">
-            {% if order.paymentMethod == "cash" %}
-              <td>{{ 'نقدی' }}</td>
-            {% else %}
-              <td>{{ 'نقدی + چک' }}</td>
-            {% endif %}
-            <td class="number">{{ order.cashPrice | number_format }}</td>
-            <td class="number">{{ order.chequePrice | number_format }}</td>
-            <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
-          </tr>
-          <tr class="text-center">
-            <th>هزینه ارسال</th>
-            <th>مبلغ مشارکت</th>
-            <th>قابل پرداخت</th>
-          </tr>
-          <tr class="text-center">
-            <td class="post_price number">{{order.shippingCost | number_format}}</td>
-            <td class="number">0</td>
-            <td class="total number"></td>
-          </tr>
-        </tbody>
-        </table>
-        <hr>
-      <table  class="table bg-white pt-2 pb-2 text-center">
-      <tbody>
-          <tr class="text-center">
-            <th>توضیحات ارسال</th>
-            <th>توضیحات فروشنده</th>
-          </tr>
-          
-              <tr class="text-center">
-                <td>{{order.sendDescription}}</td>
-                <td>{{ order.sellerDescription }}</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-<!--End order details modal -->
-</div>
-{% endfor %}
-{# Order Product #}
+      {# 
+      ######### ORDERS START MODAL  
+      #}
+      {% include 'Admin/Master/Repetitive/order-details-modal' with {'orders':orders} %}
+      {#
+      ######### ORDERS END MODAL
+      #}
 
 
 

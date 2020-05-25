@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\SpecialTariff;
+
+use App\Models\SpecialTariff;
+use App\Models\User;
+
 class SpecialTariffController extends Controller
 {
     /**
@@ -13,7 +16,7 @@ class SpecialTariffController extends Controller
      */
     public function index($id)
     {
-        $user = 'App\User'::findOrFail($id);
+        $user = User::findOrFail($id);
 
         return Response()->json($user->tariffs,200,[],JSON_UNESCAPED_UNICODE);
     }
@@ -37,25 +40,42 @@ class SpecialTariffController extends Controller
     public function store(Request $request)
     {
       
-        $status = SpecialTariff::where([
-          ['user_id'    ,'='  ,$request->user_id],
-          ['product_id' ,'='  ,$request->product_id],
-          ['place'      ,'='  ."%{$request->place}%"]
-        ])->exists();
+        $user_id    = $request->user_id;
+        $product_id = $request->product_id;
+        $place      = $request->place;
 
-        if($status){
-          $message = 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }else{
+        $product_status = SpecialTariff::where([
+            ['user_id','=',$user_id],
+            ['product_id','=',$product_id]
+        ])->exists(); 
+
+        if($product_status){
+            $specialShareds = SpecialTariff::where([
+                ['user_id','=',$user_id],
+                ['product_id','=',$product_id]
+            ])->get(); 
+
+            foreach($specialShareds as $specialShared){
+
+                if($specialShared->place == $place){
+                    $result = ['message' => 'اطلاعات برای این محصول و این نماینده قبلا وارد شده است', 'status' => '0'];
+                    return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+                }
+            }
+
+        }
+
+        
+        
           SpecialTariff::create([
             'user_id'       =>  $request->user_id,
             'product_id'    =>  $request->product_id,
             'place'         =>  $request->place,
             'price'         =>  $request->price,
           ]);
-          $message = 'اطلاعات وارد شد';
-          return Response()->json($message,200,[],JSON_UNESCAPED_UNICODE);
-        }
+          $result = ['message' => 'اطلاعات وارد شد', 'status' => '1'];
+          return Response()->json($result,200,[],JSON_UNESCAPED_UNICODE);
+        
 
     }
 

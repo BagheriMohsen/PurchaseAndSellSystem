@@ -5,6 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use DB;
+
+use App\Models\Order;
+use App\Models\PaymentCirculation;
+use App\Models\User;
+use App\Models\MoneyCirculation;
+use App\Models\BankAccount;
+use App\Models\UserInventory;
+
 class MoneyCirculationController extends Controller
 {
     /*
@@ -13,26 +22,139 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentCurrentBills(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
         $AllSell = 
-        'App\MoneyCirculation'::where('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)
-        ->orWhere('agent_id',$user->id)->sum('amount');
+        MoneyCirculation::where('agent_id',$user->id)->sum('amount');
             
-        $AllSpecialShared = 'App\UserInventory'::where([
+        $AllSpecialShared = UserInventory::where([
             ['agent_id','=',$user->id]
         ])->sum('balance');
             
-        $TotalSettle = 'App\PaymentCirculation'::where([
+        $TotalSettle = PaymentCirculation::where([
             ['user_id','=',$user->id],
             ['status_id','=',2]
         ])->sum('bill');
+
+        $today = Carbon::now();
+        $yesterday = Carbon::now()->subDays(1);
+        $ThirtyDaysAgo = Carbon::now()->subDays(30);
+
+        $totalDebtor = Order::where([
+            ['agent_id','=',$user->id],
+            ['collected_Date','!=',null]
+        ])->sum('cashPrice');
+        $totalCreditor = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['confirmDate','!=',null]
+        ])
+        ->sum('bill');
+        
+        // $AllSell =   Order::where([
+        //     ['collected_Date','!=',Null],
+        //     ['agent_id','=',$user->id]
+        // ])->sum('cashPrice');
+
+        $orders = Order::with("products")->where([
+            ["collected_Date","!=", Null],
+            ["agent_id","=", $user->id]
+        ])->get();
+        
+        $Discount = 0;
+        foreach( $orders as $order ) {
+            $Discount += $order->products->sum("off");
+        }
+
+        
+   
+        $costs = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])->sum('bill');
+
+        $payments = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])->sum('bill');
+
+        $AllSpecialShared = UserInventory::where([
+            ['agent_id','=',$user->id]
+        ])->sum('balance');
+
+
+        $Allpayments = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',2]
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',5]
+        ])
+        ->get();
+
+        $AllOrders = Order::where([
+            ['collected_Date','!=',Null],
+            ['agent_id','=',$user->id]
+        ])->get();
+        $Allpayments = $Allpayments->toArray();
+        $AllOrders = $AllOrders->toArray();
+        $transaction = array_merge($AllOrders,$Allpayments);
+
+        $payback = PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id', '=', 8],
+            ['confirmDate','!=', null]
+        ])
+        ->sum("bill");
+       
+     
+        
+
         return view('Admin.UserInventory.Agent.current-bills',compact(
             'AllSell',
             'AllSpecialShared',
+            'payments',
+            'costs',
             'TotalSettle',
-            'user'
+            'user',
+            'totalDebtor',
+            'totalCreditor',
+            'transaction',
+            'Discount',
+            'payback'
         ));
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | current Bills Debtor
+    |--------------------------------------------------------------------------
+    |*/
+    public function currentBillsDebtor($user_id){
+        
+        $totalDebtor = Order::with(array('MoneyCirculations'=>function($query)use($user_id){
+            $query->select('id','order_id','sharedSpecialAmount')
+            ->where('agent_id',$user_id)
+            ->sum('sharedSpecialAmount');
+        }))->where([
+            ['agent_id','=',$user_id],
+            ['collected_Date','!=',null]
+        ])->latest()->get(['id','collected_Date','cashPrice']);
+
+        return Response()->json([$totalDebtor],200,[],JSON_UNESCAPED_UNICODE);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | current Bills Creditor
+    |--------------------------------------------------------------------------
+    |*/
+    public function currentBillsCreditor($user_id){
+        
+        $totalCreditor = PaymentCirculation::where([
+            ['user_id','=',$user_id],
+            ['confirmDate','!=',null]
+        ])
+        ->latest()->get(['id','status_id','billDate','bill']);
+
+        return Response()->json([$totalCreditor],200,[],JSON_UNESCAPED_UNICODE);
     }
     /*
     |--------------------------------------------------------------------------
@@ -41,9 +163,9 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentPaymentOrders(){
         
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $carts = 'App\BankAccount'::where('user_id',$user->id)->latest()->get();
-        $orders = 'App\Order'::where([
+        $user = User::findOrFail(auth()->user()->id);
+        $carts = BankAccount::where('user_id',$user->id)->latest()->get();
+        $orders = Order::where([
             ['agent_id','=',$user->id],
             ['status','=',10]
         ])
@@ -64,14 +186,18 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaymentList(){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        $payments = 'App\PaymentCirculation'::where([
+        $user = User::findOrFail(auth()->user()->id);
+        $payments = PaymentCirculation::where([
             ['user_id','=',$user->id],
-            ['status_id','=',2]
+            ['status_id','=',1]
         ])
         ->orWhere([
             ['user_id','=',$user->id],
-            ['status_id','=',1],
+            ['status_id','=',2],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',3],
         ])
         ->latest()->paginate(15);
         
@@ -80,12 +206,144 @@ class MoneyCirculationController extends Controller
     }
     /*
     |--------------------------------------------------------------------------
+    | Agent Payment Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPaymentDelete($id){
+        $payment = PaymentCirculation::findOrFail($id);
+
+        if(!is_null($payment->confirmDate)){
+            return back()->with('info','متاسفانه شما دیر اقدام کردید');
+        }
+
+        PaymentCirculation::destroy($id);
+        return back()->with('message','پرداخت مورد نظر از لیست پرداخت های شما پاک گردید');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Payment List Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentPaymentListUpdate(Request $request,$id){
+        $payment = PaymentCirculation::findOrFail($id);
+
+        if(!is_null($payment->confirmDate)){
+            return back()->with('info','متاسفانه شما دیر اقدام کردید');
+        }
+
+        if($request->hasFile('image')){
+            Storage::disk('public')->delete($payment->receiptImage);
+            $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
+        }else{
+            $image = $payment->image; 
+        }
+        $payment->update([
+            'receiptImage'  =>  $image,
+            'bill'          =>  (float) str_replace(',', '', $request->bill),
+            'billDesc'      =>  $request->desc
+        ]);
+        return back()->with('message','اطلاعات پرداخت به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | Agent Costs List
     |--------------------------------------------------------------------------
     |*/
     public function AgentCostsList(){
-        return view('Admin.UserInventory.Agent.costs-list');
+        $user       =   User::findOrFail(auth()->user()->id);
+        $costs   =   PaymentCirculation::where([
+            ['user_id','=',$user->id],
+            ['status_id','=',4],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',5],
+        ])
+        ->orWhere([
+            ['user_id','=',$user->id],
+            ['status_id','=',6],
+        ])
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.Agent.costs-list',compact('costs'));
 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Store
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsStore(Request $request){
+      
+        $user = User::findOrFail(auth()->user()->id);
+        $date = Carbon::parse($request->date)->toDateString();
+        PaymentCirculation::create([
+            'billDate'      =>  $date,
+            'status_id'     =>  4,
+            'trackingCode'  =>  uniqid(),
+            'user_id'       =>  $user->id,
+            'bill'          =>  (float) str_replace(',', '', $request->price),
+            'billDesc'      =>  $request->desc,
+        ]);
+
+        return back()->with('message','هزینه با موفقیت ثبت شد');
+    }
+     /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Delete
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsDelete($id){
+        
+        PaymentCirculation::where('id',$id)->delete();
+
+        return back()->with('message','با موفقیت پاک شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostsUpdate(Request $request,$id){
+       
+        PaymentCirculation::where('id',$id)->update([
+            'billDate'      =>  $request->date,
+            'bill'          =>  (float) str_replace(',', '', $request->price),
+            'billDesc'      =>  $request->desc,
+        ]);
+
+        return back()->with('message','با موفقیت به روز رسانی شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentCostConfirm($id){
+
+        $cost = PaymentCirculation::findOrFail($id);
+        $cost->update([
+            'status_id'      =>  5,
+            'confirmDate'    =>  Carbon::now()
+        ]);
+
+        return back()->with('message','هزینه تایید شد');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Costs Update
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentUnverifiedCosts(){
+        
+        
+        $costs   =   PaymentCirculation::where([
+            ['confirmDate','=',null],
+            ['status_id','=',4]
+        ])
+        ->latest()->paginate(15);
+
+        return view('Admin.UserInventory.Admin.unverfied-agent-costs',compact('costs'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +351,21 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentPaybackList(){
-        return view('Admin.UserInventory.Agent.payback-list');
+        $user = auth()->user();
+
+        $payments = PaymentCirculation::where([
+            ['status_id','=', 7],
+            ['user_id','=', $user->id]
+        ])
+        ->orWhere([
+            ['status_id','=', 8],
+            ['user_id','=', $user->id] 
+        ])
+        ->latest("billDate")->paginate(15);
+
+        return view('Admin.UserInventory.Agent.payback-list',compact(
+            'payments'
+        ));
 
     }
     /*
@@ -111,7 +383,10 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentUnverifiedPayment(){
-        $payments = 'App\PaymentCirculation'::where('status_id',1)
+        $payments = PaymentCirculation::where([
+            ['status_id','=',1],
+            ['OnconfirmDate','=',null]
+        ])
         ->latest()->paginate(15);
         return view('Admin.UserInventory.Admin.unverified-payment',compact('payments'));
     }
@@ -122,7 +397,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function cartStore(Request $request){
         
-        'App\BankAccount'::create([
+        BankAccount::create([
             'name'          =>  $request->name,
             'user_id'       =>  auth()->user()->id,
             'cartNumber'    =>  $request->cartNumber,
@@ -138,10 +413,10 @@ class MoneyCirculationController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function cartSetDefault(Request $request,$id){
-        $user = 'App\User'::findOrFail(auth()->user()->id);
-        'App\BankAccount'::where('user_id',$user->id)->update(['default'=>0]);
+        $user = User::findOrFail(auth()->user()->id);
+        BankAccount::where('user_id',$user->id)->update(['default'=>0]);
 
-        $cart = 'App\BankAccount'::findOrFail($id);
+        $cart = BankAccount::findOrFail($id);
         $cart->update(['default'=>1]);
 
         return back()->with('message',' کارت مورد نظر به عنوان کارت پیش فرض انتخاب شد');
@@ -154,7 +429,7 @@ class MoneyCirculationController extends Controller
     |*/
     public function cartDelete($id){
 
-        $cart = 'App\BankAccount'::destroy($id);
+        $cart = BankAccount::destroy($id);
         return back()->with('message','کارت مورد نظر از لیست حذف شد');
     }
     /*
@@ -164,62 +439,74 @@ class MoneyCirculationController extends Controller
     |*/
     public function AgentPayMoney(Request $request){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
        
         if($request->hasFile('image')){
             $image = Storage::disk('public')->put('AgentPaymentImage',$request->image);
         }else{
             $image = null;
         }
+  
+        $date = Carbon::parse($request->date);
         
-        'App\PaymentCirculation'::create([
+        PaymentCirculation::create([
                 'receiptImage'  =>  $image,
                 'user_id'       =>  $user->id,
                 'status_id'     =>  1,
                 'bill'          =>  (float) str_replace(',', '', $request->bill),
-                'billDate'      =>  $request->date,
+                'billDate'      =>  $date,
                 'trackingCode'  =>  (float) str_replace(',', '', $request->trackingCode),
                 'paymentMethod' =>  $request->paymentMethod,
                 'billDesc'      =>  $request->billDesc
-            ]);
+        ]);
         return back()->with('message','اطلاعات به درستی ارسال شد.پس از تایید مدیریت در حساب جاری شما اعمال میشود');
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | Admin Accept Agent Payment
     |--------------------------------------------------------------------------
     |*/
     public function AdminAcceptAgentPayment($id){
-        $pay = 'App\PaymentCirculation'::findOrFail($id);
+        $pay = PaymentCirculation::findOrFail($id);
         $pay->update([
             'status_id'     =>  2,
-            'confirmDate'   =>  Carbon::now()
-            ]);
+            'confirmDate'   =>  Carbon::now(),
+            'OnconfirmDate' =>  Null
+        ]);
 
         return back()->with('message','فیش واریزی تایید و در حساب جاری نماینده اعمال شد');
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Money Circulation
+    |--------------------------------------------------------------------------
+    |*/
     public function AgentsMoneyCirculation(){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agents = 'App\User'::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
+        $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->paginate(15);
         
         return view('Admin.UserInventory.AgentChief.agents-money-circulation',compact('agents'));
     }
-
+    /*
+    |--------------------------------------------------------------------------
+    | Agents Payment List
+    |--------------------------------------------------------------------------
+    |*/
     public function AgentsPaymentList($agent_id){
 
-        $user = 'App\User'::findOrFail(auth()->user()->id);
+        $user = User::findOrFail(auth()->user()->id);
 
-        $agent = 'App\User'::findOrFail($agent_id);
+        $agent = User::findOrFail($agent_id);
 
         if($agent->agent_id != $user->id){
             return abort(404);
         }
 
-        $payments = 'App\PaymentCirculation'::where([
+        $payments = PaymentCirculation::where([
             ['user_id','=',$agent_id],
             ['status_id','=',2]
         ])
@@ -231,6 +518,119 @@ class MoneyCirculationController extends Controller
         
         return view('Admin.UserInventory.AgentChief.agents-payment-list',compact('payments'));
 
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Reject Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function RejectPayment($id){
+        $payment = PaymentCirculation::findOrFaIL($id);
+
+        $payment->update([
+            'status_id'     =>  3,
+            'OnconfirmDate' =>  Carbon::now(),
+            'confirmDate'   =>  Null,
+        ]);
+
+        return back()->with('message','پرداخت مورد نظر پذیرفته نشد');
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Reject Cost
+    |--------------------------------------------------------------------------
+    |*/
+    public function RejectCost($id){
+
+        $payment = PaymentCirculation::findOrFaIL($id);
+
+        $payment->update([
+            'status_id'     =>  6,
+            'OnconfirmDate' =>  Carbon::now()
+        ]);
+
+        return back()->with('message','هزینه مورد نظر پذیرفته نشد');
+
+    }
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Payment List
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminPaymentList() {
+        $user = User::findOrFail(auth()->user()->id);
+        $agents = User::with(["state", "city"])->Role("agent")->get();
+        $payments = PaymentCirculation::with("user")
+        ->where('status_id', 7)
+        ->orWhere('status_id', 8)
+        ->latest()->paginate(15);
+        
+        return view('Admin.UserInventory.Admin.payment-list',compact(
+            'payments',
+            'agents'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Payment Create
+    |--------------------------------------------------------------------------
+    |*/
+    public function AdminPaymentCreate(Request $req) {
+       
+        if($req->hasFile('image')){
+            $image = Storage::disk('public')->put('AgentPaymentImage',$req->image);
+        }else{
+            $image = null;
+        }
+  
+        $date = Carbon::parse($req->date);
+        
+        PaymentCirculation::create([
+                'receiptImage'  =>  $image,
+                'user_id'       =>  $req->agent_id,
+                'status_id'     =>  7,
+                'bill'          =>  (float) str_replace(',', '', $req->bill),
+                'billDate'      =>  $date,
+                'trackingCode'  =>  (float) str_replace(',', '', $req->trackingCode),
+                'paymentMethod' =>  $req->paymentMethod,
+                'billDesc'      =>  $req->billDesc
+        ]);
+        return back()->with('message','اطلاعات به درستی ارسال شد.');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Accept Agent Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentAcceptAgentPayment($id){
+        $pay = PaymentCirculation::findOrFail($id);
+        $pay->update([
+            'status_id'     =>  8,
+            'confirmDate'   =>  Carbon::now(),
+            'OnconfirmDate' =>  Null
+        ]);
+
+        return back()->with('message','فیش واریزی تایید و در حساب جاری شما اعمال شد');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Agent Accept Agent Payment
+    |--------------------------------------------------------------------------
+    |*/
+    public function AgentRejectAgentPayment($id){
+        $pay = PaymentCirculation::findOrFail($id);
+        $pay->update([
+            'status_id'     =>  7,
+            'confirmDate'   =>  Null,
+            'OnconfirmDate' =>  Carbon::now()
+        ]);
+
+        return back()->with('message','فیش واریزی پذیرفته نشد');
     }
 
    

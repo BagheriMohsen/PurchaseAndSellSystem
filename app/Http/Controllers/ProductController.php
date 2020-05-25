@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
+
+use App\Models\Product;
+use App\Models\ProductOff;
+
 class ProductController extends Controller
 {
     /**
@@ -169,14 +172,13 @@ class ProductController extends Controller
     |*/
     public function off_store(Request $request){
         $product =  Product::findOrFail($request->product_id);
-        $status = 'App\ProductOff'::where([
+        $status = ProductOff::where([
             ['product_id','=',$request->product_id],
             ['numberOfProduct','=',$request->numberOfProduct],
-            ['offPrice','=',$request->offPrice]
         ])->exists();
 
         if($status == false){
-            'App\ProductOff'::create([
+            ProductOff::create([
                 'user_id'           =>  auth()->user()->id,
                 'product_id'        =>  $request->product_id,
                 'numberOfProduct'   =>  $request->numberOfProduct,
@@ -186,7 +188,7 @@ class ProductController extends Controller
             ->with('message','تخفیف با موفقیت برای این کالا ثبت شد');
         }else{
             return redirect()->route('products.off',$product->slug)
-            ->with('error','این تعداد تخفیف با همین میزان تخفیف برای این کالا قبلا ثبت شده است');
+            ->with('error','تخفیف برای این تعداد کالا قبلا در سیستم ثبت شده است');
         }
     }
         /*
@@ -195,9 +197,9 @@ class ProductController extends Controller
         |--------------------------------------------------------------------------
         |*/
         public function off_destroy($id){
-            $off = 'App\ProductOff'::findOrFail($id);
+            $off = ProductOff::findOrFail($id);
             $product = Product::findOrFail($off->product_id);
-            'App\ProductOff'::destroy($id);
+            ProductOff::destroy($id);
             return redirect()->route('products.off',$product->slug)
             ->with('message','تخفیف مورد نظر حذف شد');
         }

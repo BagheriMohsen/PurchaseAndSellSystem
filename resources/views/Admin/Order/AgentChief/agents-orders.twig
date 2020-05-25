@@ -25,7 +25,6 @@
      
 
 
-<!--End order details modal -->
   <div class="row">
     <div class="card col-sm-12">
      
@@ -33,38 +32,46 @@
                 <!-- /.card-header -->
                 <div class="card-body col-12 mx-auto">
                 
-                  <table   class="table table-striped table-bordered table-sm text-center" cellspacing="0"
+                  <table  id="orderTable" class="table table-striped table-bordered table-sm text-center" cellspacing="0"
                 width="100%">
                     <thead>
                     <tr>
-                      
-                      <th>شماره<br> سفارش</th>
-                      <th>نماینده</th>
-                      <th>نام خریدار</th>
+                      <th></th>
+                      <th class="d-none">شماره<br> سفارش</th>
+                      <th>محصولات</th>
                       <th>تاریخ ثبت</th>
-                      {# <th>تاریخ تخصیص</th> #}
+                      <th>تاریخ تخصیص</th>
                       <th>استان-شهر</th>
                       <th>کد پستی</th>
+                      <th>نام خریدار</th>
                       <th>همراه-ثابت</th>
                       <th>نوع پرداخت</th>
+                      <th>نماینده</th>
+                      <th>کالسنتر</th>
                       <th>عملیات</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for order in orders %}
                       <tr>
-                        
-                        <td>{{order.id}}</td>
+                        <td></td>
+                        <td class="d-none">{{order.id}}</td>
                         <td>
-                          {{order.agent.name}}{{' '}}{{order.agent.family}}
-                          {{'/'}}
-                          {{order.agent.state.name}}{{'-'}}{{order.agent.city.name}}
+                          {% for ProductItem in order.products %}
+                          <span>
+                            {{ProductItem.product.name}}
+                            {{' '}}
+                            {% if ProductItem.type is not null %}
+                              ({{ProductItem.type.name}})
+                            {% endif %}
+                          </span>
+                          {% endfor %}
                         </td>
-                        <td>{{order.fullName}}</td>
                         <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
-                        {# <td>{{'-'}}</td> #}
+                        <td>{{'-'}}</td>
                         <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
                         <td>{{order.postalCode}}</td>
+                        <td>{{order.fullName}}</td>
                         <td>{{order.mobile}}<br>{{order.telephone}}</td>
                         {% if order.paymentMethod == 'cash' %}
                           <td>{{'نقدی'}}</td>
@@ -72,16 +79,22 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td>
+                          {{order.agent.name}}{{' '}}{{order.agent.family}}
+                          {{'/'}}
+                          {{order.agent.state.name}}{{'-'}}{{order.agent.city.name}}
+                        </td>
+                        <td>{{''}}</td>
+                        <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
                               {{order.products.count()}}
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>
-                          {# <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+                          <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
                           target="_blank">
                             <i class="fa fa-book crud-icon"></i>
-                          </a> #}
+                          </a>
                           {# <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
                               <i class="fa fa-cogs crud-icon"></i>
                           </a> #}
@@ -91,24 +104,71 @@
                           </a> #}
                         </td>
                       </tr>
-                   
                     {% endfor %}
                     </tbody>
-                    <tfoot>
-                      {{ order.render() | raw }}
-                    </tfoot>
+                    
                   </table>
                 </div>
                 <!-- /.card-body -->
               </div>
           </div>
 
-      
-{# Order Product #}
-{% for order in orders %}
+      <div class="row">
+        <div class="col-6">
+          <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" id="conditionForm">
+            <input type="hidden" name="_token" value="{{csrf_token()}}" />
+            <label for="status">
+              تعیین وضعیت تحویل
+              <span class="text-danger">*</span>
+            </label>
+            <select class="p-2 pb-2 form-control col-sm-6" name="status">
+              <option value="">گزینه ای انتخاب نشده</option>
+              {% for bot_status in bottom_statuses %}
+                <option value="{{bot_status.id}}">{{bot_status.name}}</option>
+              {% endfor %}
+         
+            </select>
+            <button class="col-sm-6  btn btn-success btn-sm mx-auto" type="submit" name="button">
+              <strong class="h6">
+                ذخیره
+              </strong>
+            </button>
+          </form>
+          <hr>
+          
+            {% set user = auth_user() %}
+            {% if user.backToFollowManager != null %} 
+            <form class="" action="{{route('orders.AgentChangeOrderStatus')}}" method="post" id="toFollowManagerForm"> 
+              <button class="col-sm-6  btn btn-default mx-auto" type="submit" name="button">
+                <strong class="h6">
+                  برگشت به مدیر پیگیری
+                </strong>
+              </button>
+              <input name="status" type="hidden"  value="8" />
+            </form>
+            {% else %}
+              <button onclick="alert('این ویژگی برای شما در دسترس نیست')" title="این ویژگی برای شما در دسترس نیست" class="col-sm-6  btn btn-danger btn-sm mx-auto" type="submit" name="button">
+                <strong class="h6">
+                    <i class="fas fa-lock crud-icon"></i>
+                  برگشت به مدیر پیگیری
+                </strong>
+              </button>
+            {% endif %}
 
-<!-- Order details modal -->
-<div class="modal fade orderDetail" id="order{{order.id}}">
+         </div>
+        
+      </div>
+     
+      {# 
+      ######### ORDERS START MODAL  
+      #}
+      {% include 'Admin/Master/Repetitive/order-details-modal' with {'orders':orders} %}
+      {#
+      ######### ORDERS END MODAL
+      #}
+
+<!-- Order condition modal -->
+<div class="modal fade" id="condition">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
 
@@ -118,168 +178,111 @@
           <span aria-hidden="true" class="white-text">&times;</span>
         </button>
         <p class="heading lead"> 
-          مشخصات سفارش
-          {{order.fullName}}
+         تعیین وضعیت
         </p>
       </div>
 
       <!-- Modal body -->
-      <div class="modal-body text-center  ">
-        <table  class="table pt-2 pb-2 text-center">
-          <tbody>
-            <tr class="text-center">
-              <th>نام و نام خانوادگی</th>
-              <th>شماره موبایل</th>
-              <th>شماره تلفن</th>
-              <th>کد ارسالی</th>
-              <th>استان</th>
-              <th>شهر</th>
-            </tr>
-            <tr>
-              <td>{{order.fullName}}</td>
-              <td>{{order.mobile}}</td>
-              <td>{{order.telephone}}</td>
-              <td>-</td>
-              <td>{{order.state.name}}</td>
-              <td>{{order.city.name}}</td>
-            </tr>
-            <tr class="text-center">
-              <th>کد پستی</th>
-              <th>کد پیگیری</th>
-              <th>مبلغ مشارکت پایه</th>
-            </tr>
-            <tr>
-              <td>{{ order.postalCode }}</td>
-              <td>{{ order.trackingCode }}</td>
-              <td>
-                    <span>
-                      {{'داخل شهر:'}}
-                      {{order.agent.internalPrice}}
-                    </span>/
-                    <span>
-                      {{'حومه شهر:'}}
-                      {{order.agent.locallyPrice}}
-                      </span>/
-                    <span>
-                      {{'روستا:'}}
-                      {{order.agent.villagePrice}}
-                    </span>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <strong>آدرس:</strong>
-        {{order.address}}
-        <hr>
-        <table  class="table pt-2 pb-2 text-center">
-          <tbody>
-            <tr class="text-center">
-              <th>محصول</th>
-              <th>نوع</th>
-              <th>مبلغ</th>
-              <th>تعداد</th>
-              <th>تخفیف</th>
-              <th>مبلغ مشارکت ویژه</th>
-              <th>جمع</th>
-            </tr>
-            {% for item in order.products %}
-              <tr class="text-center">
-
-                <td>{{ item.product.name }}</td>
-                {% if item.product_type is null %}
-                  <td>{{ 'ندارد' }}</td>
-                {% else %}
-                  <td>{{ item.type.name }}</td>
-                {% endif %}
-                <td class="number">{{ item.product.price }}</td>
-                <td>{{ item.count }}</td>
-                <td class="number">{{ item.off }}</td>
-                <td>
-                  {% for share in order.agent.tariffs %}
-
-                    {% if share.product_id == item.product.id %}
-                      {% if share.place == "internal" %}
-                        {{'داخل شهر'}}
-                      {% elseif share.place == "suburb" %}
-                        {{'حومه شهر'}}
-                      {% else %}
-                        {{'روستا'}}
-                      {% endif %}
-                      {{':'}}
-                      {{share.price | number_format}}
-                      {{'<br />'}}
-                    {% endif %}
-
-                  {% endfor %}
-
-                </td>
-                <td class="row_total number">{{ (item.product.price * item.count) - item.off  }}</td>
-              </tr>
-
-            {% endfor %}
-
-          </tbody>
-
-        </table>
-       <!-- 
-        #########
-        More Details
-        #########
-       -->
-       <hr>
-       <table  class="table pt-2 pb-2 text-center">
-        <tbody>
-          <tr class="text-center">
-            <th>نوع پرداخت</th>
-            <th>مبلغ پرداخت نقدی</th>
-            <th>مبلغ پرداخت چکی</th>
-            <th>پیش پرداخت</th>
-          </tr>
-          <tr class="text-center">
-            {% if order.paymentMethod == "cash" %}
-              <td>{{ 'نقدی' }}</td>
-            {% else %}
-              <td>{{ 'نقدی + چک' }}</td>
-            {% endif %}
-            <td class="number">{{ order.cashPrice | number_format }}</td>
-            <td class="number">{{ order.chequePrice | number_format }}</td>
-            <td class="pre_payment number">{{ order.prePayment | number_format }}</td>
-          </tr>
-          <tr class="text-center">
-            <th>هزینه ارسال</th>
-            <th>مبلغ مشارکت</th>
-            <th>قابل پرداخت</th>
-          </tr>
-          <tr class="text-center">
-            <td class="post_price number">{{order.shippingCost | number_format}}</td>
-            <td class="number">0</td>
-            <td class="total number"></td>
-          </tr>
-        </tbody>
-        </table>
-        <hr>
-      <table  class="table bg-white pt-2 pb-2 text-center">
-      <tbody>
-          <tr class="text-center">
-            <th>توضیحات ارسال</th>
-            <th>توضیحات فروشنده</th>
-          </tr>
-          
-              <tr class="text-center">
-                <td>{{order.sendDescription}}</td>
-                <td>{{ order.sellerDescription }}</td>
-              </tr>
-          </tbody>
-        </table>
+      <div class="modal-body text-center ">
+        <form action="{{route('orders.AgentChangeOrderStatus')}}" method="post" class="conditionAssignForm">
+          <div class="row">
+            <div class="col-6 text-right">
+              <h6>انتخاب حالات دیگر:</h6>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="waitingDelivery" value="7" name="condition" checked>
+                <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="suspend" value="14" name="condition" >
+                <label class="form-check-label" for="suspend">معلق</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" class="cancel" value="13" name="condition">
+                <label class="form-check-label" for="cancel">کنسلی</label>
+              </div>
+            </div>
+            <div class="col-6 text-right">
+              <div class="waitingDeliveryField">
+                <label for="waitingDeliveryDesc">توضیحات:</label>
+                <textarea rows="10" cols="50" class="form-control" type="text"  name="waitingDeliveryDesc" value="" placeholder="توضیحات وضعیت سفارش"></textarea>
+              </div>
+              <div class="suspendField d-none">
+                <h6>انتخاب حالت تماس مجدد:</h6>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
+                  <label class="form-check-label">عدم پاسخگویی</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
+                  <label class="form-check-label">خارج از دسترس</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="dueDate" name="suspend">
+                  <label class="form-check-label">زمان سررسید</label>
+                </div>
+                <div class="dueDateFuild d-none">
+                  <label>تاریخ: </label>
+                  <input type="text" class="form-control persianDateTimepicker" name="dueDate">
+                </div>
+              </div>
+              <div class="cancelField d-none">
+                <h6>انتخاب حالت انصراف :</h6>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
+                  <label class="form-check-label">قیمت بالا</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
+                  <label class="form-check-label">کیفیت پایین</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
+                  <label class="form-check-label">ناکارآمد بودن </label>
+                </div>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
+                  <label class="form-check-label">برآورده نکردن خواسته ها </label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value=" مزاحمت" name="cancel" >
+                  <label class="form-check-label">  مزاحمت</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
+                  <label class="form-check-label">تماس دیروقت </label>
+                </div>
+                 <div class="form-check">
+                  <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
+                  <label class="form-check-label"> خرید از مکان دیگر</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر" name="cancel" >
+                  <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" value="cancelDesc" name="cancel">
+                  <label class="form-check-label">توضیحات </label>
+                </div>
+                <div class="cancelDescField d-none">
+                   <label for="cancelDesc">توضیحات:</label>
+                    <textarea rows="10" cols="50" class="form-control " type="text"  name="cancelDesc" value="" placeholder="توضیحات دلیل کنسلی"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 text-center mt-5">
+              <button class="btn btn-info" type="button" name="button">
+                <strong class="">
+                  اعمال
+                </strong>
+              </button>
+            </div>
+          </div>
+        </from>
       </div>
     </div>
   </div>
 </div>
-<!--End order details modal -->
-</div>
-{% endfor %}
-{# Order Product #}
+
 
 {% endblock %}
 

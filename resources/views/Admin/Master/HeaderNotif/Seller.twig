@@ -1,0 +1,9 @@
+{% if returnToSeller > 0 %}
+    <a 
+        href="{{route('orders.receiveOrderFromFollowUpManager')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{returnToSeller}}
+        عدد برگشت خورده
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

@@ -52,7 +52,17 @@
         <tbody>
           {% for storage in storages %}
             <tr class="text-center">
-              <td><img src="{{storage.product.thumbUrl}}" /></td>
+              <td>
+             
+                 
+                  {% if storage.image_id is not null %} 
+                    <img  src="{{storage.product.thumbUrl}}" />
+
+                  {% else %}
+                    {{"تصویری پیدا نشد"}}
+                  {% endif %}
+                 
+              </td>
               <td>{{storage.product.name}}</td>
               {# <td>{{storage.status}}</td> #}
               <td>{{storage.product.price | number_format}}</td>

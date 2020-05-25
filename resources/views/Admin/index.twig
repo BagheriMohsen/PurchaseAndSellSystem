@@ -30,11 +30,11 @@
         <div class="mt-3 pt-2 pb-2">
           <p>
             ماه جاری:
-            -
+            {{OrderCreatedByCallcenterInMonth}}
           </p>
           <p>
             امروز:
-            -
+            {{OrderCreatedByCallcenterToday}}
           </p>
         </div>
       </div>
@@ -125,14 +125,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for storeRoom in storeRooms %}
+      {% for todayProduct in todayProducts %}
       <tr>
         <td class="d-flex">
             <div class="col-10 mx-auto">
-              {{storeRoom.product.name}}
+              {{todayProduct.name}}
             </div>
             <div class="col-2 mx-auto">
-              {{storeRoom.number}}
+              {{todayProduct.count}}
             </div>
         </td>
       </tr>
@@ -177,19 +177,25 @@
       </tr>
     </thead>
     <tbody>
-      {% for DebtorAgent in DebtorAgents %}
+      {% for agent in agents %}
       <tr>
         <td class="d-flex">
             <div class="col-9 mx-auto">
-              {{ DebtorAgent.agent.name }}
-              {{' '}}
-              {{ DebtorAgent.agent.family }}
+              {{agent.name}}
               {{'/'}}
-              {{ DebtorAgent.agent.city.name }}
+              {{agent.state_city}}
             </div>
-            <div class="col-3 mx-auto">
-                {{ DebtorAgent.balance | number_format }}
-            </div>
+            {% if agent.price >= 0 %}
+              <div title="نماینده بدهکار است" class="col-3 mx-auto">
+                {{ agent.price | number_format }}
+              </div>
+            {% else %}
+              <div title="نماینده طلب دارد" class="col-3 mx-auto text-danger">
+                {{ agent.price | abs | number_format }}
+              </div>
+            {% endif %}
+                
+            
         </td>
       </tr>
       {% endfor %}
@@ -209,12 +215,12 @@
     <tbody>
       <tr>
         <td class="d-flex">
-            <div class="col-7 mx-auto">
+            {# <div class="col-7 mx-auto">
               -
             </div>
             <div class="col-5 mx-auto">
                 -
-            </div>
+            </div> #}
         </td>
       </tr>
      

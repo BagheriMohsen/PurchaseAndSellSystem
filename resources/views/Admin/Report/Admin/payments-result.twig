@@ -1,0 +1,193 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  مشاهده بایگانی پرداخت
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'مشاهده بایگانی پرداخت'} %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'Messages/message' %}
+{% include 'Messages/info' %}
+
+<div class="row">
+  <div class="card col-sm-12 p-3">
+    {# <div class="card-body col-12 mx-auto">
+      <div class="col-12">
+      <form class="" action="" method="post" id=""> 
+        <button class="btn btn-default" type="submit">
+          <strong class="">
+            تایید پرداخت  
+          </strong>
+        </button>
+      </form>
+    </div> #}
+      <table   class="table table-striped table-bordered table-sm text-center" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>کد پیگیری</th>
+            <th>نماینده</th>
+            <th>تاریخ</th>
+            <th>مبلغ</th>
+            {# <th>جمع چک ها</th> #}
+            {# <th>جمع مشارکت</th> #}
+            {# <th>کد پیگیری</th> #}
+            <th>نوع پرداخت</th>
+            {# <th>صورت حساب</th> #}
+            <th> توضیحات</th>
+            <th>عملیات </th>
+          </tr>
+        </thead>
+        <tbody>
+        {# {% for order in orders %} #}
+        {% for payment in payments %}
+          <tr>
+            
+            
+            <td>{{payment.trackingCode}}</td>
+            <td>
+              {{payment.user.name}}{{' '}}{{payment.user.family}}
+              {{'/'}}
+              {{payment.user.city.name}}
+              {{'-'}}
+              {{payment.user.state.name}}
+            </td>
+            <td class="justDate">{{ payment.billDate}}</td>
+            <td>{{ payment.bill | number_format}}</td>
+            {% if payment.paymentMethod == "card" %}
+                <td>{{'فیش'}}</td>
+            {% else %}
+                <td>{{'آنلاین'}}</td>
+            {% endif %}
+            <td>{{payment.billDesc}}</td>
+            <td>
+                
+              <a title="جزئیات" class="text-secondary m-1" 
+              data-toggle="modal" data-target="#detail{{payment.id}}">
+              <i class="fas fa-info-circle crud-icon"></i>
+              </a>
+              {% if payment.status_id != 2 and payment.status_id != 7 and payment.status_id != 8 %}
+              <a title="پذیرفتن" class="text-secondary m-1" 
+              href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
+                <i class="far fa-check-square text-success crud-icon"></i>
+              </a>
+              {% endif %}
+              {% if payment.status_id != 3 and payment.status_id != 7 and payment.status_id != 8 %}
+              <a  title="نپذیرفتن" class="text-success"
+                  href="{{route('userInventory.RejectPayment',payment.id)}}">
+                  <i class="far fa-window-close text-danger crud-icon"></i>
+              </a>
+              {% endif %}
+            
+            </td>
+          </tr>
+          {% endfor %}
+          {# {% endfor %} #}
+        </tbody>
+      </table>
+      <div class="col-12">
+      {# <form class="" action="" method="post" id=""> 
+        <button class="btn btn-default" type="submit">
+          <strong class="">
+            تایید پرداخت  
+          </strong>
+        </button>
+      </form> #}
+    </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% for payment in payments %}
+
+    <!-- Modal -->
+    <div class="modal fade right" id="detail{{payment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog modal-side modal-bottom-left" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                مشخصات
+                {# {{' '}}{{storeRoom.product.name}} #}
+                </h5>
+                
+            </div>
+            <div class="modal-body">
+                    {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
+                    <div class="d-flex mt-3">
+                        <div>نام:</div>
+                        <div>
+                            {{payment.user.name}}{{' '}}{{payment.user.family}}
+                            {{'/'}}
+                            {{payment.user.city.name}}
+                            {{'-'}}
+                            {{payment.user.state.name}}
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div>مبلغ:</div>
+                        <div>
+                        {{payment.bill | number_format}}
+                        عدد
+                        </div>
+                    </div>
+                     <div class="d-flex">
+                        <div>توضیحات:</div>
+                        <div>
+                        {% if payment.billDesc is not null %}
+                            {{payment.billDesc|raw}}
+                        {% else %}
+                            {{'ندارد'}}
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div>تاریخ واریز:</div>
+
+                        <div class="justDate">{{payment.billDate }}</div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div>تصویر :</div>
+                        <img class="col-sm-12" src="/storage/{{payment.receiptImage}}" />
+                    </div>
+                {% if payment.status_id != 2 and payment.status_id != 7 and payment.status_id != 8 %}
+                  <a  class="btn btn-success btn-sm text-dark"
+                      href="{{route('userInventory.AdminAcceptAgentPayment',payment.id)}}">
+                      <strong class="h6">
+                          تایید 
+                      </strong>
+                      <i class="fas fa-check crud-icon"></i>
+                  </a>
+                {% endif %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                
+            </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Extra payment list modal -->
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

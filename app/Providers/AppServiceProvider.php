@@ -5,6 +5,15 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
+
+use Carbon\Carbon;
+
+use App\Models\Order;
+use App\Models\User;
+use App\Models\StoreRoom;
+use App\Models\PaymentCirculation;
+use App\Models\Product;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -34,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('Admin.Master.sidebar',function($view){
             if(auth()->check()){
                 // find user detail
-                $user       = 'App\User'::find(auth()->user()->id);
+                $user       = User::find(auth()->user()->id);
                 // find role name
                 $roleName   = $user->getRoleNames()->first();
                 // find role all detail
@@ -50,42 +59,96 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('Admin.Master.header',function($view){
             if(auth()->check()){
                 // find user detail
-                $user       = 'App\User'::find(auth()->user()->id);
+                $user       = User::find(auth()->user()->id);
                 // find role name
                 $roleName   = $user->getRoleNames()->first();
+  
                 // find role all detail
                 $role = Role::where('name',$roleName)->firstOrFail();
+                
+                $notifs = 0;
+                $AgentReturnedProduct = 0;
+                $orderNotif = 0;
+                $Agentpayments = 0;
+                $Agentcosts =   0;
+                $agents_order = 0;
+                $returnToSeller = 0;
+                $AgentPayBack       = 0;
+                if($roleName == "agent"){
+                    $notifs = StoreRoom::where(['receiver_id'=>$user->id,'in_out'=>10])
+                    ->count();
+                    
+                    $AgentPayBack = PaymentCirculation::where([
+                        ['status_id','=', 7],
+                        ['user_id','=', $user->id]
+                    ])->count();
 
-                if($roleName == "agent" || $roleName == "agentChief"){
-                    $notifs = 'App\StoreRoom'::where(['receiver_id'=>$user->id,'in_out'=>10])
+                    $orderNotif = Order::where(['agent_id'=>$user->id,'status'=>7])
                     ->count();
-                    $AgentReturnedProduct = 0;
-                    $orderNotif = 'App\Order'::where(['agent_id'=>$user->id,'status'=>7])
-                    ->count();
+                }elseif($roleName == "agentChief"){
+
+                    $user = User::findOrFail(auth()->user()->id);
+                    $agents = User::where('agent_id',$user->id)->Role('agent')->latest()->get();
+
+                    $orders = Order::where('agent_id',$user->id);
+
+                    foreach($agents as $agent){
+                        $orders->Orwhere([
+                            ['agent_id','=',$agent->id],
+                            ['status','=',7]
+                        ]);
+                    }
+                    $agents_order = $orders->count();
+
                 }elseif($roleName == "fundWarehouser"){
-                    $notifs = 'App\StoreRoom'::where(['warehouse_id'=>2,'in_out'=>5])
+                    $notifs = StoreRoom::where(['warehouse_id'=>2,'in_out'=>5])
                     ->count();
-                    $AgentReturnedProduct =  'App\StoreRoom'::where([
+                    $AgentReturnedProduct =  StoreRoom::where([
                         ['receiver_id','=',2],
                         ['in_out','=',16]
                     ])->count();
-                    $orderNotif = 0;
+              
                 }elseif($roleName == "mainWarehouser"){
-                    $notifs = 'App\StoreRoom'::where(['in_out'=>15])->get()->count();
-                    $orderNotif = 0;
-                    $AgentReturnedProduct = 0;
+                    $notifs = StoreRoom::where(['in_out'=>15])->get()->count();
+                   
                 }elseif($roleName == "followUpManager"){
-                    $notifs = 0;
-                    $AgentReturnedProduct = 0;
-                    $orderNotif = 'App\Order'::where(['followUpManager_id'=>$user->id,'status'=>3,'agent_id'=>null])
+                   
+                    $orderNotif = Order::where(['followUpManager_id'=>$user->id,'status'=>3,'agent_id'=>null])
                     ->count();
-                }else{
-                    $notifs = 0;
-                    $AgentReturnedProduct = 0;
-                    $orderNotif = 0;
-                }
+                }elseif($roleName == "admin"){
+                    $Agentpayments = PaymentCirculation::where([
+                        ['confirmDate','=',null],
+                        ['status_id','=',1]
+                    ])
+                    ->latest()->count();
 
-                $view ->with(compact('role','notifs','orderNotif','AgentReturnedProduct'));
+                    $Agentcosts   =   PaymentCirculation::where([
+                        ['confirmDate','=',null],
+                        ['status_id','=',4]
+                    ])
+                    ->latest()->count();
+                  
+                }elseif($roleName == "seller"){
+                    $returnToSeller = Order::where([
+                        ['seller_id','=',$user->id],
+                        ['status','=',6],//Receive Order From FollowUpManager
+                    ])->latest()->count();
+                }else{
+                    //
+                }
+             
+                $view ->with(compact(
+                    'role',
+                    'notifs',
+                    'orderNotif',
+                    'AgentReturnedProduct',
+                    'Agentpayments',
+                    'Agentcosts',
+                    'agents_order',
+                    'returnToSeller',
+                    'AgentPayBack'
+                
+                ));
             }
         });
         /*
@@ -93,38 +156,39 @@ class AppServiceProvider extends ServiceProvider
         | Seller work information for sellers and admin
         |--------------------------------------------------------------------------
         |*/
-        view()->composer('Admin.Master.sellers-info',function($view){
+        view()->composer('Admin.Master.Repetitive.sellers-info-modal',function($view){
             if(auth()->check()){
                 // find user detail
-                $sellers       = 'App\User'::Role('seller')->get();
+                $sellers       = User::Role('seller')->get();
                 $sellerRegisters = array();
-                $today = 'Carbon\Carbon'::now();
-                $yesterday = 'Carbon\Carbon'::now()->subDays(1);
+                $today = Carbon::now();
+                $yesterday = Carbon::now()->subDays(1);
+                $thirteenDaysAgo = Carbon::now()->subDays(30);
                 foreach($sellers as $seller){
                     $name = $seller->name.' '.$seller->family;
-                    $register = 'App\Order'::where([
+                    $register = Order::where([
                         ['seller_id','=',$seller->id],
                         ['created_at','<',$today],
                         ['created_at','>',$yesterday]
                     ])->get();
 
-                    $collected = 'App\Order'::where([
+                    $collected = Order::where([
                         ['seller_id','=',$seller->id],
                         ['status','=',10],
-                        ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',11],
-                        ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->orWhere([
                         ['seller_id','=',$seller->id],
                         ['status','=',12],
-                        ['created_at','<',$today],
-                        ['created_at','>',$yesterday]
+                        ['collected_Date','<',$today],
+                        ['collected_Date','>',$thirteenDaysAgo]
                     ])
                     ->get();
 
@@ -137,6 +201,27 @@ class AppServiceProvider extends ServiceProvider
                 $view ->with(compact('sellerRegisters'));
             }
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Set Role variable for admin sidebar
+        |--------------------------------------------------------------------------
+        |*/
+        view()->composer('Admin.Master.Repetitive.StoreRoom.edit-modal',function($view){
+            if(auth()->check()){
+                // find user detail
+                $user       = User::find(auth()->user()->id);
+                // find role name
+                $roleName   = $user->getRoleNames()->first();
+                // find role all detail
+                $role = Role::where('name',$roleName)->firstOrFail();
+                // find Storage
+                $products = Product::latest()->get();
+                
+                $view ->with(compact('products'));
+            }
+        });
+
 
     }
 }

@@ -1,0 +1,18 @@
+{% if Agentpayments > 0 %}
+    <a 
+        href="{{route('userInventory.AgentUnverifiedPayment')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{Agentpayments}}
+        عدد پرداخت در انتظار بررسی-نماینده ها
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}
+{% if Agentcosts > 0 %}
+    <a 
+        href="{{route('userInventory.AgentUnverifiedCosts')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{Agentcosts}}
+        عدد هزینه در انتظار بررسی-نماینده ها
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}

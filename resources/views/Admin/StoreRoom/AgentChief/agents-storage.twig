@@ -13,7 +13,29 @@
 {% endblock %}
 
 {% block path %}
-  {% include 'Admin/Master/path' with {'title':'موجودی انبار'} %}
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h4 class="m-0 mr-3 text-dark">
+            {{"موجودی انبار"}}
+            <small style="font-size:14px;">
+              {{"("}}
+              {{ user.name }}{{" "}}{{ user.family }}
+              {{"-"}}
+              {{user.state.name}}{{"/"}}{{ user.city.name }}
+              {{")"}}
+            </small>
+          </h4>
+          
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
 {% endblock %}
 
 {% block content %}

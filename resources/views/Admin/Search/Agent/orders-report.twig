@@ -1,0 +1,150 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  سفارشات
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'سفارشات'} %}
+{% endblock %}
+
+{% block content %}
+
+
+<form id="reportOrderForm" action="{{route('search.AgentOrderSearch')}}" method="post" class="row pt-2 pb-2">
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+
+    <div class="col-12">
+
+      <div class="row">
+
+        <div class="col-sm-8">
+          <div class="row">
+            <div class="col-sm-4 mx-auto">
+              <label for="from">از تاریخ</label>
+              <input class="form-control persianDatePicker" type="text" required>
+              <input class="georgian_date" type="hidden" name="from" required>
+            </div>
+            <div class="col-sm-4 mx-auto">
+              <label for="to">تا تاریخ</label>
+              <input class="form-control persianDatePicker" type="text" required>
+              <input class="georgian_date" type="hidden" name="to" required>
+            </div>
+
+ 
+
+        <div class="col-sm-4 mx-auto ">
+          <label for="to">وضعیت</label>
+          <select class="form-control" name="status" id="">
+              <option value="">همه</option>
+              {% for status in statuses %}
+              <option value="{{status.id}}">{{status.name}}</option>
+              {% endfor %}
+              
+          </select>
+        </div>
+
+          </div>
+        </div>
+
+
+
+
+      <div class="col-sm-4 mx-auto">
+        <h6 class="col-12">نوع تاریخ</h6>
+        <!-- Group of default radios - option 1 -->
+        <div class="custom-control custom-radio">
+          <input value="created_at" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample1" checked>
+          <label class="custom-control-label" for="defaultGroupExample1">تاریخ ثبت سفارش</label>
+        </div>
+  
+        <!-- Group of default radios - option 2 -->
+        <div class="custom-control custom-radio">
+          <input value="edit_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample2" >
+          <label class="custom-control-label" for="defaultGroupExample2">تاریخ ویرایش سفارش</label>
+        </div>
+  
+        <!-- Group of default radios - option 3 -->
+        <div class="custom-control custom-radio">
+          <input value="allotment_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample3" >
+          <label class="custom-control-label" for="defaultGroupExample3">تاریخ تخصیص سفارش به نماینده</label>
+        </div>
+        <!-- Group of default radios - option 3 -->
+        <div class="custom-control custom-radio">
+          <input value="action_Date" name="date_status" type="radio" class="custom-control-input" id="defaultGroupExample4" >
+          <label class="custom-control-label" for="defaultGroupExample4">تاریخ اقدام نماینده روی سفارش</label>
+        </div>
+      </div>
+
+      </div>
+    </div>
+    
+
+    <div class="col-12 mt-5">
+      <div class="row">
+        
+
+        
+
+        {# <div class="col-sm-6 mx-auto">
+          <h6 class="col-12">نوع گزارش</h6>
+          <!-- Group of default radios - option 1 -->
+          <div class="custom-control custom-radio">
+            <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample5" checked>
+            <label class="custom-control-label" for="defaultGroupExample5">سفارشات مدیر پیگیری</label>
+          </div>
+    
+          <!-- Group of default radios - option 2 -->
+          <div class="custom-control custom-radio">
+            <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample6" >
+            <label class="custom-control-label" for="defaultGroupExample6">سفارشات نماینده</label>
+          </div>
+    
+          <!-- Group of default radios - option 3 -->
+          <div class="custom-control custom-radio">
+            <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample7" >
+            <label class="custom-control-label" for="defaultGroupExample7">سفارشات وصولی</label>
+          </div>
+          <!-- Group of default radios - option 3 -->
+          <div class="custom-control custom-radio">
+            <input name="report_status" type="radio" class="custom-control-input" id="defaultGroupExample8" >
+            <label class="custom-control-label" for="defaultGroupExample8">سفارشات کنسلی</label>
+          </div>
+        </div> #}
+
+
+      </div>
+    </div>
+
+
+    <div class="col-12 mt-5">
+      
+
+
+    </div>
+
+
+    <div class="col-sm-12 mt-5">
+        
+        <button class="btn btn-success btn-sm text-dark">
+            <strong class="h6">
+                مشاهده
+            </strong>
+        </button>
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}

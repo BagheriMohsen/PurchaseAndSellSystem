@@ -79,6 +79,7 @@ class CreateUsersTable extends Migration
             $table->string('forceOrder')->nullable();
             $table->integer('porsantSeller')->default(0);
             $table->integer('percent')->nullable();
+            $table->integer('factorPrice')->default(0);
             $table->integer('locallyPrice')->default(0);
             $table->integer('internalPrice')->default(0);
             $table->integer('villagePrice')->default(0);
@@ -88,11 +89,11 @@ class CreateUsersTable extends Migration
             $table->Foreign('image_id')->references('id')->on('media')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->Foreign('state_id')->references('id')->on('states')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->Foreign('state_id')->references('id')->on('states')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->Foreign('city_id')->references('id')->on('cities')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->Foreign('city_id')->references('id')->on('cities')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             $table->Foreign('agent_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');

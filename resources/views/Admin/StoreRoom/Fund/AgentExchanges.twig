@@ -49,7 +49,8 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                        <input type="text" value="{{old('date')}}" id="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>                        {# <label for="date-picker-example" class="mt-2">تاریخ</label> #}
+                        <input type="hidden" class="georgian_date" name="date"></input>  
                         <label for="date">تاریخ</label>
                     </div>                  
                     <div class="col-sm-8 mt-5 mx-auto">
@@ -152,8 +153,9 @@
                 <div class="row">
                     
                     <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>                        {# <label for="date-picker-example">تاریخ</label> #}
-                        <label id="date">تاریخ</label>
+                        <input type="text" value="{{old('date')}}" id="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required> 
+                        <input type="hidden" class="georgian_date" name="date"></input>                    
+                        <label for="date">تاریخ</label>
                     </div>
                   
                     <div class="col-sm-8 mt-5 mx-auto">
@@ -262,7 +264,8 @@
                 <div class="row">
                     
                      <div class="md-form col-sm-8 mt-5 mx-auto">
-                        <input type="text" value="{{old('date')}}" id="date" name="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>
+                        <input type="text" value="{{old('date')}}" id="date" class="form-control  cursor-pointer persianDatePicker" autocomplete="off" required>
+                        <input type="hidden" class="georgian_date" name="date"></input>  
                         <label for="date">تاریخ</label>
                     </div>
                   

@@ -7,12 +7,44 @@
         </p>
     </a>
 </li>
+{#  Report #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="far fa-folder-open"></i>
+    <p>
+        بایگانی
+    <i class="fa fa-angle-left right"></i> 
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('report.Orders')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>سفارشات</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('report.Payments')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>پرداخت ها و عودت وجه</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('report.Costs')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>هزینه ها</p>
+            </a>
+        </li>
+    </ul>
+</li>
+{#  Report #}
 {# products #}
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="fas fa-box-open"></i>
         <p>
         محصولات
+        <i class="fa fa-angle-left right"></i>   
         </p>
     </a>
     <ul class="nav nav-treeview">
@@ -45,6 +77,7 @@
         <i class="fas fa-users "></i>
         <p>
             کاربران
+        <i class="fa fa-angle-left right"></i> 
         </p>
     </a>
     <ul class="nav nav-treeview">
@@ -87,6 +120,7 @@
         <i class="fas fa-calculator"></i>
     <p>
         امور مالی
+    <i class="fa fa-angle-left right"></i> 
     </p>
     </a>
     <ul class="nav nav-treeview">
@@ -96,10 +130,23 @@
             <p>پرداخت های تایید نشده نماینده</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{route('userInventory.AgentUnverifiedCosts')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>هزینه های تایید نشده نماینده</p>
+            </a>
+        </li>
+         <li class="nav-item">
+            <a href="{{route('userInventory.AdminPaymentList')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>عودت وجه</p>
+            </a>
+        </li>
        
     </ul>
 </li>
 {#  user-inventory #}
+
 {# Citites #}
 <li class="nav-item">
     <a href="{{route('states.index')}}" class="nav-link">
@@ -128,3 +175,23 @@
     </a>
 </li>
 {# Search #}
+{#  setting #}
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="fas fa-cogs"></i>
+    <p>
+        تنظیمات
+    <i class="fa fa-angle-left right"></i> 
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('admin.GeneralSetting')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>تنظیمات عمومی</p>
+            </a>
+        </li>
+       
+    </ul>
+</li>
+{#  setting #}

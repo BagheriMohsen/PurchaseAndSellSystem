@@ -26,11 +26,11 @@ class CreateTableCustomers extends Migration
             $table->text('address')->nullable();
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('city_id')->references('id')->on('cities')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('state_id')->references('id')->on('states')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('state_id')->references('id')->on('states')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             
         });

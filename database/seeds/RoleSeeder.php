@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+
+use App\Models\User;
+
 class RoleSeeder extends Seeder
 {
     /**
@@ -22,28 +25,28 @@ class RoleSeeder extends Seeder
         $callCenter         = Role::create(['name'=>'callCenter','persianName'=>'کالسنتر']);
 
         #1.admin site
-        $user = 'App\User'::findOrFail(1);
+        $user = User::findOrFail(1);
         $user->assignRole($admin->name);
         #2.followUpManager
-        $user = 'App\User'::findOrFail(2);
+        $user = User::findOrFail(2);
         $user->assignRole($followUpManager->name);
         #3.mainwarehouser
-        $user = 'App\User'::findOrFail(3);
+        $user = User::findOrFail(3);
         $user->assignRole($mainwarehouser->name);
         #4.fundwarehouser
-        $user = 'App\User'::findOrFail(4);
+        $user = User::findOrFail(4);
         $user->assignRole($fundwarehouser->name);
         #5.agentChief
-        $user = 'App\User'::findOrFail(5);
+        $user = User::findOrFail(5);
         $user->assignRole($agentChief->name);
         #6.agent
-        $user = 'App\User'::findOrFail(6);
+        $user = User::findOrFail(6);
         $user->assignRole($agent->name);
         #7.seller
-        $user = 'App\User'::findOrFail(7);
+        $user = User::findOrFail(7);
         $user->assignRole($seller->name);
         #8.callCenter
-        $user = 'App\User'::findOrFail(8);
+        $user = User::findOrFail(8);
         $user->assignRole($callCenter->name);
     }
 }

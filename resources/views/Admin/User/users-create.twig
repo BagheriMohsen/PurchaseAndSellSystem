@@ -91,7 +91,6 @@
           <select id="agent_id" class="form-control"  name="agent_id">
             <option selected value="{{null}}">بدون مدیر نماینده</option>
             {% for chief in agentChiefs %}
-            {{dump(chief)}}
               <option {% if old('agent_id') == chief.id %} selected {% endif %}
                value="{{chief.id}}">
                {{chief.name}}{{' '}}{{chief.family}}
@@ -109,7 +108,10 @@
           <select id="callcenter_id" class="form-control"  name="callCenter">
               <option selected value="{{null}}"> کالسنتر را انتخاب کنید</option>
             {% for callCenter in callCenters %}
-              <option  {% if old('callCenter') == callCenter.id %} selected {% endif %} value="{{callCenter.id}}">{{callCenter.username}}</option>
+              <option  {% if old('callCenter') == callCenter.id %} selected {% endif %} 
+              value="{{callCenter.id}}">
+                {{callCenter.name}}{{" "}}{{ callCenter.family }}
+              </option>
             {% endfor %}
           </select>
         </div>
@@ -171,19 +173,26 @@
         </div>
         {# end auto send #}
         {# auto send #}
-        <div class="col-sm-4 mb-4 d-none">
-          <h6>نوع محاسبه هزینه کالا
-          </h6>
-          <input id="calType" type="checkbox"
-          
-            data-toggle="switchbutton"
-            data-onstyle="success"
-            data-offstyle="info"
-            data-onlabel="مبلغ فاکتور"
-            data-offlabel="تعرفه تعیین شده" name="calType"
-            {% if old('calType') != null %} checked {% endif %}
-            >
+        <div class="col-sm-4 mb-4 d-none CalTypeBox">
+          <div>
+             <h6>نوع محاسبه هزینه کالا
+            </h6>
+            <input id="calType" type="checkbox"
+            
+              data-toggle="switchbutton"
+              data-onstyle="success"
+              data-offstyle="info"
+              data-onlabel="مبلغ فاکتور"
+              data-offlabel="تعرفه تعیین شده" name="calType"
+              {% if old('calType') != null %} checked {% endif %}
+              >
+            </div>
+            <div class="md-form d-none">
+              <input type="text" id="factorCal" class="form-control comma" name="factorPrice" value="">
+              <label for="factorCal"> مبلغ محاسبه مبلغ فاکتور</label>
+            </div>
         </div>
+        
         {# end auto send #}
         {# Back to follow manager #}
         <div class="col-sm-4 mb-4 d-none">
@@ -361,7 +370,7 @@
     <div class="col-sm-5  mt-5">
       <label for="state">استان
       </label>
-      <select id="state" class="form-control"  name="state">
+      <select id="state" class="form-control"  name="state" required>
         <option value="{{null}}">استان را انتخاب کنید</option>
         {% for state in states %}
           <option {% if old('state') == state.id %} selected {% endif %} value="{{state.id}}">{{state.name}}</option>
@@ -372,7 +381,7 @@
     <div class="col-sm-5  mt-5">
       <label for="city">شهر
       </label>
-      <select id="city" class="form-control" name="city">
+      <select id="city" class="form-control" name="city" required>
         <option value="{{null}}">شهر را انتخاب کنید</option>
           {% for city in cities %}
             <option {% if old('city') == city.id %} selected {% endif %} value="{{city.id}}">{{city.name}}</option>

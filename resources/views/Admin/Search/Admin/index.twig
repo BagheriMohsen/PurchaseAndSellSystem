@@ -25,7 +25,7 @@
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <div class="col-sm-6 px-4">
           <div class="form-row">
-             <div class="form-group col-12 px-4">
+             <div class="form-group col-6 px-4">
               <label for="status">وضعیت</label>
               <select id="order_status" class="form-control" name="status">
                 <option value="{{null}}" selected>همه ی وضعیت ها</option>
@@ -34,12 +34,24 @@
                 {% endfor %}
               </select>
             </div>
+
+            <div class="form-group col-6 px-4">
+              <label for="product">محصولات</label>
+              <select id="product" class="form-control" name="product">
+                <option value="{{null}}" selected>همه</option>
+                {% for product in products %}
+                  <option>{{product.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+
             <div class="form-group col-6 px-4">
               <label for="seller">فروشنده</label>
               <select id="seller" class="form-control" name="seller">
                 <option value="{{null}}" selected>همه</option>
                 {% for seller in sellers %}
-                  <option>
+                  <option value="{{seller.id}}">
                     {{ seller.name }}
                     {{' '}}
                     {{ seller.family }}
@@ -54,7 +66,7 @@
               <select id="callcenter" class="form-control" name="callcenter">
                 <option value="{{null}}" selected>همه</option>
                 {% for callCenter in callCenters %}
-                  <option>
+                  <option value="{{callCenter.id}}">
                     {{ callCenter.name }}
                     {{' '}}
                     {{ callCenter.family }}
@@ -69,7 +81,7 @@
               <select id="follow_manager" class="form-control" name="follow_manager">
                 <option value="{{null}}" selected>همه</option>
                 {% for followUpManager in followUpManagers %}
-                  <option value="{{null}}">
+                  <option value="{{followUpManager.id}}">
                     {{ followUpManager.name }}
                     {{' '}}
                     {{ followUpManager.family }}
@@ -84,7 +96,7 @@
               <select id="agent" class="form-control" name="agent">
                 <option value="{{null}}" selected>همه</option>
                 {% for agent in agents %}
-                  <option>
+                  <option value="{{agent.id}}">
                     {{ agent.name }}
                     {{' '}}
                     {{ agent.family }}
@@ -122,15 +134,7 @@
         </div>
         <div class="col-sm-12 px-4">
           <div class="form-row">
-            {# <div class="form-group col-6 px-4">
-              <label for="product">محصولات</label>
-              <select id="product" class="form-control" name="product">
-                <option value="{{null}}" selected>همه</option>
-                {% for product in products %}
-                  <option>{{product.name}}</option>
-                {% endfor %}
-              </select>
-            </div> #}
+            
             <div class="form-group col-3 px-4">
               <label for="state">استان</label>
               <select id="state" class="form-control" name="state">
@@ -164,19 +168,19 @@
               <input type="hidden" name="to_register_date" class="georgian_date"></input>
             </div>
             <div class="form-group col-3 px-4">
-              <label for="from_deliver_date">از تاریخ تحویل</label>
+              <label for="from_deliver_date">از تاریخ اقدام</label>
               <input type="text" class="form-control persianDatePicker"></input>
               <input type="hidden" name="from_deliver_date" class="georgian_date"></input>
             </div>
             <div class="form-group col-3 px-4">
-              <label for="to_deliver_date">تا تاریخ تحویل</label>
+              <label for="to_deliver_date">تا تاریخ اقدام</label>
               <input type="text" class="form-control persianDatePicker"></input>
               <input type="hidden" name="to_deliver_date" class="georgian_date"></input>
             </div>
-            <div class="form-group col-3 px-4">
+            {# <div class="form-group col-3 px-4">
               <label for="excel_export">گرفتن خروجی اکسل</label>
               <input type="checkbox" name="excel_export" class="form-control"></input>
-            </div>
+            </div> #}
           </div>
         </div>
         <button type="submit" class="btn btn-primary">جستجو</button>

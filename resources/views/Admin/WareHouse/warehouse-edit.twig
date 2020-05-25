@@ -20,7 +20,7 @@
 
         {% include 'Messages/errors' %}
 
-        <form action="{{ route('warehouses.update',warehouse.id) }}" method="post" class="container-fluid bg-white pt-3 pb-3">
+        <form id="warehouseForm" action="{{ route('warehouses.update',warehouse.id) }}" method="post" class="container-fluid bg-white pt-3 pb-3">
             <input type="hidden" name="_token" value="{{csrf_token()}}" />
             <input type="hidden" name="_method" value="PUT" />
             <div class="row">
@@ -43,8 +43,8 @@
                 {# City #}
                 <div  class="col-sm-3 mt-3  mb-4">
                     <label for="city">استان</label>
-                    <select class="form-control"  name="state">
-                        {% for state in cities %}
+                    <select id="state" class="form-control"  name="state">
+                        {% for state in states %}
                             <option {% if warehouse.state_id == state.id %} selected {% endif %} value="{{state.id}}" >{{state.name}}</option>
                         {% endfor %}
                     </select>
@@ -53,7 +53,7 @@
                 {# City #}
                 <div  class="col-sm-3 mt-3  mb-4">
                     <label for="city">شهر</label>
-                    <select class="form-control"  name="city">
+                    <select id="city" class="form-control"  name="city">
                         {% for city in cities %}
                             <option {% if warehouse.city_id == city.id %} selected {% endif %} value="{{city.id}}" >{{city.name}}</option>
                         {% endfor %}

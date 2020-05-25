@@ -35,10 +35,10 @@ class CreateTableMoneyCirculations extends Migration
             $table->bigInteger('agent_id')->unsigned()->nullable();
             $table->bigInteger('seller_id')->unsigned()->nullable();
             $table->bigInteger('order_status_id')->unsigned()->nullable();
-            $table->bigInteger('order_product_id')->unsigned();
+            // $table->bigInteger('order_product_id')->unsigned();
             $table->bigInteger('order_id')->unsigned();
             $table->integer('amount');
-            $table->integer('sharedSpecialAmount')->nullable();
+            $table->integer('sharedSpecialAmount')->default(0);
             
             $table->string('code',100)->nullable();
             $table->char('trackingCode',100)->nullable();
@@ -49,8 +49,8 @@ class CreateTableMoneyCirculations extends Migration
             $table->foreign('user_inventory_id')->references('id')->on('users_inventory')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('order_product_id')->references('id')->on('order_product')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('order_product_id')->references('id')->on('order_product')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             $table->foreign('seller_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
@@ -87,12 +87,13 @@ class CreateTableMoneyCirculations extends Migration
             $table->bigInteger('bank_account_id')->unsigned()->nullable();
             $table->string('receiptImage')->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->bigInteger('status_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned()->nullable();
             $table->integer('bill');
             $table->Date('billDate');
             $table->Date('confirmDate')->nullable();
+            $table->Date('OnconfirmDate')->nullable();
             $table->string('trackingCode',256);
-            $table->string('paymentMethod');
+            $table->string('paymentMethod')->nullable();
             $table->text('billDesc')->nullable();
             $table->timestamps();
 

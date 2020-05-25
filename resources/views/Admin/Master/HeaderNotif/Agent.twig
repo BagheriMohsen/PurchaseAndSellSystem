@@ -8,12 +8,22 @@
         {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
     </a>
 {% endif %}
- {% if orderNotif > 0 %}
+{% if orderNotif > 0 %}
     <a 
         href="{{route('orders.AgentOrderLists')}}" class="dropdown-item">
         <i class="fa fa-envelope ml-2"></i> 
         {{orderNotif}}
         عدد سفارش در انتظار تحویل
+        {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
+    </a>
+{% endif %}
+
+{% if AgentPayBack > 0 %}
+    <a 
+        href="{{route('userInventory.AgentPaybackList')}}" class="dropdown-item">
+        <i class="fa fa-envelope ml-2"></i> 
+        {{AgentPayBack}}
+        عدد عودت وجه تایید نشده
         {# <span class="float-left text-muted text-sm">3 دقیقه</span> #}
     </a>
 {% endif %}

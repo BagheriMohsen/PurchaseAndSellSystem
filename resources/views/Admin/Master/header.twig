@@ -32,7 +32,7 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell crud-icon"></i>
           <span class="badge badge-secondary navbar-badge" style="font-size:12px;">
-            {{notifs + orderNotif + AgentReturnedProduct}}
+            {{notifs + orderNotif + AgentReturnedProduct + agents_order + Agentpayments + Agentcosts + returnToSeller + AgentPayBack}}
           </span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
@@ -48,12 +48,25 @@
               #}
               {% if role.name == "agent" %}
                 {% include 'Admin.Master.HeaderNotif.Agent' %}
+
+              {% elseif role.name == "agentChief" %}
+                {% include 'Admin.Master.HeaderNotif.AgentChief' %}
+
               {% elseif role.name == "fundWarehouser" %}
                 {% include 'Admin.Master.HeaderNotif.FundWareHouser' %}
+
               {% elseif role.name == "followUpManager" %}
                 {% include 'Admin.Master.HeaderNotif.FollowUpManager' %}
+
               {% elseif role.name == "mainWarehouser" %}
                 {% include 'Admin.Master.HeaderNotif.MainWareHouser' %}
+
+              {% elseif role.name == "admin" %}
+                {% include 'Admin.Master.HeaderNotif.Admin' %}
+
+              {% elseif role.name == "seller" %}
+                {% include 'Admin.Master.HeaderNotif.Seller' %}
+
               {% endif %}
               {#
               --------------------------------------------------------------------------
@@ -61,7 +74,7 @@
               --------------------------------------------------------------------------
               #}
               
-              {% set notifCount = orderNotif + notifs + AgentReturnedProduct %}
+              {% set notifCount = orderNotif + notifs + agents_order + Agentpayments + AgentReturnedProduct + Agentcosts %}
               {% if  notifCount <= 0 %}
                   <div class="text-center text-muted">
                     چیزی برای نمایش وجود ندارد

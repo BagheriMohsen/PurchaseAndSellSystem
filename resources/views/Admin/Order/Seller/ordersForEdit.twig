@@ -1,0 +1,139 @@
+{% extends 'Admin/Master/layout' %}
+
+{% block title %}
+  سفارشات قابل ویرایش
+{% endblock %}
+
+{% block header %}
+  {% include 'Admin/Master/header' %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'Admin/Master/sidebar' %}
+{% endblock %}
+
+{% block path %}
+  {% include 'Admin/Master/path' with {'title':'سفارشات قابل ویرایش'} %}
+{% endblock %}
+
+{% block content %}
+
+  {% include 'Messages/switchSuccess' %}
+
+  <div class="row">
+   
+    <div class="card col-sm-12">
+     
+                <div class="card-header">
+                  {# <a class="col-3 btn btn-warning btn-sm" href="#">
+                    <strong class="h6 text-dark">
+                      برگشت به مدیر پیگیری
+                    </strong>
+                  </a> #}
+
+                  
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body col-12 mx-auto">
+                
+                  <table   class="table table-striped table-bordered table-sm text-center" cellspacing="0"
+                width="100%">
+                    <thead>
+                    <tr>
+                      <th>نام خریدار</th>
+                      <th>استان-شهر</th>
+                      <th>کد پستی</th>
+                      <th>همراه-ثابت</th>
+                      <th>کد پیگیری</th>
+                      <th>نوع پرداخت</th>
+                      <th>تاریخ ثبت</th>
+                      <th>عملیات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                      <tr>
+                        <td>{{order.fullName}}</td>
+                        <td>{{order.state.name}}{{'-'}}{{order.city.name}}</td>
+                        <td>{{order.postalCode}}</td>
+                        <td>{{order.mobile}}<br>{{order.telephone}}</td>
+                        <td>{{order.trackingCode}}</td>
+                        {% if order.paymentMethod == 'cash' %}
+                          <td>{{'نقدی'}}</td>
+                        {% else %}
+                          <td>{{'غیر نقدی'}}</td>
+                        {% endif %}
+                        <td class="timestamp">{{order.created_at | date('Y-m-d')}}</td>
+                        <td >
+                          {# {% if order.paymentMethod != 'cash' %}
+                            <a title="جزئیات چک" class="text-secondary" >
+                                <i class="fas fa-money-bill crud-icon"></i>
+                            </a>
+                          {% else %}
+                            <a title="پرداخت بصورت نقدی ست" class="text-primary" >
+                                <i class="fas fa-money-bill crud-icon"></i>
+                            </a>
+                          {% endif %} #}
+                          
+                          <div class="mx-auto">
+                            <a href="{{route('orders.edit',order.id)}}" title="ویرایش سفارش" class="mx-auto text-secondary" >
+                                <i class="far fa-edit crud-icon"></i>
+                            </a>
+                          </div >
+
+                          <div class="mx-auto">
+                            <a title="جزئیات این سفارش" class=" text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                                <sub class="text-dark">
+                                  {{order.products.count()}}
+                                </sub>
+                                <i class="fas fa-shopping-basket crud-icon"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <ul>
+                        {{ orders.render() | raw }}
+                      </ul>
+                    </tfoot>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+          </div>
+
+      {# <div class="row">
+        <div class="col-6">
+          <button class="btn btn-info btn-sm mx-auto" type="button" name="button">
+              <strong class="h6">
+                چاپ
+              </strong>
+          </button>
+          <button class="btn btn-secondary btn-sm mx-auto" type="button" name="button">
+              <strong class="h6">
+                اکسل
+              </strong>
+          </button>
+        </div>
+      </div> #}
+     
+
+          
+      {# 
+      ######### ORDERS START MODAL  
+      #}
+      {% include 'Admin/Master/Repetitive/order-details-modal' with {'orders':orders} %}
+      {#
+      ######### ORDERS END MODAL
+      #}
+
+
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'Admin/Master/footer' %}
+{% endblock %}
+

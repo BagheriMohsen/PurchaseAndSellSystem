@@ -1,0 +1,126 @@
+{% for order in orders %}
+
+  <div class="modal fade" id="condition{{order.id}}">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header bg-success justify-content-start pb-0">
+          <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+          <p class="heading lead"> 
+          تعیین وضعیت
+          </p>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body text-center ">
+          <form method="post" class="conditionAssignForm" action="{{ route("orders.AgentChangeOrderStatusDesc", order.id) }}">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <div class="row">
+              <div class="col-6 text-right">
+                <h6>انتخاب حالات دیگر:</h6>
+                {% if order.status !=  7 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="7" name="condition" checked>
+                    <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+                  </div>
+                {% endif %}
+
+                {% if order.status !=  14 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="14" name="condition" >
+                    <label class="form-check-label" for="suspend">معلق</label>
+                  </div>
+                {% endif %}
+
+                {% if order.status !=  13 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="13" name="condition">
+                    <label class="form-check-label" for="cancel">کنسلی</label>
+                  </div>
+                {% endif %}
+
+              </div>
+              <div class="col-6 text-right">
+                <div class="waiting_options">
+                  <label for="waiting_desc">توضیحات:</label>
+                  <textarea rows="10" cols="50" class="form-control" type="text"  name="waiting_desc" placeholder="توضیحات وضعیت سفارش"></textarea>
+                </div>
+                <div class="suspend_options d-none">
+                  <h6>انتخاب حالت تماس مجدد:</h6>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="عدم پاسخگویی"  name="suspend">
+                    <label class="form-check-label">عدم پاسخگویی</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="خارج از دسترس" name="suspend" >
+                    <label class="form-check-label">خارج از دسترس</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="زمان سررسید" name="suspend">
+                    <label class="form-check-label">زمان سررسید</label>
+                  </div>
+                  <div class="dueDate d-none">
+                    <label>تاریخ: </label>
+                    <input type="text" class="form-control persianDatePicker" name="dueDate">
+                  </div>
+                </div>
+                <div class="cancel_options d-none">
+                  <h6>انتخاب حالت انصراف :</h6>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="قیمت بالا" name="cancel">
+                    <label class="form-check-label">قیمت بالا</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="کیفیت پایین" name="cancel" >
+                    <label class="form-check-label">کیفیت پایین</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="ناکارآمد بودن" name="cancel">
+                    <label class="form-check-label">ناکارآمد بودن </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="برآورده نکردن خواسته ها" name="cancel">
+                    <label class="form-check-label">برآورده نکردن خواسته ها </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="مزاحمت" name="cancel" >
+                    <label class="form-check-label">  مزاحمت</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="تماس دیروقت" name="cancel">
+                    <label class="form-check-label">تماس دیروقت </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="خرید از مکان دیگر" name="cancel">
+                    <label class="form-check-label"> خرید از مکان دیگر</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="ثبت اطلاعات نامعتبر (فروشنده)" name="cancel" >
+                    <label class="form-check-label">ثبت اطلاعات نامعتبر (فروشنده)  </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="توضیحات" name="cancel">
+                    <label class="form-check-label">توضیحات </label>
+                  </div>
+                  <div class="cancel_desc d-none">
+                    <label for="cancelDesc">توضیحات:</label>
+                      <textarea rows="10" cols="30" class="form-control" type="text"  name="cancel_desc" value="" placeholder="توضیحات دلیل کنسلی"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 text-center mt-5">
+                <button class="btn btn-success" type="button" name="button">
+                  <strong class="">
+                    اعمال
+                  </strong>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}

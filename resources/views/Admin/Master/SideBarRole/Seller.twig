@@ -18,27 +18,33 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-        <a href="{{route('orders.create')}}" class="nav-link">
-            <i class="fas fa-chevron-circle-left"></i>
-            <p>ثبت سفارش جدید</p>
-        </a>
+            <a href="{{route('orders.create')}}" class="nav-link">
+                <i class="fas fa-chevron-circle-left"></i>
+                <p>ثبت سفارش جدید</p>
+            </a>
         </li>
         <li class="nav-item">
             <a href="{{route('orders.sellerOrderCallBack')}}" class="nav-link">
                 <i class="fas fa-chevron-circle-left"></i>
-                <p>تماس مجدد</p>
+                <p>لیست تماس مجدد</p>
             </a>
         </li>
+        {# <li class="nav-item">
+            <a href="{{route('orders.OrdersForEdit')}}" class="nav-link">
+                <i class="fas fa-chevron-circle-left"></i>
+                <p>سفارشات قابل ویرایش</p>
+            </a>
+        </li> #}
         <li class="nav-item">
             <a href="{{route('orders.sellerNoActionOrders')}}" class="nav-link">
                 <i class="fas fa-chevron-circle-left"></i>
-                <p>سفارشات بدون اقدام</p>
+                <p>سفارشات ‌ثبت ‌شده‌ بدون ‌اقدام</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{{route('orders.receiveOrderFromFollowUpManager')}}" class="nav-link">
                 <i class="fas fa-chevron-circle-left"></i>
-                <p>سفارشات برگشت خورده</p>
+                <p>سفارشات برگشتی جهت ویرایش</p>
             </a>
         </li>
         

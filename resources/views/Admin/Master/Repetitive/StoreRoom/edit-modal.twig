@@ -1,0 +1,71 @@
+{% for storeRoom in storeRooms %}
+    <!-- Modal -->
+    <form  action="{{route('storeRooms.storeRoomsUpdate',storeRoom.id)}}" 
+    method="POST" enctype="multipart/form-data"
+    class="modal fade right" id="editStoreRoom{{storeRoom.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <input name="_token" value="{{csrf_token()}}">
+ 
+
+        <div class="modal-dialog modal-side modal-bottom-left" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                مشخصات
+                {# {{' '}}{{storeRoom.product.name}} #}
+                </h5>
+            </div>
+            <div class="modal-body">
+                    {# <img class="col-sm-12" src="{{storeRoom.product.cardUrl}}" /> #}
+                <div class="d-flex mt-3">
+                    <div>
+                        <strong>
+                            وضعیت
+                        </strong>
+                        <br>
+                        {{storeRoom.status}}
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-3 md-form">
+                    <input type="number" name="number" value="{{storeRoom.number}}" id="form1" class="form-control">
+                    <label for="form1">تعداد</label>
+                </div>
+                <div class="md-form col-sm-12 mt-3">
+                    <i class="fas fa-pencil-alt prefix"></i>
+                    <textarea name="desc" id="form10" 
+                    class="md-textarea form-control" 
+                    rows="3" cols="30">{{storeRoom.description|raw}}</textarea>
+                    <label for="form10">توضیحات</label>
+                </div>
+                <div class="col-sm-12 mt-3">
+                    <div>
+                        <label for="product">نام کالا</label>
+                        <div>{{storeRoom.product.name}}</div>
+                        {# <select disabled name="product" class="browser-default custom-select">
+                            {% for product in products %}
+                                <option 
+                                {% if storeRoom.product.id == product.id %} 
+                                    selected
+                                {% endif %}
+                                value="{{product.id}}">{{product.name}}</option>
+                            {% endfor %}
+                        </select> #}
+                    </div>
+                </div>
+                 
+                </div>
+                <div class="col-sm-6 mt-3">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <strong class="h6 text-dark">
+                            ویرایش  
+                        </strong>
+                    </button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endfor %}

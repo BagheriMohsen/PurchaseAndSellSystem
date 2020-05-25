@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\State;
-use App\City;
+
+use App\Models\State;
+use App\Models\City;
+
+
 class CityController extends Controller
 {
     /**
@@ -14,7 +17,9 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::latest()->paginate(15);
+        $cities = City::with("state")
+        ->latest()
+        ->paginate(15);
         $states = State::latest()->get();
         return view('Admin.City&State.cities',compact('states','cities'));
     }

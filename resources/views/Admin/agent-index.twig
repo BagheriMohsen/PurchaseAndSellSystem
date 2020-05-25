@@ -118,118 +118,159 @@
           </div>
 
 
-          <div class="container col-sm-12">
-            {# item #}
-            <div class="row">
-              <div class="col-md-6">
-                 <div class="card">
-                  <div class="card-header text-center bg-info">
-                   <i class="fa fa-book crud-icon"></i>
-                    صورت حساب جاری شما  
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body col-12 mx-auto">
-                    <table class="table table-sm text-center no-border">
-                      <tr>
-                          <th scope="row">مجموع کل فروش</th>
+<div class="container col-sm-12">
+              {# item #}
+              <div class="row">
+                <div class="col-md-6">
+                   <div class="card">
+                    <div class="card-header text-center bg-info">
+                     <i class="fa fa-book crud-icon"></i>
+                      صورت حساب جاری شما  
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body col-12 mx-auto">
+                      <table class="table table-sm text-center no-border">
+                        <tr>
+                            <th scope="row">مجموع کل فروش</th>
+                            <th scope="col">
+                              {% set all_sell = AllSell + Discount %}
+                              {{ all_sell | number_format }}
+                              تومان
+                            </th>
+                        </tr>
+                        <tr>
+                          <th scope="row">مجموع واریزی</th>
                           <th scope="col">
-                            {{ AllSell | number_format }}
-                            تومان
-                          </th>
-                      </tr>
-                      <tr>
-                        <th scope="row">مجموع واریزی</th>
-                        <th scope="col">
-                            {{ TotalSettle | number_format }}
-                            تومان
-                        </th>
-                      </tr>
-                      {# <tr>
-                          <th scope="row">هزینه حمل</th>
-                          <td>10000</td>
-                      </tr> #}
-                      {# <tr>
-                          <th scope="row">مجموع چک ها</th>
-                          <td>10000</td>
-                      </tr> #}
-                      {# <tr>
-                          <th scope="row">مجموع چک های تایید شده</th>
-                          <td>10000</td>
-                      </tr> #}
-                      {# <tr>
-                          <th scope="row">مجموع پرداختی</th>
-                          <td>10000</td>
-                      </tr> #}
-                      <tr>
-                          <th scope="row">مجموع مبلغ مشارکت</th>
-                          <th scope="col">
-                              {{ AllSpecialShared | number_format }}
+                              {{ payments | number_format }}
                               تومان
                           </th>
-                      </tr>
-                      
-                      
-                  
-
-                    </table>
+                        </tr>
+                        <tr>
+                            <th scope="row">هزینه  ها</th>
+                            <td>
+                              {{ costs | number_format }}
+                              تومان
+                            </td>
+                        </tr>
+                        
+                        {# <tr>
+                            <th scope="row">مجموع چک ها</th>
+                            <td>10000</td>
+                        </tr> #}
+                        {# <tr>
+                            <th scope="row">مجموع چک های تایید شده</th>
+                            <td>10000</td>
+                        </tr> #}
+                        {# <tr>
+                            <th scope="row">مجموع پرداختی</th>
+                            <td>10000</td>
+                        </tr> #}
+                        <tr>
+                            <th scope="row">مجموع مبلغ مشارکت</th>
+                            <th scope="col">
+                                {{ AllSpecialShared | number_format }}
+                                تومان
+                            </th>
+                        </tr>
+                        
+                        
+                    
+  
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
                   </div>
-                  <!-- /.card-body -->
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header text-center bg-info">
-                  <i class="fas fa-money-check-alt"></i>
-                    مبلغ بدهی شما
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body col-12 mx-auto">
-                    <table class="table table-sm text-center no-border">
-                      <tr>
-                        <th scope="row">جایزه</th>
-                        <td>
-                          {{ user.gift | number_format }}
-                          تومان
-                        </td>
-                      </tr>
-                      {# <tr>
-                          <th scope="row">امتیاز</th>
-                          <td>10000</td>
-                      </tr> #}
-                      <tr>
-                          <th scope="row">مجموع بدهی شما</th>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-header text-center bg-info">
+                    <i class="fas fa-money-check-alt"></i>
+                      مبلغ بدهی شما
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body col-12 mx-auto">
+                      <table class="table table-sm text-center no-border">
+                        <tr>
+                          <th scope="row">تخفیف</th>
                           <td>
-                            {% set AllDebtor = AllSell - TotalSettle - AllSpecialShared %}
-                            {{ AllDebtor | number_format}}
+                            {{ Discount | number_format }}
                             تومان
                           </td>
-                      </tr>
-                      {# <tr>
-                          <th scope="row">بدهی چکی شما</th>
-                          <td>10000</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">بدهی نقدی شما</th>
-                          <td>10000</td>
-                      </tr> #}
-                      <tr>
-                        <th scope="row">مانده حساب</th>
-                        <td>
-                          {% set balance = AllDebtor - user.gift %}
-                          {{ balance | number_format }}
-                          تومان
-                        </td>
-                      </tr>
-                    </table>
+                        </tr>
+                        <tr>
+                            <th scope="row">عودت‌ وجه</th>
+                            <td>
+                              {{ payback | number_format }}
+                              تومان
+                            </td>
+                        </tr>
+                        {# <tr>
+                            <th scope="row">امتیاز</th>
+                            <td>10000</td>
+                        </tr> #}
+                        <tr>
+                            <th scope="row">مجموع بدهی شما</th>
+                            <td>
+                             
+                              {% set AllDebtor = all_sell  - (payments + AllSpecialShared + costs - payback) %}
+
+                              {% if AllDebtor > 0 %}
+                                {% set AllDebtor = AllDebtor - Discount %}
+                              {% else %}
+                                {% set AllDebtor = AllDebtor + Discount %}
+                              {% endif %}
+
+                              {{ AllDebtor | number_format}}
+                              تومان
+                              
+                            </td>
+                        </tr>
+                        {# <tr>
+                            <th scope="row">بدهی چکی شما</th>
+                            <td>10000</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">بدهی نقدی شما</th>
+                            <td>10000</td>
+                        </tr> #}
+                        <tr>
+                          <th scope="row">مانده حساب</th>
+                          
+                            {% set balance = AllDebtor - user.gift %}
+  
+                            {% if balance >= 0 %}
+                              <td class="text-danger">
+                              {{ balance | number_format }}
+                              تومان
+                              </td>
+                            {% else %}
+                              <td class="text-primary">
+                              {{ balance | abs | number_format }}
+                              تومان
+                              </td>
+                            {% endif %}
+                        </tr>
+                        {% if balance < 0 %}
+                        <tfoot>
+                          <tr class="text-center bg-success pt-2 pb-2">
+                            <td colspan="2">
+                              <i class="fas fa-info"></i>
+                              نماینده عزیز شما مبلغ
+                              {{ balance | abs | number_format }}
+                              تومان را از سیستم طلب دارید
+                            </td>
+                        {% endif %}
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
                   </div>
-                  <!-- /.card-body -->
                 </div>
               </div>
             </div>
-          </div>
 
-
-         {# chart #}
+        {# chart #}
           <div class="row text-center d-block mt-5">
             <h4 ></h4>
             <hr width="300px" style="border-bottom:5px solid red;" />

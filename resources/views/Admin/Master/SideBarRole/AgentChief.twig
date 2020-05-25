@@ -8,12 +8,23 @@
     </a>
 </li>
 {# Agent Chief Dashboard #}
+{#  WareHouse #}
+{# <li class="nav-item">
+    <a href="{{route('users.AgentListsForAgentChief')}}" class="nav-link">
+        <i class="fas fa-user-friends"></i>
+        <p>
+        نمایندگان
+        </p>
+    </a>
+</li> #}
+{#  WareHouse #}
 {#  orders #}
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
     <i class="far fa-calendar-plus"></i>
     <p>
         سفارشات
+    <i class="fa fa-angle-left right"></i> 
     </p>
     </a>
     <ul class="nav nav-treeview">
@@ -61,4 +72,34 @@
         امور مالی
         </p>
     </a>
+</li>
+
+{# Search #}
+<li class="nav-item">
+    <a href="{{route('search.AgentChiefAdvancedSearchPage')}}" class="nav-link">
+        <i class="fas fa-search"></i>
+        <p>
+        جستجو پیشرفته
+        </p>
+    </a>
+</li>
+{# Search #}
+
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+    <i class="far fa-calendar-plus"></i>
+    <p>
+        گزارش‌ها
+    <i class="fa fa-angle-left right"></i> 
+    </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{route('report.AgentChiefReportsAgent')}}" class="nav-link">
+            <i class="fas fa-chevron-circle-left"></i>
+            <p>کاربران</p>
+            </a>
+        </li>
+        
+    </ul>
 </li>

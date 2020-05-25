@@ -28,15 +28,16 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('followUpManager_id')->unsigned()->nullable();
             $table->Date('followUpManagerConfirmDate')->nullable();
             $table->bigInteger('pay_id')->unsigned()->nullable();
+            $table->string('product_array')->nullable();
             $table->char('trackingCode',250);
             $table->string('mobile');
             $table->string('telephone')->nullable();
             $table->string('fullName')->nullable();
             $table->string('paymentMethod')->nullable();
-            $table->integer('shippingCost')->nullable();
-            $table->integer('prePayment')->nullable();
-            $table->integer('cashPrice')->nullable();
-            $table->integer('chequePrice')->nullable();
+            $table->integer('shippingCost')->default(0);
+            $table->integer('prePayment')->default(0);
+            $table->integer('cashPrice')->default(0);
+            $table->integer('chequePrice')->default(0);
             $table->text('sellerDescription')->nullable();
             $table->text('sendDescription')->nullable();
             $table->text('statusDescription')->nullable();
@@ -49,7 +50,15 @@ class CreateOrdersTable extends Migration
             $table->Date('delivary_Date')->nullable();
             $table->Date('collected_Date')->nullable();
             $table->Date('cancelled_Date')->nullable();
+            $table->Date('edit_Date')->nullable();
+            $table->Date('send_seller_Date')->nullable();
+            $table->Date('send_callcenter_Date')->nullable();
             $table->Date('returnToSeller_Date')->nullable();
+            $table->Date('returnToManager_Date')->nullable();
+            $table->Date('allotment_Date')->nullable();
+            $table->Date('action_Date')->nullable();
+            $table->Text("status_desc")->nullable();
+            $table->Date("dueDate")->nullable();
             $table->string('addressConfirm')->nullable();
             $table->string('gift')->nullable();
             $table->timestamps();
@@ -66,11 +75,11 @@ class CreateOrdersTable extends Migration
             $table->foreign('followUpManager_id')->references('id')->on('users')
             ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('city_id')->references('id')->on('cities')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('city_id')->references('id')->on('cities')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->foreign('state_id')->references('id')->on('states')
-            ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('state_id')->references('id')->on('states')
+            // ->onUpdate('cascade')->onDelete('cascade');
 
             
 
@@ -89,6 +98,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->integer('count');
             $table->integer('off');
+            $table->boolean('collected')->default(0);
+            $table->boolean('cancelled')->default(0);
             $table->timestamps();
             
             $table->foreign('order_id')->references('id')->on('orders')

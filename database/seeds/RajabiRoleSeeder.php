@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+
+use App\Models\User;
+
 class RajabiRoleSeeder extends Seeder
 {
     /**
@@ -22,16 +25,16 @@ class RajabiRoleSeeder extends Seeder
         $callCenter         = Role::create(['name'=>'callCenter','persianName'=>'کالسنتر']);
 
         #1.admin site
-        $user = 'App\User'::findOrFail(1);
+        $user = User::findOrFail(1);
         $user->assignRole($admin->name);
         #2.followUpManager
-        $user = 'App\User'::findOrFail(2);
+        $user = User::findOrFail(2);
         $user->assignRole($followUpManager->name);
         #3.mainwarehouser
-        $user = 'App\User'::findOrFail(3);
+        $user = User::findOrFail(3);
         $user->assignRole($mainwarehouser->name);
         #4.fundwarehouser
-        $user = 'App\User'::findOrFail(4);
+        $user = User::findOrFail(4);
         $user->assignRole($fundwarehouser->name);
        
     }
