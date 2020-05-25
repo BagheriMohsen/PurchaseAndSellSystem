@@ -1548,10 +1548,16 @@ class OrderController extends Controller
         if($status == 7) {
             $order->update([
                 'status'        =>  $req->status,
-                'status_desc'   =>  $req->waiting_desc
+                'status_desc'   =>  $req->waiting_desc,
+                "action_Date"   =>  Carbon::now()
             ]); 
         }elseif($status == 13 ) {
-            $order->update(['status'=>  $req->status]);
+            $order->update([
+                'status'=>  $req->status,
+                "cancelled_Date"    =>  Carbon::now(),
+                "action_Date"       =>  Carbon::now()
+
+            ]);
             if(!is_null($req->cancel)): 
                 $order->update(['status_desc'=>  $req->cancel]);
             else: 
@@ -1559,7 +1565,11 @@ class OrderController extends Controller
             endif;
 
         }else {
-            $order->update(['status'=>  $req->status]);
+            $order->update([
+                'status'=>  $req->status,
+                "suspended_Date"=> Carbon::now(),
+                "action_Date"   =>  Carbon::now()
+            ]);
             if(is_null($req->suspend)):
                 $order->update([
                     'status_desc'   =>  $req->suspend,

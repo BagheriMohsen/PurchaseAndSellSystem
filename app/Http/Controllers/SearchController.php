@@ -251,8 +251,8 @@ class SearchController extends Controller
         ])
         ->latest()
         ->paginate(10);
-        
-        return view('Admin.Search.AgentChief.search-result',compact('orders'));
+    
+        return view('Admin.Search.AgentChief.search-result',compact('orders', "user"));
 
     }
 

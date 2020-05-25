@@ -240,7 +240,7 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     |*/
     public function AgentsAllReport(Request $req) {
-        
+       
         $user       =   auth()->user();
         $from_date  =   Carbon::parse($req->from_date);
         $to_date    =   Carbon::parse($req->to_date);
@@ -350,13 +350,17 @@ class ReportController extends Controller
                 $product_storage = 'App\Models\Storage'::where([
                     ["agent_id", "=", $agent->id],
                     ["product_id", "=", $product->id]
-                ])->firstOrFail();
-                $product_number = $product_storage->number;
+                ])->first();
+                if(is_null($product_storage)): 
+                    $product_number = 0;
+                else: 
+                    $product_number = $product_storage->number;
+                endif;
 
                 $product_onConfirm = StoreRoom::where([
                     ["receiver_id", "=", $agent->id],
                     ["product_id", "=", $product->id],
-                    ["id_date", "=", null]
+                    ["in_date", "=", null]
                 ])->count();
 
                 //payment for this product 

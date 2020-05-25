@@ -63,75 +63,77 @@
                     </thead>
                     <tbody>
                     {% for order in orders %}
-                      <tr>
-                        <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
-                        <td class="timestamp">{{order.delivary_Date | date('Y-m-d') }}</td>
-                        <td class="timestamp">{{order.updated_at | date('Y-m-d') }}</td>
-                        <td>{{ order.state.name }}{{"-"}}{{ order.city.name }}</td>
+                      {% if order.agent.agent_id == user.id %}
+                        <tr>
+                          <td class="timestamp">{{order.created_at | date('Y-m-d') }}</td>
+                          <td class="timestamp">{{order.delivary_Date | date('Y-m-d') }}</td>
+                          <td class="timestamp">{{order.updated_at | date('Y-m-d') }}</td>
+                          <td>{{ order.state.name }}{{"-"}}{{ order.city.name }}</td>
 
-                        <td>{{ order.address }}</td>
-                        <td>{{ order.fullName }}</td>
-                        <td>{{ order.mobile }}{{"-"}}{{ order.telephone }}</td>
-                        <td>
-                          {% for item in order.products %}
-                              <p>{{ item.product.name }}</p>
-                          {% endfor %}
-                        </td>
-                        <td>{{ order.cashPrice | number_format }}</td>
-                        <td>{{ order.prePayment | number_format }}</td>
-                        <td>{{ order.products.count }}</td>
-                        <td>{{ order.products.sum("count") }}</td>
-                        <td>{{ order.products.sum("off") }}</td>
+                          <td>{{ order.address }}</td>
+                          <td>{{ order.fullName }}</td>
+                          <td>{{ order.mobile }}{{"-"}}{{ order.telephone }}</td>
+                          <td>
+                            {% for item in order.products %}
+                                <p>{{ item.product.name }}</p>
+                            {% endfor %}
+                          </td>
+                          <td>{{ order.cashPrice | number_format }}</td>
+                          <td>{{ order.prePayment | number_format }}</td>
+                          <td>{{ order.products.count }}</td>
+                          <td>{{ order.products.sum("count") }}</td>
+                          <td>{{ order.products.sum("off") }}</td>
 
-                        {# Seller #}
-                        <td>{{order.seller.name}}{{' '}}{{order.seller.family}}
-                          {{'/'}}
-                          {{order.seller.city.name}}
-                        </td>
+                          {# Seller #}
+                          <td>{{order.seller.name}}{{' '}}{{order.seller.family}}
+                            {{'/'}}
+                            {{order.seller.city.name}}
+                          </td>
 
-                        {# Call   Center #}
-                        <td>{{order.callCenter.name}}{{' '}}{{order.callCenter.family}}
-                          {{'/'}}
-                          {{order.callCenter.city.name}}
-                        </td>
+                          {# Call   Center #}
+                          <td>{{order.callCenter.name}}{{' '}}{{order.callCenter.family}}
+                            {{'/'}}
+                            {{order.callCenter.city.name}}
+                          </td>
 
-                        {# Follow Up Manager #}
-                        <td>{{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}
-                          {{'/'}}
-                          {{order.followUpManager.city.name}}
-                        </td>
+                          {# Follow Up Manager #}
+                          <td>{{order.followUpManager.name}}{{' '}}{{order.followUpManager.family}}
+                            {{'/'}}
+                            {{order.followUpManager.city.name}}
+                          </td>
 
-                        {# Agent #}
-                        <td>{{order.agent.name}}{{' '}}{{order.agent.family}}
-                          {{'/'}}
-                          {{order.agent.city.name}}
-                        </td>
+                          {# Agent #}
+                          <td>{{order.agent.name}}{{' '}}{{order.agent.family}}
+                            {{'/'}}
+                            {{order.agent.city.name}}
+                          </td>
 
-                        {# Seller Description #}
-                        <td>{{ order.sellerDescription }}</td>
+                          {# Seller Description #}
+                          <td>{{ order.sellerDescription }}</td>
 
-                        {# Send Description #}
-                        <td>{{ order.sendDescription }}</td>
+                          {# Send Description #}
+                          <td>{{ order.sendDescription }}</td>
 
-                        {# Status #}
-                        <td>{{order.OrderStatus.name}}</td>
-                        <td>
-                          <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
-                            <sub class="text-dark">
-                              {{order.products.count()}}
-                            </sub>
-                            <i class="fas fa-shopping-basket crud-icon"></i>
-                          </a>
-                          {# <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
-                          target="_blank">
-                            <i class="fa fa-book crud-icon"></i>
-                          </a>
-                          <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
-                              <i class="fa fa-cogs crud-icon"></i>
-                          </a> #}
-                          
-                        </td>
-                      </tr>
+                          {# Status #}
+                          <td>{{order.OrderStatus.name}}</td>
+                          <td>
+                            <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
+                              <sub class="text-dark">
+                                {{order.products.count()}}
+                              </sub>
+                              <i class="fas fa-shopping-basket crud-icon"></i>
+                            </a>
+                            {# <a title="فاکتور" class="text-secondary" href="{{route('orders.Factor',order.id)}}"
+                            target="_blank">
+                              <i class="fa fa-book crud-icon"></i>
+                            </a>
+                            <a title="تعیین وضعیت" class="text-secondary" data-toggle="modal" href="#condition">
+                                <i class="fa fa-cogs crud-icon"></i>
+                            </a> #}
+                            
+                          </td>
+                        </tr>
+                      {% endif %}
                     {% endfor %}
                     </tbody>
                     
