@@ -20,18 +20,27 @@
             <div class="row">
               <div class="col-6 text-right">
                 <h6>انتخاب حالات دیگر:</h6>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" value="7" name="condition" checked>
-                  <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" value="14" name="condition" >
-                  <label class="form-check-label" for="suspend">معلق</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" value="13" name="condition">
-                  <label class="form-check-label" for="cancel">کنسلی</label>
-                </div>
+                {% if order.status !=  7 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="7" name="condition" checked>
+                    <label class="form-check-label" for="waitingDelivery">در انتظار تحویل</label>
+                  </div>
+                {% endif %}
+
+                {% if order.status !=  14 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="14" name="condition" >
+                    <label class="form-check-label" for="suspend">معلق</label>
+                  </div>
+                {% endif %}
+
+                {% if order.status !=  13 %}
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" value="13" name="condition">
+                    <label class="form-check-label" for="cancel">کنسلی</label>
+                  </div>
+                {% endif %}
+
               </div>
               <div class="col-6 text-right">
                 <div class="waiting_options">
