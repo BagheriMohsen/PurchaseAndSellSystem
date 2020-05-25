@@ -1561,7 +1561,10 @@ class OrderController extends Controller
         }else {
             $order->update(['status'=>  $req->status]);
             if(is_null($req->suspend)):
-                $order->update(['status_desc'=>  $req->suspend]);
+                $order->update([
+                    'status_desc'   =>  $req->suspend,
+                    "dueDate"       =>  null
+                ]);
             elseif(!is_null($req->dueDate)): 
                 $order->update(['dueDate'=>  $req->dueDate]);
             endif;
