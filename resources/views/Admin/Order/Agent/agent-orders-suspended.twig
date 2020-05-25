@@ -93,12 +93,15 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td>{{ order.OrderStatus.name }}</td>
-                        <td>{{ order.OrderStatus.name }}</td>
-
+                        {% if order.dueDate is null %}
+                          <td>{{ order.status_desc }}</td>
+                        {% else %}
+                          <td class="justDate">{{ order.dueDate }}</td>
+                        {% endif %}
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
-                              {{order.products.count()}}
+                              {{ order.products.count() }}
                             </sub>
                             <i class="fas fa-shopping-basket crud-icon"></i>
                           </a>

@@ -93,7 +93,7 @@
                           <td>{{'غیر نقدی'}}</td>
                         {% endif %}
                         <td>{{ order.OrderStatus.name }}</td>
-                        <td>{{ order.OrderStatus.name }}</td>
+                        <td>{{ order.status_desc }}</td>
                         <td>
                           <a title="جزئیات این سفارش" class="text-secondary" data-toggle="modal" href="#order{{order.id}}">
                             <sub class="text-dark">
