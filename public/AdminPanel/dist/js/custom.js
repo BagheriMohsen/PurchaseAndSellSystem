@@ -1661,6 +1661,7 @@ $(document).ready(function() {
         var dueDate = form.find('input[name="dueDate"]').val();
         var cancel = form.find('input[name="cancel"]:checked').val();
         var cancel_desc = form.find('textarea[name="cancel_desc"]').val();
+        var m = moment(dueDate, 'jYYYY/jM/jD').format('YYYY/M/D');
         $.ajax({
             url: actionUrl,
             type: 'get',
@@ -1669,7 +1670,7 @@ $(document).ready(function() {
                 status: condition,
                 waiting_desc: waiting_desc,
                 suspend: suspend,
-                dueDate: dueDate,
+                dueDate: m,
                 cancel: cancel,
                 cancel_desc: cancel_desc,
             },
